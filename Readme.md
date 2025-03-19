@@ -41,7 +41,7 @@ aapt dump badging
 
 ## RuntimeIdentifier 설정 (32비트)  
 <PropertyGroup>  
-    <RuntimeIdentifier>android-arm64</RuntimeIdentifier>    
+    <RuntimeIdentifier>android-arm</RuntimeIdentifier>    
 </PropertyGroup>  
 
 
