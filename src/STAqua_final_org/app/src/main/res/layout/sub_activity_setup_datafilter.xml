@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/Setup_DF"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/Setup_DF_Content"
+        android:orientation="horizontal"
+        android:background="#2c2d35"
+        android:layout_width="fill_parent"
+        android:layout_height="0px"
+        android:layout_weight="10"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+        <TextView
+            android:id="@+id/Setup_DF_Content_Text"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:text="@string/multi_setup_datafilter"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:layout_weight="100"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Setup_DF_Sensor"
+        android:orientation="horizontal"
+        android:background="#2c2d35"
+        android:layout_width="fill_parent"
+        android:layout_height="0px"
+        android:layout_weight="10">
+        <RadioGroup
+            android:id="@+id/Setup_DF_Sensor_Radio_Group"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="100"
+            >
+            <RadioButton
+                android:id="@+id/Setup_DF_Sensor_Radio_TU"
+                android:text="@string/multi_turbidity"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textColor="#FFFFFF"
+                android:gravity="center_vertical"
+                android:textSize="10sp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+
+                android:layout_weight="25" />
+
+            <RadioButton
+                android:id="@+id/Setup_DF_Sensor_Radio_CH"
+                android:text="@string/multi_chlorine"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textColor="#FFFFFF"
+                android:gravity="center_vertical"
+                android:textSize="10sp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+
+                android:layout_weight="25" />
+
+            <RadioButton
+                android:id="@+id/Setup_DF_Sensor_Radio_PH"
+                android:text="@string/multi_ph"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textColor="#FFFFFF"
+                android:gravity="center_vertical"
+                android:textSize="10sp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+
+                android:layout_weight="25" />
+
+            <RadioButton
+                android:id="@+id/Setup_DF_Sensor_Radio_CO"
+                android:text="@string/multi_conductivity"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textColor="#FFFFFF"
+                android:gravity="center_vertical"
+                android:textSize="10sp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+
+                android:layout_weight="25" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Setup_DF_Filter"
+        android:orientation="horizontal"
+        android:background="#2c2d35"
+        android:layout_width="fill_parent"
+        android:layout_height="0px"
+        android:layout_weight="10">
+        <TextView
+            android:id="@+id/Setup_DF_Filter_Text"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:text="@string/multi_filter"
+            android:padding="10dp"
+            android:gravity="center_vertical"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:layout_weight="35"/>
+        <EditText
+            android:id="@+id/Setup_DF_Filter_Ed"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:text="0.00"
+            android:textColor="#38C6C8"
+            android:padding="10dp"
+            android:ems="10"
+            android:layout_marginBottom="1dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="#141418"
+            android:layout_weight="35"
+            android:inputType="numberDecimal" />
+        <Button
+            android:id="@+id/Setup_DF_Filter_Btn_Up"
+            android:text="▲"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="15"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/my_button_base" />
+        <Button
+            android:id="@+id/Setup_DF_Filter_Btn_Down"
+            android:text="▼"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="15"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/my_button_base" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/Setup_DF_Filter_Deviation"
+        android:orientation="horizontal"
+        android:background="#2c2d35"
+        android:layout_width="fill_parent"
+        android:layout_height="0px"
+        android:layout_weight="10">
+        <TextView
+            android:id="@+id/Setup_DF_Filter_Deviation_Text"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:text="@string/multi_filter_deviation"
+            android:padding="10dp"
+            android:gravity="center_vertical"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:layout_weight="35"/>
+        <EditText
+            android:id="@+id/Setup_DF_Filter_Deviation_Ed"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:text="0.00"
+            android:textColor="#38C6C8"
+            android:padding="10dp"
+            android:ems="10"
+            android:layout_marginBottom="1dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="#141418"
+            android:layout_weight="35"
+            android:inputType="numberDecimal" />
+        <Button
+            android:id="@+id/Setup_DF_Filter_Deviation_Btn_Up"
+            android:text="▲"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="15"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/my_button_base" />
+        <Button
+            android:id="@+id/Setup_DF_Filter_Deviation_Btn_Down"
+            android:text="▼"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="15"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/my_button_base" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/Setup_DF_Filter_Window"
+        android:orientation="horizontal"
+        android:background="#2c2d35"
+        android:layout_width="fill_parent"
+        android:layout_height="0px"
+        android:layout_weight="10">
+        <TextView
+            android:id="@+id/Setup_DF_Filter_Window_Text"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:text="@string/multi_filter_window"
+            android:padding="10dp"
+            android:gravity="center_vertical"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:layout_weight="35"/>
+        <EditText
+            android:id="@+id/Setup_DF_Filter_Window_Ed"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:text="0.00"
+            android:textColor="#38C6C8"
+            android:padding="10dp"
+            android:ems="10"
+            android:layout_marginBottom="1dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="#141418"
+            android:layout_weight="35"
+            android:inputType="numberDecimal" />
+        <Button
+            android:id="@+id/Setup_DF_Filter_Window_Btn_Up"
+            android:text="▲"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="15"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/my_button_base" />
+        <Button
+            android:id="@+id/Setup_DF_Filter_Window_Btn_Down"
+            android:text="▼"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="15"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/my_button_base" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/Setup_DF_Range_High"
+        android:orientation="horizontal"
+        android:background="#2c2d35"
+        android:layout_width="fill_parent"
+        android:layout_height="0px"
+        android:layout_weight="10">
+        <TextView
+            android:id="@+id/Setup_DF_Range_High_Text"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:text="@string/multi_range_high"
+            android:padding="10dp"
+            android:gravity="center_vertical"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:layout_weight="35"/>
+        <EditText
+            android:id="@+id/Setup_DF_Range_High_Ed"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:text="0.00"
+            android:textColor="#38C6C8"
+            android:padding="10dp"
+            android:ems="10"
+            android:layout_marginBottom="1dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="#141418"
+            android:layout_weight="35"
+            android:inputType="numberDecimal" />
+        <Button
+            android:id="@+id/Setup_DF_Range_High_Btn_Up"
+            android:text="▲"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="15"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/my_button_base" />
+        <Button
+            android:id="@+id/Setup_DF_Range_High_Btn_Down"
+            android:text="▼"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="15"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/my_button_base" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/Setup_Range_Low"
+        android:orientation="horizontal"
+        android:background="#2c2d35"
+        android:layout_width="fill_parent"
+        android:layout_height="0px"
+        android:layout_weight="10">
+        <TextView
+            android:id="@+id/Setup_DF_Range_Low_Text"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:text="@string/multi_range_low"
+            android:padding="10dp"
+            android:gravity="center_vertical"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:layout_weight="35"/>
+        <EditText
+            android:id="@+id/Setup_DF_Range_Low_Ed"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:text="0.00"
+            android:textColor="#38C6C8"
+            android:padding="10dp"
+            android:ems="10"
+            android:layout_marginBottom="1dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="#141418"
+            android:layout_weight="35"
+            android:inputType="numberDecimal" />
+        <Button
+            android:id="@+id/Setup_DF_Range_Low_Btn_Up"
+            android:text="▲"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="15"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/my_button_base" />
+        <Button
+            android:id="@+id/Setup_DF_Range_Low_Btn_Down"
+            android:text="▼"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="15"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/my_button_base" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/Setup_DF_Dummy1"
+        android:orientation="horizontal"
+        android:background="#2c2d35"
+        android:layout_width="fill_parent"
+        android:layout_height="0px"
+        android:layout_weight="10">
+        <TextView
+            android:id="@+id/Setup_DF_Dummy1_Empty"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:text=""
+            android:padding="10dp"
+            android:gravity="center_vertical"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="66"/>
+        <Button
+            android:id="@+id/Setup_DF_Dummy1_Load"
+            android:text="@string/multi_load"
+            android:textSize="10sp"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="33"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/my_button_base" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/Setup_DF_Dummy2"
+        android:orientation="horizontal"
+        android:background="#2c2d35"
+        android:layout_width="fill_parent"
+        android:layout_height="0px"
+        android:layout_weight="10">
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Setup_DF_Option1"
+        android:orientation="horizontal"
+        android:background="#2c2d35"
+        android:layout_width="fill_parent"
+        android:layout_height="0px"
+        android:layout_weight="10">
+        <Button
+            android:id="@+id/Setup_DF_Option1_FactoryReset"
+            android:text="@string/multi_factory_reset"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="33"
+            android:textSize="10sp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/my_button_red" />
+
+        <TextView
+            android:id="@+id/Setup_DF_Option1_Empty"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:text=""
+            android:padding="10dp"
+            android:gravity="center_vertical"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="33"/>
+
+        <Button
+            android:id="@+id/Setup_DF_Option1_Apply"
+            android:text="@string/multi_apply"
+            android:textSize="10sp"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="33"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/my_button_green" />
+    </LinearLayout>
+
+</LinearLayout>

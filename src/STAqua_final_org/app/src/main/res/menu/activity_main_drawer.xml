@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_setup"
+            android:icon="@drawable/ic_setup"
+            android:title="@string/multi_setup" />
+        <item
+            android:id="@+id/nav_cal"
+            android:icon="@drawable/ic_cal"
+            android:title="@string/multi_calibration"/>
+        <!--<item-->
+            <!--android:id="@+id/nav_out"-->
+            <!--android:icon="@drawable/ic_out"-->
+            <!--android:title="@string/multi_output" />-->
+        <item
+          android:id="@+id/nav_wash"
+           android:icon="@drawable/ic_wash"
+           android:title="@string/multi_wash" />
+        <item
+            android:id="@+id/nav_trend"
+            android:icon="@drawable/ic_trend"
+            android:title="@string/multi_trend" />
+        <item
+            android:id="@+id/nav_dia"
+            android:icon="@drawable/ic_dia"
+            android:title="@string/multi_diagnosis" />
+    </group>
+
+
+    <!--<menu>-->
+        <!--<item-->
+            <!--android:id="@+id/nav_share"-->
+            <!--android:title="Share"/>-->
+        <!--<item-->
+            <!--android:id="@+id/nav_send"-->
+            <!--android:title="Send" />-->
+    <!--</menu>-->
+
+
+
+</menu>

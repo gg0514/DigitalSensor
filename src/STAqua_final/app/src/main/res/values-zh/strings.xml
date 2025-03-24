@@ -1,0 +1,375 @@
+<resources>
+    <string name="app_name">Aqua2000-i5</string>
+    <string name="multi_menu">菜单</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">设定</string>
+
+    <string name="multi_suntech_eng">Suntech Engineering Co.</string>
+
+    <string name="multi_please_select_sensor">请选择传感器</string>
+    <string name="multi_turbidity">浊度 Turbidity</string>
+    <string name="multi_chlorine">余氯 Chlorine</string>
+    <string name="multi_ph">氢离子 pH</string>
+    <string name="multi_temperature">水温 Temperature</string>
+    <string name="multi_conductivity">电气传导度 Conductivity</string>
+    <string name="multi_normal_flow">Normal Flow</string>
+    <string name="multi_check_flow">Check Flow</string>
+
+    <string name="multi_setup">设定</string>
+    <string name="multi_calibration">矫正</string>
+    <string name="multi_output">输出</string>
+    <string name="multi_wash">清洗</string>
+    <string name="multi_trend">趋势</string>
+    <string name="multi_diagnosis">诊断</string>
+    <string name="multi_detaildiagnosis">Detailed Diagnostics</string>
+
+    <string name="multi_serial">串口通信</string>
+    <string name="multi_serial_standard">通信方式</string>
+    <string name="multi_baud_rate">通信速度</string>
+    <string name="multi_stop_bit">停止位</string>
+    <string name="multi_parity">平价</string>
+    <string name="multi_station_number">区号</string>
+    <string name="multi_data_bit">数据位</string>
+    <string name="multi_protocol">数据</string>
+
+    <string name="multi_ethernet">以太网</string>
+    <string name="multi_ip_address">IP地址</string>
+    <string name="multi_subnet_mask">子网掩码</string>
+    <string name="multi_gateway">网关</string>
+    <string name="multi_port">端口</string>
+    <string name="multi_pair_list">配对列表</string>
+
+    <string name="multi_bluetooth">蓝牙</string>
+    <string name="multi_system">系统</string>
+    <string name="multi_product_serial_number">产品序号</string>
+    <string name="multi_ph_serial_number">氢离子 产品序号</string>
+    <string name="multi_chlorine_serial_number">余氯 产品序号</string>
+    <string name="multi_turbidity_serial_number">浊度 产品序号</string>
+    <string name="multi_conductivity_serial_number">电气传导度 产品序号</string>
+
+    <string name="multi_additional_function">附加組件</string>
+    <string name="multi_item_replacement">消费替代</string>
+    <string name="multi_item_expire_date">Expire Date</string>
+    <string name="multi_replacement_history">替代履历</string>
+
+    <string name="multi_recommended_date">Recommended Date</string>
+    <string name="multi_notification_date">Notification Date</string>
+    <string name="multi_complete_replacement">完成替代</string>
+
+    <string name="multi_filter_deviation">滤波器偏差</string>
+    <string name="multi_filter_window">滤波窗</string>
+    <string name="multi_range_high">上限</string>
+    <string name="multi_range_low">下限</string>
+
+    <string name="multi_calibration_date">矫正时间</string>
+    <string name="multi_calibration_method">矫正方法</string>
+
+    <string name="multi_analog_setup">模拟设定</string>
+    <string name="multi_range_setting">输出范围设定</string>
+    <string name="multi_analog_output">模拟输出调整</string>
+
+    <string name="multi_digital_setup">数码设定</string>
+
+    <string name="multi_setting_date">输入日期</string>
+    <string name="multi_standard">基准值</string>
+    <string name="multi_measured">当前值</string>
+    <string name="multi_std_rate">偏差率(%)</string>
+
+    <string name="multi_change">变更</string>
+    <string name="multi_high_alarm">上限警报</string>
+    <string name="multi_low_alarm">下限警报</string>
+    <string name="multi_relay_selection">继电器选择</string>
+    <string name="multi_phase">变动</string>
+    <string name="multi_dead_band">不感带</string>
+    <string name="multi_on_delay">激活延迟时间</string>
+    <string name="multi_set_point">设定值</string>
+    <string name="multi_off_delay">非激活延迟时间</string>
+    <string name="multi_relay">继电器</string>
+
+    <string name="multi_interval">周期</string>
+    <string name="multi_duration">清洗时间</string>
+    <string name="multi_stabilization">稳定时间</string>
+    <string name="multi_auto">自动清洗 (输入运转值)</string>
+    <string name="multi_high">上限</string>
+    <string name="multi_low">下限</string>
+    <string name="multi_manual">手动清洗</string>
+    <string name="multi_hold_measurement">传感器测定中止</string>
+    <string name="multi_min">分</string>
+    <string name="multi_sec">秒</string>
+
+    <string name="multi_x_zoom_in_out">X 轴放大, 缩小</string>
+    <string name="multi_previous_data">以前数据确认</string>
+    <string name="multi_second_previous">秒 (以前)</string>
+    <string name="multi_minute_previous">分 (以前)</string>
+    <string name="multi_hour_previous">小时 (以前)</string>
+
+    <string name="multi_sensor_diagnosis">传感器诊断</string>
+    <string name="multi_sensor_check">Sensor Check</string>
+    <string name="multi_no">No.</string>
+    <string name="multi_sensor">传感器</string>
+    <string name="multi_value">当前值</string>
+    <string name="multi_thresholds">Thresholds</string>
+    <string name="multi_confirmation">Confirmation</string>
+    <string name="multi_alarm_history">警报履历</string>
+    <string name="multi_sensor_type">传感器类型</string>
+    <string name="multi_connection">结线</string>
+    <string name="multi_date_and_time">时间</string>
+    <string name="multi_turbidity_diagnosis">浊度诊断</string>
+    <string name="multi_lamp_off_volt">无光源电压测定</string>
+    <string name="multi_previous">以前值</string>
+    <string name="multi_tu_light">浊度光源</string>
+    <string name="multi_detector">Detector</string>
+    <string name="multi_lamp">Lamp</string>
+    <string name="multi_measurement">Measurement</string>
+
+    <string name="multi_1point_buffer">1点缓冲</string>
+    <string name="multi_2point_buffer">2点缓冲</string>
+    <string name="multi_1point_sample">1点样品</string>
+    <string name="multi_2point_sample">2点样品</string>
+    <string name="multi_current">当前值</string>
+    <string name="multi_filter">滤波器</string>
+    <string name="multi_data_filter">数据滤波器</string>
+    <string name="multi_temperature_electrode">温度电极矫正</string>
+    <string name="multi_temperature_select">温度电极</string>
+    <string name="multi_systemtime">System Time</string>
+    <string name="multi_calibration_history">矫正履历</string>
+    <string name="multi_fixed_ph">pH固定</string>
+    <string name="multi_current_ph">pH补偿</string>
+    <string name="multi_ph_compensation">pH补偿</string>
+    <string name="multi_zero">零点矫正</string>
+    <string name="multi_verification">验证</string>
+    <string name="multi_stick_no">杆号</string>
+    <string name="multi_on">上</string>
+    <string name="multi_off">离</string>
+    <string name="multi_in">放大</string>
+    <string name="multi_out">缩小</string>
+
+    <string name="multi_edit">变更</string>
+    <string name="multi_help">帮助</string>
+    <string name="multi_stop">中断</string>
+    <string name="multi_factory_reset">工厂初始化</string>
+    <string name="multi_hold">保持</string>
+    <string name="multi_load">Load</string>
+    <string name="multi_cancel">取消</string>
+    <string name="multi_apply">适用</string>
+    <string name="multi_search">检索</string>
+    <string name="multi_connect">连接</string>
+    <string name="multi_disconnect">解除连接</string>
+    <string name="multi_btenable">蓝牙 激活</string>
+    <string name="multi_btdisable">蓝牙 非激活</string>
+    <string name="multi_delete_all">全部删除</string>
+    <string name="multi_delete">全部删除</string>
+    <string name="multi_download">下载</string>
+    <string name="multi_excel">Excel</string>
+    <string name="multi_registration">登录</string>
+    <string name="multi_meas">测定</string>
+
+    <string name="multi_main">主画面</string>
+
+    <string name="multi_cal_ch">矫正 > 余氯</string>
+    <string name="multi_cal_ch_1p_sample">矫正 > 余氯 > 1点样品</string>
+    <string name="multi_cal_ch_cal_hist">矫正 > 余氯 > 矫正履历</string>
+    <string name="multi_cal_ch_filter">矫正 > 余氯 > 过滤器</string>
+    <string name="multi_cal_ch_ph_comp">矫正 > 余氯 > pH补偿 </string>
+    <string name="multi_cal_ch_temp_ele">矫正 > 余氯 > 温度探头校正</string>
+    <string name="multi_cal_ch_zero">矫正 > 余氯 > 零点矫正</string>
+
+    <string name="multi_cal_co">矫正 > 电气传导度</string>
+    <string name="multi_cal_co_1p_sample">矫正 > 电气传导度 > 1点样品</string>
+    <string name="multi_cal_co_cal_hist">矫正 > 电气传导度 > 矫正履历</string>
+    <string name="multi_cal_co_filter">矫正 > 电气传导度 > 滤波器</string>
+    <string name="multi_cal_co_temp_ele">矫正 > 电气传导度 > 温度探头校正</string>
+    <string name="multi_cal_co_zero">矫正 > 电气传导度 > 零点矫正</string>
+
+    <string name="multi_cal_ph">矫正 > 氢离子浓度</string>
+    <string name="multi_cal_ph_1p_buffer">矫正 > 氢离子浓度 > 1点缓冲</string>
+    <string name="multi_cal_ph_1p_sample">矫正 > 氢离子浓度 > 1点样品</string>
+    <string name="multi_cal_ph_2p_buffer">矫正 > 氢离子浓度 > 2点缓冲</string>
+    <string name="multi_cal_ph_2p_sample">矫正 > 氢离子浓度 > 2点样品</string>
+    <string name="multi_cal_ph_cal_hist">矫正 > 氢离子浓度 > 矫正履历</string>
+    <string name="multi_cal_ph_filter">矫正 > 氢离子浓度 > 滤波器</string>
+    <string name="multi_cal_ph_temp_ele">矫正 > 氢离子浓度 > 温度电极矫正</string>
+
+    <string name="multi_cal_tu">矫正 > 浊度</string>
+    <string name="multi_cal_tu_1p_sample">矫正 > 浊度 > 1点样品</string>
+    <string name="multi_cal_tu_cal_hist">矫正 > 浊度 > 校准历史</string>
+    <string name="multi_cal_tu_filter">矫正 > 浊度 > 过滤器</string>
+    <string name="multi_cal_tu_temp_ele">矫正 > 浊度 > 温度探头校正</string>
+    <string name="multi_cal_tu_ver">矫正 > 浊度 > 验证</string>
+    <string name="multi_cal_tu_zero">矫正 > 浊度 > 零点矫正</string>
+
+    <string name="multi_dia_alarm_history">诊断 > 警报履历</string>
+    <string name="multi_dia_sensor_dia">诊断 > 传感器诊断</string>
+    <string name="multi_dia_sensor_check"> Diagnosis > Sensor Check</string>
+    <string name="multi_dia_tu_dia">诊断 > 浊度诊断</string>
+
+    <string name="multi_output_ch">输出 > 余氯</string>
+    <string name="multi_output_ch_analog">输出 > 余氯 > 模拟设定</string>
+    <string name="multi_output_ch_digital">输出 > 余氯 > 数码设定</string>
+    <string name="multi_output_co">输出 > 电气传导度</string>
+    <string name="multi_output_co_analog">输出 > 电气传导度 > 模拟设定</string>
+    <string name="multi_output_co_digital">输出 > 电气传导度 > 数码设定</string>
+    <string name="multi_output_ph">输出 > 氢离子</string>
+    <string name="multi_output_ph_analog">输出 > 氢离子 > 模拟设定</string>
+    <string name="multi_output_ph_digital">输出 > 氢离子 > 数码设定</string>
+    <string name="multi_output_temp">输出 > 水温</string>
+    <string name="multi_output_temp_analog">输出 > 水温 > 模拟设定</string>
+    <string name="multi_output_temp_digital">输出 > 水温 > 数码设定</string>
+    <string name="multi_output_tu">输出 > 浊度</string>
+    <string name="multi_output_tu_analog">输出 > 浊度 > 模拟设定</string>
+    <string name="multi_output_tu_digital">输出 > 浊度 > 数码设定</string>
+
+    <string name="multi_setup_bluetooth">设定 > 蓝牙</string>
+    <string name="multi_setup_ethernet">设定 > 以太网</string>
+    <string name="multi_setup_systemtime"> Setup > SystemTime</string>
+    <string name="multi_setup_serial">设定 > 串口通信</string>
+    <string name="multi_setup_system">设定 > 系统</string>
+    <string name="multi_setup_system_select"> 设定 > 系统 > Connection Select</string>
+    <string name="multi_setup_addition">设定 > 附加組件</string>
+    <string name="multi_setup_itemreplacement">设定 > 消费替代</string>
+    <string name="multi_setup_replacementhistory">设定 > 替代履历</string>
+    <string name="multi_setup_datafilter">设定 > 数据滤波器</string>
+    <string name="multi_setup_temperatureelectrode">设定 > 温度电极选择</string>
+
+    <string name="multi_co1">电气传导度</string>
+    <string name="multi_tu1">浊度</string>
+    <string name="multi_ch1">余氯</string>
+    <string name="multi_ph1">氢离子</string>
+    <string name="multi_temp1">水温</string>
+    <string name="multi_history">履历</string>
+    <string name="multi_realtime">实时</string>
+    <string name="multi_trend_ch">趋势 > 余氯</string>
+    <string name="multi_trend_co">趋势 > 电气传导度</string>
+    <string name="multi_trend_data">趋势 > 数据删除</string>
+    <string name="multi_trend_download">趋势 > 数据下载</string>
+    <string name="multi_trend_excel"> Trend > Excel Export</string>
+    <string name="multi_trend_flow">趋势 > 助焊剂</string>
+    <string name="multi_trend_ph">趋势 > 氢离子</string>
+    <string name="multi_trend_tu">趋势 > 浊度</string>
+    <string name="multi_trend_temp">趋势 > 水温</string>
+    <string name="multi_trend_filter">趋势 > 滤波器</string>
+    <string name="multi_all_data_are_deleted">所有的数据已删除</string>
+    <string name="multi_download_trend_data">下载趋势数据</string>
+    <string name="multi_export_trend_data">Export trend data</string>
+
+    <string name="multi_wash_ch">清洗 > 余氯</string>
+    <string name="multi_wash_tu">清洗 > 浊度</string>
+
+    <string name="multi_flow">流量</string>
+
+    <string name="multi_x_value_is_less_than"> X 值小于 0 </string>
+    <string name="multi_x_value_is_more_than"> X 值大于数据 1</string>
+
+    <string name="multi_mode">模式: </string>
+    <string name="multi_status">状态: </string>
+    <string name="multi_alarm_status">警报状态</string>
+
+    <string name="select_device">请选择设备</string>
+    <string name="search_message">正在寻找设备...</string>
+    <string name="title_paired_devices">配对的设备</string>
+    <string name="title_other_devices">其他设备</string>
+    <string name="none_paired">未配对的设备</string>
+    <string name="none_found">未找到</string>
+    <string name="command_hint">在这里输入评语</string>
+    <string name="button_send">传送</string>
+    <string name="connect_success">接入成功</string>
+    <string name="on_connecting">接入中..</string>
+    <string name="connect_failure">接入失败</string>
+    <string name="connected">已接入</string>
+    <string name="disconnected">接入断开</string>
+
+    <string name="action_bluetooth">on/off</string>
+    <string name="no_bt_support">设备不支持蓝牙</string>
+    <string name="empty_device_name">&lt;新设备&gt;</string>
+
+    <string name="multi_buffer_help_line">将传感器放入第一个 缓冲溶液后\n按适用按钮。\n若要中断矫正,请按中断按钮。</string>
+    <string name="multi_sample_help_line">将传感器放入第一个 样品溶液后, 利用箭头\n输入矫正值后按适用按钮。\n若要中断矫正, 请按中断按钮。</string>
+    <string name="multi_2buffer_help_line">将传感器放入第二个缓冲溶液后\n按适用按钮。\n若要中断矫正,请按中断按钮。</string>
+    <string name="multi_2sample_help_line">将传感器放入第二个样品溶液后, 利用箭头\n输入矫正值后按适用按钮。\n若要中断矫正, 请按中断按钮。</string>
+    <string name="multi_zero_help_line">将传感器放入ZERO溶液后\n按适用按钮。\n若要中断矫正,请按中断按钮。</string>
+    <string name="multi_verification_help_line">最初没有测定履历。\n按杆号[变更]按钮后输入杆号。</string>
+    <string name="multi_verify_saved_help_line">按基准值[测定]按钮, \n测定当前杆的基准值后自动保存。\n结束以前请等待。</string>
+    <string name="multi_verify_new_help_line">最初没有测定履历。\n输入杆号后按[变更]按钮。</string>
+    <string name="multi_verification_has_record">存在原有杆号履历。\n希望变更杆号时请按"是"按钮, \n要使用原有杆号的情况, 请按"否"按钮。\n按"是"按钮时原有杆号将被删除。</string>
+    <string name="multi_verification_check_standard">请测定基准值</string>
+    <string name="multi_verification_check_stick">请输入杆号</string>
+    <string name="multi_verification_success">验证成功。偏差率为2%以上时请矫正</string>
+
+    <string name="multi_temp_validation">只能输入从-20至90</string>
+    <string name="multi_ph_validation">只能输入从0至14</string>
+    <string name="multi_co_validation">只能输入从0至5000</string>
+    <string name="multi_ch_validation">只能输入从0至2</string>
+    <string name="multi_tu_validation">只能输入从0至20</string>
+    <string name="multi_filter_validation">只能输入从0至127</string>
+    <string name="multi_verification_validation">只能输入从0至9999</string>
+    <string name="multi_analog_output_validation">只能输入从0至65535</string>
+    <string name="multi_digital_output_validation">只能输入从0至60000</string>
+
+    <string name="multi_wash_time_validation">只能输入从0至50000</string>
+    <string name="multi_check_connection">Please Check Connection Status</string>
+
+    <string name="multi_temp_analog_validation">只能输入从-20至90</string>
+    <string name="multi_ph_analog_validation">只能输入从0至14</string>
+    <string name="multi_co_analog_validation">只能输入从0至5000</string>
+    <string name="multi_ch_analog_validation">只能输入从0至2</string>
+    <string name="multi_tu_analog_validation">只能输入从0至20</string>
+
+    <string name="multi_are_you_sure">确实要结束吗?</string>
+    <string name="multi_are_you_sure_delete">确实要删除吗?</string>
+    <string name="multi_are_you_sure_download">要接收趋势数据吗?</string>
+    <string name="multi_download_failed">下载失败, 请重试</string>
+    <string name="multi_download_success">下载成功</string>
+    <string name="multi_answer_yes">是</string>
+    <string name="multi_answer_no">否</string>
+    <string name="multi_answer_cancel">取消</string>
+    <string name="multi_date_format">yyyy/MM/dd HH:mm:ss"</string>
+    <string name="multi_stop_measurement">要Hold吗?</string>
+    <string name="multi_start_measurement">要解除Hold吗?</string>
+    <string name="multi_change_communication">要变更通信状态吗?</string>
+    <string name="multi_answer_confirm">确认</string>
+
+    <string name="multi_disable">不使用</string>
+
+    <string name="multi_applied">已适用</string>
+    <string name="multi_deleted">数据已删除</string>
+    <string name="multi_delete_failed">数据文件不存在</string>
+
+    <string name="multi_cal_status_0">要矫正的传感器不存在</string>
+    <string name="multi_cal_status_1">正在矫正</string>
+    <string name="multi_cal_status_2">矫正完毕</string>
+    <string name="multi_cal_status_3">矫正失败 – 不稳定</string>
+    <string name="multi_cal_status_4">矫正失败 – 未找到缓冲器</string>
+    <string name="multi_cal_status_5">矫正失败 – 未找到第一个缓冲器</string>
+    <string name="multi_cal_status_6">矫正失败 – 未找到第二个缓冲器</string>
+    <string name="multi_cal_status_7">矫正失败 – 值过低</string>
+    <string name="multi_cal_status_8">矫正失败 – 值过高</string>
+    <string name="multi_cal_status_9">矫正失败 – 倾斜度过低</string>
+    <string name="multi_cal_status_10">矫正失败 – 倾斜度过高</string>
+    <string name="multi_cal_status_11">矫正失败 – 偏离过低</string>
+    <string name="multi_cal_status_12">矫正失败 – 偏离过高</string>
+    <string name="multi_cal_status_13">矫正失败 – 点太近</string>
+    <string name="multi_cal_status_14">一般矫正失败(zero or sample)。</string>
+    <string name="multi_cal_status_15">时间超过</string>
+    <string name="multi_cal_cancel">矫正中止</string>
+
+    <string name="multi_alarm_start">警报开始</string>
+    <string name="multi_alarm_end">警报解除</string>
+
+    <string name="multi_trend_original">原始</string>
+    <string name="multi_trend_moving_average">平均值</string>
+    <string name="multi_trend_confidence_level">信赖水准</string>
+    <string name="multi_trend_confidence">信赖</string>
+    <string name="multi_trend_on_range">范围内</string>
+    <string name="multi_trend_count">测定个数</string>
+    <string name="multi_trend_constant">测定常数</string>
+
+    <string name="multi_setup_ph_salt_bridge">氢离子盐桥</string>
+    <string name="multi_setup_ch_membrane_cap">余氯膜帽</string>
+    <string name="multi_setup_tu_lamp">浊度灯</string>
+    <string name="multi_setup_ph_sensor">氢离子感器</string>
+    <string name="multi_setup_ch_sensor">感器</string>
+    <string name="multi_setup_ethernet_format">Wrong IP format. please enter [xxx.xxx.xxx.xxx]</string>
+    <string name="multi_setup_ethernet_value">只能输入从0至255</string>
+    <string name="multi_setup_ethernet_port_value">只能输入从0至99999</string>
+</resources>

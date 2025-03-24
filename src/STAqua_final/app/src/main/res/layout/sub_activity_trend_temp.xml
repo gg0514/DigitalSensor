@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="#2c2d35"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/Trend_Temp_Content"
+        android:orientation="horizontal"
+        android:background="#2c2d35"
+        android:layout_width="fill_parent"
+        android:layout_height="0px"
+        android:layout_weight="10">
+        <TextView
+            android:id="@+id/Trend_Temp_Content_Text"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:text="@string/multi_trend_temp"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:layout_weight="70"/>
+
+        <Button
+            android:id="@+id/Trend_Temp_Content_Btn_History"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="30"
+            android:background="@drawable/my_button_base"
+            android:text="@string/multi_load"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Trend_Temp_Chart"
+        android:orientation="horizontal"
+        android:background="#000000"
+        android:layout_width="fill_parent"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_height="0px"
+        android:layout_weight="50">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Trend_Temp_Data"
+        android:layout_width="fill_parent"
+        android:layout_height="0px"
+        android:layout_weight="10"
+        android:background="#2c2d35"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/Trend_Temp_Data_Text_Title"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="20"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="℃:"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/Trend_Temp_Data_Text_Value"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="30"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="20"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/Trend_Temp_Data_Average_Title"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="30"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text=""
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/Trend_Temp_Data_Average_Value"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:text=""
+            android:padding="10dp"
+            android:gravity="center_vertical"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:layout_weight="20"/>
+
+        <!--<Button-->
+            <!--android:id="@+id/Trend_Temp_Data_Btn_Help"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:layout_marginBottom="5dp"-->
+            <!--android:layout_marginLeft="5dp"-->
+            <!--android:layout_marginRight="5dp"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:layout_weight="25"-->
+            <!--android:background="@drawable/my_button_base"-->
+            <!--android:text="@string/multi_help"-->
+            <!--android:textColor="#FFFFFF" />-->
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Trend_Temp_Confidence"
+        android:orientation="horizontal"
+        android:background="#2c2d35"
+        android:layout_width="fill_parent"
+        android:layout_height="0px"
+        android:layout_weight="10">
+
+        <TextView
+            android:id="@+id/Trend_Temp_Confidence_Title"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="50"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="@string/multi_trend_confidence_level"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/Trend_Temp_Confidence_Value"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="50"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text=""
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/Trend_Temp_X"
+        android:orientation="horizontal"
+        android:background="#2c2d35"
+        android:layout_width="fill_parent"
+        android:layout_height="0px"
+        android:layout_weight="10">
+
+        <TextView
+            android:id="@+id/Trend_Temp_X_Text_Title"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="50"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="@string/multi_x_zoom_in_out"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/Trend_Temp_X_Btn_In"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="25"
+            android:background="@drawable/my_button_base"
+            android:text="IN"
+            android:textColor="#FFFFFF"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/Trend_Temp_X_Btn_Out"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="25"
+            android:background="@drawable/my_button_base"
+            android:text="OUT"
+            android:textColor="#FFFFFF"
+            android:visibility="invisible" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/Trend_Temp_Previous"
+        android:orientation="horizontal"
+        android:background="#2c2d35"
+        android:layout_width="fill_parent"
+        android:layout_height="0px"
+        android:layout_weight="10">
+        <TextView
+            android:id="@+id/Trend_Temp_Previous_Text_Title"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:text="@string/multi_previous_data"
+            android:padding="10dp"
+            android:gravity="center_vertical"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:layout_weight="50"/>
+
+        <Button
+            android:id="@+id/Trend_Temp_Previous_Btn_Left"
+            android:text="◀"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="25"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/my_button_base" />
+
+        <Button
+            android:id="@+id/Trend_Temp_Previous_Btn_Right"
+            android:text="▶"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="25"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/my_button_base" />
+    </LinearLayout>
+</LinearLayout>
