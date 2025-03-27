@@ -9,7 +9,7 @@
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <RuntimeIdentifier>android-arm</RuntimeIdentifier>
+    <RuntimeIdentifier>android-arm64</RuntimeIdentifier>
     <PublishTrimmed>True</PublishTrimmed>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

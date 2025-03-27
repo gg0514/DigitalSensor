@@ -1,9 +1,9 @@
 ## 안드로이드 빌드 및 배포 테스트
 
-* Android 6.0 - API 23의 경우에는 net9.0-android35.0의 TargetFramework를 사용할 수 없음!  
+* Android 6.0 - API 23 장치의 경우에는 net9.0-android35.0의 TargetFramework를 사용할 수 없음!  
                                                net8.0-android34.0의 TargetFramework에서는 가능함!  
  
-* Android 10.0 - API 29의 경우에는 net9.0-android35.0의 TargetFramework를 사용 가능함!  
+* Android 10.0 - API 29 장치의 경우에는 net9.0-android35.0의 TargetFramework를 사용 가능함!  
 
 
 실제 디바이스 테스트결과, 핵심은 다음과 같다.
