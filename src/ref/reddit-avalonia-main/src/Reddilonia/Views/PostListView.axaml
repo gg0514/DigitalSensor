@@ -1,0 +1,83 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Reddilonia.ViewModels"
+             xmlns:vmd="clr-namespace:Reddilonia.ViewModels.Design"
+             xmlns:reddilonia="clr-namespace:Reddilonia"
+             mc:Ignorable="d" d:DesignWidth="540" d:DesignHeight="960"
+             x:Class="Reddilonia.Views.PostListView"
+             x:DataType="vm:PostListViewModel">
+  <Design.DataContext>
+    <vmd:PostListViewModelDesign />
+  </Design.DataContext>
+
+  <UserControl.Resources>
+    <reddilonia:BitmapAssetValueConverter x:Key="BitmapConverter" />
+  </UserControl.Resources>
+
+  <ScrollViewer>
+    <ListBox ItemsSource="{Binding Posts}" Background="#2B2B2B" SelectedItem="{Binding SelectedPost}" Name="ItemParent">
+      <ListBox.ItemTemplate>
+        <DataTemplate>
+          <StackPanel Margin="0 5" Spacing="7">
+
+            <!-- TODO: make it a custom control and use it in post view too -->
+            <!-- Subreddit and Author Info -->
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <TextBlock Text="{Binding SubredditNamePrefixed, FallbackValue='SubReddit'}"
+                         Foreground="#4fbcff"
+                         FontWeight="Bold" />
+              <TextBlock Text="•" Foreground="#808080" />
+              <TextBlock
+                Text="{Binding Author, StringFormat='Posted by u/{0}', FallbackValue='Posted by u/username'}"
+                Foreground="#808080" />
+              <TextBlock Text="{Binding TimeSpanFromCreationEpoch, StringFormat=' {0} ago', FallbackValue='5h ago'}"
+                         Foreground="#808080" />
+            </StackPanel>
+
+            <!-- Post Title -->
+            <TextBlock Text="{Binding Title, FallbackValue='TestTitle'}"
+                       TextWrapping="Wrap"
+                       FontSize="18"
+                       FontWeight="SemiBold" />
+
+            <!-- Post Content -->
+            <TextBlock Text="{Binding Selftext, FallbackValue='TestBody'}"
+                       TextWrapping="Wrap" TextTrimming="CharacterEllipsis" MaxLines="4" />
+
+            <Image Source="{Binding Thumbnail, Converter={StaticResource BitmapConverter}}"
+                   MaxWidth="300"
+                   HorizontalAlignment="Center" />
+
+            <!-- Post Stats -->
+            <StackPanel Orientation="Horizontal" Spacing="16">
+              <!-- Upvotes -->
+              <StackPanel Orientation="Horizontal" Spacing="4">
+                <PathIcon Data="{StaticResource ArrowUpRegular}"
+                          Width="16" Height="16" />
+                <PathIcon Data="{StaticResource ArrowDownRegular}"
+                          Width="16" Height="16" />
+                <TextBlock Text="{Binding Score, FallbackValue='-999'}"
+                           VerticalAlignment="Center" />
+              </StackPanel>
+
+              <!-- Comments -->
+              <StackPanel Orientation="Horizontal" Spacing="4">
+                <PathIcon Data="{StaticResource CommentRegular}"
+                          Width="16" Height="16" />
+                <TextBlock Text="{Binding NumComments, FallbackValue='-999'}"
+                           VerticalAlignment="Center" />
+                <TextBlock Text="Comments"
+                           VerticalAlignment="Center" />
+              </StackPanel>
+            </StackPanel>
+
+            <Separator Margin="0 5 0 0"/>
+          </StackPanel>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
+  </ScrollViewer>
+</UserControl>
+
