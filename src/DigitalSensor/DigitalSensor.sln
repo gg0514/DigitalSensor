@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalSensor", "DigitalSensor\DigitalSensor.csproj", "{13E8240D-9AD6-4CDB-99AF-012F0EBD7B8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalSensor.Android", "DigitalSensor.Android\DigitalSensor.Android.csproj", "{564F90A4-F51D-41F4-A8ED-B2385E191AD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalSensor.Desktop", "DigitalSensor.Desktop\DigitalSensor.Desktop.csproj", "{82415C5B-E49C-496C-8666-0ADE78758E2F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{13E8240D-9AD6-4CDB-99AF-012F0EBD7B8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13E8240D-9AD6-4CDB-99AF-012F0EBD7B8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13E8240D-9AD6-4CDB-99AF-012F0EBD7B8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13E8240D-9AD6-4CDB-99AF-012F0EBD7B8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{564F90A4-F51D-41F4-A8ED-B2385E191AD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{564F90A4-F51D-41F4-A8ED-B2385E191AD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{564F90A4-F51D-41F4-A8ED-B2385E191AD7}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{564F90A4-F51D-41F4-A8ED-B2385E191AD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{564F90A4-F51D-41F4-A8ED-B2385E191AD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{564F90A4-F51D-41F4-A8ED-B2385E191AD7}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{82415C5B-E49C-496C-8666-0ADE78758E2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82415C5B-E49C-496C-8666-0ADE78758E2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82415C5B-E49C-496C-8666-0ADE78758E2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82415C5B-E49C-496C-8666-0ADE78758E2F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
