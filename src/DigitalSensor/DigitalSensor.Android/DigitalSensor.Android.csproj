@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DigitalSensor\DigitalSensor.csproj" />
+	  <ProjectReference Include="..\UsbSerialForAndroid.Net\UsbSerialForAndroid.Net.csproj" />
+	  <ProjectReference Include="..\DigitalSensor\DigitalSensor.csproj" />
   </ItemGroup>
 </Project>
