@@ -58,10 +58,8 @@ public class ModbusService
         _usbService = usbService;
     }
 
-    public async Task<ushort[]> ReadUsbSerialAdapter(string portName, byte slaveId, ushort startAddress, ushort numRegisters)
+    public async Task<ushort[]> ReadUsbSerialAdapter(int deviceId, byte slaveId, ushort startAddress, ushort numRegisters)
     {
-
-        int deviceId = 11; // USB device ID
         int baudRate = 9600;
         byte dataBits = 8;
         byte stopBits = 1;

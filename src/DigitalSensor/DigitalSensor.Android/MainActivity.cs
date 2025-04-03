@@ -23,9 +23,9 @@ public class MainActivity : AvaloniaMainActivity<App>
             .WithInterFont();
     }
 
-        private void OnRegisterPlatformService(IServiceCollection services)
-        {
-            services.AddSingleton<IUsbService, UsbService>();
-        }
+    private void OnRegisterPlatformService(IServiceCollection services)
+    {
+        services.AddSingleton<IUsbService, UsbService>();
+    }
 
 }

@@ -15,8 +15,8 @@
 
 
 	<StackPanel Margin="20">
-		<TextBlock Text="Serial Port:"/>
-		<TextBox Text="{Binding PortName}" />
+		<TextBlock Text="Device ID:"/>
+		<TextBox Text="{Binding DeviceId}" />
 		
 		<TextBlock Text="Slave ID:"/>
 		<TextBox Text="{Binding SlaveId}" />

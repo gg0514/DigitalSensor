@@ -22,7 +22,7 @@ public partial class MainViewModel : ViewModelBase
     private readonly ModbusService       _modbusService;
 
     [ObservableProperty]
-    private string portName = "COM11";
+    private int deviceId = 11;
 
     [ObservableProperty]
     private byte slaveId = 250;
@@ -58,7 +58,7 @@ public partial class MainViewModel : ViewModelBase
         try
         {
             //var values = await _modbusService.ReadHoldingRegistersAsync(PortName, SlaveId, RegisterAddress, DataLength);
-            var values = await _modbusService.ReadUsbSerialAdapter(PortName, SlaveId, RegisterAddress, DataLength);
+            var values = await _modbusService.ReadUsbSerialAdapter(DeviceId, SlaveId, RegisterAddress, DataLength);
 
             RegisterValues.Clear();
 
