@@ -14,9 +14,12 @@ namespace DigitalSensor.ViewModels;
 //}
 
 
-public partial class MainViewModel : ObservableObject
+public partial class MainViewModel : ViewModelBase
 {
-    private readonly ModbusService _modbusService;
+    private readonly NotificationService _notificationService;
+    private readonly IUsbService         _usbService;
+
+    private readonly ModbusService       _modbusService;
 
     [ObservableProperty]
     private string portName = "COM11";
@@ -35,9 +38,18 @@ public partial class MainViewModel : ObservableObject
 
     public ObservableCollection<ushort> RegisterValues { get; } = new();
 
+    // for Design
     public MainViewModel()
     {
-        _modbusService = new ModbusService();
+    }
+
+    // for Runtime
+    public MainViewModel(NotificationService notificationService, IUsbService usbService)
+    {
+        _notificationService = notificationService;
+        _usbService = usbService;
+
+        _modbusService = new ModbusService(usbService);
     }
 
     [RelayCommand]
@@ -45,7 +57,9 @@ public partial class MainViewModel : ObservableObject
     {
         try
         {
-            var values = await _modbusService.ReadHoldingRegistersAsync(PortName, SlaveId, RegisterAddress, DataLength);
+            //var values = await _modbusService.ReadHoldingRegistersAsync(PortName, SlaveId, RegisterAddress, DataLength);
+            var values = await _modbusService.ReadUsbSerialAdapter(PortName, SlaveId, RegisterAddress, DataLength);
+
             RegisterValues.Clear();
 
             foreach (var value in values)

@@ -28,6 +28,13 @@ class Program
 
     private static void OnRegisterPlatformService(IServiceCollection services)
     {
+        // Interface와 Implementation을 등록하고,
+        // 사용 코드에서는 Interface를 사용하여 작업을 수행한다.
         services.AddSingleton<IUsbService, UsbService>();
+
+
+        // 다음과 같이 Implementation만을 등록하는 방법도 있다.
+        // 사용 코드에서는 Implementation를 사용하여 작업을 수행한다.
+        // services.AddSingleton<UsbService>();
     }
 }

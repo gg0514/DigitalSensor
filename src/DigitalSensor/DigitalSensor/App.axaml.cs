@@ -12,6 +12,7 @@ using DigitalSensor.ViewModels;
 using DigitalSensor.Views;
 using System;
 using System.Threading;
+using DigitalSensor.Extensions;
 
 namespace DigitalSensor;
 
@@ -24,10 +25,17 @@ public partial class App : Application
         Host.CreateDefaultBuilder()
             .ConfigureServices((services) =>
             {
+                // 여기서 UsbSerive의 인터페이스와 구현체를 등록합니다.
                 RegisterPlatformService?.Invoke(services);
+
+                // 여기서 NotificationService의 구현체를 등록합니다.
                 services.AddTransient<NotificationService>();
+
+                // 여기서 MainWindow, MainView의 구현체를 등록합니다.
                 services.AddSingleton<MainWindow>();
                 services.AddSingleton<MainView>();
+
+                // 여기서 MainViewModel의 구현체를 등록합니다.
                 services.AddSingleton<MainViewModel>();
             })
             .Build());
@@ -50,11 +58,11 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = GlobalHost.Services.GetRequiredService<MainWindow>();
+            desktop.MainWindow = GlobalHost.GetService<MainWindow>();
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
-            singleViewPlatform.MainView = GlobalHost.Services.GetRequiredService<MainView>();
+            singleViewPlatform.MainView = GlobalHost.GetService<MainView>();
         }
 
         base.OnFrameworkInitializationCompleted();
