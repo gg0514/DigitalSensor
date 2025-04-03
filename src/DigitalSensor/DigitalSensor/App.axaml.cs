@@ -11,64 +11,61 @@ using DigitalSensor.Services;
 using DigitalSensor.ViewModels;
 using DigitalSensor.Views;
 using System;
+using System.Threading;
 
 namespace DigitalSensor;
 
 
 public partial class App : Application
 {
-
     public static Action<IServiceCollection>? RegisterPlatformService;
 
-    public static IHost GlobalHost => Host.CreateDefaultBuilder()
-        .ConfigureServices((services) =>
+    private static readonly Lazy<IHost> _globalHost = new Lazy<IHost>(() =>
+        Host.CreateDefaultBuilder()
+            .ConfigureServices((services) =>
+            {
+                RegisterPlatformService?.Invoke(services);
+                services.AddTransient<NotificationService>();
+                services.AddSingleton<MainWindow>();
+                services.AddSingleton<MainView>();
+                services.AddSingleton<MainViewModel>();
+            })
+            .Build());
+
+    public static IHost GlobalHost
+    {
+        get
         {
-            RegisterPlatformService?.Invoke(services);
-
-            services.AddTransient<NotificationService>();
-            services.AddSingleton<MainWindow>();
-            services.AddSingleton<MainView>();
-            services.AddSingleton<MainViewModel>();
-        }).Build();
-
+            Console.WriteLine("GlobalHost accessed!");
+            return _globalHost.Value;
+        }
+    }
 
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
     }
 
-    public override void OnFrameworkInitializationCompleted()
+    public override async void OnFrameworkInitializationCompleted()
     {
-        if (Design.IsDesignMode)
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            base.OnFrameworkInitializationCompleted();
-            return;
+            desktop.MainWindow = GlobalHost.Services.GetRequiredService<MainWindow>();
         }
-
-        // Line below is needed to remove Avalonia data validation.
-        // Without this line you will get duplicate validations from both Avalonia and CT
-        // CommunityToolkit를 사용하기 위해서 Avalonia의 데이터 유효성 검사를 제거하는 코드
-        BindingPlugins.DataValidators.RemoveAt(0);
-
-
-        var mainViewModel = new MainViewModel();
-
-        switch (ApplicationLifetime)
+        else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
-            case IClassicDesktopStyleApplicationLifetime desktop:
-                desktop.MainWindow = new MainWindow
-                {
-                    DataContext = mainViewModel,
-                };
-                break;
-            case ISingleViewApplicationLifetime singleViewPlatform:
-                singleViewPlatform.MainView = new MainView
-                {
-                    DataContext = mainViewModel,
-                };
-                break;
+            singleViewPlatform.MainView = GlobalHost.Services.GetRequiredService<MainView>();
         }
 
         base.OnFrameworkInitializationCompleted();
+
+        try
+        {
+            await GlobalHost.StartAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Host Start Failed: {ex.Message}");
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
-
 using Avalonia;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DigitalSensor.Desktop;
 
@@ -15,9 +15,19 @@ class Program
 
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
+    {
+        App.RegisterPlatformService = OnRegisterPlatformService;
+
+        var _ = App.GlobalHost;
+
+        return AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace();
+    }
 
+    private static void OnRegisterPlatformService(IServiceCollection services)
+    {
+        services.AddSingleton<IUsbService, UsbService>();
+    }
 }

@@ -130,7 +130,8 @@ namespace UsbSerialForAndroid.Net
         /// <param name="detached">USB拔出回调</param>
         /// <param name="errorCallback">内部回调错误</param>
         public static void RegisterUsbBroadcastReceiver(bool isShowToast = true,
-            Action<UsbDevice>? attached = default, Action<UsbDevice>? detached = default,
+            Action<UsbDevice>? attached = default, 
+            Action<UsbDevice>? detached = default,
             Action<Exception>? errorCallback = default)
         {
             UsbBroadcastReceiverHelper.RegisterUsbBroadcastReceiver(isShowToast, attached, detached, errorCallback);

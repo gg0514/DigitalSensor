@@ -16,16 +16,19 @@ namespace AvaloniaDemo.ViewModels
     {
         private readonly NotificationService notificationService;
         private readonly IUsbService usbService;
+
         public MainViewModel(NotificationService notificationService, IUsbService usbService)
         {
             this.notificationService = notificationService;
             this.usbService = usbService;
         }
+
         [ObservableProperty] private ObservableCollection<UsbDeviceInfo> usbDeviceInfos = [];
         [ObservableProperty] private string? receivedText;
         [ObservableProperty] private bool sendHexIsChecked = true;
         [ObservableProperty] private bool receivedHexIsChecked = true;
         [ObservableProperty] private UsbDeviceInfo? selectedDeviceInfo;
+
         public void GetAllCommand()
         {
             try
@@ -38,6 +41,7 @@ namespace AvaloniaDemo.ViewModels
                 notificationService.ShowMessage(ex.Message, NotificationType.Error);
             }
         }
+
         public void ConnectDeviceCommand(object[] items)
         {
             try
@@ -68,6 +72,7 @@ namespace AvaloniaDemo.ViewModels
                 notificationService.ShowMessage(ex.Message, NotificationType.Error);
             }
         }
+
         public void SendCommand(string? text)
         {
             try
@@ -86,6 +91,7 @@ namespace AvaloniaDemo.ViewModels
                 notificationService.ShowMessage(ex.Message, NotificationType.Error);
             }
         }
+
         public void ReceiveCommand()
         {
             try
@@ -107,6 +113,7 @@ namespace AvaloniaDemo.ViewModels
                 notificationService.ShowMessage(ex.Message, NotificationType.Error);
             }
         }
+
         private static byte[] TextToBytes(string hexString)
         {
             var text = hexString.ToUpper();
@@ -125,6 +132,7 @@ namespace AvaloniaDemo.ViewModels
 
             return buffer;
         }
+
         public void TestConnectCommand()
         {
             try

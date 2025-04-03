@@ -1,4 +1,5 @@
-﻿using DigitalSensor;
+﻿using Android.Hardware.Usb;
+using DigitalSensor;
 using DigitalSensor.Models;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,10 @@ namespace DigitalSensor.Android
         {
             UsbDriverFactory.RegisterUsbBroadcastReceiver();
         }
+
         private UsbDriverBase? usbDriver;
+        // UsbDriverBase.UsbDeviceConnection를 사용하여 IStreamResource을 구현할 수 있다.
+
         public List<UsbDeviceInfo> GetUsbDeviceInfos()
         {
             var items = UsbManagerHelper.GetAllUsbDevices();
@@ -58,6 +62,19 @@ namespace DigitalSensor.Android
             ArgumentNullException.ThrowIfNull(usbDriver);
             usbDriver.Write(buffer);
         }
+
+        public int Read(byte[] buffer, int offset, int count)
+        {
+            UsbDeviceConnection usbDeviceConnection = usbDriver.UsbDeviceConnection;
+            return usbDeviceConnection.BulkTransfer(usbDriver.UsbEndpointRead, buffer, offset, count, usbDriver.ReadTimeout);
+        }
+
+        public void Write(byte[] buffer, int offset, int count)
+        {
+            UsbDeviceConnection usbDeviceConnection = usbDriver.UsbDeviceConnection;
+            usbDeviceConnection.BulkTransfer(usbDriver.UsbEndpointWrite, buffer, offset, count, usbDriver.WriteTimeout);
+        }
+
         public void Close()
         {
             ArgumentNullException.ThrowIfNull(usbDriver);
