@@ -22,7 +22,7 @@ namespace DigitalSensor.Desktop
             return new List<UsbDeviceInfo>();
         }
 
-        public void Open(int deviceId, int baudRate, byte dataBits, byte stopBits, byte parity)
+        public bool Open(int deviceId, int baudRate, byte dataBits, byte stopBits, byte parity)
         {
             string portName = $"COM{deviceId}";
             _port = new SerialPort(portName);
@@ -33,26 +33,33 @@ namespace DigitalSensor.Desktop
             _port.StopBits = (StopBits)stopBits;
             _port.Parity = (Parity)parity;
             _port.Open();
-        }
 
-        public byte[]? Receive()
-        {
-            return null;
-        }
-
-        public void Send(byte[] buffer)
-        {
-
+            return IsConnection();
         }
 
         public int Read(byte[] buffer, int offset, int count)
         {
-            return _port.Read(buffer, offset, count);
+            int nResult= _port.Read(buffer, offset, count);
+
+            //string text = BitConverter.ToString(buffer, offset, count).Replace("-", " ");
+            //throw new NotImplementedException($"Read ({offset}:{count}): {text}");
+
+            return nResult;
         }
 
         public void Write(byte[] buffer, int offset, int count)
         {
+            //string text = BitConverter.ToString(buffer, offset, count).Replace("-", " ");
+            //throw new NotImplementedException($"Write: {text}");
+
+            //Console.WriteLine($"Write: {text}");
             _port.Write(buffer, offset, count);
+        }
+
+        public void DiscardInBuffer()
+        {
+            ArgumentNullException.ThrowIfNull(_port);
+            _port.DiscardInBuffer();
         }
 
         public void Close()

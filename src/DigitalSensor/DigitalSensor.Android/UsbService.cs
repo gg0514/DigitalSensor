@@ -2,23 +2,25 @@
 using DigitalSensor;
 using DigitalSensor.Models;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using UsbSerialForAndroid.Net;
 using UsbSerialForAndroid.Net.Drivers;
+using UsbSerialForAndroid.Net.Exceptions;
 using UsbSerialForAndroid.Net.Helper;
 
 namespace DigitalSensor.Android
 {
     public class UsbService : IUsbService
     {
+        // USB 드라이버
+        private UsbDriverBase? usbDriver;
+
         public UsbService()
         {
             UsbDriverFactory.RegisterUsbBroadcastReceiver();
         }
-
-        private UsbDriverBase? usbDriver;
-        // UsbDriverBase.UsbDeviceConnection를 사용하여 IStreamResource을 구현할 수 있다.
 
         public List<UsbDeviceInfo> GetUsbDeviceInfos()
         {
@@ -45,34 +47,41 @@ namespace DigitalSensor.Android
                 Version = item.Version//support android23.0
             }).ToList();
         }
-        public void Open(int deviceId, int baudRate, byte dataBits, byte stopBits, byte parity)
+
+        public bool Open(int deviceId, int baudRate, byte dataBits, byte stopBits, byte parity)
         {
             usbDriver = UsbDriverFactory.CreateUsbDriver(deviceId);
             var _stopBits = (UsbSerialForAndroid.Net.Enums.StopBits)stopBits;
             var _parity = (UsbSerialForAndroid.Net.Enums.Parity)parity;
             usbDriver.Open(baudRate, dataBits, _stopBits, _parity);
+
+            return IsOpen();
         }
-        public byte[]? Receive()
+
+        public bool IsOpen()
         {
-            ArgumentNullException.ThrowIfNull(usbDriver);
-            return usbDriver.Read();
-        }
-        public void Send(byte[] buffer)
-        {
-            ArgumentNullException.ThrowIfNull(usbDriver);
-            usbDriver.Write(buffer);
+            return IsConnection();
         }
 
         public int Read(byte[] buffer, int offset, int count)
         {
-            UsbDeviceConnection usbDeviceConnection = usbDriver.UsbDeviceConnection;
-            return usbDeviceConnection.BulkTransfer(usbDriver.UsbEndpointRead, buffer, offset, count, usbDriver.ReadTimeout);
+            return usbDriver.Read(buffer, offset, count);
         }
+
 
         public void Write(byte[] buffer, int offset, int count)
         {
-            UsbDeviceConnection usbDeviceConnection = usbDriver.UsbDeviceConnection;
-            usbDeviceConnection.BulkTransfer(usbDriver.UsbEndpointWrite, buffer, offset, count, usbDriver.WriteTimeout);
+            usbDriver.Write(buffer, offset, count);
+        }
+
+        public void DiscardInBuffer()
+        {
+        }
+
+        public void Dispose()
+        {
+            Close();
+            usbDriver = null;
         }
 
         public void Close()
@@ -80,6 +89,7 @@ namespace DigitalSensor.Android
             ArgumentNullException.ThrowIfNull(usbDriver);
             usbDriver.Close();
         }
+
         public bool IsConnection()
         {
             try

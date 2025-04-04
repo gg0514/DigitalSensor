@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DigitalSensor.Modbus;
 using DigitalSensor.Services;
 
 namespace DigitalSensor.ViewModels;
@@ -17,9 +18,9 @@ namespace DigitalSensor.ViewModels;
 public partial class MainViewModel : ViewModelBase
 {
     private readonly NotificationService _notificationService;
-    private readonly IUsbService         _usbService;
+    private readonly IUsbService _usbService;
 
-    private readonly ModbusService       _modbusService;
+    private readonly ModbusService _modbusService;
 
     [ObservableProperty]
     private int deviceId = 11;
@@ -57,8 +58,8 @@ public partial class MainViewModel : ViewModelBase
     {
         try
         {
-            //var values = await _modbusService.ReadHoldingRegistersAsync(PortName, SlaveId, RegisterAddress, DataLength);
-            var values = await _modbusService.ReadUsbSerialAdapter(DeviceId, SlaveId, RegisterAddress, DataLength);
+            // SlaveId = 250, RegisterAddress = 20, DataLength = 1
+            var values = await _modbusService.ReadUsbSerialAdapter(SlaveId, RegisterAddress, DataLength);
 
             RegisterValues.Clear();
 
@@ -68,6 +69,44 @@ public partial class MainViewModel : ViewModelBase
             }
 
             ResultText = $"Response: {string.Join(", ", values)}";
+        }
+        catch (Exception ex)
+        {
+            ResultText = $"Error: {ex.Message}";
+        }
+    }
+
+    [RelayCommand]
+    private void DetectDevice()
+    {
+        try
+        {
+            //var values = await _modbusService.ReadHoldingRegistersAsync(PortName, SlaveId, RegisterAddress, DataLength);
+            var deviceIds = _modbusService.DetectDevices();
+
+            if (deviceIds.Count == 0)
+            {
+                ResultText = "No devices found.";
+                return;
+            }
+
+            DeviceId = deviceIds[0];
+        }
+        catch (Exception ex)
+        {
+            ResultText = $"Error: {ex.Message}";
+        }
+    }
+
+
+    [RelayCommand]
+    private void OpenDevice()
+    {
+        try
+        {
+            bool bOpen = _modbusService.OpenDevice(DeviceId);
+
+            ResultText = $"result: {bOpen}";
         }
         catch (Exception ex)
         {

@@ -5,48 +5,11 @@ using Modbus.IO;
 using Modbus.Data;
 using Modbus.Device;
 using Modbus.Serial;
+using System.Collections.Generic;
+using DigitalSensor.Models;
 
 
-namespace DigitalSensor.Services;
-
-public class UsbSerialAdapter : IStreamResource
-{
-    private readonly IUsbService _usbService;
-
-
-    public UsbSerialAdapter(IUsbService usbService)
-    {
-        _usbService = usbService;
-    }
-
-    public int InfiniteTimeout { get; } = -1;    
-
-    public int ReadTimeout { get; set; } = 1000;
-    public int WriteTimeout { get; set; } = 1000;
-
-    /// <summary>
-    ///     Purges the receive buffer.
-    /// </summary>
-    public void DiscardInBuffer() 
-    { 
-    }
-
-    public void Dispose()
-    {
-        // IDisposable 패턴에 따라 자원 해제
-        // SerialInputOutputManager은 직접 해제하지 않음 (외부에서 관리)
-        //_usbService = null;
-    }
-
-    public int Read(byte[] buffer, int offset, int count)
-    {
-        return _usbService.Read(buffer, offset, count);
-    }
-    public void Write(byte[] buffer, int offset, int count)
-    {
-        _usbService.Write(buffer, offset, count);
-    }
-}
+namespace DigitalSensor.Modbus;
 
 
 public class ModbusService
@@ -58,14 +21,39 @@ public class ModbusService
         _usbService = usbService;
     }
 
-    public async Task<ushort[]> ReadUsbSerialAdapter(int deviceId, byte slaveId, ushort startAddress, ushort numRegisters)
+    public List<int> DetectDevices()
+    {
+        var devices = _usbService.GetUsbDeviceInfos();
+
+        List<int> deviceIds = new List<int>();
+
+        foreach (var device in devices)
+        {
+            //if (device.VendorId == 0x0403 && device.ProductId == 0x6001) // FTDI USB Serial Device
+            {
+                deviceIds.Add(device.DeviceId);
+            }
+        }
+
+        return deviceIds;
+    }
+
+    public bool OpenDevice(int deviceId)
     {
         int baudRate = 9600;
         byte dataBits = 8;
         byte stopBits = 1;
         byte parity = 0; // 0 = None, 1 = Odd, 2 = Even
 
-        _usbService.Open(deviceId, baudRate, dataBits, stopBits, parity);
+        return _usbService.Open(deviceId, baudRate, dataBits, stopBits, parity);
+    }
+
+    public async Task<ushort[]> ReadUsbSerialAdapter(byte slaveId, ushort startAddress, ushort numRegisters)
+    {
+        if(!_usbService.IsConnection())
+        {
+            throw new InvalidOperationException("USB service is not opened.");
+        }
 
         var adapter = new UsbSerialAdapter(_usbService);
 

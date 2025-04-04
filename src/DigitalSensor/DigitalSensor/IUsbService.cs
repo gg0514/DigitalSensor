@@ -7,13 +7,11 @@ namespace DigitalSensor
     {
         List<UsbDeviceInfo> GetUsbDeviceInfos();
 
-        void Open(int deviceId, int baudRate, byte dataBits, byte stopBits, byte parity);
-
-        void Send(byte[] buffer);
-        byte[]? Receive();
+        bool Open(int deviceId, int baudRate, byte dataBits, byte stopBits, byte parity);
 
         int Read(byte[] buffer, int offset, int count);
         void Write(byte[] buffer, int offset, int count);
+        void DiscardInBuffer();
 
         void Close();
         bool IsConnection();
@@ -27,21 +25,21 @@ namespace DigitalSensor
             return new List<UsbDeviceInfo>();
         }
 
-        public void Open(int deviceId, int baudRate, byte dataBits, byte stopBits, byte parity)
+        public bool Open(int deviceId, int baudRate, byte dataBits, byte stopBits, byte parity)
         {
-
-        }
-
-        public void Send(byte[] buffer) { }
-        public byte[]? Receive() {
-            return null;
+            return true;
         }
 
         public int Read(byte[] buffer, int offset, int count) {
             return 0;
         }
+
         public void Write(byte[] buffer, int offset, int count) { 
         }
+
+        public void DiscardInBuffer() {
+        }
+
 
         public void Close() { 
         }

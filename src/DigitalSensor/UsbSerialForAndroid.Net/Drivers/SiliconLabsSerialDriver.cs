@@ -27,6 +27,7 @@ namespace UsbSerialForAndroid.Net.Drivers
         public const int ControlRtsEnable = 0x0202;
         public const int ControlRtsDisable = 0x0200;
         public SiliconLabsSerialDriver(UsbDevice usbDevice) : base(usbDevice) { }
+
         public override void Open(int baudRate = DefaultBaudRate, byte dataBits = DefaultDataBits, StopBits stopBits = DefaultStopBits, Parity parity = DefaultParity)
         {
             UsbDeviceConnection = UsbManager.OpenDevice(UsbDevice);
