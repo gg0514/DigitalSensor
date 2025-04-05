@@ -8,6 +8,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using UsbSerialForAndroid.Resources;
 
 namespace AvaloniaDemo.ViewModels
@@ -94,9 +95,15 @@ namespace AvaloniaDemo.ViewModels
 
         public void ReceiveCommand()
         {
+            Receive();
+        }
+
+
+        public async Task Receive()
+        {
             try
             {
-                var buffer = usbService.Receive();
+                var buffer = await usbService.Receive();
                 if (buffer is null)
                 {
                     notificationService.ShowMessage(AppResources.NoDataToRead);
@@ -113,6 +120,11 @@ namespace AvaloniaDemo.ViewModels
                 notificationService.ShowMessage(ex.Message, NotificationType.Error);
             }
         }
+
+
+
+
+
 
         private static byte[] TextToBytes(string hexString)
         {

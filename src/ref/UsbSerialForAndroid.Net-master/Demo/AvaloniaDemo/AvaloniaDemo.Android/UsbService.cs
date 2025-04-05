@@ -3,6 +3,8 @@ using AvaloniaDemo.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+
 using UsbSerialForAndroid.Net;
 using UsbSerialForAndroid.Net.Drivers;
 using UsbSerialForAndroid.Net.Helper;
@@ -48,16 +50,18 @@ namespace AvaloniaDemo.Android
             var _parity = (UsbSerialForAndroid.Net.Enums.Parity)parity;
             usbDriver.Open(baudRate, dataBits, _stopBits, _parity);
         }
-        public byte[]? Receive()
+        
+        public async Task <byte[]?> Receive()
         {
             ArgumentNullException.ThrowIfNull(usbDriver);
-            return usbDriver.Read();
+            return await usbDriver.ReadAsync();
         }
-        public void Send(byte[] buffer)
+        public async Task Send(byte[] buffer)
         {
             ArgumentNullException.ThrowIfNull(usbDriver);
-            usbDriver.Write(buffer);
+            await usbDriver.WriteAsync(buffer);
         }
+        
         public void Close()
         {
             ArgumentNullException.ThrowIfNull(usbDriver);
