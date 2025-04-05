@@ -50,18 +50,29 @@ namespace AvaloniaDemo.Android
             var _parity = (UsbSerialForAndroid.Net.Enums.Parity)parity;
             usbDriver.Open(baudRate, dataBits, _stopBits, _parity);
         }
-        
-        public async Task <byte[]?> Receive()
+
+        public byte[]? Receive()
+        {
+            ArgumentNullException.ThrowIfNull(usbDriver);
+            return usbDriver.Read();
+        }
+        public void Send(byte[] buffer)
+        {
+            ArgumentNullException.ThrowIfNull(usbDriver);
+            usbDriver.Write(buffer);
+        }
+
+        public async Task<byte[]?> ReceiveAsync()
         {
             ArgumentNullException.ThrowIfNull(usbDriver);
             return await usbDriver.ReadAsync();
         }
-        public async Task Send(byte[] buffer)
+        public async Task SendAsync(byte[] buffer)
         {
             ArgumentNullException.ThrowIfNull(usbDriver);
             await usbDriver.WriteAsync(buffer);
         }
-        
+
         public void Close()
         {
             ArgumentNullException.ThrowIfNull(usbDriver);

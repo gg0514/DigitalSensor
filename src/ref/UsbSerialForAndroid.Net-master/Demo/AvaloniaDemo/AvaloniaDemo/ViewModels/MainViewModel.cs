@@ -98,12 +98,11 @@ namespace AvaloniaDemo.ViewModels
             Receive();
         }
 
-
-        public async Task Receive()
+        public void Receive()
         {
             try
             {
-                var buffer = await usbService.Receive();
+                var buffer = usbService.Receive();
                 if (buffer is null)
                 {
                     notificationService.ShowMessage(AppResources.NoDataToRead);
@@ -120,10 +119,27 @@ namespace AvaloniaDemo.ViewModels
                 notificationService.ShowMessage(ex.Message, NotificationType.Error);
             }
         }
+        public async Task ReceiveAsync()
+        {
+            try
+            {
+                var buffer = await usbService.ReceiveAsync();
+                if (buffer is null)
+                {
+                    notificationService.ShowMessage(AppResources.NoDataToRead);
+                    return;
+                }
 
-
-
-
+                ReceivedText = ReceivedHexIsChecked
+                ? string.Join(' ', buffer.Select(c => c.ToString("X2")))
+                : Encoding.Default.GetString(buffer);
+                notificationService.ShowMessage(AppResources.ReceiveSuccess + buffer.Length);
+            }
+            catch (Exception ex)
+            {
+                notificationService.ShowMessage(ex.Message, NotificationType.Error);
+            }
+        }
 
 
         private static byte[] TextToBytes(string hexString)

@@ -9,9 +9,13 @@ namespace AvaloniaDemo
     {
         List<UsbDeviceInfo> GetUsbDeviceInfos();
         void Open(int deviceId, int baudRate, byte dataBits, byte stopBits, byte parity);
-        
-        Task Send(byte[] buffer);
-        Task<byte[]?> Receive();
+
+        void Send(byte[] buffer);
+        byte[]? Receive();
+
+
+        Task SendAsync(byte[] buffer);
+        Task<byte[]?> ReceiveAsync();
         
         void Close();
         bool IsConnection();
