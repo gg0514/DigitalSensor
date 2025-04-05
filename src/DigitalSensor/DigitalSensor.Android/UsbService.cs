@@ -71,6 +71,9 @@ namespace DigitalSensor.Android
 
         public void Write(byte[] buffer, int offset, int count)
         {
+            //string str= "HEX: " + BitConverter.ToString(buffer, offset, count).Replace("-", " ");
+            //throw new Exception(str);
+
             usbDriver.Write(buffer, offset, count);
         }
 

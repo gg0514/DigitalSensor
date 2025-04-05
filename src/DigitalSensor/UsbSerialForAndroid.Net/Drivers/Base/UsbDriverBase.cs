@@ -97,12 +97,12 @@ namespace UsbSerialForAndroid.Net.Drivers
         public virtual int Read(byte[] buffer, int offset, int count)
         {
             ArgumentNullException.ThrowIfNull(UsbDeviceConnection);
-            var readBuffer = ArrayPool<byte>.Shared.Rent(offset+count);
+            var readBuffer = ArrayPool<byte>.Shared.Rent(count);
 
             int bytesRead = 0;
             try
             {
-                bytesRead = UsbDeviceConnection.BulkTransfer(UsbEndpointRead, readBuffer, offset, count, ReadTimeout);
+                bytesRead = UsbDeviceConnection.BulkTransfer(UsbEndpointRead, readBuffer, 0, count, ReadTimeout);
 
                 if (bytesRead > 0)
                 {
@@ -110,12 +110,12 @@ namespace UsbSerialForAndroid.Net.Drivers
                 }
                 else if (bytesRead < 0)
                 {
-                    throw new BulkTransferException("Read failed", bytesRead, UsbEndpointRead, readBuffer, 0, readBuffer.Length, ReadTimeout);
+                    throw new BulkTransferException("Read failed", bytesRead, UsbEndpointRead, readBuffer, 0, count, ReadTimeout);
                 }
             }
             finally
             {
-                ArrayPool<byte>.Shared.Return(buffer);
+                ArrayPool<byte>.Shared.Return(readBuffer);
             }
 
             return bytesRead;
