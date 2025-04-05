@@ -66,6 +66,13 @@ namespace DigitalSensor.Android
         public int Read(byte[] buffer, int offset, int count)
         {
             return usbDriver.Read(buffer, offset, count);
+
+            //int nRead = usbDriver.Read(buffer, offset, count);
+
+            //string str = "HEX: " + BitConverter.ToString(buffer, offset, count).Replace("-", " ");
+            //throw new Exception(str);
+
+            //return nRead;
         }
 
 
