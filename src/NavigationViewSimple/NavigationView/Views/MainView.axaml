@@ -28,6 +28,7 @@
                        PaneDisplayMode="LeftMinimal"
                        IsPaneToggleButtonVisible="True"
 				       IsSettingsVisible="False"
+					   OpenPaneLength="180"
 					   SelectionChanged="OnNavigationSelectionChanged">
 		<ui:NavigationView.MenuItems>
 			<ui:NavigationViewItem
