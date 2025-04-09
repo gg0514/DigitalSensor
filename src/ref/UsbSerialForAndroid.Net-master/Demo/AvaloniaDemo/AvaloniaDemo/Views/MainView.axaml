@@ -150,7 +150,7 @@
 
 			<TextBox
                 x:Name="sendTb"
-                Text="01 01 00 00 00 08 3D CC"
+                Text="FA 03 00 14 00 01 D1 85"
                 TextWrapping="Wrap" />
 		</StackPanel>
 

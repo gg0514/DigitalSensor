@@ -8,6 +8,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using UsbSerialForAndroid.Resources;
 
 namespace AvaloniaDemo.ViewModels
@@ -94,6 +95,11 @@ namespace AvaloniaDemo.ViewModels
 
         public void ReceiveCommand()
         {
+            Receive();
+        }
+
+        public void Receive()
+        {
             try
             {
                 var buffer = usbService.Receive();
@@ -113,6 +119,28 @@ namespace AvaloniaDemo.ViewModels
                 notificationService.ShowMessage(ex.Message, NotificationType.Error);
             }
         }
+        public async Task ReceiveAsync()
+        {
+            try
+            {
+                var buffer = await usbService.ReceiveAsync();
+                if (buffer is null)
+                {
+                    notificationService.ShowMessage(AppResources.NoDataToRead);
+                    return;
+                }
+
+                ReceivedText = ReceivedHexIsChecked
+                ? string.Join(' ', buffer.Select(c => c.ToString("X2")))
+                : Encoding.Default.GetString(buffer);
+                notificationService.ShowMessage(AppResources.ReceiveSuccess + buffer.Length);
+            }
+            catch (Exception ex)
+            {
+                notificationService.ShowMessage(ex.Message, NotificationType.Error);
+            }
+        }
+
 
         private static byte[] TextToBytes(string hexString)
         {

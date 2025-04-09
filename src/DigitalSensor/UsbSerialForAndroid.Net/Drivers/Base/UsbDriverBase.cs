@@ -97,28 +97,49 @@ namespace UsbSerialForAndroid.Net.Drivers
         public virtual int Read(byte[] buffer, int offset, int count)
         {
             ArgumentNullException.ThrowIfNull(UsbDeviceConnection);
-            var readBuffer = ArrayPool<byte>.Shared.Rent(offset+count);
+            var readBuffer = ArrayPool<byte>.Shared.Rent(count);
 
-            int bytesRead = 0;
+            int totalBytes = 0;
+            int expectedLength = 0;
+
             try
             {
-                bytesRead = UsbDeviceConnection.BulkTransfer(UsbEndpointRead, readBuffer, offset, count, ReadTimeout);
+                while (true)
+                {
+                    int bytesRead = UsbDeviceConnection.BulkTransfer(UsbEndpointRead, readBuffer, totalBytes, count - totalBytes, ReadTimeout);
 
-                if (bytesRead > 0)
-                {
-                    Array.Copy(readBuffer, 0, buffer, offset, bytesRead);
+                    if (bytesRead < 0)
+                    {
+                        throw new BulkTransferException("Read failed", bytesRead, UsbEndpointRead, readBuffer, 0, count, ReadTimeout);
+                    }
+
+                    totalBytes += bytesRead;
+
+                    if (totalBytes >= 3 && expectedLength == 0)
+                    {
+                        expectedLength = 3 + readBuffer[2] + 2;
+                    }
+
+                    if (expectedLength > 0 && totalBytes >= expectedLength)
+                    {
+                        break; // 패킷 완성
+                    }
+
+                    if (totalBytes >= count)
+                    {
+                        break; // 버퍼가 꽉 찼음
+                    }
                 }
-                else if (bytesRead < 0)
-                {
-                    throw new BulkTransferException("Read failed", bytesRead, UsbEndpointRead, readBuffer, 0, readBuffer.Length, ReadTimeout);
-                }
+
+                Array.Copy(readBuffer, 0, buffer, offset, totalBytes);
+                //throw new BulkTransferException("Read failed", totalBytes, UsbEndpointRead, buffer, expectedLength, count, ReadTimeout);
             }
             finally
             {
-                ArrayPool<byte>.Shared.Return(buffer);
+                ArrayPool<byte>.Shared.Return(readBuffer);
             }
 
-            return bytesRead;
+            return totalBytes;
         }
 
 

@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Hardware.Usb;
+using Android.Media.TV;
 using System;
 using System.Buffers;
 using System.Threading.Tasks;
@@ -135,12 +136,41 @@ namespace UsbSerialForAndroid.Net.Drivers
         {
             ArgumentNullException.ThrowIfNull(UsbDeviceConnection);
             var buffer = ArrayPool<byte>.Shared.Rent(DefaultBufferLength);
+
+            int totalBytes = 0;
+            int expectedLength = 0;
+
             try
             {
-                int result = UsbDeviceConnection.BulkTransfer(UsbEndpointRead, buffer, 0, DefaultBufferLength, ReadTimeout);
-                return result >= 0
-                    ? buffer.AsSpan().Slice(0, result).ToArray()
-                    : default;
+                while (true)
+                {
+                    int bytesRead = UsbDeviceConnection.BulkTransfer(UsbEndpointRead, buffer, totalBytes, buffer.Length - totalBytes, ReadTimeout);
+                    if (bytesRead < 0)
+                    {
+                        throw new BulkTransferException("Read failed", bytesRead, UsbEndpointRead, buffer, totalBytes, buffer.Length - totalBytes, ReadTimeout);
+                    }
+                    totalBytes += bytesRead;
+
+                    // totalBytes 수 계산
+                    if (totalBytes >= 3 && expectedLength == 0)
+                    {
+                        // 데이터 바이트 수 + 3(header) + 2(CRC)
+                        expectedLength = 3 + buffer[2] + 2;
+                    }
+
+                    // 패킷 완성여부 판단 
+                    if (expectedLength > 0 && totalBytes >= expectedLength)
+                    {
+                        break; // 패킷 완성
+                    }
+                }
+
+                return buffer.AsSpan().Slice(0, totalBytes).ToArray();
+
+                //int result = UsbDeviceConnection.BulkTransfer(UsbEndpointRead, buffer, 0, DefaultBufferLength, ReadTimeout);
+                //return result >= 0
+                //    ? buffer.AsSpan().Slice(0, result).ToArray()
+                //    : default;
             }
             finally
             {
