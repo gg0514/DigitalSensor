@@ -1,0 +1,53 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:vm="clr-namespace:NavigationView.ViewModels"
+			 xmlns:views="using:NavigationView.Views"
+             mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="800"
+             x:Class="NavigationView.Views.MainView"
+             x:DataType="vm:MainViewModel">
+	
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <vm:MainViewModel />
+  </Design.DataContext>
+
+	<ui:NavigationView x:Name="NavView"
+                      IsSettingsVisible="False"
+                      PaneDisplayMode="LeftCompact"
+                      IsPaneOpen="False"
+                      OpenPaneLength="250"
+                      SelectedIndex="{Binding SelectedNavIndex}"
+                      SelectionChanged="NavView_SelectionChanged">
+		<ui:NavigationView.MenuItems>
+			<ui:NavigationViewItem Content="Home" Tag="home" Icon="Home" />
+			<ui:NavigationViewItem Content="Settings" Tag="settings" Icon="Settings" />
+		</ui:NavigationView.MenuItems>
+
+		<Panel>
+			<ContentControl Content="{Binding CurrentView}">
+				<ContentControl.DataTemplates>
+					<DataTemplate DataType="{x:Type vm:HomeViewModel}">
+						<views:HomeView />
+					</DataTemplate>
+					<DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+						<views:SettingsView />
+					</DataTemplate>
+				</ContentControl.DataTemplates>
+			</ContentControl>
+		</Panel>
+	</ui:NavigationView>
+
+	<UserControl.CodeBehind>
+		private void NavView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if (DataContext is MainWindowViewModel vm)
+			{
+				vm.NavigateToItemCommand.Execute(NavView.SelectedIndex);
+			}
+		}
+	</UserControl.CodeBehind>
+</UserControl>

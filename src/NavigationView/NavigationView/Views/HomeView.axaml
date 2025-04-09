@@ -1,0 +1,50 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:vm="using:NavigationView.ViewModels"
+             xmlns:views="using:NavigationView.Views"
+			 mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="800"
+             x:Class="NavigationView.Views.HomeView"
+             x:DataType="vm:HomeViewModel">
+	
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <vm:HomeViewModel />
+  </Design.DataContext>
+
+	<Grid RowDefinitions="Auto,*">
+		<TextBlock Grid.Row="0"
+                   Text="Home"
+                   FontSize="24"
+                   Margin="24,12"
+                   FontWeight="SemiBold"/>
+
+		<ui:TabView Grid.Row="1"
+                    TabItems="{Binding TabItems}"
+                    SelectedIndex="{Binding SelectedTabIndex}"
+                    Margin="12">
+			<ui:TabView.TabItemTemplate>
+				<DataTemplate>
+					<ui:TabViewItem Header="{Binding Header}">
+						<ContentControl Content="{Binding Content}">
+							<ContentControl.DataTemplates>
+								<DataTemplate DataType="{x:Type vm:Tab1ViewModel}">
+									<views:Tab1View />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type vm:Tab2ViewModel}">
+									<views:Tab2View />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type vm:Tab3ViewModel}">
+									<views:Tab3View />
+								</DataTemplate>
+							</ContentControl.DataTemplates>
+						</ContentControl>
+					</ui:TabViewItem>
+				</DataTemplate>
+			</ui:TabView.TabItemTemplate>
+		</ui:TabView>
+	</Grid>
+</UserControl>

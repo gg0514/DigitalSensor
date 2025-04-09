@@ -1,0 +1,13 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="NavigationView.App"
+             xmlns:sty="using:FluentAvalonia.Styling"
+             RequestedThemeVariant="Default">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.Styles>
+        <FluentTheme />
+		<sty:FluentAvaloniaTheme />
+		<!--<StyleInclude Source="avares://FluentAvalonia/Styling/Controls/FAControls.axaml" />-->
+	</Application.Styles>
+</Application>

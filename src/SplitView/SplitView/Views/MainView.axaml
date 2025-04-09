@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:SplitView.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="800"
+             x:Class="SplitView.Views.MainView"
+             x:DataType="vm:MainViewModel">
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <vm:MainViewModel />
+  </Design.DataContext>
+
+	<SplitView DisplayMode="Overlay"
+               OpenPaneLength="200"
+               IsPaneOpen="{Binding IsMenuOpen}">
+		<SplitView.Pane>
+			<StackPanel>
+				<Button Content="🏠 홈" Command="{Binding NavigateHomeCommand}" />
+				<Button Content="⚙ 설정" Command="{Binding NavigateSettingsCommand}" />
+			</StackPanel>
+		</SplitView.Pane>
+
+		<SplitView.Content>
+			<DockPanel>
+				<StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+					<Button Content="☰" Command="{Binding ToggleMenuCommand}" />
+					<TextBlock Text="My App" VerticalAlignment="Center" Margin="8,0,0,0"/>
+				</StackPanel>
+
+				<ContentControl Content="{Binding CurrentView}" />
+			</DockPanel>
+		</SplitView.Content>
+	</SplitView>
+</UserControl>
