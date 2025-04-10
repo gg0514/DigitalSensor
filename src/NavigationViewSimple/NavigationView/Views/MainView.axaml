@@ -32,6 +32,7 @@
 					   SelectionChanged="OnNavigationSelectionChanged">
 		<ui:NavigationView.MenuItems>
 			<ui:NavigationViewItem
+				FontSize="18"
 				Content="Home"
 				Tag="home"
 				IconSource="Home"
@@ -39,6 +40,7 @@
 				 />
 
 			<ui:NavigationViewItem
+				FontSize="18"
 				Content="Setting"
 				IconSource="Setting"
 				Tag="Setting">
@@ -48,6 +50,7 @@
 			</ui:NavigationViewItem>
 
 			<ui:NavigationViewItem
+				FontSize="18"
 				Content="Calibration"
 				IconSource="Play" 
 				Tag="Calib">

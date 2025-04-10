@@ -29,10 +29,10 @@ public partial class App : Application
         BindingPlugins.DataValidators.RemoveAt(0);
 
 
-        // FluentAvalonia 초기화
-        var fa = new FluentAvaloniaTheme();
-        fa.PreferSystemTheme = false;
-        Styles.Insert(0, fa);
+        //// FluentAvalonia 초기화
+        //var fa = new FluentAvaloniaTheme();
+        //fa.PreferSystemTheme = false;
+        //Styles.Insert(0, fa);
 
 
         // Setup DI container
@@ -57,7 +57,7 @@ public partial class App : Application
         }
 
         // Dark 테마 설정
-        Application.Current.RequestedThemeVariant = Avalonia.Styling.ThemeVariant.Dark;
+        //Application.Current.RequestedThemeVariant = Avalonia.Styling.ThemeVariant.Dark;
 
         base.OnFrameworkInitializationCompleted();
     }
