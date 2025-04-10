@@ -29,7 +29,8 @@
                        IsPaneToggleButtonVisible="True"
 				       IsSettingsVisible="False"
 					   OpenPaneLength="200"
-					   SelectionChanged="OnNavigationSelectionChanged">
+				       SelectionChanged="NavView_SelectionChanged"
+				       >
 		<ui:NavigationView.MenuItems>
 			<ui:NavigationViewItem
 				FontSize="18"
@@ -64,7 +65,7 @@
 
 		</ui:NavigationView.MenuItems>
 
-		<ContentControl Content="{Binding CurrentView}" />
+		<ContentControl Content="{Binding CurrentPage}" />
 	</ui:NavigationView>
 
 

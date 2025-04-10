@@ -4,9 +4,9 @@ using NavigationView.ViewModels;
 
 namespace NavigationView.Views;
 
-public partial class MainView : UserControl
+public partial class MainView2 : UserControl
 {
-    public MainView()
+    public MainView2()
     {
         InitializeComponent();
     }

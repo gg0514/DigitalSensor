@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using NavigationView.Services;
 using NavigationView.Views;
 using System;
 using System.Collections.ObjectModel;
@@ -9,23 +10,20 @@ namespace NavigationView.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
+    private readonly NavigationService _navigationService;
+
     [ObservableProperty]
-    private UserControl currentView;
+    private object? _currentPage;
 
-    public MainViewModel()
+    public MainViewModel(NavigationService navigationService)
     {
-        CurrentView = new HomeView();
+        _navigationService = navigationService;
+        NavigateTo("Home");
     }
 
     [RelayCommand]
-    private void NavigateHome()
+    private void NavigateTo(string pageKey)
     {
-        CurrentView = new HomeView();
-    }
-
-    [RelayCommand]
-    private void NavigateSettings()
-    {
-        CurrentView = new SettingView();
+        CurrentPage = _navigationService.GetPage(pageKey);
     }
 }

@@ -1,0 +1,40 @@
+<UserControl
+    x:Class="NavigationView.Views.MainView2"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="using:FluentAvalonia.UI.Controls"
+    xmlns:views="using:NavigationView.Views"
+    xmlns:vm="clr-namespace:NavigationView.ViewModels"
+    d:DesignHeight="800"
+    d:DesignWidth="450"
+    x:DataType="vm:MainViewModel"
+    mc:Ignorable="d">
+
+    <Design.DataContext>
+        
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <!--  SelectedIndex="{Binding SelectedNavIndex}"  -->
+    <!--  SelectionChanged="NavView_SelectionChanged">  -->
+	<!--SelectedItem="{Binding SelectedItem}">-->
+	<!--SelectedItem="Home">-->
+
+	<ui:NavigationView
+		PaneDisplayMode="Top"
+		IsPaneToggleButtonVisible="True"
+		IsPaneVisible="True"
+		SelectionChanged="NavView_SelectionChanged"
+        >
+		
+		<ui:NavigationView.MenuItems>
+			<ui:NavigationViewItem Content="Home" Tag="Home" />
+			<ui:NavigationViewItem Content="Settings" Tag="Settings" />
+		</ui:NavigationView.MenuItems>
+
+		<ContentControl Content="{Binding CurrentPage}" />
+	</ui:NavigationView>
+
+</UserControl>

@@ -6,6 +6,7 @@ using Avalonia.Styling;
 using FluentAvalonia.Styling;
 using Microsoft.Extensions.DependencyInjection;
 
+using NavigationView.Services;
 using NavigationView.ViewModels;
 using NavigationView.Views;
 using System;
@@ -15,7 +16,7 @@ namespace NavigationView;
 
 public partial class App : Application
 {
-    public IServiceProvider? Services { get; private set; }
+    public static IServiceProvider Services { get; private set; }
 
     public override void Initialize()
     {
@@ -64,8 +65,11 @@ public partial class App : Application
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddSingleton<NavigationService>();
+        services.AddSingleton<DataService>();
+
         // Register view models
-        services.AddTransient<MainViewModel>();
+        services.AddSingleton<MainViewModel>();
         services.AddTransient<HomeViewModel>();
         services.AddTransient<SettingViewModel>();
     }

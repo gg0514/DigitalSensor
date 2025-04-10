@@ -2,8 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:DigitalSensor.ViewModels"
-             xmlns:vmd="clr-namespace:DigitalSensor.ViewModels.Design"
+             xmlns:vm="using:DigitalSensor.ViewModels"
+             xmlns:vmd="using:DigitalSensor.ViewModels.Design"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="800"
              x:Class="DigitalSensor.Views.MainView"
              x:DataType="vm:MainViewModel">
@@ -14,7 +14,7 @@
 
 
 
-	<StackPanel Margin="20">
+	<StackPanel Margin="30,60">
 		<TextBlock Text="Device ID:"/>
 		<TextBox Text="{Binding DeviceId}" />
 		
