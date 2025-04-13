@@ -10,16 +10,23 @@ namespace NavigationView.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
-    private readonly NavigationService _navigationService;
+    private readonly INavigationService _navigationService;
 
     [ObservableProperty]
     private object? _currentPage;
 
-    public MainViewModel(NavigationService navigationService)
+    public MainViewModel(INavigationService navigationService)
     {
         _navigationService = navigationService;
         NavigateTo("Home");
     }
+
+    public MainViewModel()
+    {
+        _navigationService = new FakeNavigationService();
+        NavigateTo("Home");
+    }
+
 
     [RelayCommand]
     private void NavigateTo(string pageKey)

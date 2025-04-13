@@ -61,8 +61,5 @@ public partial class App : Application
         services.AddTransient<MainViewModel>();
         services.AddTransient<HomeViewModel>();
         services.AddTransient<SettingViewModel>();
-        services.AddTransient<Tab1ViewModel>();
-        services.AddTransient<Tab2ViewModel>();
-        services.AddTransient<Tab3ViewModel>();
     }
 }

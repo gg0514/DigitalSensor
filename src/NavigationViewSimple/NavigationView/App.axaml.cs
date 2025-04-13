@@ -65,7 +65,7 @@ public partial class App : Application
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddSingleton<NavigationService>();
+        services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<DataService>();
 
         // Register view models

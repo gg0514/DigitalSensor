@@ -22,4 +22,37 @@
 		<sty:FluentAvaloniaTheme />
 		<!--<StyleInclude Source="avares://FluentAvalonia/Styling/Controls/FAControls.axaml" />-->
 	</Application.Styles>
+
+	<Application.Styles>
+
+		<sty:FluentAvaloniaTheme />
+		<StyleInclude Source="avares://FluentAvalonia/Styling/ControlThemes/Controls.axaml"/>
+		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+
+	</Application.Styles>
+
+	<Application.Resources>
+		<ControlTemplate x:Key="CustomPaneToggleButtonTemplate" TargetType="Button">
+			<Border Background="Transparent" Padding="4">
+				<Viewbox Width="36" Height="36">
+					<TextBlock Text="&#xE700;"
+							   FontFamily="Segoe MDL2 Assets"
+							   FontSize="28"/>
+				</Viewbox>
+			</Border>
+		</ControlTemplate>
+	</Application.Resources>
+
+
+	<!--<Application.Styles>
+		<Style x:Key="CustomPaneToggleButtonStyle" TargetType="Button">
+		<Setter Property="Width" Value="40"/>
+		<Setter Property="Height" Value="40"/>
+		<Setter Property="Margin" Value="12,0"/>
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="FontSize" Value="16"/>
+	</Style>
+	</Application.Styles>-->
+
+
 </Application>

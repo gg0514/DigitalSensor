@@ -16,38 +16,10 @@
   </Design.DataContext>
 
 	<ui:NavigationView x:Name="NavView"
-                      IsSettingsVisible="False"
-                      PaneDisplayMode="LeftCompact"
-                      IsPaneOpen="False"
-                      OpenPaneLength="250"
-                      SelectedIndex="{Binding SelectedNavIndex}"
-                      SelectionChanged="NavView_SelectionChanged">
-		<ui:NavigationView.MenuItems>
-			<ui:NavigationViewItem Content="Home" Tag="home" Icon="Home" />
-			<ui:NavigationViewItem Content="Settings" Tag="settings" Icon="Settings" />
-		</ui:NavigationView.MenuItems>
-
-		<Panel>
-			<ContentControl Content="{Binding CurrentView}">
-				<ContentControl.DataTemplates>
-					<DataTemplate DataType="{x:Type vm:HomeViewModel}">
-						<views:HomeView />
-					</DataTemplate>
-					<DataTemplate DataType="{x:Type vm:SettingsViewModel}">
-						<views:SettingsView />
-					</DataTemplate>
-				</ContentControl.DataTemplates>
-			</ContentControl>
-		</Panel>
-	</ui:NavigationView>
-
-	<UserControl.CodeBehind>
-		private void NavView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			if (DataContext is MainWindowViewModel vm)
-			{
-				vm.NavigateToItemCommand.Execute(NavView.SelectedIndex);
-			}
-		}
-	</UserControl.CodeBehind>
+						   PaneDisplayMode="LeftMinimal"
+						   IsPaneOpen="False"
+						   MenuItemsSource="{Binding MenuItems}"
+						   SelectedItem="{Binding SelectedMenuItem}"
+						   Content="{Binding CurrentPage}" />
+	
 </UserControl>

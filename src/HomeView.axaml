@@ -3,10 +3,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
-             xmlns:vm="using:NavigationView.ViewModels"
-             xmlns:views="using:NavigationView.Views"
+             xmlns:vm="using:AAva.ViewModels"
 			 mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="800"
-             x:Class="NavigationView.Views.HomeView"
+             x:Class="AAva.Views.HomeView"
              x:DataType="vm:HomeViewModel">
 	
   <Design.DataContext>
@@ -15,8 +14,5 @@
     <vm:HomeViewModel />
   </Design.DataContext>
 
-	<StackPanel>
-		<TextBlock Text="Home Page" FontSize="20" />
-		<TextBlock Text="{Binding InstrumentData}" />
-	</StackPanel>
+	<TextBlock Text="{Binding WelcomeMessage}" VerticalAlignment="Center" HorizontalAlignment="Center" />
 </UserControl>

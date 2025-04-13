@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="using:FluentAvalonia.UI.Controls"
     xmlns:views="using:NavigationView.Views"
-    xmlns:vm="clr-namespace:NavigationView.ViewModels"
+    xmlns:vm="using:NavigationView.ViewModels"
     d:DesignHeight="800"
     d:DesignWidth="450"
     x:DataType="vm:MainViewModel"
@@ -23,6 +23,8 @@
     <!--  SelectedIndex="{Binding SelectedNavIndex}"  -->
     <!--  SelectionChanged="NavView_SelectionChanged">  -->
 
+
+		
 	<ui:NavigationView x:Name="Nav" 
 					   IsPaneOpen="False"
                        PaneDisplayMode="LeftMinimal"
@@ -31,17 +33,22 @@
 					   OpenPaneLength="200"
 				       SelectionChanged="NavView_SelectionChanged"
 				       >
+
+		<!--<ui:NavigationView.PaneToggleButton>
+			<Button Template="{StaticResource CustomPaneToggleButtonTemplate}" />
+		</ui:NavigationView.PaneToggleButton>-->
+
 		<ui:NavigationView.MenuItems>
 			<ui:NavigationViewItem
-				FontSize="18"
+				FontSize="14"
 				Content="Home"
-				Tag="home"
+				Tag="Home"
 				IconSource="Home"
 				IsSelected="True"
 				 />
 
 			<ui:NavigationViewItem
-				FontSize="18"
+				FontSize="14"
 				Content="Setting"
 				IconSource="Setting"
 				Tag="Setting">
@@ -51,7 +58,7 @@
 			</ui:NavigationViewItem>
 
 			<ui:NavigationViewItem
-				FontSize="18"
+				FontSize="14"
 				Content="Calibration"
 				IconSource="Play" 
 				Tag="Calib">

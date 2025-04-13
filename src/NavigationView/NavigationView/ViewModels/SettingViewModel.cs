@@ -10,20 +10,5 @@ namespace NavigationView.ViewModels;
 public partial class SettingViewModel : ViewModelBase
 {
     [ObservableProperty]
-    private bool _isDarkTheme;
-
-    [ObservableProperty]
-    private bool _notificationsEnabled;
-
-    public SettingViewModel()
-    {
-        _isDarkTheme = false;
-        _notificationsEnabled = true;
-    }
-
-    [RelayCommand]
-    private void SaveSettings()
-    {
-        // Save settings logic would go here
-    }
+    private string _message = "Settings Page";
 }

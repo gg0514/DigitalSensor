@@ -17,7 +17,8 @@ public partial class HomeViewModel : ViewModelBase
 
     public HomeViewModel()
     {
-
+        _dataService = new DataService();
+        _dataService.DataReceived += data => ReceivedData = data;
     }
 
 
