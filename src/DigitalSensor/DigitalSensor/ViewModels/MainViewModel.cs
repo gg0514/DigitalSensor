@@ -18,13 +18,13 @@ public partial class MainViewModel : ViewModelBase
     public MainViewModel(INavigationService navigationService)
     {
         _navigationService = navigationService;
-        NavigateTo("Home");
+        NavigateTo("Test");
     }
 
     public MainViewModel()
     {
         _navigationService = new FakeNavigationService();
-        NavigateTo("Home");
+        NavigateTo("Test");
     }
 
 

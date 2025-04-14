@@ -23,7 +23,7 @@ public class NavigationService : INavigationService
 
         return name switch
         {
-            "Home" => _provider.GetRequiredService<HomeViewModel>(),
+            "Home" => _provider.GetRequiredService<TestViewModel>(),
             "Setting" => _provider.GetRequiredService<SettingViewModel>(),
             "pH" => _provider.GetRequiredService<TestViewModel>(),
             _ => null

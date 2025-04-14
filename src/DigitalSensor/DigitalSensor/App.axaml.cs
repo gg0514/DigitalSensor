@@ -28,7 +28,10 @@ public partial class App : Application
                 // 여기서 UsbSerive의 인터페이스와 구현체를 등록합니다.
                 RegisterPlatformService?.Invoke(services);
 
+                services.AddSingleton<INavigationService, NavigationService>();
+                services.AddSingleton<DataService>();
                 services.AddTransient<NotificationService>();
+
                 services.AddSingleton<MainWindow>();
                 services.AddSingleton<MainView>();
                 services.AddSingleton<MainViewModel>();
