@@ -16,6 +16,7 @@
     <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
     <PackageReference Include="FluentAvaloniaUI" Version="2.1.0" />
+    <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="1.1.293" />
 
 	  <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
@@ -29,5 +30,18 @@
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="ViewModels\Design\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaXaml Update="Views\TestView.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\TestView.axaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>TestView.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

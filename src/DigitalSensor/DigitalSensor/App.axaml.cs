@@ -28,15 +28,16 @@ public partial class App : Application
                 // 여기서 UsbSerive의 인터페이스와 구현체를 등록합니다.
                 RegisterPlatformService?.Invoke(services);
 
-                // 여기서 NotificationService의 구현체를 등록합니다.
                 services.AddTransient<NotificationService>();
-
-                // 여기서 MainWindow, MainView의 구현체를 등록합니다.
                 services.AddSingleton<MainWindow>();
                 services.AddSingleton<MainView>();
-
-                // 여기서 MainViewModel의 구현체를 등록합니다.
                 services.AddSingleton<MainViewModel>();
+                services.AddSingleton<TestView>();
+                services.AddSingleton<TestViewModel>();
+                services.AddSingleton<HomeView>();
+                services.AddSingleton<HomeViewModel>();
+                services.AddSingleton<SettingView>();
+                services.AddSingleton<SettingViewModel>();
             })
             .Build());
 

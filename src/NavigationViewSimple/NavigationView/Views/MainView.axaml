@@ -7,6 +7,7 @@
     xmlns:ui="using:FluentAvalonia.UI.Controls"
     xmlns:views="using:NavigationView.Views"
     xmlns:vm="using:NavigationView.ViewModels"
+	xmlns:ic="using:FluentIcons.Avalonia.Fluent"
     d:DesignHeight="800"
     d:DesignWidth="450"
     x:DataType="vm:MainViewModel"
@@ -60,8 +61,17 @@
 			<ui:NavigationViewItem
 				FontSize="14"
 				Content="Calibration"
-				IconSource="Play" 
+				IconSource="Play"
 				Tag="Calib">
+
+				<ui:NavigationViewItem.IconSource>
+					<ic:FluentIconSource Icon="BookPulse" />
+				</ui:NavigationViewItem.IconSource>
+
+				<ui:NavigationViewItem.IconSource>
+					<ic:FluentIconSource Icon="Poll" />
+				</ui:NavigationViewItem.IconSource>
+
 				<ui:NavigationViewItem.MenuItems>
 					<ui:NavigationViewItem Content="pH" Tag="pH" />
 					<ui:NavigationViewItem Content="CL" Tag="CL" />

@@ -9,9 +9,9 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="DigitalSensor">
 
-	<Design.DataContext>
+	<!--<Design.DataContext>
 		<vm:MainViewModel />
-	</Design.DataContext>
+	</Design.DataContext>-->
 
 	<views:MainView />
 	

@@ -1,45 +1,86 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="using:DigitalSensor.ViewModels"
-             xmlns:vmd="using:DigitalSensor.ViewModels.Design"
-             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="800"
-             x:Class="DigitalSensor.Views.MainView"
-             x:DataType="vm:MainViewModel">
-	
-  <Design.DataContext>
-    <vm:MainViewModel />
-  </Design.DataContext>
+<UserControl
+    x:Class="DigitalSensor.Views.MainView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="using:FluentAvalonia.UI.Controls"
+    xmlns:views="using:DigitalSensor.Views"
+    xmlns:vm="using:DigitalSensor.ViewModels"
+	xmlns:ic="using:FluentIcons.Avalonia.Fluent"
+    d:DesignHeight="800"
+    d:DesignWidth="450"
+    x:DataType="vm:MainViewModel"
+    mc:Ignorable="d">
+
+    <Design.DataContext>
+        <!--
+            This only sets the DataContext for the previewer in an IDE,
+            to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs)
+        -->
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <!--  SelectedIndex="{Binding SelectedNavIndex}"  -->
+    <!--  SelectionChanged="NavView_SelectionChanged">  -->
 
 
-
-	<StackPanel Margin="30,60">
-		<TextBlock Text="Device ID:"/>
-		<TextBox Text="{Binding DeviceId}" />
 		
-		<TextBlock Text="Slave ID:"/>
-		<TextBox Text="{Binding SlaveId}" />
+	<ui:NavigationView x:Name="Nav" 
+					   IsPaneOpen="False"
+                       PaneDisplayMode="LeftMinimal"
+                       IsPaneToggleButtonVisible="True"
+				       IsSettingsVisible="False"
+					   OpenPaneLength="200"
+				       SelectionChanged="NavView_SelectionChanged"
+				       >
 
-		<TextBlock Text="Start Address:"/>
-		<TextBox Text="{Binding RegisterAddress}" />
+		<!--<ui:NavigationView.PaneToggleButton>
+			<Button Template="{StaticResource CustomPaneToggleButtonTemplate}" />
+		</ui:NavigationView.PaneToggleButton>-->
 
-		<TextBlock Text="Length:"/>
-		<TextBox Text="{Binding DataLength}" />
+		<ui:NavigationView.MenuItems>
+			<ui:NavigationViewItem
+				FontSize="14"
+				Content="Home"
+				Tag="Home"
+				IconSource="Home"
+				IsSelected="True"
+				 />
+
+			<ui:NavigationViewItem
+				FontSize="14"
+				Content="Setting"
+				IconSource="Setting"
+				Tag="Setting">
+			</ui:NavigationViewItem>
+
+			<ui:NavigationViewItem
+				FontSize="14"
+				Content="Calibration"
+				IconSource="Play"
+				Tag="Calib">
+
+				<ui:NavigationViewItem.IconSource>
+					<ic:FluentIconSource Icon="BookPulse" />
+				</ui:NavigationViewItem.IconSource>
+
+				<ui:NavigationViewItem.IconSource>
+					<ic:FluentIconSource Icon="Poll" />
+				</ui:NavigationViewItem.IconSource>
+
+				<ui:NavigationViewItem.MenuItems>
+					<ui:NavigationViewItem Content="pH" Tag="pH" />
+					<ui:NavigationViewItem Content="CL" Tag="CL" />
+					<ui:NavigationViewItem Content="TU" Tag="TU" />
+					<ui:NavigationViewItem Content="EC" Tag="EC" />
+				</ui:NavigationViewItem.MenuItems>
+			</ui:NavigationViewItem>
+
+		</ui:NavigationView.MenuItems>
+
+		<ContentControl Content="{Binding CurrentPage}" />
+	</ui:NavigationView>
 
 
-		<DockPanel>
-			<Button Content="Send3" DockPanel.Dock="Left" Command="{Binding ReadRegistersCommand}" Margin="0,10,10,10"/>
-			<Button Content="Detect" DockPanel.Dock="Right" Command="{Binding DetectDeviceCommand}" Margin="0,10,10,10"/>
-			<Button Content="Open" DockPanel.Dock="Right" Command="{Binding OpenDeviceCommand}" Margin="0,10,10,10"/>
-		</DockPanel>
-		
-		<TextBlock TextWrapping="Wrap"
-			Text="{Binding ResultText}" />
-		
-		<ListBox	ScrollViewer.HorizontalScrollBarVisibility="Auto"
-					ScrollViewer.VerticalScrollBarVisibility="Auto"
-					ItemsSource="{Binding RegisterValues}" />
-	</StackPanel>
-	
 </UserControl>
