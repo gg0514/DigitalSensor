@@ -15,7 +15,7 @@ public class DataService
             while (true)
             {
                 await Task.Delay(1000);
-                var simulatedData = $"Data @ {DateTime.Now:T}";
+                var simulatedData = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 DataReceived?.Invoke(simulatedData);
             }
         });

@@ -69,7 +69,7 @@
 				</ui:NavigationViewItem.IconSource>
 
 				<ui:NavigationViewItem.IconSource>
-					<ic:FluentIconSource Icon="Poll" />
+					<ic:FluentIconSource Icon="PulseSquare" />
 				</ui:NavigationViewItem.IconSource>
 
 				<ui:NavigationViewItem.MenuItems>

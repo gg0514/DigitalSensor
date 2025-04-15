@@ -3,7 +3,7 @@
 			 xmlns:local="using:DigitalSensor"
              xmlns:sty="using:FluentAvalonia.Styling"
              x:Class="DigitalSensor.App"
-             RequestedThemeVariant="Dark">
+             RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
 	<Application.DataTemplates>
