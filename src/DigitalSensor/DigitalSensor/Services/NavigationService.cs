@@ -23,9 +23,9 @@ public class NavigationService : INavigationService
 
         return name switch
         {
-            "Home" => _provider.GetRequiredService<TestViewModel>(),
-            "Setting" => _provider.GetRequiredService<SettingViewModel>(),
-            "pH" => _provider.GetRequiredService<TestViewModel>(),
+            "Home" => _provider.GetRequiredService<HomeViewModel>(),
+            "Setting" => _provider.GetRequiredService<TestViewModel>(),
+            "pH" => _provider.GetRequiredService<SettingViewModel>(),
             _ => null
         };
     }
