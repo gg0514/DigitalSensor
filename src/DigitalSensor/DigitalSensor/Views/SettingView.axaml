@@ -15,25 +15,96 @@
     <vm:SettingViewModel />
   </Design.DataContext>
 
-	<StackPanel Margin="30,60">
-		<!--<ui:BreadcrumbBar x:Name="BreadcrumbBar1"/>-->
-		
-		<TextBlock Text="Settings"
-                   FontSize="24"
-                   Margin="0,0,0,20"
-                   FontWeight="SemiBold"/>
+	<ScrollViewer Padding="20" Margin="0,30,0,0">
+		<StackPanel Spacing="20">
 
-		<CheckBox Content="Dark Theme"
-                  IsChecked="{Binding IsDarkTheme}"
-                  Margin="0,10" />
+			<!-- Title -->
+			<TextBlock Text="설정" FontSize="28" FontWeight="Bold"/>
 
-		<CheckBox Content="Enable Notifications"
-                  IsChecked="{Binding NotificationsEnabled}"
-                  Margin="0,10" />
 
-		<Button Content="Save"
-                Command="{Binding SaveSettingsCommand}"
-                HorizontalAlignment="Left"
-                Margin="0,20,0,0" />
-	</StackPanel>
+			<!-- USB Devices -->
+			<Border
+				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+				CornerRadius="12"
+				Padding="16"
+				Margin="0,0"
+				Effect="{DynamicResource ShadowElevation3}" >
+
+				<StackPanel>
+					<TextBlock Text="USB 장치" FontSize="14" Foreground="LightBlue"/>
+					<StackPanel Margin="0,15,0,0" Spacing="12">
+						<StackPanel>
+							<TextBlock Text="No Devices" FontSize="16"/>
+							<TextBlock Text="" FontSize="14" Foreground="Gray"/>
+						</StackPanel>
+					</StackPanel>
+				</StackPanel>
+			</Border>
+
+			<!-- MODBUS -->
+			<Border
+				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+				CornerRadius="12"
+				Padding="16"
+				Margin="0,0"
+				Effect="{DynamicResource ShadowElevation3}" >
+
+				<StackPanel>
+					<TextBlock Text="MODBUS" FontSize="14" Foreground="LightBlue"/>
+					<StackPanel Margin="0,15,0,0" Spacing="12">
+						<StackPanel>
+							<TextBlock Text="Slave ID" FontSize="16"/>
+							<TextBlock Text="1" FontSize="14" Foreground="Gray"/>
+						</StackPanel>
+					</StackPanel>
+				</StackPanel>
+			</Border>
+
+
+
+			<!-- Alarms Section -->
+			<Border
+				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+				CornerRadius="12"
+				Padding="16"
+				Margin="0,5"
+				Effect="{DynamicResource ShadowElevation3}" >
+
+				<StackPanel>
+					<TextBlock Text="시리얼" FontSize="14" Foreground="LightBlue"/>
+					<StackPanel Margin="0,15,0,0" Spacing="12">
+
+						<!-- Baud rate -->
+						<StackPanel>
+							<TextBlock Text="Baud rate" FontSize="16"/>
+							<TextBlock Text="9600" FontSize="14" Foreground="Gray"/>
+						</StackPanel>
+
+						<Separator/>
+						<!-- Data bits -->
+						<StackPanel>
+							<TextBlock Text="Data bits" FontSize="16"/>
+							<TextBlock Text="8" FontSize="14" Foreground="Gray"/>
+						</StackPanel>
+
+						<Separator/>
+						<!-- Parity -->
+						<StackPanel>
+							<TextBlock Text="Parity" FontSize="16"/>
+							<TextBlock Text="None" FontSize="14" Foreground="Gray"/>
+						</StackPanel>
+
+						<Separator/>
+						<!-- Stop bits -->
+						<StackPanel>
+							<TextBlock Text="Stop bits" FontSize="16"/>
+							<TextBlock Text="1" FontSize="14" Foreground="Gray"/>
+						</StackPanel>
+					</StackPanel>
+				</StackPanel>
+			</Border>
+			
+
+		</StackPanel>
+	</ScrollViewer>
 </UserControl>

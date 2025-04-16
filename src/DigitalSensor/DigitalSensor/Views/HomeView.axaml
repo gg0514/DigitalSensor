@@ -55,7 +55,7 @@
 			Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
 			CornerRadius="12"
 			Padding="16"
-			Margin="10,5"
+			Margin="10,5,5,20"
 			Effect="{DynamicResource ShadowElevation3}" >
 
 			<StackPanel>
@@ -76,7 +76,7 @@
 			Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
 			CornerRadius="12"
 			Padding="16"
-			Margin="10,5"
+			Margin="10,5,5,20"
 			Effect="{DynamicResource ShadowElevation3}" >
 
 			<StackPanel>
@@ -97,7 +97,7 @@
 			Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
 			CornerRadius="12"
 			Padding="16"
-			Margin="10,5"
+			Margin="10,5,5,20"
 			Effect="{DynamicResource ShadowElevation3}" >
 
 			<StackPanel>
@@ -118,7 +118,7 @@
 			Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
 			CornerRadius="12"
 			Padding="16"
-			Margin="10,5"
+			Margin="10,5,5,20"
 			Effect="{DynamicResource ShadowElevation3}" >
 
 			<StackPanel>
