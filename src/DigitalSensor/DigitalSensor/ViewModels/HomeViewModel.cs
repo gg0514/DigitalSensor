@@ -14,13 +14,18 @@ public partial class HomeViewModel : ViewModelBase
     private readonly IMonitoringService _monitoringService;
 
     [ObservableProperty]
+    private SensorInfo receivedInfo = new();
+
+    [ObservableProperty]
     private SensorData receivedData = new();
-    
+
 
     public HomeViewModel()
     {
         _monitoringService = new MonitoringService(new SensorService());
         _monitoringService.SensorDataReceived += OnSensorDataReceived;
+
+        // 모니터링 시작
         _monitoringService.StartMonitoring();
     }
 
@@ -29,6 +34,8 @@ public partial class HomeViewModel : ViewModelBase
     {
         _monitoringService = monitoringService;
         _monitoringService.SensorDataReceived += OnSensorDataReceived;
+
+        // 모니터링 시작
         _monitoringService.StartMonitoring();
     }
 
