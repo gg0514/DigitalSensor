@@ -1,0 +1,93 @@
+{
+	"SENSOR_VALUE": {
+		"register": 40001,
+		"address": 0,
+		"properties": "READ",
+		"dataType": "FLOAT",
+		"dataLength": 2
+	},
+	"TEMP_VALUE": {
+		"register": 40003,
+		"address": 2,
+		"properties": "READ",
+		"dataType": "FLOAT",
+		"dataLength": 2
+	},
+	"SENSOR_MV": {
+		"register": 40005,
+		"address": 4,
+		"properties": "READ",
+		"dataType": "FLOAT",
+		"dataLength": 2
+	},
+	"SENSOR_TYPE": {
+		"register": 40007,
+		"address": 6,
+		"properties": "READ",
+		"dataType": "UINT16",
+		"dataLength": 1
+	},
+	"CALIB_STATUS": {
+		"register": 40008,
+		"address": 7,
+		"properties": "READ",
+		"dataType": "UINT16",
+		"dataLength": 1
+	},
+	"SENSOR_SERIAL": {
+		"register": 40009,
+		"address": 8,
+		"properties": "READ",
+		"dataType": "UINT16",
+		"dataLength": 3
+	},
+	"SENSOR_FACTOR": {
+		"register": 40012,
+		"address": 11,
+		"properties": "R/W",
+		"dataType": "FLOAT",
+		"dataLength": 2
+	},
+	"SENSOR_OFFSET": {
+		"register": 40014,
+		"address": 13,
+		"properties": "R/W",
+		"dataType": "FLOAT",
+		"dataLength": 2
+	},
+	"CALIB_1P_SAMPLE": {
+		"register": 40016,
+		"address": 15,
+		"properties": "R/W",
+		"dataType": "FLOAT",
+		"dataLength": 2
+	},
+	"CALIB_2P_BUFFER": {
+		"register": 40018,
+		"address": 17,
+		"properties": "WRITE",
+		"dataType": "UINT16",
+		"dataLength": 1
+	},
+	"CALIB_ZERO": {
+		"register": 40019,
+		"address": 18,
+		"properties": "WRITE",
+		"dataType": "UINT16",
+		"dataLength": 1
+	},
+	"CALIB_ABORT": {
+		"register": 40020,
+		"address": 19,
+		"properties": "WRITE",
+		"dataType": "UINT16",
+		"dataLength": 1
+	},
+	"CHG_SLAVE_ID": {
+		"register": 40021,
+		"address": 20,
+		"properties": "R/W",
+		"dataType": "UINT16",
+		"dataLength": 1
+	}
+}

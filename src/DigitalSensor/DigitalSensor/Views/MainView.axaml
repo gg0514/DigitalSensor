@@ -53,6 +53,11 @@
 				Content="Setting"
 				IconSource="Setting"
 				Tag="Setting">
+				<ui:NavigationViewItem.MenuItems>
+					<ui:NavigationViewItem Content="통신" Tag="Comm" />
+					<ui:NavigationViewItem Content="국번" Tag="SlaveID" />
+				</ui:NavigationViewItem.MenuItems>
+
 			</ui:NavigationViewItem>
 
 			<ui:NavigationViewItem
@@ -66,7 +71,7 @@
 				</ui:NavigationViewItem.IconSource>
 
 				<ui:NavigationViewItem.IconSource>
-					<ic:FluentIconSource Icon="Poll" />
+					<ic:FluentIconSource Icon="Pulse" />
 				</ui:NavigationViewItem.IconSource>
 
 				<ui:NavigationViewItem.MenuItems>

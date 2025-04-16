@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalSensor", "DigitalSensor\DigitalSensor.csproj", "{13E8240D-9AD6-4CDB-99AF-012F0EBD7B8E}"
 EndProject
@@ -13,6 +13,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalSensor.Desktop", "DigitalSensor.Desktop\DigitalSensor.Desktop.csproj", "{82415C5B-E49C-496C-8666-0ADE78758E2F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsbSerialForAndroid.Net", "UsbSerialForAndroid.Net\UsbSerialForAndroid.Net.csproj", "{D45F900E-A4C8-4449-B92F-77D39995E8BA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modbus Register", "Modbus Register", "{8BC17294-04AE-4ADF-927D-51FE098EB9A5}"
+	ProjectSection(SolutionItems) = preProject
+		modbus_config.json = modbus_config.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
