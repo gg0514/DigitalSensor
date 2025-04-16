@@ -62,7 +62,7 @@
 
 
 
-			<!-- Alarms Section -->
+			<!-- 시리얼 통신 -->
 			<Border
 				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
 				CornerRadius="12"
