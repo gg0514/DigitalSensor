@@ -5,6 +5,8 @@ using DigitalSensor.Services;
 using DigitalSensor.Views;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace DigitalSensor.ViewModels;
 
@@ -18,19 +20,19 @@ public partial class MainViewModel : ViewModelBase
     public MainViewModel(INavigationService navigationService)
     {
         _navigationService = navigationService;
-        NavigateTo("");
     }
 
     public MainViewModel()
     {
         _navigationService = new FakeNavigationService();
-        NavigateTo("");
     }
 
 
     [RelayCommand]
     private void NavigateTo(string pageKey)
     {
+        Debug.WriteLine($"NavigateTo: {pageKey}");
+
         CurrentPage = _navigationService.GetPage(pageKey);
     }
 }
