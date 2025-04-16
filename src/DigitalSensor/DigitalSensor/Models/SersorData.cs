@@ -8,22 +8,6 @@ using System.Threading.Tasks;
 namespace DigitalSensor.Models
 {
 
-    public enum SensorType
-    {
-        None = 0,
-        PH = 1,
-        ORP = 2,                // ORP 센서
-        DO = 3,                 // 용존산소 센서    
-        Conductivity = 5,       // 전도도 센서
-        Ozone = 6,              // 오존 센서
-        TurbidityLow = 7, 
-        TurbidityHighColor = 8, 
-        TurbidityHighIR = 9,
-        Chlorine = 10,
-        SuspendedSolids = 11    // 부유물질 센서
-    }
-
-
     public enum CalibrationStatus
     {
         NoSensorCalibration = 0,
@@ -39,14 +23,14 @@ namespace DigitalSensor.Models
         FailSlopeTooHigh = 10
     }
 
-    public record SensorInfo(   SensorType type, 
-                                string serial);             // hexstring으로 표시
 
-
-    public record SensorData(   float value,
-                                float mv,
-                                float temperature);
-
+    public class SensorData
+    {
+        public string   Timestamp { get; set; }
+        public float    Value     { get; set; }
+        public float    Mv        { get; set; }
+        public float    Temperature { get; set; }
+    }
 }
 
 

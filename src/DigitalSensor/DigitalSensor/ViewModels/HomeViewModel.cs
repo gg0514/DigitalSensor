@@ -1,6 +1,8 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DigitalSensor.Models;
 using DigitalSensor.Services;
+using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
@@ -9,23 +11,30 @@ namespace DigitalSensor.ViewModels;
 
 public partial class HomeViewModel : ViewModelBase
 {
-
-    private readonly DataService _dataService;
+    private readonly IMonitoringService _monitoringService;
 
     [ObservableProperty]
-    private string receivedData;
+    private SensorData receivedData = new();
+    
 
     public HomeViewModel()
     {
-        _dataService = new DataService();
-        _dataService.DataReceived += data => ReceivedData = data;
+        _monitoringService = new MonitoringService(new SensorService());
+        _monitoringService.SensorDataReceived += OnSensorDataReceived;
+        _monitoringService.StartMonitoring();
     }
 
 
-    public HomeViewModel(DataService dataService)
+    public HomeViewModel(IMonitoringService monitoringService)
     {
-        _dataService = dataService;
-        _dataService.DataReceived += data => ReceivedData = data;
+        _monitoringService = monitoringService;
+        _monitoringService.SensorDataReceived += OnSensorDataReceived;
+        _monitoringService.StartMonitoring();
+    }
+
+    private void OnSensorDataReceived(SensorData data)
+    {
+        ReceivedData = data; // UI 자동 갱신
     }
 
 }

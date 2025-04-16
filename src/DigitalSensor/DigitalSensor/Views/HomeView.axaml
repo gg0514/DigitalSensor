@@ -16,7 +16,7 @@
   </Design.DataContext>
 
 	<StackPanel Background="" Margin="10,5">
-		<TextBlock Text="{Binding ReceivedData}" FontSize="14" HorizontalAlignment="Right" VerticalAlignment="Center"
+		<TextBlock Text="{Binding ReceivedData.Timestamp}" FontSize="14" HorizontalAlignment="Right" VerticalAlignment="Center"
 				   Margin="0,10,20,10"/>
 
 		<!-- LED 영역-->

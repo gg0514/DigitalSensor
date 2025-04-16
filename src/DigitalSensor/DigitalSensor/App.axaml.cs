@@ -29,7 +29,8 @@ public partial class App : Application
                 RegisterPlatformService?.Invoke(services);
 
                 services.AddSingleton<INavigationService, NavigationService>();
-                services.AddSingleton<DataService>();
+                services.AddSingleton<IMonitoringService, MonitoringService>();
+                services.AddSingleton<ISensorService, SensorService>();
                 services.AddTransient<NotificationService>();
 
                 services.AddSingleton<MainWindow>();

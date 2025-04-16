@@ -7,10 +7,12 @@ using Avalonia.Interactivity;
 
 namespace DigitalSensor.Services;
 
+
 public interface INavigationService
 {
     object GetPage(string name);
 }
+
 
 public class NavigationService : INavigationService
 {
@@ -28,4 +30,19 @@ public class NavigationService : INavigationService
             _ => null
         };
     }
+}
+
+public class FakeNavigationService : INavigationService
+{
+    public FakeNavigationService()
+    {
+    }
+
+    public object GetPage(string name) => name switch
+    {
+        "Home" => new HomeViewModel(),
+        "Setting" => new SettingViewModel(),
+        "pH" => new SettingViewModel(),
+        _ => null
+    };
 }
