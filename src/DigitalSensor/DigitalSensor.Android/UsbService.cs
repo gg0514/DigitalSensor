@@ -1,6 +1,6 @@
 ﻿using Android.Hardware.Usb;
+using DigitalSensor.Modbus;
 using DigitalSensor.Models;
-using DigitalSensor.Services;
 using System;
 using System.Buffers;
 using System.Collections.Generic;

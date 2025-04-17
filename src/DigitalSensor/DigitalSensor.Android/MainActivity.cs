@@ -3,7 +3,7 @@ using Android.Content.PM;
 
 using Avalonia;
 using Avalonia.Android;
-using DigitalSensor.Services;
+using DigitalSensor.Modbus;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DigitalSensor.Android;

@@ -1,6 +1,6 @@
 ﻿using System;
 using Avalonia;
-using DigitalSensor.Services;
+using DigitalSensor.Modbus;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DigitalSensor.Desktop;

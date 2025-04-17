@@ -18,7 +18,6 @@ namespace DigitalSensor.ViewModels;
 public partial class TestViewModel : ViewModelBase
 {
     private readonly NotificationService _notificationService;
-    private readonly IUsbService _usbService;
 
     private readonly ModbusService _modbusService;
 
@@ -48,7 +47,6 @@ public partial class TestViewModel : ViewModelBase
     public TestViewModel(NotificationService notificationService, IUsbService usbService)
     {
         _notificationService = notificationService;
-        _usbService = usbService;
 
         _modbusService = new ModbusService(usbService);
     }

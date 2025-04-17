@@ -7,7 +7,6 @@ using Modbus.Device;
 using Modbus.Serial;
 using System.Collections.Generic;
 using DigitalSensor.Models;
-using DigitalSensor.Services;
 
 
 namespace DigitalSensor.Modbus;

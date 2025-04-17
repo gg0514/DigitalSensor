@@ -1,7 +1,7 @@
 ﻿using DigitalSensor.Models;
 using System.Collections.Generic;
 
-namespace DigitalSensor.Services
+namespace DigitalSensor.Modbus
 {
     public interface IUsbService
     {
@@ -42,7 +42,6 @@ namespace DigitalSensor.Services
         public void DiscardInBuffer()
         {
         }
-
 
         public void Close()
         {
