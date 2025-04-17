@@ -1,10 +1,14 @@
 ﻿using DigitalSensor.Models;
+using System;
 using System.Collections.Generic;
 
 namespace DigitalSensor.Modbus
 {
     public interface IUsbService
     {
+        event Action<UsbDeviceInfo> UsbDeviceAttached;
+        event Action<UsbDeviceInfo> UsbDeviceDetached;
+
         List<UsbDeviceInfo> GetUsbDeviceInfos();
 
         bool Open(int deviceId, int baudRate, byte dataBits, byte stopBits, byte parity);
@@ -20,6 +24,9 @@ namespace DigitalSensor.Modbus
 
     public class FakeUsbService : IUsbService
     {
+        public event Action<UsbDeviceInfo>? UsbDeviceAttached;
+        public event Action<UsbDeviceInfo>? UsbDeviceDetached;
+
         public List<UsbDeviceInfo> GetUsbDeviceInfos()
         {
             return new List<UsbDeviceInfo>();

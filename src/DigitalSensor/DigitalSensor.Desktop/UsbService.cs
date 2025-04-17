@@ -10,6 +10,9 @@ namespace DigitalSensor.Desktop
 {
     public class UsbService : IUsbService
     {
+        public event Action<UsbDeviceInfo>? UsbDeviceAttached;
+        public event Action<UsbDeviceInfo>? UsbDeviceDetached;
+
         private SerialPort? _port;
 
         public UsbService()

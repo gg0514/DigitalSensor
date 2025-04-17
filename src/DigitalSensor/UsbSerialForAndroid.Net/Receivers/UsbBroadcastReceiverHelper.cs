@@ -8,6 +8,7 @@ namespace UsbSerialForAndroid.Net.Receivers
     internal static class UsbBroadcastReceiverHelper
     {
         private static UsbBroadcastReceiver? usbBroadcastReceiver;
+
         public static void RegisterUsbBroadcastReceiver(bool isShowToast = true,
             Action<UsbDevice>? attached = default, 
             Action<UsbDevice>? detached = default,
@@ -16,6 +17,7 @@ namespace UsbSerialForAndroid.Net.Receivers
             var intentFilter = new IntentFilter();
             intentFilter.AddAction(UsbManager.ActionUsbDeviceAttached);
             intentFilter.AddAction(UsbManager.ActionUsbDeviceDetached);
+
             usbBroadcastReceiver = new UsbBroadcastReceiver
             {
                 UsbDeviceAttached = attached,
@@ -25,6 +27,7 @@ namespace UsbSerialForAndroid.Net.Receivers
             };
             Application.Context.RegisterReceiver(usbBroadcastReceiver, intentFilter);
         }
+
         public static void UnRegisterUsbBroadcastReceiver()
         {
             Application.Context.UnregisterReceiver(usbBroadcastReceiver);

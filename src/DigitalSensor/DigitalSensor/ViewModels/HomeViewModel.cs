@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DigitalSensor.Modbus;
 using DigitalSensor.Models;
 using DigitalSensor.Services;
 using System;
@@ -12,6 +13,8 @@ namespace DigitalSensor.ViewModels;
 public partial class HomeViewModel : ViewModelBase
 {
     private readonly IMonitoringService _monitoringService;
+
+
 
     [ObservableProperty]
     private LEDRamp     ledRamp  = new();

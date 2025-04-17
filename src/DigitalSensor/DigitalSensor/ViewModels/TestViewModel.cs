@@ -17,9 +17,8 @@ namespace DigitalSensor.ViewModels;
 
 public partial class TestViewModel : ViewModelBase
 {
-    private readonly NotificationService _notificationService;
-
-    private readonly ModbusService _modbusService;
+    private readonly NotificationService    _notificationService;
+    private readonly ModbusService          _modbusService;
 
     [ObservableProperty]
     private int deviceId = 11;
@@ -85,10 +84,13 @@ public partial class TestViewModel : ViewModelBase
             if (deviceIds.Count == 0)
             {
                 ResultText = "No devices found.";
+                _notificationService.ShowMessage("정보", $"{ResultText}");
+
                 return;
             }
 
             DeviceId = deviceIds[0];
+            _notificationService.ShowMessage("정보", $"Device {DeviceId} detected.");
         }
         catch (Exception ex)
         {
@@ -105,6 +107,8 @@ public partial class TestViewModel : ViewModelBase
             bool bOpen = _modbusService.OpenDevice(DeviceId);
 
             ResultText = $"result: {bOpen}";
+
+            _notificationService.ShowMessage("정보", $"Device {DeviceId} opened successfully.");
         }
         catch (Exception ex)
         {

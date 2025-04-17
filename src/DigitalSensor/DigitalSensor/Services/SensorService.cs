@@ -1,4 +1,5 @@
-﻿using DigitalSensor.Models;
+﻿using DigitalSensor.Modbus;
+using DigitalSensor.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,8 +15,42 @@ public interface ISensorService
 
 public class SensorService : ISensorService
 {
+    private readonly NotificationService    _notificationService;
+    private readonly ModbusService          _modbusService;
+
+
     private readonly Random _random = new();
 
+    // for Design
+    public SensorService()
+    {
+    }
+
+    // for Runtime
+    public SensorService(NotificationService notificationService, IUsbService usbService)
+    {
+        _notificationService = notificationService;
+        _modbusService = new ModbusService(usbService);
+
+        // 구독 등록
+        _modbusService.UsbDeviceAttached += OnUSBDeviceAttached;
+        _modbusService.UsbDeviceAttached += OnUSBDeviceDetached;
+    }
+
+    private void OnUSBDeviceAttached(UsbDeviceInfo deviceInfo)
+    {
+        // Handle USB device attached event
+        Console.WriteLine($"USB device attached: {deviceInfo.DeviceId}");
+
+        _notificationService.ShowMessage("USB Device Attached", $"Device ID: {deviceInfo.DeviceId}");
+    }
+    private void OnUSBDeviceDetached(UsbDeviceInfo deviceInfo)
+    {
+        // Handle USB device attached event
+        Console.WriteLine($"USB device detached: {deviceInfo.DeviceId}");
+
+        _notificationService.ShowMessage("USB Device Detached", $"Device ID: {deviceInfo.DeviceId}");
+    }
 
 
     public Task<SensorInfo> GetSensorInfoAsync()

@@ -12,6 +12,7 @@ namespace UsbSerialForAndroid.Net.Receivers
         public Action<UsbDevice>? UsbDeviceDetached;
         public Action<Exception>? ErrorCallback;
         public bool IsShowToast { get; set; } = true;
+
         public override void OnReceive(Context? context, Intent? intent)
         {
             try
@@ -44,6 +45,7 @@ namespace UsbSerialForAndroid.Net.Receivers
                             default:
                                 break;
                         }
+
                         if (IsShowToast)
                             Toast.MakeText(context, msg, ToastLength.Short)?.Show();
                     }

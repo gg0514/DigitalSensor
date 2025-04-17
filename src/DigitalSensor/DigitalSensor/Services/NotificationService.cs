@@ -8,9 +8,9 @@ namespace DigitalSensor.Services
     {
         private static WindowNotificationManager? windowNotificationManager;
 
-        public NotificationPosition Position { get; set; } = NotificationPosition.BottomCenter;
-        
+        public NotificationPosition Position { get; set; } = NotificationPosition.BottomRight;        
         public int MaxItems { get; set; } = 1;
+
         
         public void SetTopLevel(TopLevel? topLevel)
         {
@@ -21,11 +21,11 @@ namespace DigitalSensor.Services
             };
         }
         
-        public void ShowMessage(string msg, NotificationType type = NotificationType.Information)
+        public void ShowMessage(string title, string msg, NotificationType type = NotificationType.Information)
         {
             windowNotificationManager?.Show(new Notification()
             {
-                //Title = AppResources.Information,
+                Title = title,
                 Message = msg,
                 Type = type
             });

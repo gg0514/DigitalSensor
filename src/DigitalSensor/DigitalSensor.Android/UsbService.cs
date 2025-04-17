@@ -1,6 +1,9 @@
-﻿using Android.Hardware.Usb;
+﻿using Android.Content;
+using Android.Hardware.Usb;
+using Android.Widget;
 using DigitalSensor.Modbus;
 using DigitalSensor.Models;
+using Org.Apache.Http.Impl.Client;
 using System;
 using System.Buffers;
 using System.Collections.Generic;
@@ -10,17 +13,82 @@ using UsbSerialForAndroid.Net.Drivers;
 using UsbSerialForAndroid.Net.Exceptions;
 using UsbSerialForAndroid.Net.Helper;
 
+
 namespace DigitalSensor.Android
 {
+
     public class UsbService : IUsbService
     {
+        public event Action<UsbDeviceInfo> UsbDeviceAttached;
+        public event Action<UsbDeviceInfo> UsbDeviceDetached;
+
+        private Action<UsbDevice> attachedHandler;
+        private Action<UsbDevice> detachedHandler;
+
         // USB 드라이버
         private UsbDriverBase? usbDriver;
 
         public UsbService()
         {
-            UsbDriverFactory.RegisterUsbBroadcastReceiver();
+            bool isShowToast = true;
+
+            attachedHandler = AttachedBrokerMethod;
+            detachedHandler = DetachedBrokerMethod;
+
+            //Action<UsbDevice>? attached = default,
+            //Action<UsbDevice>? detached = default,
+            //Action<Exception>? errorCallback = default
+
+            UsbDriverFactory.RegisterUsbBroadcastReceiver(isShowToast, attachedHandler, detachedHandler);
         }
+
+        //public static void ShowToast(string message)
+        //{
+        //    var context = Avalonia.Android.AvaloniaActivity.Current;
+        //    Toast.MakeText(context, message, ToastLength.Short)?.Show();
+        //}
+
+        private void AttachedBrokerMethod(UsbDevice device)
+        {
+            //ShowToast("AttachedBroker");
+
+
+            // 처리 로직
+            UsbDeviceAttached?.Invoke(new UsbDeviceInfo()
+            {
+                DeviceId = device.DeviceId,
+                DeviceName = device.DeviceName,
+                ProductName = device.ProductName,
+                ManufacturerName = device.ManufacturerName,
+                VendorId = device.VendorId,
+                ProductId = device.ProductId,
+                SerialNumber = device.SerialNumber,
+                DeviceProtocol = device.DeviceProtocol,
+                ConfigurationCount = device.ConfigurationCount,
+                InterfaceCount = device.InterfaceCount,
+                Version = device.Version//support android23.0
+            });
+        }
+
+        private void DetachedBrokerMethod(UsbDevice device)
+        {
+            // 처리 로직
+            UsbDeviceDetached?.Invoke(new UsbDeviceInfo()
+            {
+                DeviceId = device.DeviceId,
+                DeviceName = device.DeviceName,
+                ProductName = device.ProductName,
+                ManufacturerName = device.ManufacturerName,
+                VendorId = device.VendorId,
+                ProductId = device.ProductId,
+                SerialNumber = device.SerialNumber,
+                DeviceProtocol = device.DeviceProtocol,
+                ConfigurationCount = device.ConfigurationCount,
+                InterfaceCount = device.InterfaceCount,
+                Version = device.Version//support android23.0
+            });
+        }
+
 
         public List<UsbDeviceInfo> GetUsbDeviceInfos()
         {
@@ -50,18 +118,17 @@ namespace DigitalSensor.Android
 
         public bool Open(int deviceId, int baudRate, byte dataBits, byte stopBits, byte parity)
         {
+            if (IsConnection())
+                return true;
+
             usbDriver = UsbDriverFactory.CreateUsbDriver(deviceId);
             var _stopBits = (UsbSerialForAndroid.Net.Enums.StopBits)stopBits;
             var _parity = (UsbSerialForAndroid.Net.Enums.Parity)parity;
             usbDriver.Open(baudRate, dataBits, _stopBits, _parity);
 
-            return IsOpen();
-        }
-
-        public bool IsOpen()
-        {
             return IsConnection();
         }
+
 
         public int Read(byte[] buffer, int offset, int count)
         {

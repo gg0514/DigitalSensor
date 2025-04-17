@@ -14,11 +14,29 @@ namespace DigitalSensor.Modbus;
 
 public class ModbusService
 {
+    // 이벤트 버블링
+    public event Action<UsbDeviceInfo>? UsbDeviceAttached;
+    public event Action<UsbDeviceInfo>? UsbDeviceDetached;
+
     private readonly IUsbService _usbService;
 
     public ModbusService(IUsbService usbService)
     {
         _usbService = usbService;
+
+        // 구독 등록
+        _usbService.UsbDeviceAttached += OnUSBDeviceAttached;
+        _usbService.UsbDeviceAttached += OnUSBDeviceDetached;
+    }
+
+    private void OnUSBDeviceAttached(UsbDeviceInfo deviceInfo)
+    {
+        UsbDeviceAttached?.Invoke(deviceInfo);
+    }
+
+    private void OnUSBDeviceDetached(UsbDeviceInfo deviceInfo)
+    {
+        UsbDeviceDetached?.Invoke(deviceInfo);
     }
 
     public List<int> DetectDevices()
