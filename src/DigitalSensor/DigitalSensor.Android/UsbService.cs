@@ -32,6 +32,7 @@ namespace DigitalSensor.Android
         {
             bool isShowToast = true;
 
+            // 구독 등록
             attachedHandler = AttachedBrokerMethod;
             detachedHandler = DetachedBrokerMethod;
 

@@ -13,6 +13,8 @@ namespace UsbSerialForAndroid.Net.Receivers
         public Action<Exception>? ErrorCallback;
         public bool IsShowToast { get; set; } = true;
 
+        private const string UsbPermissionAction = "com.example.USB_PERMISSION";
+
         public override void OnReceive(Context? context, Intent? intent)
         {
             try
@@ -28,12 +30,17 @@ namespace UsbSerialForAndroid.Net.Receivers
                             case UsbManager.ActionUsbDeviceAttached:
                                 {
                                     msg = AppResources.UsbDeviceAttached + msg;
-                                    if (usbManager?.HasPermission(usbDevice) == false)
+                                    if (usbManager.HasPermission(usbDevice))
                                     {
-                                        var pendingIntent = PendingIntent.GetBroadcast(context, 0, intent, PendingIntentFlags.Immutable);
+                                        UsbDeviceAttached?.Invoke(usbDevice);
+                                    }
+                                    else
+                                    {
+                                        var permissionIntent = new Intent(UsbPermissionAction);
+                                        var pendingIntent = PendingIntent.GetBroadcast(context, 0, permissionIntent, PendingIntentFlags.Immutable);
+                                        context.RegisterReceiver(new UsbPermissionReceiver(usbDevice, UsbDeviceAttached, ErrorCallback, IsShowToast), new IntentFilter(UsbPermissionAction));
                                         usbManager.RequestPermission(usbDevice, pendingIntent);
                                     }
-                                    UsbDeviceAttached?.Invoke(usbDevice);
                                     break;
                                 }
                             case UsbManager.ActionUsbDeviceDetached:
@@ -58,5 +65,55 @@ namespace UsbSerialForAndroid.Net.Receivers
                 ErrorCallback?.Invoke(ex);
             }
         }
+
+        private class UsbPermissionReceiver : BroadcastReceiver
+        {
+            private readonly UsbDevice usbDevice;
+            private readonly Action<UsbDevice>? usbDeviceAttachedCallback;
+            private readonly Action<Exception>? errorCallback;
+            private readonly bool isShowToast;
+
+            public UsbPermissionReceiver(UsbDevice usbDevice, Action<UsbDevice>? usbDeviceAttachedCallback, Action<Exception>? errorCallback, bool isShowToast)
+            {
+                this.usbDevice = usbDevice;
+                this.usbDeviceAttachedCallback = usbDeviceAttachedCallback;
+                this.errorCallback = errorCallback;
+                this.isShowToast = isShowToast;
+            }
+
+            public override void OnReceive(Context? context, Intent? intent)
+            {
+                try
+                {
+                    if (intent?.Action == UsbPermissionAction)
+                    {
+                        bool granted = intent.GetBooleanExtra(UsbManager.ExtraPermissionGranted, true);
+                        if (granted)
+                        {
+                            usbDeviceAttachedCallback?.Invoke(usbDevice);
+
+                            if (isShowToast)
+                                Toast.MakeText(context, "USB permission granted", ToastLength.Short)?.Show();
+                        }
+                        else
+                        {
+                            if (isShowToast)
+                                Toast.MakeText(context, "USB permission denied", ToastLength.Short)?.Show();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (isShowToast)
+                        Toast.MakeText(context, ex.Message, ToastLength.Long)?.Show();
+                    errorCallback?.Invoke(ex);
+                }
+                finally
+                {
+                    context?.UnregisterReceiver(this);
+                }
+            }
+        }
+
     }
 }
