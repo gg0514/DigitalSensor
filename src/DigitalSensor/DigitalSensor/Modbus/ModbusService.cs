@@ -26,7 +26,7 @@ public class ModbusService
 
         // 구독 등록
         _usbService.UsbDeviceAttached += OnUSBDeviceAttached;
-        _usbService.UsbDeviceAttached += OnUSBDeviceDetached;
+        _usbService.UsbDeviceDetached += OnUSBDeviceDetached;
     }
 
     private void OnUSBDeviceAttached(UsbDeviceInfo deviceInfo)

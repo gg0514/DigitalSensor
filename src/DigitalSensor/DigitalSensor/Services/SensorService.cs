@@ -34,7 +34,7 @@ public class SensorService : ISensorService
 
         // 구독 등록
         _modbusService.UsbDeviceAttached += OnUSBDeviceAttached;
-        _modbusService.UsbDeviceAttached += OnUSBDeviceDetached;
+        _modbusService.UsbDeviceDetached += OnUSBDeviceDetached;
     }
 
     private void OnUSBDeviceAttached(UsbDeviceInfo deviceInfo)
