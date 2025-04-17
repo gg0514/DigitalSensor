@@ -7,6 +7,7 @@ using Modbus.Device;
 using Modbus.Serial;
 using System.Collections.Generic;
 using DigitalSensor.Models;
+using DigitalSensor.Services;
 
 
 namespace DigitalSensor.Modbus;
@@ -18,10 +19,14 @@ public class ModbusService
     public event Action<UsbDeviceInfo>? UsbDeviceAttached;
     public event Action<UsbDeviceInfo>? UsbDeviceDetached;
 
-    private readonly IUsbService _usbService;
+    private readonly NotificationService    _notificationService;
+    private readonly IUsbService            _usbService;
+    private IModbusSerialMaster             _modbusMaster = default;
+    private ushort                          _slaveId = 0;
 
-    public ModbusService(IUsbService usbService)
+    public ModbusService(NotificationService notificationService, IUsbService usbService)
     {
+        _notificationService = notificationService;
         _usbService = usbService;
 
         // 구독 등록
@@ -29,15 +34,27 @@ public class ModbusService
         _usbService.UsbDeviceDetached += OnUSBDeviceDetached;
     }
 
-    private void OnUSBDeviceAttached(UsbDeviceInfo deviceInfo)
+    private async void OnUSBDeviceAttached(UsbDeviceInfo deviceInfo)
     {
         UsbDeviceAttached?.Invoke(deviceInfo);
+
+        OpenModbus(deviceInfo.DeviceId);
+
+
+        if (IsOpen())
+        {
+            ushort[] result = await ReadSlaveID();
+            int slaveID = result[0];  // 배열에서 필요한 값 꺼내기
+
+            _notificationService.ShowMessage("Slave ID", $"{slaveID}");
+        }
     }
 
     private void OnUSBDeviceDetached(UsbDeviceInfo deviceInfo)
     {
         UsbDeviceDetached?.Invoke(deviceInfo);
     }
+
 
     public List<int> DetectDevices()
     {
@@ -56,6 +73,29 @@ public class ModbusService
         return deviceIds;
     }
 
+    public bool IsOpen()
+    {
+        return _modbusMaster != null;
+    }
+
+    public IModbusSerialMaster OpenModbus(int deviceId)
+    {
+        if (_modbusMaster == null)
+        {
+            if(OpenDevice(deviceId))
+            {
+                var adapter = new UsbSerialAdapter(_usbService);
+                _modbusMaster = ModbusSerialMaster.CreateRtu(adapter);
+            }
+            else
+            {
+                _notificationService.ShowMessage("USB Device Open Failed", "");
+            }
+        }
+        return _modbusMaster;
+    }
+
+
     public bool OpenDevice(int deviceId)
     {
         int baudRate = 9600;
@@ -65,6 +105,21 @@ public class ModbusService
 
         return _usbService.Open(deviceId, baudRate, dataBits, stopBits, parity);
     }
+
+
+
+    public async Task<ushort[]> ReadSlaveID()
+    {
+        byte slaveId = 250;
+        ushort startAddress = 20;
+        ushort numRegisters = 1;
+
+        return await Task.Run(() => _modbusMaster.ReadHoldingRegisters(slaveId, startAddress, numRegisters));
+    }
+
+
+    //*********************************
+    // UsbSerialAdapter 버전 
 
     public async Task<ushort[]> ReadUsbSerialAdapter(byte slaveId, ushort startAddress, ushort numRegisters)
     {
@@ -80,6 +135,9 @@ public class ModbusService
 
         return await Task.Run(() => master.ReadHoldingRegisters(slaveId, startAddress, numRegisters));
     }
+
+    //**********************************
+    // SerialPort 버전 
 
     public async Task<ushort[]> ReadHoldingRegistersAsync(string portName, byte slaveId, ushort startAddress, ushort numRegisters)
     {

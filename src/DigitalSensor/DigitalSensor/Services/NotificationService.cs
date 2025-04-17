@@ -17,7 +17,7 @@ namespace DigitalSensor.Services
             windowNotificationManager = new WindowNotificationManager(topLevel)
             {
                 Position = this.Position,
-                MaxItems = this.MaxItems
+                MaxItems = this.MaxItems,
             };
         }
         

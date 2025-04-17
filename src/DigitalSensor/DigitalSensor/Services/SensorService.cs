@@ -30,27 +30,22 @@ public class SensorService : ISensorService
     public SensorService(NotificationService notificationService, IUsbService usbService)
     {
         _notificationService = notificationService;
-        _modbusService = new ModbusService(usbService);
+        _modbusService = new ModbusService(notificationService, usbService);
 
         // 구독 등록
         _modbusService.UsbDeviceAttached += OnUSBDeviceAttached;
         _modbusService.UsbDeviceDetached += OnUSBDeviceDetached;
     }
 
-    private void OnUSBDeviceAttached(UsbDeviceInfo deviceInfo)
+    private async void OnUSBDeviceAttached(UsbDeviceInfo deviceInfo)
     {
         // Handle USB device attached event
-        Console.WriteLine($"[SensorService] USB device attached: {deviceInfo.DeviceId}");
-
-        _notificationService.ShowMessage("USB Device Attached", $"Device ID: {deviceInfo.DeviceId}");
+        //_notificationService.ShowMessage("USB Device Attached", $"{deviceInfo.ProductName}");
     }
+
     private void OnUSBDeviceDetached(UsbDeviceInfo deviceInfo)
     {
         _notificationService.ShowMessage("USB Device Detached", "");
-
-        //// Handle USB device attached event
-        //Console.WriteLine($"[SensorService] USB device detached: {deviceInfo.DeviceId}");
-
         //_notificationService.ShowMessage("USB Device Detached", $"Device ID: {deviceInfo.DeviceId}");
     }
 
@@ -62,6 +57,12 @@ public class SensorService : ISensorService
             Type = SensorType.None,
             Serial = "1234567890ABCDEF" // 예시로 고정된 시리얼 번호
         };
+
+
+        if(_modbusService.IsOpen())
+        {
+
+        }
 
         return Task.FromResult(data);
     }

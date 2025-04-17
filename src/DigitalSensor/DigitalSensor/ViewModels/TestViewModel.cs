@@ -47,7 +47,7 @@ public partial class TestViewModel : ViewModelBase
     {
         _notificationService = notificationService;
 
-        _modbusService = new ModbusService(usbService);
+        _modbusService = new ModbusService(notificationService, usbService);
     }
 
     [RelayCommand]
