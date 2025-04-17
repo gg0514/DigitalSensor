@@ -46,10 +46,12 @@ public class SensorService : ISensorService
     }
     private void OnUSBDeviceDetached(UsbDeviceInfo deviceInfo)
     {
-        // Handle USB device attached event
-        Console.WriteLine($"[SensorService] USB device detached: {deviceInfo.DeviceId}");
+        _notificationService.ShowMessage("USB Device Detached", "");
 
-        _notificationService.ShowMessage("USB Device Detached", $"Device ID: {deviceInfo.DeviceId}");
+        //// Handle USB device attached event
+        //Console.WriteLine($"[SensorService] USB device detached: {deviceInfo.DeviceId}");
+
+        //_notificationService.ShowMessage("USB Device Detached", $"Device ID: {deviceInfo.DeviceId}");
     }
 
 

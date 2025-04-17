@@ -30,7 +30,7 @@ namespace DigitalSensor.Android
 
         public UsbService()
         {
-            bool isShowToast = true;
+            bool isShowToast = false;
 
             // 구독 등록
             attachedHandler = AttachedBrokerMethod;
@@ -43,17 +43,8 @@ namespace DigitalSensor.Android
             UsbDriverFactory.RegisterUsbBroadcastReceiver(isShowToast, attachedHandler, detachedHandler);
         }
 
-        //public static void ShowToast(string message)
-        //{
-        //    var context = Avalonia.Android.AvaloniaActivity.Current;
-        //    Toast.MakeText(context, message, ToastLength.Short)?.Show();
-        //}
-
         private void AttachedBrokerMethod(UsbDevice device)
         {
-            //ShowToast("AttachedBroker");
-
-
             // 처리 로직
             UsbDeviceAttached?.Invoke(new UsbDeviceInfo()
             {
@@ -73,21 +64,23 @@ namespace DigitalSensor.Android
 
         private void DetachedBrokerMethod(UsbDevice device)
         {
-            // 처리 로직
-            UsbDeviceDetached?.Invoke(new UsbDeviceInfo()
-            {
-                DeviceId = device.DeviceId,
-                DeviceName = device.DeviceName,
-                ProductName = device.ProductName,
-                ManufacturerName = device.ManufacturerName,
-                VendorId = device.VendorId,
-                ProductId = device.ProductId,
-                SerialNumber = device.SerialNumber,
-                DeviceProtocol = device.DeviceProtocol,
-                ConfigurationCount = device.ConfigurationCount,
-                InterfaceCount = device.InterfaceCount,
-                Version = device.Version//support android23.0
-            });
+            UsbDeviceDetached?.Invoke(null);
+
+            // Detached 후에 USB 장치 접근 불가
+            //UsbDeviceDetached?.Invoke(new UsbDeviceInfo()
+            //{
+            //    DeviceId = device.DeviceId,
+            //    DeviceName = device.DeviceName,
+            //    ProductName = device.ProductName,
+            //    ManufacturerName = device.ManufacturerName,
+            //    VendorId = device.VendorId,
+            //    ProductId = device.ProductId,
+            //    SerialNumber = device.SerialNumber,
+            //    DeviceProtocol = device.DeviceProtocol,
+            //    ConfigurationCount = device.ConfigurationCount,
+            //    InterfaceCount = device.InterfaceCount,
+            //    Version = device.Version//support android23.0
+            //});
         }
 
 
