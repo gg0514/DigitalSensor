@@ -27,7 +27,7 @@
 						   Margin="0,0,0,0"
 						   FontWeight="SemiBold"/>
 				<Border Width="10" Height="10" Margin="0,5,0,0" >
-					<Ellipse Fill="{Binding ReceivedInfo.TxColor}"/>
+					<Ellipse Fill="{Binding LedRamp.TxColor}"/>
 				</Border>
 			</StackPanel>
 			<StackPanel Grid.Column="2" Margin="0,10,10,10">
@@ -36,7 +36,7 @@
 						   Margin="0,0,0,0"
 						   FontWeight="SemiBold"/>
 				<Border Width="10" Height="10" Margin="0,5,0,0" >
-					<Ellipse Fill="{Binding ReceivedInfo.RxColor}"/>
+					<Ellipse Fill="{Binding LedRamp.RxColor}"/>
 				</Border>
 			</StackPanel>
 			<StackPanel Grid.Column="3" Margin="0,10,10,10">
@@ -45,7 +45,7 @@
 						   Margin="0,0,0,0"
 						   FontWeight="SemiBold"/>
 				<Border Width="10" Height="10" Margin="0,5,0,0" >
-					<Ellipse Fill="{Binding ReceivedInfo.ErrColor}"/>
+					<Ellipse Fill="{Binding LedRamp.ErrColor}"/>
 				</Border>
 			</StackPanel>
 		</Grid>

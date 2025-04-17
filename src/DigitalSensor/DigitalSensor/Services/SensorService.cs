@@ -7,6 +7,7 @@ namespace DigitalSensor.Services;
 
 public interface ISensorService
 {
+    Task<SensorInfo> GetSensorInfoAsync();
     Task<SensorData> GetSensorDataAsync();
 }
 
@@ -14,6 +15,20 @@ public interface ISensorService
 public class SensorService : ISensorService
 {
     private readonly Random _random = new();
+
+
+
+    public Task<SensorInfo> GetSensorInfoAsync()
+    {
+        var data = new SensorInfo
+        {
+            Type = SensorType.None,
+            Serial = "1234567890ABCDEF" // 예시로 고정된 시리얼 번호
+        };
+
+        return Task.FromResult(data);
+    }
+
 
     public Task<SensorData> GetSensorDataAsync()
     {

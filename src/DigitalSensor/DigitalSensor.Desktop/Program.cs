@@ -1,5 +1,6 @@
 ﻿using System;
 using Avalonia;
+using DigitalSensor.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DigitalSensor.Desktop;

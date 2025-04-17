@@ -14,6 +14,9 @@ public partial class HomeViewModel : ViewModelBase
     private readonly IMonitoringService _monitoringService;
 
     [ObservableProperty]
+    private LEDRamp     ledRamp  = new();
+
+    [ObservableProperty]
     private SensorInfo receivedInfo = new();
 
     [ObservableProperty]
@@ -23,6 +26,7 @@ public partial class HomeViewModel : ViewModelBase
     public HomeViewModel()
     {
         _monitoringService = new MonitoringService(new SensorService());
+        _monitoringService.SensorInfoReceived += OnSensorInfoReceived;
         _monitoringService.SensorDataReceived += OnSensorDataReceived;
 
         // 모니터링 시작
@@ -33,10 +37,16 @@ public partial class HomeViewModel : ViewModelBase
     public HomeViewModel(IMonitoringService monitoringService)
     {
         _monitoringService = monitoringService;
+        _monitoringService.SensorInfoReceived += OnSensorInfoReceived;
         _monitoringService.SensorDataReceived += OnSensorDataReceived;
 
         // 모니터링 시작
         _monitoringService.StartMonitoring();
+    }
+
+    private void OnSensorInfoReceived(SensorInfo data)
+    {
+        ReceivedInfo = data; // UI 자동 갱신
     }
 
     private void OnSensorDataReceived(SensorData data)

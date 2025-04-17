@@ -1,7 +1,7 @@
 ﻿using DigitalSensor.Models;
 using System.Collections.Generic;
 
-namespace DigitalSensor
+namespace DigitalSensor.Services
 {
     public interface IUsbService
     {
@@ -30,21 +30,26 @@ namespace DigitalSensor
             return true;
         }
 
-        public int Read(byte[] buffer, int offset, int count) {
+        public int Read(byte[] buffer, int offset, int count)
+        {
             return 0;
         }
 
-        public void Write(byte[] buffer, int offset, int count) { 
+        public void Write(byte[] buffer, int offset, int count)
+        {
         }
 
-        public void DiscardInBuffer() {
+        public void DiscardInBuffer()
+        {
         }
 
 
-        public void Close() { 
+        public void Close()
+        {
         }
-        
-        public bool IsConnection() {
+
+        public bool IsConnection()
+        {
             return false;
         }
     }
