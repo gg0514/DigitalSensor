@@ -13,7 +13,43 @@ using DigitalSensor.Services;
 namespace DigitalSensor.Modbus;
 
 
-public class ModbusService
+public interface IModbusService
+{
+    // SLAVE ID
+    ushort  ReadChgSlaveId();
+    void    WriteChgSlaveId(ushort value);
+
+    // 센서 데이터
+    float   ReadSensorValue();                    // 40001
+    float   ReadTempValue();                      // 40003
+    float   ReadSensorMV();                       // 40005
+
+    // 센서 정보
+    ushort  ReadSensorType();
+    ushort[] ReadSensorSerial(); // 길이: 3 (UINT16)
+
+    // SENSOR FACTOR
+    float   ReadSensorFactor();
+    void    WriteSensorFactor(float value);
+
+    // SENSOR OFFSET
+    float   ReadSensorOffset();
+    void    WriteSensorOffset(float value);
+
+    // 1P CALIBRATION
+    float   ReadCalib1pSample();
+    void    WriteCalib1pSample(float value);
+
+    // 2P CALIBRATION
+    void    WriteCalib2pBuffer(ushort value);
+    void    WriteCalibZero(ushort value);
+
+    // CALIBRATION STATUS
+    void    WriteCalibAbort(ushort value);
+    ushort  ReadCalibStatus();
+}
+
+public class ModbusService 
 {
     // 이벤트 버블링
     public event Action<UsbDeviceInfo>? UsbDeviceAttached;

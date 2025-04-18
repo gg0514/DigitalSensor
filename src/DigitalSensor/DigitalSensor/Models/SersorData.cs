@@ -8,22 +8,6 @@ using System.Threading.Tasks;
 namespace DigitalSensor.Models
 {
 
-    public enum CalibrationStatus
-    {
-        NoSensorCalibration = 0,
-        CalInProgress = 1,
-        CalOK = 2,
-        FailNotStable = 3,
-        FailBufferNotFound = 4,
-        FailFirstBufferNotFound = 5,
-        FailSecondBufferNotFound = 6,
-        ValueTooLow = 7,
-        FailValueTooHigh = 8,
-        FailSlopeTooLow = 9,
-        FailSlopeTooHigh = 10
-    }
-
-
     public class SensorData
     {
         public string   Timestamp { get; set; }

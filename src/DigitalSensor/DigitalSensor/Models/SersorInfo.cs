@@ -8,6 +8,11 @@ using System.Threading.Tasks;
 
 namespace DigitalSensor.Models
 {
+    public class SensorInfo
+    {
+        public SensorType Type { get; set; }
+        public string Serial { get; set; }             // hexstring으로 표시
+    }
 
     public enum SensorType
     {
@@ -24,11 +29,21 @@ namespace DigitalSensor.Models
         SuspendedSolids = 11    // 부유물질 센서
     }
 
-    public class SensorInfo
+    public enum CalibrationStatus
     {
-        public SensorType Type { get; set; }
-        public string Serial { get; set; }             // hexstring으로 표시
+        NoSensorCalibration = 0,
+        CalInProgress = 1,
+        CalOK = 2,
+        FailNotStable = 3,
+        FailBufferNotFound = 4,
+        FailFirstBufferNotFound = 5,
+        FailSecondBufferNotFound = 6,
+        ValueTooLow = 7,
+        FailValueTooHigh = 8,
+        FailSlopeTooLow = 9,
+        FailSlopeTooHigh = 10
     }
+
 }
 
 

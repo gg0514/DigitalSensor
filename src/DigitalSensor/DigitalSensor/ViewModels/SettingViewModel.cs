@@ -1,7 +1,9 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DigitalSensor.Models;
 using System.Collections.ObjectModel;
+using System.IO.Ports;
 using System.Threading.Tasks;
 
 namespace DigitalSensor.ViewModels;
@@ -9,15 +11,13 @@ namespace DigitalSensor.ViewModels;
 public partial class SettingViewModel : ViewModelBase
 {
     [ObservableProperty]
-    private bool _isDarkTheme;
+    private SerialConn _serialConn = new();
 
     [ObservableProperty]
-    private bool _notificationsEnabled;
+    private UsbDeviceInfo _usbDevice = new();
 
     public SettingViewModel()
     {
-        _isDarkTheme = false;
-        _notificationsEnabled = true;
     }
 
     [RelayCommand]
