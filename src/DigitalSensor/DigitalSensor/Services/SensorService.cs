@@ -32,18 +32,20 @@ public class SensorService : ISensorService
         _modbusService = modbusService;
         _notificationService = App.GlobalHost.GetService<NotificationService>();
 
-        // 구독 등록
-        _modbusService.UsbDeviceAttached += OnUSBDeviceAttached;
-        _modbusService.UsbDeviceDetached += OnUSBDeviceDetached;
+        // Modbus Device 구독 등록
+        _modbusService.ModbusDeviceAttached += OnModbusDeviceAttached;
+        _modbusService.ModbusDeviceDetached += OnModbusDeviceDetached;
     }
 
-    private async void OnUSBDeviceAttached(UsbDeviceInfo deviceInfo)
+    private async void OnModbusDeviceAttached(ModbusDeviceInfo modbusInfo)
     {
-        // Handle USB device attached event
-        //_notificationService.ShowMessage("USB Device Attached", $"{deviceInfo.ProductName}");
+        int slaveID = modbusInfo.SlaveId;
+        //_notificationService.ShowMessage("Slave ID", $"{slaveID}");
+
+        _notificationService.ShowMessage("USB Device Attached", $"{slaveID}:{modbusInfo.ProductName}");
     }
 
-    private void OnUSBDeviceDetached(UsbDeviceInfo deviceInfo)
+    private void OnModbusDeviceDetached(ModbusDeviceInfo modbusInfo)
     {
         _notificationService.ShowMessage("USB Device Detached", "");
         //_notificationService.ShowMessage("USB Device Detached", $"Device ID: {deviceInfo.DeviceId}");

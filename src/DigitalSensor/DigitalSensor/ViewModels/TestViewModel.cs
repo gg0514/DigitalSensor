@@ -52,66 +52,66 @@ public partial class TestViewModel : ViewModelBase
     [RelayCommand]
     private async Task ReadRegistersAsync()
     {
-        try
-        {
-            // SlaveId = 250, RegisterAddress = 20, DataLength = 1
-            var values = await _modbusService.ReadUsbSerialAdapter(SlaveId, RegisterAddress, DataLength);
+        //try
+        //{
+        //    // SlaveId = 250, RegisterAddress = 20, DataLength = 1
+        //    var values = await _modbusService.ReadUsbSerialAdapter(SlaveId, RegisterAddress, DataLength);
 
-            RegisterValues.Clear();
+        //    RegisterValues.Clear();
 
-            foreach (var value in values)
-            {
-                RegisterValues.Add(value);
-            }
+        //    foreach (var value in values)
+        //    {
+        //        RegisterValues.Add(value);
+        //    }
 
-            ResultText = $"Response: {string.Join(", ", values)}";
-        }
-        catch (Exception ex)
-        {
-            ResultText = $"Error: {ex.Message}";
-        }
+        //    ResultText = $"Response: {string.Join(", ", values)}";
+        //}
+        //catch (Exception ex)
+        //{
+        //    ResultText = $"Error: {ex.Message}";
+        //}
     }
 
     [RelayCommand]
     private void DetectDevice()
     {
-        try
-        {
-            //var values = await _modbusService.ReadHoldingRegistersAsync(PortName, SlaveId, RegisterAddress, DataLength);
-            var deviceIds = _modbusService.DetectDevices();
+        //try
+        //{
+        //    //var values = await _modbusService.ReadHoldingRegistersAsync(PortName, SlaveId, RegisterAddress, DataLength);
+        //    var deviceIds = _modbusService.DetectDevices();
 
-            if (deviceIds.Count == 0)
-            {
-                ResultText = "No devices found.";
-                _notificationService.ShowMessage("정보", $"{ResultText}");
+        //    if (deviceIds.Count == 0)
+        //    {
+        //        ResultText = "No devices found.";
+        //        _notificationService.ShowMessage("정보", $"{ResultText}");
 
-                return;
-            }
+        //        return;
+        //    }
 
-            DeviceId = deviceIds[0];
-            _notificationService.ShowMessage("정보", $"Device {DeviceId} detected.");
-        }
-        catch (Exception ex)
-        {
-            ResultText = $"Error: {ex.Message}";
-        }
+        //    DeviceId = deviceIds[0];
+        //    _notificationService.ShowMessage("정보", $"Device {DeviceId} detected.");
+        //}
+        //catch (Exception ex)
+        //{
+        //    ResultText = $"Error: {ex.Message}";
+        //}
     }
 
 
     [RelayCommand]
     private void OpenDevice()
     {
-        try
-        {
-            bool bOpen = _modbusService.OpenDevice(DeviceId);
+        //try
+        //{
+        //    bool bOpen = _modbusService.OpenDevice(DeviceId);
 
-            ResultText = $"result: {bOpen}";
+        //    ResultText = $"result: {bOpen}";
 
-            _notificationService.ShowMessage("정보", $"Device {DeviceId} opened successfully.");
-        }
-        catch (Exception ex)
-        {
-            ResultText = $"Error: {ex.Message}";
-        }
+        //    _notificationService.ShowMessage("정보", $"Device {DeviceId} opened successfully.");
+        //}
+        //catch (Exception ex)
+        //{
+        //    ResultText = $"Error: {ex.Message}";
+        //}
     }
 }
