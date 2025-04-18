@@ -43,9 +43,9 @@ public partial class TestViewModel : ViewModelBase
     }
 
     // for Runtime
-    public TestViewModel(IUsbService usbService)
+    public TestViewModel(ModbusService modbusService)
     {
-        _modbusService = new ModbusService(usbService);
+        _modbusService = modbusService;
         _notificationService = App.GlobalHost.GetService<NotificationService>();
     }
 

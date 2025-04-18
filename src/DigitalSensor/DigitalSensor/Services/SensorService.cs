@@ -27,9 +27,9 @@ public class SensorService : ISensorService
     }
 
     // for Runtime
-    public SensorService(IUsbService usbService)
+    public SensorService(ModbusService modbusService)
     {
-        _modbusService = new ModbusService(usbService);
+        _modbusService = modbusService;
         _notificationService = App.GlobalHost.GetService<NotificationService>();
 
         // 구독 등록

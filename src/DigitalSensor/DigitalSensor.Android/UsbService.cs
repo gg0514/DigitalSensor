@@ -45,7 +45,9 @@ namespace DigitalSensor.Android
 
         private void AttachedBrokerMethod(UsbDevice device)
         {
-            // 처리 로직
+            // USB 장치가 연결되면 호출된다.
+            // UsbDevice 받고, UsbDeviceInfo 전달한다.
+
             UsbDeviceAttached?.Invoke(new UsbDeviceInfo()
             {
                 DeviceId = device.DeviceId,
@@ -64,23 +66,9 @@ namespace DigitalSensor.Android
 
         private void DetachedBrokerMethod(UsbDevice device)
         {
-            UsbDeviceDetached?.Invoke(null);
-
             // Detached 후에 USB 장치 접근 불가
-            //UsbDeviceDetached?.Invoke(new UsbDeviceInfo()
-            //{
-            //    DeviceId = device.DeviceId,
-            //    DeviceName = device.DeviceName,
-            //    ProductName = device.ProductName,
-            //    ManufacturerName = device.ManufacturerName,
-            //    VendorId = device.VendorId,
-            //    ProductId = device.ProductId,
-            //    SerialNumber = device.SerialNumber,
-            //    DeviceProtocol = device.DeviceProtocol,
-            //    ConfigurationCount = device.ConfigurationCount,
-            //    InterfaceCount = device.InterfaceCount,
-            //    Version = device.Version//support android23.0
-            //});
+
+            UsbDeviceDetached?.Invoke(null);
         }
 
 
