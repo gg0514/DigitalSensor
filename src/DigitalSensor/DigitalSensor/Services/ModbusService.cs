@@ -23,8 +23,8 @@ public interface IModbusService
 
 
     // SLAVE ID
-    ushort ReadChgSlaveId();
-    void WriteChgSlaveId(ushort value);
+    ushort ReadlaveId();
+    void WriteSlaveId(ushort value);
 
     // 센서 데이터
     float ReadSensorValue();                    // 40001
@@ -87,6 +87,8 @@ public class ModbusService //: IModbusService
 
     private void OnUSBDeviceDetached(UsbDeviceInfo deviceInfo)
     {
+        CloseModbus();
+
         ModbusDeviceDetached?.Invoke(null);
     }
 
@@ -110,7 +112,7 @@ public class ModbusService //: IModbusService
 
         if (IsOpen())
         {
-            ushort[] result = await ReadSlaveID();
+            ushort[] result = await ReadSlaveId();
             int slaveID = result[0];  // 배열에서 필요한 값 꺼내기
 
 
@@ -127,6 +129,17 @@ public class ModbusService //: IModbusService
             _notificationService.ShowMessage("Modbus Device Open Failed", "");
         }
     }
+
+    public void CloseModbus()
+    {
+        if (IsOpen())
+        {
+            _usbService.Close();
+            _modbusMaster?.Dispose();
+            _modbusMaster = null;
+        }
+    }
+
 
 
     public IModbusSerialMaster OpenModbus(int deviceId)
@@ -163,7 +176,7 @@ public class ModbusService //: IModbusService
 
 
 
-    public async Task<ushort[]> ReadSlaveID()
+    public async Task<ushort[]> ReadSlaveId()
     {
         byte slaveId = 250;
         ushort startAddress = 20;
