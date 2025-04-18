@@ -7,6 +7,8 @@ using Modbus.Device;
 using Modbus.Serial;
 using System.Collections.Generic;
 using DigitalSensor.Models;
+using DigitalSensor.Extensions;
+using DigitalSensor.ViewModels;
 
 
 namespace DigitalSensor.Services;
@@ -14,6 +16,10 @@ namespace DigitalSensor.Services;
 
 public interface IModbusService
 {
+    event Action<UsbDeviceInfo> UsbDeviceAttached;
+    event Action<UsbDeviceInfo> UsbDeviceDetached;
+
+
     // SLAVE ID
     ushort ReadChgSlaveId();
     void WriteChgSlaveId(ushort value);
@@ -48,7 +54,7 @@ public interface IModbusService
     ushort ReadCalibStatus();
 }
 
-public class ModbusService
+public class ModbusService //: IModbusService
 {
     // 이벤트 버블링
     public event Action<UsbDeviceInfo>? UsbDeviceAttached;
@@ -59,10 +65,10 @@ public class ModbusService
     private IModbusSerialMaster _modbusMaster = default;
     private ushort _slaveId = 0;
 
-    public ModbusService(NotificationService notificationService, IUsbService usbService)
+    public ModbusService(IUsbService usbService)
     {
-        _notificationService = notificationService;
         _usbService = usbService;
+        _notificationService = App.GlobalHost.GetService<NotificationService>();
 
         // 구독 등록
         _usbService.UsbDeviceAttached += OnUSBDeviceAttached;

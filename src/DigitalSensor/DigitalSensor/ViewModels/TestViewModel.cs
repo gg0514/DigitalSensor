@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DigitalSensor.Extensions;
 using DigitalSensor.Services;
 
 namespace DigitalSensor.ViewModels;
@@ -42,11 +43,10 @@ public partial class TestViewModel : ViewModelBase
     }
 
     // for Runtime
-    public TestViewModel(NotificationService notificationService, IUsbService usbService)
+    public TestViewModel(IUsbService usbService)
     {
-        _notificationService = notificationService;
-
-        _modbusService = new ModbusService(notificationService, usbService);
+        _modbusService = new ModbusService(usbService);
+        _notificationService = App.GlobalHost.GetService<NotificationService>();
     }
 
     [RelayCommand]

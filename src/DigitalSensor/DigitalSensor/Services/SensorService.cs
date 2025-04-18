@@ -1,4 +1,5 @@
-﻿using DigitalSensor.Models;
+﻿using DigitalSensor.Extensions;
+using DigitalSensor.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -26,10 +27,10 @@ public class SensorService : ISensorService
     }
 
     // for Runtime
-    public SensorService(NotificationService notificationService, IUsbService usbService)
+    public SensorService(IUsbService usbService)
     {
-        _notificationService = notificationService;
-        _modbusService = new ModbusService(notificationService, usbService);
+        _modbusService = new ModbusService(usbService);
+        _notificationService = App.GlobalHost.GetService<NotificationService>();
 
         // 구독 등록
         _modbusService.UsbDeviceAttached += OnUSBDeviceAttached;
