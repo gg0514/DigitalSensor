@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DigitalSensor.Modbus;
 using DigitalSensor.Services;
 
 namespace DigitalSensor.ViewModels;

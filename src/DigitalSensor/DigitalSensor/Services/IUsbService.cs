@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DigitalSensor.Modbus
+namespace DigitalSensor.Services
 {
     public interface IUsbService
     {

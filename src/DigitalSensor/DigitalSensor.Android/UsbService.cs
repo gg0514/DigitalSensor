@@ -1,8 +1,8 @@
 ﻿using Android.Content;
 using Android.Hardware.Usb;
 using Android.Widget;
-using DigitalSensor.Modbus;
 using DigitalSensor.Models;
+using DigitalSensor.Services;
 using Org.Apache.Http.Impl.Client;
 using System;
 using System.Buffers;

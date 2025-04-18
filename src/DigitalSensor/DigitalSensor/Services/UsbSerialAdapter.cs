@@ -8,8 +8,7 @@ using Modbus.Serial;
 using System.Collections.Generic;
 using DigitalSensor.Models;
 
-
-namespace DigitalSensor.Modbus;
+namespace DigitalSensor.Services;
 
 public class UsbSerialAdapter : IStreamResource
 {
@@ -21,7 +20,7 @@ public class UsbSerialAdapter : IStreamResource
         _usbService = usbService;
     }
 
-    public int InfiniteTimeout { get; } = -1;    
+    public int InfiniteTimeout { get; } = -1;
 
     public int ReadTimeout { get; set; } = 1000;
     public int WriteTimeout { get; set; } = 1000;

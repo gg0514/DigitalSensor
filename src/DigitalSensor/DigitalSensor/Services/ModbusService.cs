@@ -7,58 +7,57 @@ using Modbus.Device;
 using Modbus.Serial;
 using System.Collections.Generic;
 using DigitalSensor.Models;
-using DigitalSensor.Services;
 
 
-namespace DigitalSensor.Modbus;
+namespace DigitalSensor.Services;
 
 
 public interface IModbusService
 {
     // SLAVE ID
-    ushort  ReadChgSlaveId();
-    void    WriteChgSlaveId(ushort value);
+    ushort ReadChgSlaveId();
+    void WriteChgSlaveId(ushort value);
 
     // 센서 데이터
-    float   ReadSensorValue();                    // 40001
-    float   ReadTempValue();                      // 40003
-    float   ReadSensorMV();                       // 40005
+    float ReadSensorValue();                    // 40001
+    float ReadTempValue();                      // 40003
+    float ReadSensorMV();                       // 40005
 
     // 센서 정보
-    ushort  ReadSensorType();
+    ushort ReadSensorType();
     ushort[] ReadSensorSerial(); // 길이: 3 (UINT16)
 
     // SENSOR FACTOR
-    float   ReadSensorFactor();
-    void    WriteSensorFactor(float value);
+    float ReadSensorFactor();
+    void WriteSensorFactor(float value);
 
     // SENSOR OFFSET
-    float   ReadSensorOffset();
-    void    WriteSensorOffset(float value);
+    float ReadSensorOffset();
+    void WriteSensorOffset(float value);
 
     // 1P CALIBRATION
-    float   ReadCalib1pSample();
-    void    WriteCalib1pSample(float value);
+    float ReadCalib1pSample();
+    void WriteCalib1pSample(float value);
 
     // 2P CALIBRATION
-    void    WriteCalib2pBuffer(ushort value);
-    void    WriteCalibZero(ushort value);
+    void WriteCalib2pBuffer(ushort value);
+    void WriteCalibZero(ushort value);
 
     // CALIBRATION STATUS
-    void    WriteCalibAbort(ushort value);
-    ushort  ReadCalibStatus();
+    void WriteCalibAbort(ushort value);
+    ushort ReadCalibStatus();
 }
 
-public class ModbusService 
+public class ModbusService
 {
     // 이벤트 버블링
     public event Action<UsbDeviceInfo>? UsbDeviceAttached;
     public event Action<UsbDeviceInfo>? UsbDeviceDetached;
 
-    private readonly NotificationService    _notificationService;
-    private readonly IUsbService            _usbService;
-    private IModbusSerialMaster             _modbusMaster = default;
-    private ushort                          _slaveId = 0;
+    private readonly NotificationService _notificationService;
+    private readonly IUsbService _usbService;
+    private IModbusSerialMaster _modbusMaster = default;
+    private ushort _slaveId = 0;
 
     public ModbusService(NotificationService notificationService, IUsbService usbService)
     {
@@ -118,7 +117,7 @@ public class ModbusService
     {
         if (_modbusMaster == null)
         {
-            if(OpenDevice(deviceId))
+            if (OpenDevice(deviceId))
             {
                 var adapter = new UsbSerialAdapter(_usbService);
                 _modbusMaster = ModbusSerialMaster.CreateRtu(adapter);
@@ -159,7 +158,7 @@ public class ModbusService
 
     public async Task<ushort[]> ReadUsbSerialAdapter(byte slaveId, ushort startAddress, ushort numRegisters)
     {
-        if(!_usbService.IsConnection())
+        if (!_usbService.IsConnection())
         {
             throw new InvalidOperationException("USB service is not opened.");
         }

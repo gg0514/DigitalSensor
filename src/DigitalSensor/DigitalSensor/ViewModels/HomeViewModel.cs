@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
-using DigitalSensor.Modbus;
 using DigitalSensor.Models;
 using DigitalSensor.Services;
 using System;
