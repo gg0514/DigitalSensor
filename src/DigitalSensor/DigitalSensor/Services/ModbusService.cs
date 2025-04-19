@@ -253,10 +253,6 @@ public class ModbusHandler
 
 public class ModbusService 
 {
-    // 이벤트 버블링
-    //public event Action<ModbusDeviceInfo>? ModbusDeviceAttached;
-    //public event Action<ModbusDeviceInfo>? ModbusDeviceDetached;
-
     public event Action<ModbusHandler>? ModbusHandlerAttached;
     public event Action<ModbusHandler>? ModbusHandlerDetached;
 
@@ -311,19 +307,6 @@ public class ModbusService
 
             // 상위로 이벤트 전파 
             ModbusHandlerAttached?.Invoke(_modbusHandler);
-
-
-
-            //ushort[] result = await ReadSlaveId();
-            //int slaveID = result[0];  // 배열에서 필요한 값 꺼내기
-
-            //// 상위로 이벤트 전파 
-            //ModbusDeviceAttached?.Invoke(new ModbusDeviceInfo
-            //{
-            //    DeviceId= _usbDeviceInfo.DeviceId,
-            //    ProductName = _usbDeviceInfo.ProductName,
-            //    SlaveId = slaveID,
-            //});
         }
         else
         {
@@ -343,8 +326,6 @@ public class ModbusService
         }
     }
 
-
-
     public IModbusSerialMaster OpenModbus(int deviceId)
     {
         if (OpenDevice(deviceId))
@@ -360,13 +341,6 @@ public class ModbusService
         return null;
     }
 
-
-
-    public bool IsOpen()
-    {
-        return _modbusMaster != null;
-    }
-
     public bool OpenDevice(int deviceId)
     {
         int baudRate = int.Parse(SerialConn.BaudRate);
@@ -377,57 +351,9 @@ public class ModbusService
         return _usbService.Open(deviceId, baudRate, dataBits, stopBits, parity);
     }
 
-
-
-    public async Task<ushort[]> ReadSlaveId()
+    public bool IsOpen()
     {
-        byte slaveId = 250;
-        ushort startAddress = 20;
-        ushort numRegisters = 1;
-
-        return await Task.Run(() => _modbusMaster.ReadHoldingRegisters(slaveId, startAddress, numRegisters));
+        return _modbusMaster != null;
     }
-
-
-    ////*********************************
-    //// UsbSerialAdapter 버전 
-
-    //public async Task<ushort[]> ReadUsbSerialAdapter(byte slaveId, ushort startAddress, ushort numRegisters)
-    //{
-    //    if (!_usbService.IsConnection())
-    //    {
-    //        throw new InvalidOperationException("USB service is not opened.");
-    //    }
-
-    //    var adapter = new UsbSerialAdapter(_usbService);
-
-    //    // create modbus master
-    //    IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(adapter);
-
-    //    return await Task.Run(() => master.ReadHoldingRegisters(slaveId, startAddress, numRegisters));
-    //}
-
-    ////**********************************
-    //// SerialPort 버전 
-
-    //public async Task<ushort[]> ReadHoldingRegistersAsync(string portName, byte slaveId, ushort startAddress, ushort numRegisters)
-    //{
-    //    using (SerialPort port = new SerialPort(portName))
-    //    {
-    //        // configure serial port
-    //        port.BaudRate = 9600;
-    //        port.DataBits = 8;
-    //        port.Parity = Parity.None;
-    //        port.StopBits = StopBits.One;
-    //        port.Open();
-
-    //        var adapter = new SerialPortAdapter(port);
-
-    //        // create modbus master
-    //        IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(adapter);
-
-    //        return await Task.Run(() => master.ReadHoldingRegisters(slaveId, startAddress, numRegisters));
-    //    }
-    //}
 }
 

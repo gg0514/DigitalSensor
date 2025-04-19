@@ -28,7 +28,24 @@ public class MonitoringService : IMonitoringService
     public MonitoringService(ISensorService dataService)
     {
         _sensorService = dataService;
+        _sensorService.SensorAttached += OnSensorAttached;
+        _sensorService.SensorDetached += OnSensorDetached;
     }
+
+    private void OnSensorAttached()
+    {
+        StartMonitoring();
+
+        // Sensor Attached 통지
+        //LEDRampReceived?.Invoke(new LEDRamp());
+    }
+
+    private void OnSensorDetached()
+    {
+        // Sensor Detached 통지
+        //LEDRampReceived?.Invoke(new LEDRamp());
+    }
+
 
     public async void StartMonitoring()
     {

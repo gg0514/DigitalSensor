@@ -30,9 +30,6 @@ public partial class HomeViewModel : ViewModelBase
         _monitoringService = new MonitoringService(new SensorService());
         _monitoringService.SensorInfoReceived += OnSensorInfoReceived;
         _monitoringService.SensorDataReceived += OnSensorDataReceived;
-
-        // 모니터링 시작
-        _monitoringService.StartMonitoring();
     }
 
 
@@ -41,9 +38,6 @@ public partial class HomeViewModel : ViewModelBase
         _monitoringService = monitoringService;
         _monitoringService.SensorInfoReceived += OnSensorInfoReceived;
         _monitoringService.SensorDataReceived += OnSensorDataReceived;
-
-        // 모니터링 시작
-        _monitoringService.StartMonitoring();
     }
 
     private void OnSensorInfoReceived(SensorInfo data)
