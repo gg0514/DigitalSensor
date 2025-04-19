@@ -97,6 +97,7 @@ public class ModbusService
     {
         if (OpenDevice(deviceId))
         {
+            // Desktop, Android 공용
             var adapter = new UsbSerialAdapter(_usbService);
             return ModbusSerialMaster.CreateRtu(adapter);
         }
@@ -108,6 +109,8 @@ public class ModbusService
         return null;
     }
 
+    // Desktop, Android 공용
+    // Desktop인 경우, ComPort 숫자
     public bool OpenDevice(int deviceId)
     {
         int baudRate = int.Parse(SerialConn.BaudRate);

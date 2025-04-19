@@ -71,16 +71,16 @@ public class MonitoringService : IMonitoringService
         SensorInfo info = await _sensorService.GetSensorInfoAsync();
         SensorInfoReceived?.Invoke(info);
 
-        SensorData data = await _sensorService.GetSensorDataAsync();
-        SensorDataReceived?.Invoke(data);
+        //SensorData data = await _sensorService.GetSensorDataAsync();
+        //SensorDataReceived?.Invoke(data);
 
-        //while (true)
-        //{
-        //    // 센서 데이터 가져오기
-        //    SensorData data = await _sensorService.GetSensorDataAsync();
-        //    SensorDataReceived?.Invoke(data);
+        while (true)
+        {
+            // 센서 데이터 가져오기
+            SensorData data = await _sensorService.GetSensorDataAsync();
+            SensorDataReceived?.Invoke(data);
 
-        //    await Task.Delay(1000); // 1초 대기
-        //}
+            await Task.Delay(1000); // 1초 대기
+        }
     }
 }
