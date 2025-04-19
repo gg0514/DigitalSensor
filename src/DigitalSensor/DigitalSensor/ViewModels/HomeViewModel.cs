@@ -13,7 +13,7 @@ public partial class HomeViewModel : ViewModelBase
 {
     private readonly IMonitoringService _monitoringService;
 
-
+  
 
     [ObservableProperty]
     private LEDRamp     ledRamp  = new();
@@ -28,6 +28,8 @@ public partial class HomeViewModel : ViewModelBase
     public HomeViewModel()
     {
         _monitoringService = new MonitoringService(new SensorService());
+        
+        _monitoringService.LEDRampReceived += OnLEDRampReceived;
         _monitoringService.SensorInfoReceived += OnSensorInfoReceived;
         _monitoringService.SensorDataReceived += OnSensorDataReceived;
     }
@@ -36,12 +38,21 @@ public partial class HomeViewModel : ViewModelBase
     public HomeViewModel(IMonitoringService monitoringService)
     {
         _monitoringService = monitoringService;
+
+        _monitoringService.LEDRampReceived += OnLEDRampReceived;
         _monitoringService.SensorInfoReceived += OnSensorInfoReceived;
         _monitoringService.SensorDataReceived += OnSensorDataReceived;
     }
 
+    private void OnLEDRampReceived(LEDRamp data)
+    {
+        LedRamp = data; // UI 자동 갱신
+    }
+
     private void OnSensorInfoReceived(SensorInfo data)
     {
+
+
         ReceivedInfo = data; // UI 자동 갱신
     }
 

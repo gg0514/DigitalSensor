@@ -34,14 +34,14 @@ namespace DigitalSensor.Models
         public string ErrColor => Err switch
         {
             ErrStatus.Disconnected => "Red",
-            ErrStatus.Connected => "GreenYellow",
+            ErrStatus.Connected => "Gray",
             _ => "Gray"
         };
 
         public string TxColor => Tx switch
         {
             TxStatus.NoSignal => "Gray",
-            TxStatus.Signal => "GreenYellow",
+            TxStatus.Signal => "Orange",
             _ => "Gray"
         };
 

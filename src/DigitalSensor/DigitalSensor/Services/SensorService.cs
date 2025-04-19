@@ -27,8 +27,7 @@ public class SensorService : ISensorService
 
     private ModbusHandler _modbusHandler= default;
 
-
-    private readonly Random _random = new();
+    //private readonly Random _random = new();
 
     // for Design
     public SensorService()
@@ -81,24 +80,28 @@ public class SensorService : ISensorService
         var data = new SensorInfo
         {
             Type = (SensorType)type,
-            Serial = "1234567890ABCDEF" // 예시로 고정된 시리얼 번호
+            Serial = serial // 예시로 고정된 시리얼 번호
         };
 
         return await Task.FromResult(data);
     }
 
 
-    public Task<SensorData> GetSensorDataAsync()
+    public async Task<SensorData> GetSensorDataAsync()
     {
+        float value     = await _modbusHandler.ReadSensorValue();
+        float mv        = await _modbusHandler.ReadSensorMV();
+        float temperature = await _modbusHandler.ReadTempValue();
+
         var data = new SensorData
         {
             Timestamp   = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-            Value       = (float)_random.NextDouble(),
-            Mv          = (float)_random.NextDouble(),
-            Temperature = (float)_random.NextDouble()
+            Value       = value,
+            Mv          = mv,
+            Temperature = temperature
         };
 
-        return Task.FromResult(data);
+        return await Task.FromResult(data);
     }
 
 }

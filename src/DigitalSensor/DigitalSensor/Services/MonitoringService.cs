@@ -36,14 +36,31 @@ public class MonitoringService : IMonitoringService
     {
         StartMonitoring();
 
-        // Sensor Attached 통지
-        //LEDRampReceived?.Invoke(new LEDRamp());
+
+        // LED Ramp 상태 변경
+        LEDRampReceived?.Invoke(new LEDRamp()
+        {
+            Err= ErrStatus.Connected,
+            Tx = TxStatus.Signal,
+            Rx = RxStatus.Signal
+        });
     }
 
     private void OnSensorDetached()
     {
         // Sensor Detached 통지
         //LEDRampReceived?.Invoke(new LEDRamp());
+
+
+        // LED Ramp 상태 초기화
+        LEDRampReceived?.Invoke(new LEDRamp()
+        {
+            Err = ErrStatus.Disconnected,
+            Tx = TxStatus.NoSignal,
+            Rx = RxStatus.NoSignal
+        });
+
+        SensorInfoReceived?.Invoke(new SensorInfo());
     }
 
 
@@ -54,14 +71,15 @@ public class MonitoringService : IMonitoringService
         SensorInfo info = await _sensorService.GetSensorInfoAsync();
         SensorInfoReceived?.Invoke(info);
 
+        //SensorData data = await _sensorService.GetSensorDataAsync();
 
-        while (true)
-        {
-            // 센서 데이터 가져오기
-            SensorData data = await _sensorService.GetSensorDataAsync();
-            SensorDataReceived?.Invoke(data);
+        //while (true)
+        //{
+        //    // 센서 데이터 가져오기
+        //    SensorData data = await _sensorService.GetSensorDataAsync();
+        //    SensorDataReceived?.Invoke(data);
 
-            await Task.Delay(1000); // 1초 대기
-        }
+        //    await Task.Delay(1000); // 1초 대기
+        //}
     }
 }
