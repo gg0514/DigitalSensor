@@ -14,11 +14,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalSensor.Desktop", "Di
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsbSerialForAndroid.Net", "UsbSerialForAndroid.Net\UsbSerialForAndroid.Net.csproj", "{D45F900E-A4C8-4449-B92F-77D39995E8BA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modbus Register", "Modbus Register", "{8BC17294-04AE-4ADF-927D-51FE098EB9A5}"
-	ProjectSection(SolutionItems) = preProject
-		modbus_config.json = modbus_config.json
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -18,6 +18,8 @@ public class SensorService : ISensorService
     private readonly NotificationService    _notificationService;
     private readonly ModbusService          _modbusService;
 
+    private ModbusHandler _modbusHandler= default;
+
 
     private readonly Random _random = new();
 
@@ -33,21 +35,23 @@ public class SensorService : ISensorService
         _notificationService = App.GlobalHost.GetService<NotificationService>();
 
         // Modbus Device 구독 등록
-        _modbusService.ModbusDeviceAttached += OnModbusDeviceAttached;
-        _modbusService.ModbusDeviceDetached += OnModbusDeviceDetached;
+        _modbusService.ModbusHandlerAttached += OnModbusHandlerAttached;
+        _modbusService.ModbusHandlerDetached += OnModbusHandlerDetached;
     }
 
-    private async void OnModbusDeviceAttached(ModbusDeviceInfo modbusInfo)
+    private async void OnModbusHandlerAttached(ModbusHandler handler)
     {
-        int slaveID = modbusInfo.SlaveId;
-        //_notificationService.ShowMessage("Slave ID", $"{slaveID}");
+        _modbusHandler = handler;
 
-        _notificationService.ShowMessage("USB Device Attached", $"{slaveID}:{modbusInfo.ProductName}");
+        int slaveID = handler.SlaveId;
+        string productName = handler.GetProductName();
+
+        _notificationService.ShowMessage("ModbusHandler Attached", $"{slaveID}:{productName}");
     }
 
-    private void OnModbusDeviceDetached(ModbusDeviceInfo modbusInfo)
+    private void OnModbusHandlerDetached(ModbusHandler modbusInfo)
     {
-        _notificationService.ShowMessage("USB Device Detached", "");
+        _notificationService.ShowMessage("ModbusHandler Detached", "");
         //_notificationService.ShowMessage("USB Device Detached", $"Device ID: {deviceInfo.DeviceId}");
     }
 
