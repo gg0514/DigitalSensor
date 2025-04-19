@@ -55,8 +55,8 @@ public class ModbusHandler
     public async Task<float> ReadSensorValue()
     {
         byte slaveId = SlaveId;
-        ushort startAddress = (ushort)modbusMap["SENSOR_DATA"]["address"];
-        ushort numRegisters = (ushort)modbusMap["SENSOR_DATA"]["dataLength"]; ;
+        ushort startAddress = (ushort)modbusMap["SENSOR_VALUE"]["address"];
+        ushort numRegisters = (ushort)modbusMap["SENSOR_VALUE"]["dataLength"]; ;
         ushort[] registers = await _modbusMaster?.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
         return ConvertToFloat(registers);
     }

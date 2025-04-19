@@ -71,7 +71,8 @@ public class MonitoringService : IMonitoringService
         SensorInfo info = await _sensorService.GetSensorInfoAsync();
         SensorInfoReceived?.Invoke(info);
 
-        //SensorData data = await _sensorService.GetSensorDataAsync();
+        SensorData data = await _sensorService.GetSensorDataAsync();
+        SensorDataReceived?.Invoke(data);
 
         //while (true)
         //{
