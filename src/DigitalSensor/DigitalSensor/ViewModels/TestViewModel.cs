@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DigitalSensor.Extensions;
+using DigitalSensor.Models;
 using DigitalSensor.Services;
 
 namespace DigitalSensor.ViewModels;
@@ -21,7 +22,7 @@ public partial class TestViewModel : ViewModelBase
     private readonly ModbusService          _modbusService;
 
     [ObservableProperty]
-    private int deviceId = 11;
+    private int deviceId = 5;
 
     [ObservableProperty]
     private byte slaveId = 250;
@@ -99,8 +100,21 @@ public partial class TestViewModel : ViewModelBase
 
 
     [RelayCommand]
-    private void OpenDevice()
+    private async void OpenDevice()
     {
+        bool bOpen= await _modbusService.OpenModbus(new UsbDeviceInfo()
+        {
+            DeviceId = DeviceId,
+            ProductName = "USB Serial Adapter",
+            VendorId = 0x0403,
+            ProductId = 0x6001,
+            SerialNumber = "1234567890"
+        });
+
+        if(bOpen)
+            _notificationService.ShowMessage("정보", $"Device {DeviceId} opened successfully.");
+
+
         //try
         //{
         //    bool bOpen = _modbusService.OpenDevice(DeviceId);
