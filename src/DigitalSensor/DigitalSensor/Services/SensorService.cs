@@ -51,13 +51,16 @@ public class SensorService : ISensorService
     {
         _modbusHandler = handler;
 
-        // Sensor Attached 통지
-        SensorAttached?.Invoke();
-
         int slaveID = handler.SlaveId;
         string productName = handler.GetProductName();
 
         _notificationService.ShowMessage("ModbusHandler Attached", $"{slaveID}:{productName}");
+
+        int type = await _modbusHandler.ReadSensorType();
+        string serial = await _modbusHandler.ReadSensorSerial();
+
+        // Sensor Attached 통지
+        SensorAttached?.Invoke();
     }
 
     private void OnModbusHandlerDetached(ModbusHandler modbusInfo)
@@ -70,21 +73,18 @@ public class SensorService : ISensorService
     }
 
 
-    public Task<SensorInfo> GetSensorInfoAsync()
+    public async Task<SensorInfo> GetSensorInfoAsync()
     {
+        int type = await _modbusHandler.ReadSensorType();
+        string serial= await _modbusHandler.ReadSensorSerial();
+
         var data = new SensorInfo
         {
-            Type = SensorType.None,
+            Type = (SensorType)type,
             Serial = "1234567890ABCDEF" // 예시로 고정된 시리얼 번호
         };
 
-
-        if(_modbusService.IsOpen())
-        {
-
-        }
-
-        return Task.FromResult(data);
+        return await Task.FromResult(data);
     }
 
 
