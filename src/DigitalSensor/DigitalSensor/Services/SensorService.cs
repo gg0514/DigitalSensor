@@ -115,7 +115,7 @@ public class SensorService : ISensorService
 
     public async Task SensorHealthCheck()
     {
-        for(int i=0; i < 3; i++)
+        for(int i=0; i < 30; i++)
         {
             byte slaveId = (byte)(await _modbusHandler.ReadSlaveId())[0];    // 0x14
             int type = await _modbusHandler.ReadSensorType();                // 0x06

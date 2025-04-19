@@ -53,9 +53,34 @@ public partial class TestViewModel : ViewModelBase
         _notificationService = App.GlobalHost.GetService<NotificationService>();
     }
 
+
+
+    // 안드로이드 테스트시 USB_PERMISSION이 없으면 OpenModbus가 실패함
+    // DetectDevice 후에 OpenModbus 호출해야 함
+
     [RelayCommand]
-    private async Task ReadRegistersAsync()
+    private async Task ReadRegisters()
     {
+        //int deviceId = 5;       // for Desktop
+        //int deviceId = 1002;      // for Android (퍼미션 문제로 직접 접근 불가)
+
+        try
+        {
+            IModbusSerialMaster master = null;
+            master = _modbusService.OpenModbus(DeviceId);
+
+            // SlaveId = 250, RegisterAddress = 20, DataLength = 1
+
+            ushort[] values = master.ReadHoldingRegisters(250, 20, 1);
+            int slaveID = values[0];
+
+            Debug.WriteLine($"Slave ID search: {slaveID}");
+        }
+        catch (Exception ex)
+        {
+            ResultText = $"Error: {ex.Message}";
+        }
+
         //try
         //{
         //    // SlaveId = 250, RegisterAddress = 20, DataLength = 1
@@ -100,51 +125,6 @@ public partial class TestViewModel : ViewModelBase
         }
     }
 
-
-    [RelayCommand]
-    private async void OpenDevice()
-    {
-        //bool bOpen= await _modbusService.OpenModbus(new UsbDeviceInfo()
-        //{
-        //    DeviceId = DeviceId,
-        //    ProductName = "USB Serial Adapter",
-        //    VendorId = 0x0403,
-        //    ProductId = 0x6001,
-        //    SerialNumber = "1234567890"
-        //});
-
-        //if(bOpen)
-        //    _notificationService.ShowMessage("정보", $"Device {DeviceId} opened successfully.");
-
-
-        OpenModbusTest();
-    }
-
-
-    private void OpenModbusTest()
-    {
-        //int deviceId = 5;       // for Desktop
-        //int deviceId = 1002;      // for Android (퍼미션 문제로 직접 접근 불가)
-
-        try
-        {
-            IModbusSerialMaster master = null;                
-            master= _modbusService.OpenModbus(DeviceId);
-
-            // SlaveId = 250, RegisterAddress = 20, DataLength = 1
-
-            ushort[] values= master.ReadHoldingRegisters(250, 20, 1);
-            int slaveID= values[0];
-
-            Debug.WriteLine($"Slave ID search: {slaveID}");
-        }
-        catch (Exception ex)
-        {
-            ResultText = $"Error: {ex.Message}";
-        }
-    }
-
-
     public List<int> DetectDevices()
     {
         IUsbService _usbService = App.GlobalHost.GetService<IUsbService>();
@@ -164,4 +144,21 @@ public partial class TestViewModel : ViewModelBase
         return deviceIds;
     }
 
+    [RelayCommand]
+    private async void OpenDevice()
+    {
+        // Desktop에서 테스트할 때는 DeviceId를 직접 지정
+        bool bOpen = await _modbusService.OpenModbus(new UsbDeviceInfo()
+        {
+            DeviceId = DeviceId,
+            ProductName = "USB Serial Adapter",
+            VendorId = 0x0403,
+            ProductId = 0x6001,
+            SerialNumber = "1234567890"
+        });
+
+        if (bOpen)
+            _notificationService.ShowMessage("정보", $"Device {DeviceId} opened successfully.");
+
+    }
 }
