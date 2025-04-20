@@ -14,7 +14,7 @@ namespace UsbSerialForAndroid.Net.Drivers
         private static readonly UsbManager usbManager = GetUsbManager();
         public const byte XON = 17;
         public const byte XOFF = 19;
-        public const int DefaultTimeout = 5000;
+        public const int DefaultTimeout = 1000;
         public const int DefaultBufferLength = 1024 * 4;
         public const int DefaultBaudRate = 9600;
         public const byte DefaultDataBits = 8;
@@ -126,7 +126,7 @@ namespace UsbSerialForAndroid.Net.Drivers
         public virtual int Read(byte[] buffer, int offset, int count)
         {
             ArgumentNullException.ThrowIfNull(UsbDeviceConnection);
-            var readBuffer = ArrayPool<byte>.Shared.Rent(DefaultBufferLength);
+            var readBuffer = ArrayPool<byte>.Shared.Rent(count);
 
             int totalBytes = 0;
             int expectedLength = 0;
@@ -188,7 +188,7 @@ namespace UsbSerialForAndroid.Net.Drivers
 
         public async Task<int> ReadAsync(byte[] buffer, int offset, int count)
         {
-            var readBuffer = ArrayPool<byte>.Shared.Rent(DefaultBufferLength);
+            var readBuffer = ArrayPool<byte>.Shared.Rent(count);
             int totalBytes = 0;
             int expectedLength = 0;
 
