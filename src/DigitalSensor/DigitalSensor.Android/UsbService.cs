@@ -27,7 +27,8 @@ namespace DigitalSensor.Android
         private Action<UsbDevice> detachedHandler;
 
         // USB 드라이버
-        private UsbDriverBase? usbDriver;
+        private UsbDriverBase? _usbDriver;
+        private UsbRecoveryHandler? _usbRecoveryHandler;
 
         public UsbService()
         {
@@ -104,17 +105,27 @@ namespace DigitalSensor.Android
             if (IsConnection())
                 return true;
 
-            usbDriver = UsbDriverFactory.CreateUsbDriver(deviceId);
+            _usbDriver = UsbDriverFactory.CreateUsbDriver(deviceId);
             var _stopBits = (UsbSerialForAndroid.Net.Enums.StopBits)stopBits;
             var _parity = (UsbSerialForAndroid.Net.Enums.Parity)parity;
-            usbDriver.Open(baudRate, dataBits, _stopBits, _parity);
+            _usbDriver.Open(baudRate, dataBits, _stopBits, _parity);
 
-            return IsConnection();
+            if(IsConnection())
+            {
+                UsbDeviceConnection usbConnection = _usbDriver.UsbDeviceConnection;
+                UsbEndpoint endpointRead= _usbDriver.UsbEndpointRead;
+                UsbEndpoint endpointWrite= _usbDriver.UsbEndpointWrite;
+                UsbInterface usbInterface= _usbDriver.UsbInterface;
+
+                _usbRecoveryHandler = new UsbRecoveryHandler(usbConnection, endpointRead, endpointWrite, usbInterface);
+                return true;
+            }
+            return false;
         }
 
         public int Read(byte[] buffer, int offset, int count)
         {
-            int nRead = usbDriver.Read(buffer, offset, count);
+            int nRead = _usbDriver.Read(buffer, offset, count);
 
             string text = BitConverter.ToString(buffer, offset, count).Replace("-", " ");
             Debug.WriteLine($"Read ({offset}:{count}): {text}");
@@ -130,12 +141,12 @@ namespace DigitalSensor.Android
             Debug.WriteLine($"Write ({offset}:{count}): {text}");
             //throw new NotImplementedException($"Write: {text}");
 
-            usbDriver.Write(buffer, offset, count);
+            _usbDriver.Write(buffer, offset, count);
         }
 
         public async Task<int> ReadAsync(byte[] buffer, int offset, int count)
         {
-            int nRead = await usbDriver.ReadAsync(buffer, offset, count);
+            int nRead = await _usbDriver.ReadAsync(buffer, offset, count);
 
             string text = BitConverter.ToString(buffer, offset, count).Replace("-", " ");
             Debug.WriteLine($"ReadAsync ({offset}:{count}): {text}");
@@ -151,7 +162,7 @@ namespace DigitalSensor.Android
             Debug.WriteLine($"WriteAsync ({offset}:{count}): {text}");
             //throw new NotImplementedException($"Write: {text}");
 
-            await usbDriver.WriteAsync(buffer, offset, count);
+            await _usbDriver.WriteAsync(buffer, offset, count);
         }
 
 
@@ -162,26 +173,43 @@ namespace DigitalSensor.Android
         public void Dispose()
         {
             Close();
-            usbDriver = null;
+            _usbDriver = null;
         }
 
         public void Close()
         {
-            ArgumentNullException.ThrowIfNull(usbDriver);
-            usbDriver.Close();
+            ArgumentNullException.ThrowIfNull(_usbDriver);
+            _usbDriver.Close();
+            _usbRecoveryHandler = null;
         }
 
         public bool IsConnection()
         {
             try
             {
-                if (usbDriver is null) return false;
-                return usbDriver.TestConnection();
+                if (_usbDriver is null) return false;
+                return _usbDriver.TestConnection();
             }
             catch
             {
                 return false;
             }
         }
+
+        public bool TryRecover(Func<bool> communicationTest)
+        {
+            try
+            {
+                if (_usbRecoveryHandler != null)
+                    return _usbRecoveryHandler.TryRecover(communicationTest);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"USB 복구 시도 중 오류 발생: {ex.Message}");
+            }
+
+            return false;
+        }
+
     }
 }

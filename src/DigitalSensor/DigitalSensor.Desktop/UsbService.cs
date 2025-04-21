@@ -79,6 +79,11 @@ namespace DigitalSensor.Desktop
             return Task.Run(() => Write(buffer, offset, count));
         }
 
+        public bool TryRecover(Func<bool> communicationTest)
+        {
+            return false;
+        }
+
         public void DiscardInBuffer()
         {
             ArgumentNullException.ThrowIfNull(_port);

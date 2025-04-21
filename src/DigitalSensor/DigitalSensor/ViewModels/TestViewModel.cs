@@ -67,7 +67,7 @@ public partial class TestViewModel : ViewModelBase
         try
         {
             IModbusSerialMaster master = null;
-            master = _modbusService.OpenModbus(DeviceId);
+            master = _modbusService.CreateModbusRTU(DeviceId);
 
             // SlaveId = 250, RegisterAddress = 20, DataLength = 1
 
@@ -100,6 +100,22 @@ public partial class TestViewModel : ViewModelBase
         //    ResultText = $"Error: {ex.Message}";
         //}
     }
+
+    [RelayCommand]
+    private async void OpenDevice()
+    {
+        try
+        {
+            // Desktop에서 테스트할 때는 DeviceId를 직접 지정
+            IModbusSerialMaster master = null;
+            master = _modbusService.CreateModbusRTU(DeviceId);
+        }
+        catch (Exception ex)
+        {
+            _notificationService.ShowMessage("정보", $"Device {DeviceId} opened successfully.");
+        }
+    }
+
 
     [RelayCommand]
     private void DetectDevice()
@@ -144,21 +160,4 @@ public partial class TestViewModel : ViewModelBase
         return deviceIds;
     }
 
-    [RelayCommand]
-    private async void OpenDevice()
-    {
-        // Desktop에서 테스트할 때는 DeviceId를 직접 지정
-        bool bOpen = await _modbusService.OpenModbus(new UsbDeviceInfo()
-        {
-            DeviceId = DeviceId,
-            ProductName = "USB Serial Adapter",
-            VendorId = 0x0403,
-            ProductId = 0x6001,
-            SerialNumber = "1234567890"
-        });
-
-        if (bOpen)
-            _notificationService.ShowMessage("정보", $"Device {DeviceId} opened successfully.");
-
-    }
 }

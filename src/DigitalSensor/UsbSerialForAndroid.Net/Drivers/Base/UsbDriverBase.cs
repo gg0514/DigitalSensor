@@ -26,12 +26,14 @@ namespace UsbSerialForAndroid.Net.Drivers
         public bool DtrEnable { get; protected set; }
         public bool RtsEnable { get; protected set; }
         public int UsbInterfaceIndex { get; set; } = DefaultUsbInterfaceIndex;
+
         public static UsbManager UsbManager => usbManager;
         public UsbDevice UsbDevice { get; private set; }
         public UsbDeviceConnection? UsbDeviceConnection { get; protected set; }
         public UsbInterface? UsbInterface { get; protected set; }
         public UsbEndpoint? UsbEndpointRead { get; protected set; }
         public UsbEndpoint? UsbEndpointWrite { get; protected set; }
+        
         public int ReadTimeout { get; set; } = DefaultTimeout;
         public int WriteTimeout { get; set; } = DefaultTimeout;
         public int ControlTimeout { get; set; } = DefaultTimeout;

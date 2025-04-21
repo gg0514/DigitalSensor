@@ -30,14 +30,21 @@ public class ModbusHandler
         modbusMap = JsonLoader.LoadModbusMap("Assets/modbus_config.json");
     }
 
-    public async Task LoadSlaveId()
+    public async Task<int> LoadSlaveId()
     {
         SlaveId = (byte)(await ReadSlaveId())[0];
+
+        return SlaveId;
     }
 
     public string GetProductName()
     {
         return _usbDeviceInfo?.ProductName ?? string.Empty;
+    }
+
+    public void TestConnection()
+    {
+        _modbusMaster?.ReadHoldingRegisters(250, 0, 1);
     }
 
     // SLAVE ID

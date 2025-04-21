@@ -11,6 +11,7 @@ namespace DigitalSensor.Services
         event Action<UsbDeviceInfo> UsbDeviceDetached;
 
         List<UsbDeviceInfo> GetUsbDeviceInfos();
+        bool TryRecover(Func<bool> communicationTest);
 
         bool Open(int deviceId, int baudRate, byte dataBits, byte stopBits, byte parity);
 
@@ -61,6 +62,10 @@ namespace DigitalSensor.Services
             return Task.CompletedTask; // Return a completed task
         }
 
+        public bool TryRecover(Func<bool> communicationTest)
+        {
+            return false;
+        }
 
         public void DiscardInBuffer()
         {
