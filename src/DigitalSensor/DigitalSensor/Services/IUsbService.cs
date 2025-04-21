@@ -6,7 +6,7 @@ namespace DigitalSensor.Services
 {
     public interface IUsbService
     {
-        event Action<UsbDeviceInfo> UsbDeviceAttached;
+        event Action<UsbDeviceInfo> UsbPermissionGranted;
         event Action<UsbDeviceInfo> UsbDeviceDetached;
 
         List<UsbDeviceInfo> GetUsbDeviceInfos();
@@ -24,7 +24,7 @@ namespace DigitalSensor.Services
 
     public class FakeUsbService : IUsbService
     {
-        public event Action<UsbDeviceInfo>? UsbDeviceAttached;
+        public event Action<UsbDeviceInfo>? UsbPermissionGranted;
         public event Action<UsbDeviceInfo>? UsbDeviceDetached;
 
         public List<UsbDeviceInfo> GetUsbDeviceInfos()

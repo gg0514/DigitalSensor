@@ -10,7 +10,7 @@ namespace DigitalSensor.Desktop
 {
     public class UsbService : IUsbService
     {
-        public event Action<UsbDeviceInfo>? UsbDeviceAttached;
+        public event Action<UsbDeviceInfo>? UsbPermissionGranted;
         public event Action<UsbDeviceInfo>? UsbDeviceDetached;
 
         private SerialPort? _port;
@@ -23,6 +23,12 @@ namespace DigitalSensor.Desktop
         public List<UsbDeviceInfo> GetUsbDeviceInfos()
         {
             return new List<UsbDeviceInfo>();
+        }
+
+        public void Close()
+        {
+            ArgumentNullException.ThrowIfNull(_port);
+            _port.Close();
         }
 
         public bool Open(int deviceId, int baudRate, byte dataBits, byte stopBits, byte parity)
@@ -63,12 +69,6 @@ namespace DigitalSensor.Desktop
         {
             ArgumentNullException.ThrowIfNull(_port);
             _port.DiscardInBuffer();
-        }
-
-        public void Close()
-        {
-            ArgumentNullException.ThrowIfNull(_port);
-            _port.Close();
         }
 
         public bool IsConnection()

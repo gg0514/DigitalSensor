@@ -38,6 +38,8 @@ namespace UsbSerialForAndroid.Net.Receivers
                                     {
                                         var permissionIntent = new Intent(UsbPermissionAction);
                                         var pendingIntent = PendingIntent.GetBroadcast(context, 0, permissionIntent, PendingIntentFlags.Immutable);
+
+                                        // 여기서 USB 권한 요청
                                         context.RegisterReceiver(new UsbPermissionReceiver(usbDevice, UsbDeviceAttached, ErrorCallback, IsShowToast), new IntentFilter(UsbPermissionAction));
                                         usbManager.RequestPermission(usbDevice, pendingIntent);
                                     }
@@ -46,6 +48,8 @@ namespace UsbSerialForAndroid.Net.Receivers
                             case UsbManager.ActionUsbDeviceDetached:
                                 {
                                     msg = AppResources.UsbDeviceDetached + msg;
+
+                                    // 여기서 USB Device가 분리되었음을 알린다.
                                     UsbDeviceDetached?.Invoke(usbDevice);
                                     break;
                                 }
@@ -90,6 +94,7 @@ namespace UsbSerialForAndroid.Net.Receivers
                         bool granted = intent.GetBooleanExtra(UsbManager.ExtraPermissionGranted, true);
                         if (granted)
                         {
+                            // 여기서 USB 권한을 획득한후에 콜백함수를 호출한다.
                             usbDeviceAttachedCallback?.Invoke(usbDevice);
 
                             if (isShowToast)

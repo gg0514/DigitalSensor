@@ -40,7 +40,7 @@ public class ModbusService
         _notificationService = App.GlobalHost.GetService<NotificationService>();
 
         // USB Device 구독 등록
-        _usbService.UsbDeviceAttached += OnUSBDeviceAttached;
+        _usbService.UsbPermissionGranted += OnUSBPermissionGranted;
         _usbService.UsbDeviceDetached += OnUSBDeviceDetached;
     }
 
@@ -51,7 +51,7 @@ public class ModbusService
         ModbusHandlerDetached?.Invoke(null);
     }
 
-    private async void OnUSBDeviceAttached(UsbDeviceInfo deviceInfo)
+    private async void OnUSBPermissionGranted(UsbDeviceInfo deviceInfo)
     {
         try
         {

@@ -19,7 +19,7 @@ namespace DigitalSensor.Android
 
     public class UsbService : IUsbService
     {
-        public event Action<UsbDeviceInfo> UsbDeviceAttached;
+        public event Action<UsbDeviceInfo> UsbPermissionGranted;
         public event Action<UsbDeviceInfo> UsbDeviceDetached;
 
         private Action<UsbDevice> attachedHandler;
@@ -48,7 +48,7 @@ namespace DigitalSensor.Android
             // USB 장치가 연결되면 호출된다.
             // UsbDevice 받고, UsbDeviceInfo 전달한다.
 
-            UsbDeviceAttached?.Invoke(new UsbDeviceInfo()
+            UsbPermissionGranted?.Invoke(new UsbDeviceInfo()
             {
                 DeviceId = device.DeviceId,
                 DeviceName = device.DeviceName,
