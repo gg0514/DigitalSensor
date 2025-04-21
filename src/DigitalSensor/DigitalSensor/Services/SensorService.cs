@@ -55,8 +55,8 @@ public class SensorService : ISensorService
 
         _notificationService.ShowMessage("ModbusHandler Attached", $"{slaveID}:{productName}");
 
-        int type = await _modbusHandler.ReadSensorType();
-        string serial = await _modbusHandler.ReadSensorSerial();
+        // 센서 진단
+        await SensorHealthCheck();
 
         // Sensor Attached 통지
         SensorAttached?.Invoke();
@@ -112,4 +112,23 @@ public class SensorService : ISensorService
         return await Task.FromResult(data);
     }
 
+
+    public async Task SensorHealthCheck()
+    {
+        for(int i=0; i < 30; i++)
+        {
+            byte slaveId = (byte)(await _modbusHandler.ReadSlaveId())[0];    // 0x14
+            int type = await _modbusHandler.ReadSensorType();                // 0x06
+            string serial = await _modbusHandler.ReadSensorSerial();         // 0x08
+
+            float value = await _modbusHandler.ReadSensorValue();            // 0x00
+            float temperature = await _modbusHandler.ReadTempValue();        // 0x02
+            float mv = await _modbusHandler.ReadSensorMV();                  // 0x04
+
+            float factor = await _modbusHandler.ReadSensorFactor();          // 0x0B
+            float offset = await _modbusHandler.ReadSensorOffset();          // 0x0D
+            float sample = await _modbusHandler.ReadCalib1pSample();         // 0x0F
+            ushort calib = await _modbusHandler.ReadCalibStatus();           // 0x07
+        }
+    }
 }

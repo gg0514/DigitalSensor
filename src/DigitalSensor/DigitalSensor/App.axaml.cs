@@ -31,8 +31,8 @@ public partial class App : Application
                 services.AddSingleton<INavigationService, NavigationService>();
                 services.AddSingleton<IMonitoringService, MonitoringService>();
                 services.AddSingleton<ISensorService, SensorService>();
-                services.AddTransient<ModbusService>();
-                services.AddTransient<NotificationService>();
+                services.AddSingleton<ModbusService>();
+                services.AddSingleton<NotificationService>();
 
                 services.AddSingleton<MainWindow>();
                 services.AddSingleton<MainView>();

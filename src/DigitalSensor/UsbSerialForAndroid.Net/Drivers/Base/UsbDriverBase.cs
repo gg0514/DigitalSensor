@@ -85,6 +85,36 @@ namespace UsbSerialForAndroid.Net.Drivers
             }
         }
 
+        public virtual async Task WriteAsync(byte[] buffer)
+        {
+            ArgumentNullException.ThrowIfNull(UsbDeviceConnection);
+            int result = await UsbDeviceConnection.BulkTransferAsync(UsbEndpointWrite, buffer, 0, buffer.Length, WriteTimeout);
+            if (result < 0)
+                throw new BulkTransferException("Write failed", result, UsbEndpointWrite, buffer, 0, buffer.Length, WriteTimeout);
+        }
+
+        public virtual async Task<byte[]?> ReadAsync()
+        {
+            ArgumentNullException.ThrowIfNull(UsbDeviceConnection);
+            var buffer = ArrayPool<byte>.Shared.Rent(DefaultBufferLength);
+            try
+            {
+                int result = await UsbDeviceConnection.BulkTransferAsync(UsbEndpointRead, buffer, 0, DefaultBufferLength, ReadTimeout);
+                return result >= 0
+                    ? buffer.AsSpan().Slice(0, result).ToArray()
+                    : default;
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(buffer);
+            }
+        }
+
+
+        //************************************************************************
+        // 동기버전 (Write, Read)
+        //************************************************************************
+
         public virtual void Write(byte[] buffer, int offset, int count)
         {
             ArgumentNullException.ThrowIfNull(UsbDeviceConnection);
@@ -93,7 +123,6 @@ namespace UsbSerialForAndroid.Net.Drivers
             if (result < 0)
                 throw new BulkTransferException("Write failed", result, UsbEndpointWrite, buffer, 0, buffer.Length, WriteTimeout);
         }
-
         public virtual int Read(byte[] buffer, int offset, int count)
         {
             ArgumentNullException.ThrowIfNull(UsbDeviceConnection);
@@ -142,30 +171,56 @@ namespace UsbSerialForAndroid.Net.Drivers
             return totalBytes;
         }
 
+        //************************************************************************
+        // 비동기버전 (WriteAsync, ReadAsync)
+        //************************************************************************
 
-        public virtual async Task WriteAsync(byte[] buffer)
+        public virtual async Task WriteAsync(byte[] buffer, int offset, int count)
         {
             ArgumentNullException.ThrowIfNull(UsbDeviceConnection);
-            int result = await UsbDeviceConnection.BulkTransferAsync(UsbEndpointWrite, buffer, 0, buffer.Length, WriteTimeout);
+
+            int result = await UsbDeviceConnection.BulkTransferAsync(
+                UsbEndpointWrite, buffer, offset, count, WriteTimeout);
+
             if (result < 0)
-                throw new BulkTransferException("Write failed", result, UsbEndpointWrite, buffer, 0, buffer.Length, WriteTimeout);
+                throw new BulkTransferException("WriteAsync failed", result, UsbEndpointWrite, buffer, 0, buffer.Length, WriteTimeout);
         }
 
-        public virtual async Task<byte[]?> ReadAsync()
+        public async Task<int> ReadAsync(byte[] buffer, int offset, int count)
         {
-            ArgumentNullException.ThrowIfNull(UsbDeviceConnection);
-            var buffer = ArrayPool<byte>.Shared.Rent(DefaultBufferLength);
+            var readBuffer = ArrayPool<byte>.Shared.Rent(count);
+            int totalBytes = 0;
+            int expectedLength = 0;
+
             try
             {
-                int result = await UsbDeviceConnection.BulkTransferAsync(UsbEndpointRead, buffer, 0, DefaultBufferLength, ReadTimeout);
-                return result >= 0
-                    ? buffer.AsSpan().Slice(0, result).ToArray()
-                    : default;
+                while (true)
+                {
+                    int bytesRead = await UsbDeviceConnection.BulkTransferAsync(UsbEndpointRead, readBuffer, totalBytes, count - totalBytes, ReadTimeout);
+
+                    if (bytesRead < 0)
+                        throw new BulkTransferException("ReadAsync failed", bytesRead, UsbEndpointRead, readBuffer, 0, count, ReadTimeout);
+
+                    totalBytes += bytesRead;
+
+                    if (totalBytes >= 3 && expectedLength == 0)
+                        expectedLength = 3 + readBuffer[2] + 2;
+
+                    if (expectedLength > 0 && totalBytes >= expectedLength)
+                        break;
+
+                    if (totalBytes >= count)
+                        break;
+                }
+
+                Array.Copy(readBuffer, 0, buffer, offset, totalBytes);
             }
             finally
             {
-                ArrayPool<byte>.Shared.Return(buffer);
+                ArrayPool<byte>.Shared.Return(readBuffer);
             }
+
+            return totalBytes;
         }
 
         public static UsbInterface[] GetUsbInterfaces(UsbDevice usbDevice)

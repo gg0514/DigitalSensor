@@ -5,7 +5,8 @@ using DigitalSensor.Models;
 using DigitalSensor.Services;
 using Org.Apache.Http.Impl.Client;
 using System;
-using System.Buffers;
+using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using UsbSerialForAndroid.Net;
@@ -111,27 +112,48 @@ namespace DigitalSensor.Android
             return IsConnection();
         }
 
-
         public int Read(byte[] buffer, int offset, int count)
         {
-            return usbDriver.Read(buffer, offset, count);
+            int nRead = usbDriver.Read(buffer, offset, count);
 
-            //int nRead = usbDriver.Read(buffer, offset, count);
+            string text = BitConverter.ToString(buffer, offset, count).Replace("-", " ");
+            Debug.WriteLine($"Read ({offset}:{count}): {text}");
+            //throw new NotImplementedException($"Read ({offset}:{count}): {text}");
 
-            //string str = "HEX: " + BitConverter.ToString(buffer, offset, count).Replace("-", " ");
-            //throw new Exception(str);
-
-            //return nRead;
+            return nRead;
         }
 
 
         public void Write(byte[] buffer, int offset, int count)
         {
-            //string str= "HEX: " + BitConverter.ToString(buffer, offset, count).Replace("-", " ");
-            //throw new Exception(str);
+            string text = BitConverter.ToString(buffer, offset, count).Replace("-", " ");
+            Debug.WriteLine($"Write ({offset}:{count}): {text}");
+            //throw new NotImplementedException($"Write: {text}");
 
             usbDriver.Write(buffer, offset, count);
         }
+
+        public async Task<int> ReadAsync(byte[] buffer, int offset, int count)
+        {
+            int nRead = await usbDriver.ReadAsync(buffer, offset, count);
+
+            string text = BitConverter.ToString(buffer, offset, count).Replace("-", " ");
+            Debug.WriteLine($"ReadAsync ({offset}:{count}): {text}");
+            //throw new NotImplementedException($"Read ({offset}:{count}): {text}");
+
+            return nRead;
+        }
+
+
+        public async Task WriteAsync(byte[] buffer, int offset, int count)
+        {
+            string text = BitConverter.ToString(buffer, offset, count).Replace("-", " ");
+            Debug.WriteLine($"WriteAsync ({offset}:{count}): {text}");
+            //throw new NotImplementedException($"Write: {text}");
+
+            await usbDriver.WriteAsync(buffer, offset, count);
+        }
+
 
         public void DiscardInBuffer()
         {

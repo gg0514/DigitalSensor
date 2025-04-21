@@ -63,7 +63,7 @@ public class ModbusService
         }
     }
 
-    private async Task OpenModbus(UsbDeviceInfo deviceInfo)
+    public async Task<bool> OpenModbus(UsbDeviceInfo deviceInfo)
     {
         _modbusMaster= OpenModbus(deviceInfo.DeviceId);
 
@@ -74,11 +74,15 @@ public class ModbusService
 
             // 상위로 이벤트 전파 
             ModbusHandlerAttached?.Invoke(_modbusHandler);
+
+            return true;
         }
         else
         {
             _notificationService.ShowMessage("Modbus Device Open Failed", "");
         }
+
+        return false;
     }
 
     public void CloseModbus()

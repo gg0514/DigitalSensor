@@ -28,10 +28,14 @@ public class UsbSerialAdapter : IStreamResource
     public int Read(byte[] buffer, int offset, int count)
     {
         return _usbService.Read(buffer, offset, count);
+
+        // 비동기 버전이 좋을 것 같지만, 안드로이드에서 문제가 많이 생김.
+        //return Task.Run(() => _usbService.ReadAsync(buffer, offset, count)).GetAwaiter().GetResult();
     }
     public void Write(byte[] buffer, int offset, int count)
     {
         _usbService.Write(buffer, offset, count);
+        //Task.Run(() => _usbService.WriteAsync(buffer, offset, count)).GetAwaiter().GetResult();
     }
 
     public void DiscardInBuffer()
