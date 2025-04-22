@@ -6,6 +6,7 @@ using System.IO.Ports;
 using DigitalSensor.Services;
 using static System.Net.Mime.MediaTypeNames;
 using System.Threading.Tasks;
+using System.Threading;
 
 
 namespace DigitalSensor.Desktop
@@ -69,12 +70,12 @@ namespace DigitalSensor.Desktop
             _port.Write(buffer, offset, count);
         }
 
-        public Task<int> ReadAsync(byte[] buffer, int offset, int count)
+        public Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
             return Task.Run(() => Read(buffer, offset, count));
         }
 
-        public Task WriteAsync(byte[] buffer, int offset, int count)
+        public Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
             return Task.Run(() => Write(buffer, offset, count));
         }

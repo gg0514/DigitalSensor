@@ -1,6 +1,7 @@
 ﻿using DigitalSensor.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DigitalSensor.Services
@@ -18,8 +19,9 @@ namespace DigitalSensor.Services
         int Read(byte[] buffer, int offset, int count);
         void Write(byte[] buffer, int offset, int count);
 
-        Task<int> ReadAsync(byte[] buffer, int offset, int count);
-        Task WriteAsync(byte[] buffer, int offset, int count);
+
+        Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken);
+        Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken);
 
         void DiscardInBuffer();
 
@@ -52,12 +54,12 @@ namespace DigitalSensor.Services
         {
         }
 
-        public Task<int> ReadAsync(byte[] buffer, int offset, int count)
+        public Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
             return Task.FromResult(0); // Return a completed task with a result of 0
         }
 
-        public Task WriteAsync(byte[] buffer, int offset, int count)
+        public Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
             return Task.CompletedTask; // Return a completed task
         }

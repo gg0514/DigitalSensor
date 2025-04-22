@@ -17,6 +17,9 @@ using UsbSerialForAndroid.Net;
 using UsbSerialForAndroid.Net.Drivers;
 using UsbSerialForAndroid.Net.Exceptions;
 using UsbSerialForAndroid.Net.Helper;
+using Java.Nio;
+using System.Net;
+using System.Threading;
 
 
 
@@ -35,11 +38,18 @@ namespace DigitalSensor.Android
         private UsbDriverBase? _usbDriver;
         private UsbRecoveryHandler? _usbRecoveryHandler;
 
+        private UsbDeviceConnection _usbConnection ;
+        private UsbEndpoint _endpointRead;
+        private UsbEndpoint _endpointWrite;
+        private UsbInterface _usbInterface;
+
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+
 
         //*******************************************
         // UsbSerial4Android 라이브러리 사용
         // 사용하지 않으려면 null 처리
-        private US4A _us4a = new();
+        private US4A _us4a = null;
 
 
         public UsbService()
@@ -131,12 +141,12 @@ namespace DigitalSensor.Android
 
             if(IsConnection())
             {
-                UsbDeviceConnection usbConnection = _usbDriver.UsbDeviceConnection;
-                UsbEndpoint endpointRead= _usbDriver.UsbEndpointRead;
-                UsbEndpoint endpointWrite= _usbDriver.UsbEndpointWrite;
-                UsbInterface usbInterface= _usbDriver.UsbInterface;
+                _usbConnection = _usbDriver.UsbDeviceConnection;
+                _endpointRead= _usbDriver.UsbEndpointRead;
+                _endpointWrite= _usbDriver.UsbEndpointWrite;
+                _usbInterface= _usbDriver.UsbInterface;
 
-                _usbRecoveryHandler = new UsbRecoveryHandler(usbConnection, endpointRead, endpointWrite, usbInterface);
+                _usbRecoveryHandler = new UsbRecoveryHandler(_usbConnection, _endpointRead, _endpointWrite, _usbInterface);
                 return true;
             }
             return false;
@@ -196,27 +206,73 @@ namespace DigitalSensor.Android
             _usbDriver.Write(buffer, offset, count);
         }
 
-        public async Task<int> ReadAsync(byte[] buffer, int offset, int count)
+
+        public async Task<int> ReadAsync(byte[] buffer, int offset, int size, CancellationToken cancellationToken)
         {
-            int nRead = await _usbDriver.ReadAsync(buffer, offset, count);
+            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
+            if (offset < 0 || size < 0 || offset + size > buffer.Length)
+                throw new ArgumentOutOfRangeException();
 
-            string text = BitConverter.ToString(buffer, offset, count).Replace("-", " ");
-            Debug.WriteLine($"ReadAsync ({offset}:{count}): {text}");
-            //throw new NotImplementedException($"Read ({offset}:{count}): {text}");
+            await _semaphore.WaitAsync();
+            
+                var byteBuffer = ByteBuffer.Allocate(size);
+                using var request = new UsbRequest();
+                request.Initialize(_usbConnection, _endpointRead);
 
-            return nRead;
+                if (!request.Queue(byteBuffer, size))
+                    throw new InvalidOperationException("Failed to queue read request.");
+
+                var completedRequest = await Task.Run(() => _usbConnection.RequestWait(1000));
+                if (completedRequest != request)
+                    throw new InvalidOperationException("Read request failed or timed out.");
+
+                int bytesRead = byteBuffer.Position();
+                if (bytesRead > 0)
+                {
+                    byteBuffer.Flip();
+                    byteBuffer.Get(buffer, offset, bytesRead);
+                }
+                string text = BitConverter.ToString(buffer, offset, size).Replace("-", " ");
+                Debug.WriteLine($"Read ({offset}:{size}): {text}");
+
+
+            _semaphore.Release();
+
+            return bytesRead;
+            
         }
 
-
-        public async Task WriteAsync(byte[] buffer, int offset, int count)
+        public async Task WriteAsync(byte[] buffer, int offset, int size, CancellationToken cancellationToken)
         {
-            string text = BitConverter.ToString(buffer, offset, count).Replace("-", " ");
-            Debug.WriteLine($"WriteAsync ({offset}:{count}): {text}");
-            //throw new NotImplementedException($"Write: {text}");
+            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
+            if (offset < 0 || size < 0 || offset + size > buffer.Length)
+                throw new ArgumentOutOfRangeException();
 
-            await _usbDriver.WriteAsync(buffer, offset, count);
+            await _semaphore.WaitAsync();
+            {
+                var byteBuffer = ByteBuffer.Allocate(size);
+                byteBuffer.Put(buffer, offset, size);
+                byteBuffer.Flip();
+
+                string text = BitConverter.ToString(buffer, offset, size).Replace("-", " ");
+                Debug.WriteLine($"Write ({offset}:{size}): {text}");
+
+                using var request = new UsbRequest();
+                request.Initialize(_usbConnection, _endpointWrite);
+
+                if (!request.Queue(byteBuffer, size))
+                    throw new InvalidOperationException("Failed to queue write request.");
+
+                var completedRequest = await Task.Run(() => _usbConnection.RequestWait(1000));
+                if (completedRequest != request)
+                    throw new InvalidOperationException("Write request failed or timed out.");
+
+                int position = byteBuffer.Position();
+                if (position != size)
+                    throw new InvalidOperationException($"Incomplete write: {position} of {size} bytes.");
+            }
+            _semaphore.Release();
         }
-
 
         public void DiscardInBuffer()
         {
