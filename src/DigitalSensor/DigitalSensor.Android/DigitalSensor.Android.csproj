@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+	  <ProjectReference Include="..\UsbSerial4Android\UsbSerial4Android.csproj" />
 	  <ProjectReference Include="..\UsbSerialForAndroid.Net\UsbSerialForAndroid.Net.csproj" />
 	  <ProjectReference Include="..\DigitalSensor\DigitalSensor.csproj" />
   </ItemGroup>

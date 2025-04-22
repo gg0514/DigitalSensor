@@ -19,6 +19,7 @@ using UsbSerialForAndroid.Net.Exceptions;
 using UsbSerialForAndroid.Net.Helper;
 
 
+
 namespace DigitalSensor.Android
 {
 
@@ -33,6 +34,13 @@ namespace DigitalSensor.Android
         // USB 드라이버
         private UsbDriverBase? _usbDriver;
         private UsbRecoveryHandler? _usbRecoveryHandler;
+
+
+        //*******************************************
+        // UsbSerial4Android 라이브러리 사용
+        // 사용하지 않으려면 null 처리
+        private US4A _us4a = new();
+
 
         public UsbService()
         {
@@ -52,7 +60,9 @@ namespace DigitalSensor.Android
         private void AttachedBrokerMethod(UsbDevice device)
         {
             // USB 장치가 연결되면 호출된다.
-            // UsbDevice 받고, UsbDeviceInfo 전달한다.
+            // Android.Hardware.Usb.UsbDevice 받고, UsbDeviceInfo 전달한다.
+
+            _us4a.CreateDriver(device);
 
             UsbPermissionGranted?.Invoke(new UsbDeviceInfo()
             {
@@ -106,6 +116,10 @@ namespace DigitalSensor.Android
 
         public bool Open(int deviceId, int baudRate, byte dataBits, byte stopBits, byte parity)
         {
+            if(_us4a != null)
+                return Open_us4a(baudRate, dataBits, stopBits, parity);
+
+
             if (IsConnection())
                 return true;
 
@@ -127,8 +141,35 @@ namespace DigitalSensor.Android
             return false;
         }
 
+        public bool Open_us4a(int baudRate, byte dataBits, byte stopBits, byte parity)
+        {
+            if (_us4a.IsOpen())
+                return true;
+
+            
+            _us4a.OpenPort(baudRate, dataBits, stopBits, parity);
+
+            if (_us4a.IsOpen())
+            {
+                UsbDeviceConnection usbConnection = _us4a.Connection;
+                UsbEndpoint endpointRead = _us4a.EndpointRead;
+                UsbEndpoint endpointWrite = _us4a.EndpointWrite;
+                UsbInterface usbInterface = _us4a.UsbInterface;
+                _usbRecoveryHandler = new UsbRecoveryHandler(usbConnection, endpointRead, endpointWrite, usbInterface);
+                return true;
+            }
+
+            return false;
+        }
+
+
+
         public int Read(byte[] buffer, int offset, int count)
         {
+            if (_us4a != null)
+                return _us4a.Read(buffer, offset, count);
+
+
             int nRead = _usbDriver.Read(buffer, offset, count);
 
             string text = BitConverter.ToString(buffer, offset, count).Replace("-", " ");
@@ -141,6 +182,12 @@ namespace DigitalSensor.Android
 
         public void Write(byte[] buffer, int offset, int count)
         {
+            if (_us4a != null)
+            {
+                _us4a.write(buffer, offset, count);
+                return;
+            }
+
             string text = BitConverter.ToString(buffer, offset, count).Replace("-", " ");
             Debug.WriteLine($"Write ({offset}:{count}): {text}");
             //throw new NotImplementedException($"Write: {text}");
@@ -172,16 +219,30 @@ namespace DigitalSensor.Android
 
         public void DiscardInBuffer()
         {
+
         }
 
         public void Dispose()
         {
+            if (_us4a != null)
+            {
+                _us4a.ClosePort();
+            }
+
+
             Close();
             _usbDriver = null;
         }
 
         public void Close()
         {
+            if (_us4a != null)
+            {
+                _us4a.ClosePort();
+                _usbRecoveryHandler = null;
+                return;
+            }
+
             ArgumentNullException.ThrowIfNull(_usbDriver);
             _usbDriver.Close();
             _usbRecoveryHandler = null;
@@ -214,6 +275,5 @@ namespace DigitalSensor.Android
 
             return false;
         }
-
     }
 }

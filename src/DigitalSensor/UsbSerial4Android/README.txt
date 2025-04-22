@@ -2,6 +2,7 @@
 
 # Android.Hardware.Usb API와 UsbSerial4Android 라이브러리의 관계
 
+                                                       UsbSerialProber
 UsbManager                   <->                       UsbSerialDriver
 UsbDevice                    <->                       UsbSerialPort 
 UsbDeviceConnection          <->                       usbSerialPort.open(usbConnection);

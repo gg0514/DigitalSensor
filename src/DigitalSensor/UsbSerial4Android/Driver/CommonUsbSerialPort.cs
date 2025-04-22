@@ -151,16 +151,20 @@ public abstract class CommonUsbSerialPort : IUsbSerialPort
     /// </summary>
     /// <param name="full"></param>
     /// <exception cref="IOException"></exception>
-    protected void TestConnection(bool full)
+    protected void TestConnection(bool performFullCheck)
     {
         if (_connection == null)
         {
             throw new IOException("Connection closed");
         }
-        if (!full)
+
+        //***************************************************
+        //이 부분에서 시간이 초과했으면, 추가적인 체크 안 한다.
+        if (!performFullCheck)
         {
             return;
         }
+
         byte[] buf = new byte[2];
         int len = _connection.ControlTransfer((UsbAddressing)0x80, 0, 0, 0, buf, buf.Length, 200);
         if (len < 0)
@@ -223,6 +227,8 @@ public abstract class CommonUsbSerialPort : IUsbSerialPort
                 TestConnection(true);
             }
         }
+
+        //결과값은 최소 0으로 보정됨
         return Math.Max(nread, 0);
     }
 
