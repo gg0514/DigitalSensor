@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
+
+
+//*********************************************
+// UsbSerialForAndroid.Net 라이브러리 사용
 using UsbSerialForAndroid.Net;
 using UsbSerialForAndroid.Net.Drivers;
 using UsbSerialForAndroid.Net.Exceptions;
