@@ -39,7 +39,7 @@ namespace DigitalSensor.Android
         //*******************************************
         // UsbSerial4Android 라이브러리 사용
         // 사용하지 않으려면 null 처리
-        private US4A _us4a = null;
+        private US4A _us4a = new();
 
 
         public UsbService()
@@ -62,7 +62,8 @@ namespace DigitalSensor.Android
             // USB 장치가 연결되면 호출된다.
             // Android.Hardware.Usb.UsbDevice 받고, UsbDeviceInfo 전달한다.
 
-            _us4a.CreateDriver(device);
+            if(_us4a != null)
+                _us4a.CreateDriver(device);
 
             UsbPermissionGranted?.Invoke(new UsbDeviceInfo()
             {
@@ -250,6 +251,10 @@ namespace DigitalSensor.Android
 
         public bool IsConnection()
         {
+            if (_us4a != null)
+                return _us4a.IsOpen();
+
+
             try
             {
                 if (_usbDriver is null) return false;

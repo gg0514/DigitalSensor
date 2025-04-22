@@ -120,76 +120,76 @@ namespace UsbSerialForAndroid.Net.Drivers
         // 동기버전 (Write, Read)
         //************************************************************************
 
-        //public virtual void Write(byte[] buffer, int offset, int count)
-        //{
-        //    ArgumentNullException.ThrowIfNull(UsbDeviceConnection);
-        //    int result = UsbDeviceConnection.BulkTransfer(UsbEndpointWrite, buffer, offset, count, WriteTimeout);
+        public virtual void Write(byte[] buffer, int offset, int count)
+        {
+            ArgumentNullException.ThrowIfNull(UsbDeviceConnection);
+            int result = UsbDeviceConnection.BulkTransfer(UsbEndpointWrite, buffer, offset, count, WriteTimeout);
 
-        //    if (result < 0)
-        //        throw new BulkTransferException("Write failed", result, UsbEndpointWrite, buffer, 0, buffer.Length, WriteTimeout);
-        //}
-        //
-        //public virtual int Read(byte[] buffer, int offset, int count)
-        //{
-        //    ArgumentNullException.ThrowIfNull(UsbDeviceConnection);
-        //    var readBuffer = ArrayPool<byte>.Shared.Rent(count);
+            if (result < 0)
+                throw new BulkTransferException("Write failed", result, UsbEndpointWrite, buffer, 0, buffer.Length, WriteTimeout);
+        }
 
-        //    int totalBytes = 0;
-        //    int expectedLength = 0;
+        public virtual int Read(byte[] buffer, int offset, int count)
+        {
+            ArgumentNullException.ThrowIfNull(UsbDeviceConnection);
+            var readBuffer = ArrayPool<byte>.Shared.Rent(count);
 
-        //    try
-        //    {
-        //        while (true)
-        //        {
-        //            int bytesRead = UsbDeviceConnection.BulkTransfer(UsbEndpointRead, readBuffer, totalBytes, count - totalBytes, ReadTimeout);
+            int totalBytes = 0;
+            int expectedLength = 0;
 
-        //            if (bytesRead < 0)
-        //            {
-        //                throw new BulkTransferException("Read failed", bytesRead, UsbEndpointRead, readBuffer, 0, count, ReadTimeout);
-        //            }
+            try
+            {
+                while (true)
+                {
+                    int bytesRead = UsbDeviceConnection.BulkTransfer(UsbEndpointRead, readBuffer, totalBytes, count - totalBytes, ReadTimeout);
 
-        //            totalBytes += bytesRead;
+                    if (bytesRead < 0)
+                    {
+                        throw new BulkTransferException("Read failed", bytesRead, UsbEndpointRead, readBuffer, 0, count, ReadTimeout);
+                    }
 
-        //            if (totalBytes >= 3 && expectedLength == 0)
-        //            {
-        //                expectedLength = 3 + readBuffer[2] + 2;
-        //            }
+                    totalBytes += bytesRead;
 
-        //            if (expectedLength > 0 && totalBytes >= expectedLength)
-        //            {
-        //                break; // 패킷 완성
-        //            }
+                    if (totalBytes >= 3 && expectedLength == 0)
+                    {
+                        expectedLength = 3 + readBuffer[2] + 2;
+                    }
 
-        //            if (totalBytes >= count)
-        //            {
-        //                break; // 버퍼가 꽉 찼음
-        //            }
-        //        }
+                    if (expectedLength > 0 && totalBytes >= expectedLength)
+                    {
+                        break; // 패킷 완성
+                    }
 
-        //        Array.Copy(readBuffer, 0, buffer, offset, totalBytes);
-        //        //throw new BulkTransferException("Read failed", totalBytes, UsbEndpointRead, buffer, expectedLength, count, ReadTimeout);
-        //    }
-        //    finally
-        //    {
-        //        ArrayPool<byte>.Shared.Return(readBuffer);
-        //    }
+                    if (totalBytes >= count)
+                    {
+                        break; // 버퍼가 꽉 찼음
+                    }
+                }
 
-        //    return totalBytes;
-        //}
+                Array.Copy(readBuffer, 0, buffer, offset, totalBytes);
+                //throw new BulkTransferException("Read failed", totalBytes, UsbEndpointRead, buffer, expectedLength, count, ReadTimeout);
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(readBuffer);
+            }
+
+            return totalBytes;
+        }
 
         //************************************************************************
         // 비동기버전 (WriteAsync, ReadAsync)
         //************************************************************************
 
-        public virtual void Write(byte[] buffer, int offset, int size)
-        {
-            WriteAsync(buffer, offset, size).GetAwaiter().GetResult(); // Synchronous for NModbus
-        }
+        //public virtual void Write(byte[] buffer, int offset, int size)
+        //{
+        //    WriteAsync(buffer, offset, size).GetAwaiter().GetResult(); // Synchronous for NModbus
+        //}
 
-        public virtual int Read(byte[] buffer, int offset, int size)
-        {
-            return ReadAsync(buffer, offset, size).GetAwaiter().GetResult(); // Synchronous for NModbus
-        }
+        //public virtual int Read(byte[] buffer, int offset, int size)
+        //{
+        //    return ReadAsync(buffer, offset, size).GetAwaiter().GetResult(); // Synchronous for NModbus
+        //}
 
         public async Task WriteAsync(byte[] buffer, int offset, int size)
         {
