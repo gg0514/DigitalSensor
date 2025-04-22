@@ -52,14 +52,43 @@ public class ModbusService
         _usbService.UsbDeviceDetached += OnUSBDeviceDetached;
     }
 
+    public async void ResetModbusCommunication()
+    {
+        CloseModbus();
+
+        // 2) intermediate 
+        _modbusRTU = CreateModbusRTU(_usbDeviceInfo.DeviceId);
+        Debug.WriteLine("****** CreateModbusRTU()");
+
+        // 3) target
+        _modbusHandler = new ModbusHandler(_modbusRTU, _usbDeviceInfo);
+        Debug.WriteLine("****** ModbusHandler()");
+
+
+        _modbusHandler.TestConnection();
+        Debug.WriteLine("****** MODBUS Handler TEST OK!!");
+
+        // 새로운 Handler가 생성됨을 알림.
+        await _modbusHandler.LoadSlaveId();
+        ModbusHandlerAttached?.Invoke(_modbusHandler);
+
+    }
+
     private void OnUSBPermissionGranted(UsbDeviceInfo deviceInfo)
     {
         _usbDeviceInfo = deviceInfo;
 
-        ResetModbusCommunication();
+        try
+        {
+            ResetModbusCommunication();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error: {ex.Message}");
+        }
 
         // 센서 진단
-        callHealthCheck();
+        //callHealthCheck();
     }
 
     private void OnUSBDeviceDetached(UsbDeviceInfo deviceInfo)
@@ -123,77 +152,22 @@ public class ModbusService
     {
         try
         {
-            await _modbusHandler.LoadSlaveId();
-
             await SensorHealthCheck();
-
-            // 상위로 이벤트 전파 
-            ModbusHandlerAttached?.Invoke(_modbusHandler);
         }
         catch (Exception ex)
         {
-            bool recovered = _usbService.TryRecover( () =>  {
-                try
-                {
-                    _modbusHandler.TestConnection();
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
-            });
+            bool recovered = RecoverConnection();
 
             if (!recovered)
             {
-                // 모든 복구 시도 실패, ModbusSerialMaster 재생성 필요
-
                 Debug.WriteLine("모든 복구 시도 실패, ModbusSerialMaster 재생성 필요");
 
-                Thread.Sleep(3000);
-                ResetModbusCommunication();                
+                //Thread.Sleep(3000);
+                //ResetModbusCommunication();
             }
         }
     }
 
-
-    public void ResetModbusCommunication()
-    {
-        CloseModbus();
-
-        try
-        {
-            // 2) intermediate 
-            _modbusRTU = CreateModbusRTU(_usbDeviceInfo.DeviceId);
-            Debug.WriteLine("****** CreateModbusRTU()");
-
-            // 3) target
-            _modbusHandler = new ModbusHandler(_modbusRTU, _usbDeviceInfo);
-            Debug.WriteLine("****** ModbusHandler()");
-
-
-            TestConnection();
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Error: {ex.Message}");
-        }
-
-    }
-
-    public void TestConnection()
-    {
-        try
-        {
-            Debug.WriteLine($"****** MODBUS Handler TEST !!");
-            _modbusHandler.TestConnection();
-            Debug.WriteLine($"****** MODBUS Handler TEST OK!!");
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"****** TestConnection Error: {ex.Message}");
-        }
-    }
 
 
     public async Task SensorHealthCheck()
@@ -213,6 +187,23 @@ public class ModbusService
             float sample = await _modbusHandler.ReadCalib1pSample();         // 0x0F
             ushort calib = await _modbusHandler.ReadCalibStatus();           // 0x07
         }
+    }
+
+    public bool RecoverConnection()
+    {
+        bool recovered = _usbService.TryRecover(() => {
+            try
+            {
+                _modbusHandler.TestConnection();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        });
+
+        return recovered;
     }
 
 

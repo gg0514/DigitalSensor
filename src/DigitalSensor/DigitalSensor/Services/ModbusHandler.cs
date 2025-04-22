@@ -42,9 +42,9 @@ public class ModbusHandler
         return _usbDeviceInfo?.ProductName ?? string.Empty;
     }
 
-    public void TestConnection()
+    public async void TestConnection()
     {
-        _modbusMaster?.ReadHoldingRegisters(250, 0, 1);
+        await _modbusMaster?.ReadHoldingRegistersAsync(250, 0, 1);
     }
 
     // SLAVE ID

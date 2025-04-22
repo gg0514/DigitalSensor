@@ -72,10 +72,7 @@ public class SensorService : ISensorService
     public async Task<SensorInfo> GetSensorInfoAsync()
     {
         int type = await _modbusHandler.ReadSensorType();
-        await Task.Delay(50);
-
         string serial = await _modbusHandler.ReadSensorSerial();
-        await Task.Delay(50);
 
         var data = new SensorInfo
         {
@@ -90,13 +87,8 @@ public class SensorService : ISensorService
     public async Task<SensorData> GetSensorDataAsync()
     {
         float value     = await _modbusHandler.ReadSensorValue();
-        await Task.Delay(50); 
-
         float mv        = await _modbusHandler.ReadSensorMV();
-        await Task.Delay(50);
-
         float temperature = await _modbusHandler.ReadTempValue();
-        await Task.Delay(50);
 
         var data = new SensorData
         {
