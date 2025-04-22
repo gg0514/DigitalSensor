@@ -39,7 +39,7 @@ namespace DigitalSensor.Android
         //*******************************************
         // UsbSerial4Android 라이브러리 사용
         // 사용하지 않으려면 null 처리
-        private US4A _us4a = new();
+        private US4A _us4a = null;
 
 
         public UsbService()

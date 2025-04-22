@@ -48,10 +48,6 @@ public class MonitoringService : IMonitoringService
 
     private void OnSensorDetached()
     {
-        // Sensor Detached 통지
-        //LEDRampReceived?.Invoke(new LEDRamp());
-
-
         // LED Ramp 상태 초기화
         LEDRampReceived?.Invoke(new LEDRamp()
         {
@@ -80,7 +76,7 @@ public class MonitoringService : IMonitoringService
             SensorData data = await _sensorService.GetSensorDataAsync();
             SensorDataReceived?.Invoke(data);
 
-            await Task.Delay(1000); // 1초 대기
+            await Task.Delay(3000); // 3초 대기
         }
     }
 }
