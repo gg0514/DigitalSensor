@@ -88,7 +88,7 @@ public partial class TestViewModel : ViewModelBase
             Debug.WriteLine(msg);
             _notificationService.ShowMessage("정보", msg);
 
-            Results.Add(msg);
+            Results.Insert(0, $"{DateTime.Now.ToString("[HH:mm:ss] ")} {msg}");
         }
         catch (Exception ex)
         {
