@@ -80,7 +80,7 @@ public class ModbusService
 
         try
         {
-            ResetModbusCommunication();
+            //ResetModbusCommunication();
         }
         catch (Exception ex)
         {

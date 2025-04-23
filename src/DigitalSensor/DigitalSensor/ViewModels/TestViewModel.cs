@@ -39,7 +39,13 @@ public partial class TestViewModel : ViewModelBase
     [ObservableProperty]
     private string resultText = "Response will appear here";
 
-    public ObservableCollection<ushort> RegisterValues { get; } = new();
+    public ObservableCollection<string> Results { get; } = new();
+
+
+
+    IModbusSerialMaster master = null;
+
+
 
     // for Design
     public TestViewModel()
@@ -59,6 +65,13 @@ public partial class TestViewModel : ViewModelBase
     // DetectDevice 후에 OpenModbus 호출해야 함
 
     [RelayCommand]
+    private void Read()
+    {
+        ReadRegisters();
+    }
+
+
+
     private async Task ReadRegisters()
     {
         //int deviceId = 5;       // for Desktop
@@ -66,15 +79,16 @@ public partial class TestViewModel : ViewModelBase
 
         try
         {
-            IModbusSerialMaster master = null;
-            master = _modbusService.CreateModbusRTU(DeviceId);
-
             // SlaveId = 250, RegisterAddress = 20, DataLength = 1
 
             ushort[] values = master.ReadHoldingRegisters(250, 20, 1);
             int slaveID = values[0];
 
-            Debug.WriteLine($"Slave ID search: {slaveID}");
+            string msg= $"Slave ID: {slaveID}";
+            Debug.WriteLine(msg);
+            _notificationService.ShowMessage("정보", msg);
+
+            Results.Add(msg);
         }
         catch (Exception ex)
         {
@@ -107,12 +121,30 @@ public partial class TestViewModel : ViewModelBase
         try
         {
             // Desktop에서 테스트할 때는 DeviceId를 직접 지정
-            IModbusSerialMaster master = null;
             master = _modbusService.CreateModbusRTU(DeviceId);
+
+            _notificationService.ShowMessage("정보", $"Device {DeviceId} opened successfully.");
         }
         catch (Exception ex)
         {
-            _notificationService.ShowMessage("정보", $"Device {DeviceId} opened successfully.");
+            ResultText = $"Error: {ex.Message}";
+        }
+    }
+
+
+    [RelayCommand]
+    private async void CloseDevice()
+    {
+        try
+        {
+            master.Dispose();
+            master = null;
+
+            _notificationService.ShowMessage("정보", $"Device closed.");
+        }
+        catch (Exception ex)
+        {
+            ResultText = $"Error: {ex.Message}";
         }
     }
 
