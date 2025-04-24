@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Net;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -80,8 +81,13 @@ public partial class TestViewModel : ViewModelBase
         try
         {
             // SlaveId = 250, RegisterAddress = 20, DataLength = 1
-
             ushort[] values = master.ReadHoldingRegisters(250, 20, 1);
+
+            //ushort[] values= await Task.Run(() =>
+            //{
+            //    return master.ReadHoldingRegisters(250, 20, 1);
+            //});
+
             int slaveID = values[0];
 
             string msg= $"Slave ID: {slaveID}";

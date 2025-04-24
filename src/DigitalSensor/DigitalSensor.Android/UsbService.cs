@@ -180,7 +180,6 @@ namespace DigitalSensor.Android
             if (_us4a != null)
                 return _us4a.Read(buffer, offset, count);
 
-
             int nRead = _usbDriver.Read(buffer, offset, count);
 
             string text = BitConverter.ToString(buffer, offset, count).Replace("-", " ");
@@ -276,7 +275,7 @@ namespace DigitalSensor.Android
 
         public void DiscardInBuffer()
         {
-
+            _usbDriver.Read();
         }
 
         public void Dispose()
