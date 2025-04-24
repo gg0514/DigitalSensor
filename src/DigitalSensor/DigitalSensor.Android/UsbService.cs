@@ -2,7 +2,6 @@
 using Android.Hardware.Usb;
 using Android.Widget;
 using DigitalSensor.Models;
-using DigitalSensor.Services;
 using Org.Apache.Http.Impl.Client;
 using System;
 using System.Threading.Tasks;
@@ -20,6 +19,7 @@ using UsbSerialForAndroid.Net.Helper;
 using Java.Nio;
 using System.Net;
 using System.Threading;
+using DigitalSensor.Modbus;
 
 
 

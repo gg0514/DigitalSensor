@@ -1,4 +1,5 @@
 ﻿using DigitalSensor.Extensions;
+using DigitalSensor.Modbus;
 using DigitalSensor.Models;
 using System;
 using System.Collections.Generic;

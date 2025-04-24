@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace DigitalSensor.Services;
+namespace DigitalSensor.Modbus;
 
 
 public class ModbusHandler
@@ -45,7 +45,7 @@ public class ModbusHandler
     public async Task TestConnection()
 
     {
-        int id= (await _modbusMaster?.ReadHoldingRegistersAsync(250, 20, 1))[0];
+        int id = (await _modbusMaster?.ReadHoldingRegistersAsync(250, 20, 1))[0];
     }
 
     // SLAVE ID
@@ -238,8 +238,8 @@ public class ModbusHandler
         byte[] bytes = BitConverter.GetBytes(value);
         return new ushort[]
         {
-           (ushort)((bytes[2] << 8) | bytes[3]),
-           (ushort)((bytes[0] << 8) | bytes[1])
+           (ushort)(bytes[2] << 8 | bytes[3]),
+           (ushort)(bytes[0] << 8 | bytes[1])
         };
     }
 }

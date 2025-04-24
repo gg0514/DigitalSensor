@@ -7,6 +7,7 @@ using Modbus.Device;
 using Modbus.Serial;
 using System.Collections.Generic;
 using DigitalSensor.Models;
+using DigitalSensor.Modbus;
 using DigitalSensor.Extensions;
 using DigitalSensor.ViewModels;
 using System.Diagnostics;

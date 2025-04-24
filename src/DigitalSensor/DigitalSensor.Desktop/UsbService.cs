@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Ports;
-using DigitalSensor.Services;
 using static System.Net.Mime.MediaTypeNames;
 using System.Threading.Tasks;
 using System.Threading;
+using DigitalSensor.Modbus;
 
 
 namespace DigitalSensor.Desktop
