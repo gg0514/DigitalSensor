@@ -275,7 +275,11 @@ namespace DigitalSensor.Android
 
         public void DiscardInBuffer()
         {
-            _usbDriver.Read();
+            byte[] datas= _usbDriver.Read();
+
+            //if (datas.Length > 0)
+            //    Debug.WriteLine($"DiscardInBuffer : {BitConverter.ToString(datas)}");
+
         }
 
         public void Dispose()
