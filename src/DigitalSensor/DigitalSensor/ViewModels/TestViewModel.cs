@@ -45,10 +45,6 @@ public partial class TestViewModel : ViewModelBase
 
 
 
-    IModbusSerialMaster master = null;
-
-
-
     // for Design
     public TestViewModel()
     {
@@ -76,18 +72,15 @@ public partial class TestViewModel : ViewModelBase
 
     private async Task ReadRegisters()
     {
-        //int deviceId = 5;       // for Desktop
-        //int deviceId = 1002;      // for Android (퍼미션 문제로 직접 접근 불가)
-
         try
         {
             // SlaveId = 250, RegisterAddress = 20, DataLength = 1
-            ushort[] values = master.ReadHoldingRegisters(250, 20, 1);
-
             //ushort[] values= await Task.Run(() =>
             //{
             //    return master.ReadHoldingRegisters(250, 20, 1);
             //});
+
+            ushort[] values = await _modbusService.ReadSlaveId();
 
             int slaveID = values[0];
 
@@ -101,34 +94,18 @@ public partial class TestViewModel : ViewModelBase
         {
             ResultText = $"Error: {ex.Message}";
         }
-
-        //try
-        //{
-        //    // SlaveId = 250, RegisterAddress = 20, DataLength = 1
-        //    var values = await _modbusService.ReadUsbSerialAdapter(SlaveId, RegisterAddress, DataLength);
-
-        //    RegisterValues.Clear();
-
-        //    foreach (var value in values)
-        //    {
-        //        RegisterValues.Add(value);
-        //    }
-
-        //    ResultText = $"Response: {string.Join(", ", values)}";
-        //}
-        //catch (Exception ex)
-        //{
-        //    ResultText = $"Error: {ex.Message}";
-        //}
     }
 
     [RelayCommand]
-    private async void OpenDevice()
+    private async Task OpenDevice()
     {
+        //int deviceId = 5;       // for Desktop
+        //int deviceId = 1002;      // for Android (퍼미션 문제로 직접 접근 불가)
+
         try
         {
             // Desktop에서 테스트할 때는 DeviceId를 직접 지정
-            master = _modbusService.CreateModbusRTU(DeviceId);
+            await _modbusService.Open(DeviceId);
 
             _notificationService.ShowMessage("정보", $"Device {DeviceId} opened successfully.");
         }
@@ -140,12 +117,11 @@ public partial class TestViewModel : ViewModelBase
 
 
     [RelayCommand]
-    private async void CloseDevice()
+    private async Task CloseDevice()
     {
         try
         {
-            master.Dispose();
-            master = null;
+            await _modbusService.Close();
 
             _notificationService.ShowMessage("정보", $"Device closed.");
         }

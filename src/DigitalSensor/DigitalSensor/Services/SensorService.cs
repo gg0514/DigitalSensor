@@ -3,6 +3,7 @@ using DigitalSensor.Modbus;
 using DigitalSensor.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace DigitalSensor.Services;
@@ -23,12 +24,14 @@ public class SensorService : ISensorService
     public event Action? SensorAttached;
     public event Action? SensorDetached;
 
-    private readonly NotificationService    _notificationService;
-    private readonly ModbusService          _modbusService;
 
-    private ModbusHandler _modbusHandler= default;
+    private readonly IUsbService    _usbService;
+    private readonly ModbusService  _modbusService;
+    private readonly NotificationService _notificationService;
 
-    //private readonly Random _random = new();
+    private UsbDeviceInfo _usbDeviceInfo = default;
+    public SerialConn SerialConn { get; set; } = new();                 // 기본값 부여 
+
 
     // for Design
     public SensorService()
@@ -36,44 +39,46 @@ public class SensorService : ISensorService
     }
 
     // for Runtime
-    public SensorService(ModbusService modbusService)
+    public SensorService(IUsbService usbService, ModbusService modbusService)
     {
         // 이벤트구독용
+        _usbService = usbService;
         _modbusService = modbusService;
         _notificationService = App.GlobalHost.GetService<NotificationService>();
 
-        // Modbus Handler 구독 등록
-        _modbusService.ModbusHandlerAttached += OnModbusHandlerAttached;
-        _modbusService.ModbusHandlerDetached += OnModbusHandlerDetached;
+        // USB Device 구독 등록
+        _usbService.UsbPermissionGranted += OnUSBPermissionGranted;
+        _usbService.UsbDeviceDetached += OnUSBDeviceDetached;
     }
 
-    private async void OnModbusHandlerAttached(ModbusHandler handler)
+    private void OnUSBPermissionGranted(UsbDeviceInfo deviceInfo)
     {
-        _modbusHandler = handler;
+        _usbDeviceInfo = deviceInfo;
 
-        int slaveID = handler.SlaveId;
-        string productName = handler.GetProductName();
+        try
+        {
+            //ResetModbusCommunication();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error: {ex.Message}");
+        }
 
-        _notificationService.ShowMessage("ModbusHandler Attached", $"{slaveID}:{productName}");
-
-        // Sensor Attached 통지
-        SensorAttached?.Invoke();
+        // 센서 진단
+        //callHealthCheck();
     }
 
-    private void OnModbusHandlerDetached(ModbusHandler modbusInfo)
+    private void OnUSBDeviceDetached(UsbDeviceInfo deviceInfo)
     {
-        // Sensor Detached 통지
-        SensorDetached?.Invoke();
+        //CloseModbus();
 
-        _notificationService.ShowMessage("ModbusHandler Detached", "");
-        //_notificationService.ShowMessage("USB Device Detached", $"Device ID: {deviceInfo.DeviceId}");
+        //ModbusHandlerDetached?.Invoke(null);
     }
-
 
     public async Task<SensorInfo> GetSensorInfoAsync()
     {
-        int type = await _modbusHandler.ReadSensorType();
-        string serial = await _modbusHandler.ReadSensorSerial();
+        int type = await _modbusService.ReadSensorType();
+        string serial = await _modbusService.ReadSensorSerial();
 
         var data = new SensorInfo
         {
@@ -87,15 +92,15 @@ public class SensorService : ISensorService
 
     public async Task<SensorData> GetSensorDataAsync()
     {
-        float value     = await _modbusHandler.ReadSensorValue();
-        float mv        = await _modbusHandler.ReadSensorMV();
-        float temperature = await _modbusHandler.ReadTempValue();
+        float value = await _modbusService.ReadSensorValue();
+        float mv = await _modbusService.ReadSensorMV();
+        float temperature = await _modbusService.ReadTempValue();
 
         var data = new SensorData
         {
-            Timestamp   = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-            Value       = value,
-            Mv          = mv,
+            Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+            Value = value,
+            Mv = mv,
             Temperature = temperature
         };
 

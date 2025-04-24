@@ -1,172 +1,340 @@
-﻿using System;
-using System.IO.Ports;
-using System.Threading.Tasks;
-using Modbus.IO;
-using Modbus.Data;
-using Modbus.Device;
-using Modbus.Serial;
-using System.Collections.Generic;
+﻿using Avalonia.Platform;
 using DigitalSensor.Models;
-using DigitalSensor.Modbus;
-using DigitalSensor.Extensions;
-using DigitalSensor.ViewModels;
-using System.Diagnostics;
-using System.Threading;
+using Modbus.Device;
 using Newtonsoft.Json.Linq;
-using Avalonia.Platform;
-using Avalonia;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using HarfBuzzSharp;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
 
-namespace DigitalSensor.Services;
+namespace DigitalSensor.Modbus;
 
 
-
-//*************************************************
-// MODBUS RTU 의 안정적인 서비스 제공 목적    
-//*************************************************
-
-public class ModbusService 
+public interface IModbusService
 {
-    public event Action<ModbusHandler>? ModbusHandlerAttached;
-    public event Action<ModbusHandler>? ModbusHandlerDetached;
+    Task<bool> Open(int deviceId);
+    Task<bool> Open(int deviceId, int baudRate, byte dataBits, byte stopBits, byte parity);
+    Task Close();
 
-    // 생성자에서 초기화
+    Task TestConnection();
+    Task<byte> LoadSlaveId();
+    Task<ushort[]> ReadSlaveId();
+
+    Task<float> ReadSensorValue();
+    Task<float> ReadTempValue();
+    Task<float> ReadSensorMV();
+
+    Task<ushort> ReadSensorType();
+    Task<string> ReadSensorSerial();
+    Task<float> ReadSensorFactor();
+    Task<float> ReadSensorOffset();
+
+    Task<float> ReadCalib1pSample();
+    Task<ushort> ReadCalibStatus();
+
+    Task WriteSlaveId(ushort value);
+    Task WriteSensorFactor(float value);
+    Task WriteSensorOffset(float value);
+    Task WriteCalib1pSample(float value);
+    Task WriteCalib2pBuffer(ushort value);
+    Task WriteCalibZero(ushort value);
+    Task WriteCalibAbort(ushort value);
+}
+
+
+public class ModbusService : IModbusService
+{
     private readonly IUsbService _usbService;
-    private readonly NotificationService _notificationService;
+    private IModbusSerialMaster? _modbusMaster;
+    private JObject _modbusMap;
 
-    private IModbusSerialMaster? _modbusRTU = default;
-    private UsbDeviceInfo _usbDeviceInfo = default;
-    private ModbusHandler _modbusHandler = default;                    
-
-    public SerialConn SerialConn { get; set; } = new();                 // 기본값 부여 
+    public byte SlaveId { get; set; } = 1; // 기본값 부여
 
 
     public ModbusService(IUsbService usbService)
     {
-        // 1) source
         _usbService = usbService;
-        _notificationService = App.GlobalHost.GetService<NotificationService>();
-
-        // USB Device 구독 등록
-        _usbService.UsbPermissionGranted += OnUSBPermissionGranted;
-        _usbService.UsbDeviceDetached += OnUSBDeviceDetached;
     }
 
-    public async void ResetModbusCommunication()
+    public async Task<bool> Open(int deviceId)
     {
-        CloseModbus();
+        int buadRate = 9600;
+        int dataBits = 8;
+        int stopBits = 1;
+        int parity = 0;
 
-        // 2) intermediate 
-        _modbusRTU = CreateModbusRTU(_usbDeviceInfo.DeviceId);
-        Debug.WriteLine("****** CreateModbusRTU()");
+        return await Open(deviceId, buadRate, (byte)dataBits, (byte)stopBits, (byte)parity);
 
-        // 3) target
-        _modbusHandler = new ModbusHandler(_modbusRTU, _usbDeviceInfo);
-        Debug.WriteLine("****** ModbusHandler()");
-
-
-        _modbusHandler.TestConnection();
-        Debug.WriteLine("****** MODBUS Handler TEST OK!!");
-
-        // 새로운 Handler가 생성됨을 알림.
-        await _modbusHandler.LoadSlaveId();
-        ModbusHandlerAttached?.Invoke(_modbusHandler);
-
+        // 이런식으로 쓰지 말것! 교착상태 발생함
+        //return Open(deviceId, buadRate, (byte)dataBits, (byte)stopBits, (byte)parity).Result;
     }
 
-    private void OnUSBPermissionGranted(UsbDeviceInfo deviceInfo)
+    public async Task<bool> Open(int deviceId, int baudRate, byte dataBits, byte stopBits, byte parity)
     {
-        _usbDeviceInfo = deviceInfo;
+        ////USB 연결 열기
+        //bool isUsbOpened = _usbService.Open(deviceId, 9600, 8, 1, 0);
+        //if (!isUsbOpened)
+        //{
+        //    throw new InvalidOperationException("USB 연결을 열 수 없습니다.");
+        //}
 
-        try
+        //// Modbus 마스터 초기화
+        //var usbStream = new UsbSerialAdapter(_usbService);
+        //_modbusMaster = ModbusSerialMaster.CreateRtu(usbStream);
+
+        //_modbusMap = await Task.Run(() =>
+        //{
+        //    return JsonLoader.Load_modbusMap("Assets/modbus_config.json");
+        //});
+
+        //return true;
+
+        _modbusMap = await Task.Run(() =>
         {
-            //ResetModbusCommunication();
-        }
-        catch (Exception ex)
+            return JsonLoader.Load_modbusMap("Assets/modbus_config.json");
+        });
+
+        return await Task.Run(() =>
         {
-            Debug.WriteLine($"Error: {ex.Message}");
-        }
-
-        // 센서 진단
-        //callHealthCheck();
-    }
-
-    private void OnUSBDeviceDetached(UsbDeviceInfo deviceInfo)
-    {
-        CloseModbus();
-
-        ModbusHandlerDetached?.Invoke(null);
-    }
-
-
-    public IModbusSerialMaster CreateModbusRTU(int deviceId)
-    {
-        if (OpenUSBDevice(deviceId))
-        {
-            if(_usbService.IsConnection())
+            // USB 연결 열기
+            bool isUsbOpened = _usbService.Open(deviceId, 9600, 8, 1, 0);
+            if (!isUsbOpened)
             {
-                // Desktop, Android 공용
-                var adapter = new UsbSerialAdapter(_usbService);
-                return ModbusSerialMaster.CreateRtu(adapter);
+                throw new InvalidOperationException("USB 연결을 열 수 없습니다.");
             }
-        }
-        else
-        {
-            _notificationService.ShowMessage("Modbus RTU Create Failed", "");
-        }
 
-        return null;
-    }
+            // Modbus 마스터 초기화
+            var usbStream = new UsbSerialAdapter(_usbService);
+            _modbusMaster = ModbusSerialMaster.CreateRtu(usbStream);
 
-    // Desktop, Android 공용
-    // Desktop인 경우, ComPort 숫자
-    public bool OpenUSBDevice(int deviceId)
-    {
-        int baudRate = int.Parse(SerialConn.BaudRate);
-        byte dataBits = byte.Parse(SerialConn.DataBits);
-        byte stopBits = byte.Parse(SerialConn.StopBits);
-        byte parity = byte.Parse(SerialConn.Parity); // 0 = None, 1 = Odd, 2 = Even
-
-        bool bOpen=_usbService.Open(deviceId, baudRate, dataBits, stopBits, parity);
-        return bOpen;
+            return true;
+        });
     }
 
 
-
-    public void CloseModbus()
+    public async Task Close()
     {
-        if (_modbusRTU != null)
+        if (_modbusMaster != null)
         {
-            _modbusHandler = null;
+            // USB 연결 비동기 닫기
+            await Task.Run(() => _usbService.Close());
 
-            _usbService.Close();
-            _modbusRTU?.Dispose();
-            _modbusRTU = null;
-
-            Debug.WriteLine("****** CloseModbus()");
+            // Modbus 마스터 비동기 해제
+            await Task.Run(() => _modbusMaster.Dispose());
+            _modbusMaster = null;
         }
     }
 
-
-    private async void callHealthCheck()
+    public async Task<byte> LoadSlaveId()
     {
-        try
-        {
-            await SensorHealthCheck();
-        }
-        catch (Exception ex)
-        {
-            bool recovered = RecoverConnection();
+        ushort[] slaveIds = await ReadSlaveId();
+        SlaveId = (byte)(slaveIds)[0];
 
-            if (!recovered)
-            {
-                Debug.WriteLine("모든 복구 시도 실패, ModbusSerialMaster 재생성 필요");
+        return SlaveId;
+    }
 
-                //Thread.Sleep(3000);
-                //ResetModbusCommunication();
-            }
-        }
+    public async Task TestConnection()
+    {
+        await _modbusMaster?.ReadHoldingRegistersAsync(250, 20, 1);
+    }
+
+    // SLAVE ID
+    public async Task<ushort[]> ReadSlaveId()
+    {
+        byte slaveId = 250;
+
+        ushort startAddress = (ushort)_modbusMap["SLAVE_ID"]["address"];
+        ushort numRegisters = (ushort)_modbusMap["SLAVE_ID"]["dataLength"]; ;
+
+        return await _modbusMaster?.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
+    }
+
+    // 센서 데이터
+    public async Task<float> ReadSensorValue()
+    {
+        byte slaveId = SlaveId;
+        ushort startAddress = (ushort)_modbusMap["SENSOR_VALUE"]["address"];
+        ushort numRegisters = (ushort)_modbusMap["SENSOR_VALUE"]["dataLength"]; ;
+        ushort[] registers = await _modbusMaster?.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
+        return ConvertToFloat(registers);
+    }
+
+
+    // 수온
+    public async Task<float> ReadTempValue()
+    {
+        byte slaveId = SlaveId;
+        ushort startAddress = (ushort)_modbusMap["TEMP_VALUE"]["address"];
+        ushort numRegisters = (ushort)_modbusMap["TEMP_VALUE"]["dataLength"];
+        ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
+        return ConvertToFloat(registers);
+    }
+
+    // MV
+    public async Task<float> ReadSensorMV()
+    {
+        byte slaveId = SlaveId;
+        ushort startAddress = (ushort)_modbusMap["SENSOR_MV"]["address"];
+        ushort numRegisters = (ushort)_modbusMap["SENSOR_MV"]["dataLength"];
+        ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
+        return ConvertToFloat(registers);
+    }
+
+    // 센서 타입
+    public async Task<ushort> ReadSensorType()
+    {
+        byte slaveId = SlaveId;
+        ushort startAddress = (ushort)_modbusMap["SENSOR_TYPE"]["address"];
+        return (await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, 1))[0];
+    }
+
+    // 센서 시리얼
+    public async Task<string> ReadSensorSerial()
+    {
+        byte slaveId = SlaveId;
+        ushort startAddress = (ushort)_modbusMap["SENSOR_SERIAL"]["address"];
+        ushort numRegisters = (ushort)_modbusMap["SENSOR_SERIAL"]["dataLength"];
+        ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
+        return ConvertToHexString(registers);
+    }
+
+    // 센서 팩터
+    public async Task<float> ReadSensorFactor()
+    {
+        byte slaveId = SlaveId;
+        ushort startAddress = (ushort)_modbusMap["SENSOR_FACTOR"]["address"];
+        ushort numRegisters = (ushort)_modbusMap["SENSOR_FACTOR"]["dataLength"];
+        ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
+        return ConvertToFloat(registers);
+    }
+
+    // 센서 오프셋
+    public async Task<float> ReadSensorOffset()
+    {
+        byte slaveId = SlaveId;
+        ushort startAddress = (ushort)_modbusMap["SENSOR_OFFSET"]["address"];
+        ushort numRegisters = (ushort)_modbusMap["SENSOR_OFFSET"]["dataLength"];
+        ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
+        return ConvertToFloat(registers);
+    }
+
+    // CALIB_1P_SAMPLE
+    public async Task<float> ReadCalib1pSample()
+    {
+        byte slaveId = SlaveId;
+        ushort startAddress = (ushort)_modbusMap["CALIB_1P_SAMPLE"]["address"];
+        ushort numRegisters = (ushort)_modbusMap["CALIB_1P_SAMPLE"]["dataLength"];
+        ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
+        return ConvertToFloat(registers);
+    }
+
+    // CALIB_STATUS
+    public async Task<ushort> ReadCalibStatus()
+    {
+        byte slaveId = SlaveId;
+        ushort startAddress = (ushort)_modbusMap["CALIB_STATUS"]["address"];
+        return (await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, 1))[0];
+    }
+
+
+
+    // SlaveId
+    public async Task WriteSlaveId(ushort value)
+    {
+        byte slaveId = SlaveId;
+        ushort startAddress = (ushort)_modbusMap["SLAVE_ID"]["address"];
+        ushort numRegisters = (ushort)_modbusMap["SLAVE_ID"]["dataLength"]; ;
+
+        await _modbusMaster?.WriteSingleRegisterAsync(slaveId, startAddress, value);
+    }
+
+    // 센서 팩터
+    public async Task WriteSensorFactor(float value)
+    {
+        byte slaveId = SlaveId;
+        ushort startAddress = (ushort)_modbusMap["SENSOR_FACTOR"]["address"];
+        ushort[] registers = ConvertToRegisters(value);
+        await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers);
+    }
+
+    // 센서 오프셋
+    public async Task WriteSensorOffset(float value)
+    {
+        byte slaveId = SlaveId;
+        ushort startAddress = (ushort)_modbusMap["SENSOR_OFFSET"]["address"];
+        ushort[] registers = ConvertToRegisters(value);
+        await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers);
+    }
+
+    // CALIB_1P_SAMPLE
+    public async Task WriteCalib1pSample(float value)
+    {
+        byte slaveId = SlaveId;
+        ushort startAddress = (ushort)_modbusMap["CALIB_1P_SAMPLE"]["address"];
+        ushort[] registers = ConvertToRegisters(value);
+        await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers);
+    }
+
+    // CALIB_2P_BUFFER
+    public async Task WriteCalib2pBuffer(ushort value)
+    {
+        byte slaveId = SlaveId;
+        ushort startAddress = (ushort)_modbusMap["CALIB_2P_BUFFER"]["address"];
+        await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value);
+    }
+
+    // CALIB_ZERO
+    public async Task WriteCalibZero(ushort value)
+    {
+        byte slaveId = SlaveId;
+        ushort startAddress = (ushort)_modbusMap["CALIB_ZERO"]["address"];
+        await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value);
+    }
+
+    // CALIB_ABORT
+    public async Task WriteCalibAbort(ushort value)
+    {
+        byte slaveId = SlaveId;
+        ushort startAddress = (ushort)_modbusMap["CALIB_ABORT"]["address"];
+        await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value);
+    }
+
+    private float ConvertToFloat(ushort[] registers)
+    {
+        byte[] bytes = new byte[4];
+        bytes[0] = (byte)(registers[1] & 0xFF);
+        bytes[1] = (byte)(registers[1] >> 8);
+        bytes[2] = (byte)(registers[0] & 0xFF);
+        bytes[3] = (byte)(registers[0] >> 8);
+        return BitConverter.ToSingle(bytes, 0);
+    }
+
+    private string ConvertToHexString(ushort[] registers)
+    {
+        //ushort[] name = new ushort[3];
+        //name[0] = 0x2590;
+        //name[1] = 0xfaae;
+        //name[2] = 0x0000;
+
+        //string hexString = string.Concat(name.Select(x => x.ToString("X4")));
+        // 출력: 2590FAAE0000
+
+        string hexString = string.Concat(registers.Select(x => x.ToString("X4")));
+        return hexString;
+    }
+
+    private ushort[] ConvertToRegisters(float value)
+    {
+        byte[] bytes = BitConverter.GetBytes(value);
+        return new ushort[]
+        {
+           (ushort)(bytes[2] << 8 | bytes[3]),
+           (ushort)(bytes[0] << 8 | bytes[1])
+        };
     }
 
 
@@ -175,18 +343,17 @@ public class ModbusService
     {
         for (int i = 0; i < 3; i++)
         {
-            //byte slaveId = (byte)(await _modbusHandler.ReadSlaveId())[0];    // 0x14
-            int type = await _modbusHandler.ReadSensorType();                // 0x06
-            string serial = await _modbusHandler.ReadSensorSerial();         // 0x08
+            int type = await ReadSensorType();                // 0x06
+            string serial = await ReadSensorSerial();         // 0x08
 
-            float value = await _modbusHandler.ReadSensorValue();            // 0x00
-            float temperature = await _modbusHandler.ReadTempValue();        // 0x02
-            float mv = await _modbusHandler.ReadSensorMV();                  // 0x04
+            float value = await ReadSensorValue();            // 0x00
+            float temperature = await ReadTempValue();        // 0x02
+            float mv = await ReadSensorMV();                  // 0x04
 
-            float factor = await _modbusHandler.ReadSensorFactor();          // 0x0B
-            float offset = await _modbusHandler.ReadSensorOffset();          // 0x0D
-            float sample = await _modbusHandler.ReadCalib1pSample();         // 0x0F
-            ushort calib = await _modbusHandler.ReadCalibStatus();           // 0x07
+            float factor = await ReadSensorFactor();          // 0x0B
+            float offset = await ReadSensorOffset();          // 0x0D
+            float sample = await ReadCalib1pSample();         // 0x0F
+            ushort calib = await ReadCalibStatus();           // 0x07
         }
     }
 
@@ -195,7 +362,7 @@ public class ModbusService
         bool recovered = _usbService.TryRecover(() => {
             try
             {
-                _modbusHandler.TestConnection();
+                TestConnection();
                 return true;
             }
             catch
@@ -207,6 +374,25 @@ public class ModbusService
         return recovered;
     }
 
-
 }
 
+
+public class JsonLoader
+{
+    public static JObject Load_modbusMap(string jsonFilePath)
+    {
+        // 더이상 사용하지 않음 - AssetLoader 가져오기
+        // var assetLoader = AvaloniaLocator.Current.GetService<IAssetLoader>();
+        // if (assetLoader == null)
+        //    throw new InvalidOperationException("AssetLoader not found.");
+
+        // 리소스 스트림 열기
+        //using var stream = AssetLoader.Open(new Uri("avares://MyApp/Assets/data.json"));
+        using var stream = AssetLoader.Open(new Uri($"avares://DigitalSensor/{jsonFilePath}"));
+        using var reader = new StreamReader(stream);
+
+        // JSON 문자열 읽기
+        var jsonString = reader.ReadToEnd();
+        return JObject.Parse(jsonString);
+    }
+}
