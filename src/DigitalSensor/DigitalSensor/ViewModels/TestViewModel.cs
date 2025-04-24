@@ -12,6 +12,7 @@ using DigitalSensor.Modbus;
 using DigitalSensor.Models;
 using DigitalSensor.Services;
 using Modbus.Device;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DigitalSensor.ViewModels;
 
@@ -88,11 +89,22 @@ public partial class TestViewModel : ViewModelBase
             Debug.WriteLine(msg);
             _notificationService.ShowMessage("정보", msg);
 
-            Results.Insert(0, $"{DateTime.Now.ToString("[HH:mm:ss] ")} {msg}");
+            string msg2 = $"{DateTime.Now.ToString("[HH:mm:ss] ")} {msg}";
+            Results.Insert(0, msg2);
+
+            await RunOnUiAsync(() =>
+            {
+                Results.Insert(0, msg2);
+                return Task.CompletedTask;
+            });
         }
         catch (Exception ex)
         {
-            ResultText = $"Error: {ex.Message}";
+            await RunOnUiAsync(() =>
+            {
+                ResultText = $"Error: {ex.Message}";
+                return Task.CompletedTask;
+            });
         }
     }
 
@@ -111,7 +123,11 @@ public partial class TestViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            ResultText = $"Error: {ex.Message}";
+            await RunOnUiAsync(() =>
+            {
+                ResultText = $"Error: {ex.Message}";
+                return Task.CompletedTask;
+            });
         }
     }
 
@@ -127,13 +143,17 @@ public partial class TestViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            ResultText = $"Error: {ex.Message}";
+            await RunOnUiAsync(() =>
+            {
+                ResultText = $"Error: {ex.Message}";
+                return Task.CompletedTask;
+            });
         }
     }
 
 
     [RelayCommand]
-    private void DetectDevice()
+    private async Task DetectDevice()
     {
         try
         {
@@ -152,7 +172,11 @@ public partial class TestViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            ResultText = $"Error: {ex.Message}";
+            await RunOnUiAsync(() =>
+            {
+                ResultText = $"Error: {ex.Message}";
+                return Task.CompletedTask;
+            });
         }
     }
 
