@@ -32,7 +32,7 @@ public partial class App : Application
                 services.AddSingleton<INavigationService, NavigationService>();
                 services.AddSingleton<IMonitoringService, MonitoringService>();
                 services.AddSingleton<ISensorService, SensorService>();
-                services.AddSingleton<ModbusService>();
+                services.AddSingleton<IModbusService, ModbusService>();
                 services.AddSingleton<NotificationService>();
 
                 services.AddSingleton<MainWindow>();

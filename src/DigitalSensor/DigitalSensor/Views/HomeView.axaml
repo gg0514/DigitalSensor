@@ -15,6 +15,11 @@
     <vm:HomeViewModel />
   </Design.DataContext>
 
+	<UserControl.Resources>
+		<!-- BoolToBrushConverter를 리소스로 등록 -->
+		<vm:BoolToBrushConverter x:Key="BoolToBrushConverter" />
+	</UserControl.Resources>
+
 	<StackPanel Background="" Margin="10,5">
 		<TextBlock Text="{Binding ReceivedData.Timestamp}" FontSize="14" HorizontalAlignment="Right" VerticalAlignment="Center"
 				   Margin="0,10,20,10"/>
@@ -27,7 +32,7 @@
 						   Margin="0,0,0,0"
 						   FontWeight="SemiBold"/>
 				<Border Width="10" Height="10" Margin="0,5,0,0" >
-					<Ellipse Fill="{Binding LedRamp.TxColor}"/>
+					<Ellipse Fill="{Binding IsTxOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='Orange'}"/>
 				</Border>
 			</StackPanel>
 			<StackPanel Grid.Column="2" Margin="0,10,10,10">
@@ -36,7 +41,7 @@
 						   Margin="0,0,0,0"
 						   FontWeight="SemiBold"/>
 				<Border Width="10" Height="10" Margin="0,5,0,0" >
-					<Ellipse Fill="{Binding LedRamp.RxColor}"/>
+					<Ellipse Fill="{Binding IsRxOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='GreenYellow'}"/>
 				</Border>
 			</StackPanel>
 			<StackPanel Grid.Column="3" Margin="0,10,10,10">
@@ -45,7 +50,7 @@
 						   Margin="0,0,0,0"
 						   FontWeight="SemiBold"/>
 				<Border Width="10" Height="10" Margin="0,5,0,0" >
-					<Ellipse Fill="{Binding LedRamp.ErrColor}"/>
+					<Ellipse Fill="{Binding IsErrOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='Red'}"/>
 				</Border>
 			</StackPanel>
 		</Grid>

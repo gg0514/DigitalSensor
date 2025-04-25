@@ -11,10 +11,6 @@ namespace DigitalSensor.Services;
 
 public interface ISensorService
 {
-    // 이벤트 버블링
-    event Action? SensorAttached;
-    event Action? SensorDetached;
-
     Task<SensorInfo> GetSensorInfoAsync();
     Task<SensorData> GetSensorDataAsync();
 }
@@ -22,12 +18,8 @@ public interface ISensorService
 
 public class SensorService : ISensorService
 {
-    public event Action? SensorAttached;
-    public event Action? SensorDetached;
-
-
     private readonly IUsbService    _usbService;
-    private readonly ModbusService  _modbusService;
+    private readonly IModbusService  _modbusService;
     private readonly NotificationService _notificationService;
 
 
@@ -37,7 +29,7 @@ public class SensorService : ISensorService
     }
 
     // for Runtime
-    public SensorService(IUsbService usbService, ModbusService modbusService)
+    public SensorService(IUsbService usbService, IModbusService modbusService)
     {
         // 이벤트구독용
         _usbService = usbService;
