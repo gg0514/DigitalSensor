@@ -1,5 +1,7 @@
 ﻿using Avalonia.Platform;
 using DigitalSensor.Models;
+using FluentIcons.Common.Internals;
+using HarfBuzzSharp;
 using Modbus.Device;
 using Newtonsoft.Json.Linq;
 using System;
@@ -141,6 +143,21 @@ public class ModbusService : IModbusService
     {
         await _modbusMaster?.ReadHoldingRegistersAsync(250, 20, 1);
     }
+
+
+    public async Task<string> ReadHoldingRegisters(byte slaveId, ushort startAddress, ushort numRegisters)
+    {
+        //byte slaveId = 250;
+        //ushort startAddress = 20;
+        //ushort numRegisters = 1;
+        ushort[] registers = await _modbusMaster?.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
+
+        string hexString = string.Join(" ", registers.Select(v => v.ToString("X4")));
+
+
+        return $"ReadHoldingRegisters: {hexString}";
+    }
+
 
     // SLAVE ID
     public async Task<ushort[]> ReadSlaveId()

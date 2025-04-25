@@ -36,6 +36,7 @@
 			<Button Content="Open" Command="{Binding OpenDeviceCommand}" Margin="0,10,10,10"/>
 			<Button Content="Read" Command="{Binding ReadCommand}" Margin="0,10,10,10"/>
 			<Button Content="Close" Command="{Binding CloseDeviceCommand}" Margin="0,10,10,10"/>
+			<Button Content="Test" Command="{Binding TestCommand}" Margin="0,10,10,10"/>
 		</StackPanel>
 
 

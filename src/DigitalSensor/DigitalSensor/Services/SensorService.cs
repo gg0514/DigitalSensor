@@ -55,14 +55,6 @@ public class SensorService : ISensorService
     {
         _usbDeviceInfo = deviceInfo;
 
-        try
-        {
-            //ResetModbusCommunication();
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Error: {ex.Message}");
-        }
 
         // 센서 진단
         //callHealthCheck();

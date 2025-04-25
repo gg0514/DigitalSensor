@@ -63,15 +63,9 @@ public partial class TestViewModel : ViewModelBase
     // 안드로이드 테스트시 USB_PERMISSION이 없으면 OpenModbus가 실패함
     // DetectDevice 후에 OpenModbus 호출해야 함
 
+
     [RelayCommand]
-    private void Read()
-    {
-        ReadRegisters();
-    }
-
-
-
-    private async Task ReadRegisters()
+    private async Task Test()
     {
         try
         {
@@ -85,12 +79,50 @@ public partial class TestViewModel : ViewModelBase
 
             int slaveID = values[0];
 
-            string msg= $"Slave ID: {slaveID}";
+            string msg = $"Slave ID: {slaveID}";
             Debug.WriteLine(msg);
             _notificationService.ShowMessage("정보", msg);
 
             string msg2 = $"{DateTime.Now.ToString("[HH:mm:ss] ")} {msg}";
-            Results.Insert(0, msg2);
+
+            await RunOnUiAsync(() =>
+            {
+                Results.Insert(0, msg2);
+                return Task.CompletedTask;
+            });
+        }
+        catch (Exception ex)
+        {
+            await RunOnUiAsync(() =>
+            {
+                ResultText = $"Error: {ex.Message}";
+                return Task.CompletedTask;
+            });
+        }
+    }
+
+
+
+    [RelayCommand]
+    private void Read()
+    {
+        ReadRegisters();
+    }
+
+
+
+    private async Task ReadRegisters()
+    {
+        try
+        {
+            byte slaveId = SlaveId;
+            ushort startAddress = RegisterAddress;
+            ushort numRegisters = DataLength;
+
+            string result = await _modbusService.ReadHoldingRegisters(slaveId, startAddress, numRegisters);
+            Debug.WriteLine(result);
+
+            string msg2 = $"{DateTime.Now.ToString("[HH:mm:ss] ")} {result}";
 
             await RunOnUiAsync(() =>
             {

@@ -11,10 +11,10 @@ namespace DigitalSensor.ViewModels;
 public partial class SettingViewModel : ViewModelBase
 {
     [ObservableProperty]
-    private SerialConn _serialConn = new();
+    public SerialConn _serialConn = new();
 
     [ObservableProperty]
-    private UsbDeviceInfo _usbDevice = new();
+    public UsbDeviceInfo _usbDevice = new();
 
     public SettingViewModel()
     {
