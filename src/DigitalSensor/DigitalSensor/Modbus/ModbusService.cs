@@ -23,7 +23,6 @@ public interface IModbusService
     Task Close();
 
     Task TestConnection();
-    Task<byte> LoadSlaveId();
     Task<ushort[]> ReadSlaveId();
 
     Task<float> ReadSensorValue();
@@ -131,13 +130,6 @@ public class ModbusService : IModbusService
         }
     }
 
-    public async Task<byte> LoadSlaveId()
-    {
-        ushort[] slaveIds = await ReadSlaveId();
-        SlaveId = (byte)(slaveIds)[0];
-
-        return SlaveId;
-    }
 
     public async Task TestConnection()
     {

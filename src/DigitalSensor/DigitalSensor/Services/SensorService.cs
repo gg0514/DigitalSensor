@@ -1,6 +1,7 @@
 ﻿using DigitalSensor.Extensions;
 using DigitalSensor.Modbus;
 using DigitalSensor.Models;
+using DigitalSensor.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,9 +30,6 @@ public class SensorService : ISensorService
     private readonly ModbusService  _modbusService;
     private readonly NotificationService _notificationService;
 
-    private UsbDeviceInfo _usbDeviceInfo = default;
-    public SerialConn SerialConn { get; set; } = new();                 // 기본값 부여 
-
 
     // for Design
     public SensorService()
@@ -51,20 +49,64 @@ public class SensorService : ISensorService
         _usbService.UsbDeviceDetached += OnUSBDeviceDetached;
     }
 
-    private void OnUSBPermissionGranted(UsbDeviceInfo deviceInfo)
+    private async void OnUSBPermissionGranted(UsbDeviceInfo deviceInfo)
     {
-        _usbDeviceInfo = deviceInfo;
+        SettingViewModel vm = App.GlobalHost.GetService<SettingViewModel>();
 
+        try
+        {
+            int deviceId = deviceInfo.DeviceId;
+            bool isOpen = await Open(deviceId);
+
+            if (isOpen)
+            {
+                _notificationService.ShowMessage("정보", $"Device {deviceId} opened successfully.");
+
+                int slaveId = await GetSlaveID();
+
+                await UiDispatcherHelper.RunOnUiThreadAsync( async() =>
+                {
+                    vm.SlaveID = slaveId;
+                    vm.UsbDevice = deviceInfo;
+                });
+            }
+        }
+        catch(Exception ex)
+        {
+            Debug.WriteLine($"Error opening device: {ex.Message}");
+            _notificationService.ShowMessage("정보", $"Error opening device: {ex.Message}");
+            return;
+        }
 
         // 센서 진단
         //callHealthCheck();
     }
 
-    private void OnUSBDeviceDetached(UsbDeviceInfo deviceInfo)
+    private async void OnUSBDeviceDetached(UsbDeviceInfo deviceInfo)
     {
-        //CloseModbus();
+        await _modbusService.Close();
+        _notificationService.ShowMessage("정보", $"Device closed.");
 
-        //ModbusHandlerDetached?.Invoke(null);
+    }
+
+    private async Task<bool> Open(int deviceId)
+    {
+        try
+        {
+            await _modbusService.Open(deviceId);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error opening device: {ex.Message}");
+            return false;
+        }
+    }
+
+    private async Task<int> GetSlaveID()
+    {
+        ushort[] values = await _modbusService.ReadSlaveId();
+        return  values[0];
     }
 
     public async Task<SensorInfo> GetSensorInfoAsync()
