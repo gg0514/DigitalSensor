@@ -77,6 +77,8 @@ public partial class HomeViewModel : ViewModelBase
     {
         try
         {
+            await Task.Delay(1000); // 1초 대기
+
             IsErrOn = false;
             _monitoringService.StartMonitoring();
         }

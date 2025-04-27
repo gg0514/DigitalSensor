@@ -11,6 +11,11 @@ namespace DigitalSensor.Services;
 
 public interface ISensorService
 {
+    bool IsOpen();
+    Task<bool> Open();
+    Task Close();
+
+    Task<int> GetSlaveID();
     Task<SensorInfo> GetSensorInfoAsync();
     Task<SensorData> GetSensorDataAsync();
 }
@@ -22,6 +27,8 @@ public class SensorService : ISensorService
     private readonly IModbusService  _modbusService;
     private readonly NotificationService _notificationService;
 
+    private int _deviceId = 0;
+    private bool _isOpen = false;
 
     // for Design
     public SensorService()
@@ -41,24 +48,27 @@ public class SensorService : ISensorService
         _usbService.UsbDeviceDetached += OnUSBDeviceDetached;
     }
 
+    public bool IsOpen()
+    {
+        return _isOpen;
+    }
+
     private async void OnUSBPermissionGranted(UsbDeviceInfo deviceInfo)
     {
         SettingViewModel vm = App.GlobalHost.GetService<SettingViewModel>();
 
         try
         {
-            int deviceId = deviceInfo.DeviceId;
-            bool isOpen = await Open(deviceId);
+            _deviceId = deviceInfo.DeviceId;
+            _isOpen = await Open();
 
-            if (isOpen)
+            if (_isOpen)
             {
-                _notificationService.ShowMessage("정보", $"Device {deviceId} opened successfully.");
+                _notificationService.ShowMessage("정보", $"Device {_deviceId} opened successfully.");
+                Debug.WriteLine($"Device {_deviceId}:{deviceInfo.ProductName} opened successfully");
 
-                int slaveId = await GetSlaveID();
-
-                await UiDispatcherHelper.RunOnUiThreadAsync( async() =>
+                await UiDispatcherHelper.RunOnUiThreadAsync( async () =>
                 {
-                    vm.SlaveID = slaveId;
                     vm.UsbDevice = deviceInfo;
                 });
             }
@@ -74,6 +84,8 @@ public class SensorService : ISensorService
         //callHealthCheck();
     }
 
+
+
     private async void OnUSBDeviceDetached(UsbDeviceInfo deviceInfo)
     {
         await _modbusService.Close();
@@ -81,11 +93,11 @@ public class SensorService : ISensorService
 
     }
 
-    private async Task<bool> Open(int deviceId)
+    public async Task<bool> Open()
     {
         try
         {
-            await _modbusService.Open(deviceId);
+            await _modbusService.Open(_deviceId);
             return true;
         }
         catch (Exception ex)
@@ -94,8 +106,21 @@ public class SensorService : ISensorService
             return false;
         }
     }
+    public async Task Close()
+    {
+        try
+        {
+            await _modbusService.Close();
+            _isOpen = false;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error closing device: {ex.Message}");
+        }
+    }
 
-    private async Task<int> GetSlaveID()
+
+    public async Task<int> GetSlaveID()
     {
         ushort[] values = await _modbusService.ReadSlaveId();
         return  values[0];
@@ -112,7 +137,7 @@ public class SensorService : ISensorService
             Serial = serial // 예시로 고정된 시리얼 번호
         };
 
-        return await Task.FromResult(data);
+        return data;
     }
 
 
@@ -130,6 +155,6 @@ public class SensorService : ISensorService
             Temperature = temperature
         };
 
-        return await Task.FromResult(data);
+        return data;
     }
 }

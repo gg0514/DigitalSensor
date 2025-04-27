@@ -29,6 +29,9 @@ public interface IModbusService
     Task TestConnection();
     Task<ushort[]> ReadSlaveId();
 
+    Task<string> ReadHoldingRegisters(byte slaveId, ushort startAddress, ushort numRegisters);
+
+
     Task<float> ReadSensorValue();
     Task<float> ReadTempValue();
     Task<float> ReadSensorMV();
@@ -145,7 +148,7 @@ public class ModbusService : IModbusService
         await _modbusMaster?.ReadHoldingRegistersAsync(250, 20, 1);
     }
 
-
+    
     public async Task<string> ReadHoldingRegisters(byte slaveId, ushort startAddress, ushort numRegisters)
     {
         //byte slaveId = 250;

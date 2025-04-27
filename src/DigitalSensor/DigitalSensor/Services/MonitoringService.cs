@@ -1,4 +1,6 @@
-﻿using DigitalSensor.Models;
+﻿using DigitalSensor.Extensions;
+using DigitalSensor.Models;
+using DigitalSensor.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,7 +20,11 @@ public interface IMonitoringService
 public class MonitoringService : IMonitoringService
 {
     private readonly ISensorService _sensorService;
-    private bool _isRunning;
+
+    private bool _isOpen = false;
+    private bool _isSlaveID = false;
+    private bool _isSensorInfo = false;
+    private bool _isRunning = false;
 
     public event Action<Models.SensorInfo> SensorInfoReceived;
     public event Action<Models.SensorData> SensorDataReceived;
@@ -30,11 +36,24 @@ public class MonitoringService : IMonitoringService
 
     public async void StartMonitoring()
     {
+        _isOpen = _sensorService.IsOpen();
+
+        if (!_isOpen)
+        {
+            _isOpen = await _sensorService.Open();
+        }
+
         _isRunning = true;
         while (_isRunning)
         {
-            await GetSensorData();  // <-- 비동기 처리
-            await Task.Delay(1000);    // 주기
+            await GetSlaveID();
+            await Task.Delay(1000);
+
+            await GetSensorInfo();
+            await Task.Delay(1000);
+
+            await GetSensorData();
+            await Task.Delay(1000);
         }
     }
 
@@ -42,6 +61,26 @@ public class MonitoringService : IMonitoringService
     {
         _isRunning = false;
     }
+
+    private async Task GetSlaveID()
+    {
+        if (!_isSlaveID)
+        {
+            int slaveId = await _sensorService.GetSlaveID();
+            if (slaveId > 0)
+            {
+                _isSlaveID = true;
+
+                SettingViewModel vm = App.GlobalHost.GetService<SettingViewModel>();
+
+                await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
+                {
+                    vm.SlaveID = slaveId;
+                });
+            }
+        }
+    }
+
 
     private async Task GetSensorInfo()
     {

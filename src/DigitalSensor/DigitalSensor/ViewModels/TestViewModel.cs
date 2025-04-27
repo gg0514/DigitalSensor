@@ -25,7 +25,7 @@ namespace DigitalSensor.ViewModels;
 public partial class TestViewModel : ViewModelBase
 {
     private readonly NotificationService    _notificationService;
-    private readonly ModbusService          _modbusService;
+    private readonly IModbusService          _modbusService;
 
     [ObservableProperty]
     private int deviceId = 5;
@@ -49,13 +49,14 @@ public partial class TestViewModel : ViewModelBase
     // for Design
     public TestViewModel()
     {
+        int i = 0;
     }
 
     // for Runtime
-    public TestViewModel(ModbusService modbusService)
+    public TestViewModel(IModbusService modbusService, NotificationService notificationService)
     {
         _modbusService = modbusService;
-        _notificationService = App.GlobalHost.GetService<NotificationService>();
+        _notificationService = notificationService;
     }
 
 
@@ -201,6 +202,13 @@ public partial class TestViewModel : ViewModelBase
 
             DeviceId = deviceIds[0];
             _notificationService.ShowMessage("정보", $"Device {DeviceId} detected.");
+
+            //await RunOnUiAsync(() =>
+            //{
+            //    DeviceId = deviceIds[0];
+            //    _notificationService.ShowMessage("정보", $"Device {DeviceId} detected.");
+            //    return Task.CompletedTask;
+            //});
         }
         catch (Exception ex)
         {
