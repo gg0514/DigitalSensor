@@ -2,6 +2,7 @@
 using Avalonia.Controls.Primitives;
 using Avalonia.VisualTree;
 using FluentAvalonia.UI.Controls;
+using FluentIcons.Avalonia.Fluent;
 using DigitalSensor.Extensions;
 using DigitalSensor.Services;
 using DigitalSensor.ViewModels;
@@ -15,6 +16,8 @@ public partial class MainView : UserControl
     public MainView()
     {
         InitializeComponent();
+        AddSubMenuToExistingMenu();
+
         this.AttachedToVisualTree += OnAttachedToVisualTree;
 
         if (Design.IsDesignMode)
@@ -23,6 +26,55 @@ public partial class MainView : UserControl
         }
         
         DataContext = App.GlobalHost.GetService<MainViewModel>();
+    }
+
+    private void AddSubMenuToExistingMenu()
+    {
+        string parentTag = "Calib"; // 부모 메뉴의 Tag 값
+
+        foreach (var item in NavView.MenuItems)
+        {
+            if (item is NavigationViewItem navItem && navItem.Tag?.ToString() == parentTag)
+            {
+                var Item1 = new NavigationViewItem
+                {
+                    Content = "Zero Calibration",
+                    Tag = "Calib_Zero"
+                };
+                var Item2 = new NavigationViewItem
+                {
+                    Content = "1Point Sample",
+                    Tag = "Calib_1PSample"
+                };
+                var Item3 = new NavigationViewItem
+                {
+                    Content = "1Point Buffer",
+                    Tag = "Calib_1PBuffer"
+                };
+                var Item4 = new NavigationViewItem
+                {
+                    Content = "2Point Sample",
+                    Tag = "Calib_2PSample"
+                };
+                var Item5 = new NavigationViewItem
+                {
+                    Content = "2Point Buffer",
+                    Tag = "Calib_2PBuffer"
+                };
+
+
+                Item3.IsEnabled = false; // 비활성화
+                Item4.IsEnabled = false; // 비활성화
+                Item5.IsEnabled = false; // 비활성화
+
+                navItem.MenuItems.Add(Item1);
+                navItem.MenuItems.Add(Item2);
+                navItem.MenuItems.Add(Item3);
+                navItem.MenuItems.Add(Item4);
+                navItem.MenuItems.Add(Item5);
+                break; // 찾았으면 루프 종료
+            }
+        }
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)

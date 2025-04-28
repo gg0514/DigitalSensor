@@ -33,12 +33,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AvaloniaXaml Update="Views\Calib_ZeroView.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
     <AvaloniaXaml Update="Views\TestView.axaml">
       <SubType>Designer</SubType>
     </AvaloniaXaml>
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\Calib_1PSampleView.axaml.cs">
+      <DependentUpon>Calib_1PSampleView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Calib_ZeroView.axaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>Calib_ZeroView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\TestView.axaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>TestView.axaml</DependentUpon>

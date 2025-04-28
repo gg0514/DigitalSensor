@@ -26,6 +26,8 @@ public class NavigationService : INavigationService
         {
             "Home" => _provider.GetRequiredService<HomeViewModel>(),
             "Setting" => _provider.GetRequiredService<SettingViewModel>(),
+            "Calib_Zero" => _provider.GetRequiredService<Calib_ZeroViewModel>(),
+            "Calib_1PSample" => _provider.GetRequiredService<Calib_1PSampleViewModel>(),
             "pH" => _provider.GetRequiredService<TestViewModel>(),
             _ => null
         };
@@ -42,6 +44,8 @@ public class FakeNavigationService : INavigationService
     {
         "Home" => new HomeViewModel(),
         "Setting" => new SettingViewModel(),
+        "Calib_Zero" => new Calib_ZeroViewModel(),
+        "Calib_1PSample" => new Calib_1PSampleViewModel(),
         "pH" => new SettingViewModel(),
         _ => null
     };

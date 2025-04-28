@@ -26,7 +26,7 @@
 
 
 		
-	<ui:NavigationView x:Name="Nav" 
+	<ui:NavigationView x:Name="NavView" 
 					   IsPaneOpen="False"
                        PaneDisplayMode="LeftMinimal"
                        IsPaneToggleButtonVisible="True"
@@ -62,19 +62,15 @@
 				Tag="Calib">
 
 				<ui:NavigationViewItem.IconSource>
-					<ic:FluentIconSource Icon="BookPulse" />
-				</ui:NavigationViewItem.IconSource>
-
-				<ui:NavigationViewItem.IconSource>
 					<ic:FluentIconSource Icon="Pulse" />
 				</ui:NavigationViewItem.IconSource>
 
-				<ui:NavigationViewItem.MenuItems>
+				<!--<ui:NavigationViewItem.MenuItems>
 					<ui:NavigationViewItem Content="pH" Tag="pH" />
 					<ui:NavigationViewItem Content="CL" Tag="CL" />
 					<ui:NavigationViewItem Content="TU" Tag="TU" />
 					<ui:NavigationViewItem Content="EC" Tag="EC" />
-				</ui:NavigationViewItem.MenuItems>
+				</ui:NavigationViewItem.MenuItems>-->
 			</ui:NavigationViewItem>
 
 		</ui:NavigationView.MenuItems>
