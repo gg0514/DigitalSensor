@@ -18,7 +18,10 @@
 	<UserControl.Resources>
 		<!-- BoolToBrushConverter를 리소스로 등록 -->
 		<vm:BoolToBrushConverter x:Key="BoolToBrushConverter" />
+		<vm:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
 	</UserControl.Resources>
+
+
 
 	<StackPanel Background="" Margin="10,5">
 		<TextBlock Text="{Binding ReceivedData.Timestamp}" FontSize="14" HorizontalAlignment="Right" VerticalAlignment="Center"
@@ -67,28 +70,7 @@
 				<TextBlock Text="센서종류 Type" FontSize="14"
 						   Margin="0,0,0,15" />
 				<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
-					<TextBlock Grid.Column="0" Text="{Binding ReceivedInfo.Type}" HorizontalAlignment="Center" FontWeight="Bold" FontSize="50"
-						   Margin="0,0,0,0"/>
-					<Border Grid.Column="1" VerticalAlignment="Bottom" Width="30" Height="20" Margin="0,5,10,0" >
-						<TextBlock Text="" FontWeight="Light" FontSize="14"/>
-					</Border>
-				</Grid>
-			</StackPanel>
-		</Border>
-
-		<!-- 시리얼 S/N 영역-->
-		<Border
-			Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-			CornerRadius="12"
-			Padding="16"
-			Margin="10,5,5,20"
-			Effect="{DynamicResource ShadowElevation3}" >
-
-			<StackPanel>
-				<TextBlock Text="시리얼 S/N" FontSize="14"
-						   Margin="0,0,0,15" />
-				<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
-					<TextBlock Grid.Column="0" Text="{Binding ReceivedInfo.Serial}" HorizontalAlignment="Center" FontWeight="Bold" FontSize="50"
+					<TextBlock Grid.Column="0" Text="{Binding ReceivedInfo.Type, Converter={StaticResource EnumDescriptionConverter}}" HorizontalAlignment="Center" FontWeight="Bold" FontSize="50"
 						   Margin="0,0,0,0"/>
 					<Border Grid.Column="1" VerticalAlignment="Bottom" Width="30" Height="20" Margin="0,5,10,0" >
 						<TextBlock Text="" FontWeight="Light" FontSize="14"/>
@@ -113,6 +95,27 @@
 						   Margin="0,0,0,0"/>
 					<Border Grid.Column="1" VerticalAlignment="Bottom" Width="30" Height="20" Margin="0,5,10,0" >
 						<TextBlock Text="NTU" FontWeight="Light" FontSize="14"/>
+					</Border>
+				</Grid>
+			</StackPanel>
+		</Border>
+
+		<!-- 데이터 (mV) 영역-->
+		<Border
+			Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+			CornerRadius="12"
+			Padding="16"
+			Margin="10,5,5,20"
+			Effect="{DynamicResource ShadowElevation3}" >
+
+			<StackPanel>
+				<TextBlock Text="데이터 Data (mV)" FontSize="14"
+						   Margin="0,0,0,15" />
+				<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
+					<TextBlock Grid.Column="0" Text="{Binding ReceivedData.Mv}" HorizontalAlignment="Center" FontWeight="Bold" FontSize="50"
+						   Margin="0,0,0,0"/>
+					<Border Grid.Column="1" VerticalAlignment="Bottom" Width="30" Height="20" Margin="0,5,10,0" >
+						<TextBlock Text="mV" FontWeight="Light" FontSize="14"/>
 					</Border>
 				</Grid>
 			</StackPanel>

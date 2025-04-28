@@ -111,34 +111,4 @@ public class MonitoringService : IMonitoringService
             Debug.WriteLine($"Error: GetSensorInfo - {ex.Message}");
         }
     }
-
-
-    //private void OnSensorAttached()
-    //{
-    //    StartMonitoring();
-
-
-    //    // LED Ramp 상태 변경
-    //    LEDRampReceived?.Invoke(new LEDRamp()
-    //    {
-    //        Err= ErrStatus.Connected,
-    //        Tx = TxStatus.Signal,
-    //        Rx = RxStatus.Signal
-    //    });
-    //}
-
-    //private void OnSensorDetached()
-    //{
-    //    // LED Ramp 상태 초기화
-    //    LEDRampReceived?.Invoke(new LEDRamp()
-    //    {
-    //        Err = ErrStatus.Disconnected,
-    //        Tx = TxStatus.NoSignal,
-    //        Rx = RxStatus.NoSignal
-    //    });
-
-    //    SensorInfoReceived?.Invoke(new SensorInfo());
-    //}
-
-
 }
