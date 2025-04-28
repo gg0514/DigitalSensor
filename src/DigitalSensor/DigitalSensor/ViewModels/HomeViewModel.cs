@@ -8,6 +8,7 @@ using DigitalSensor.Modbus;
 using DigitalSensor.Models;
 using DigitalSensor.Services;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -31,7 +32,10 @@ public partial class HomeViewModel : ViewModelBase
     private bool isRxOn;
 
     [ObservableProperty]
-    private bool isErrOn= true;
+    private bool isErrOn = true;
+
+    [ObservableProperty]
+    private string sensorUnit;
 
     private CancellationTokenSource _txCts = new();
     private CancellationTokenSource _rxCts = new();
@@ -97,10 +101,9 @@ public partial class HomeViewModel : ViewModelBase
     }
 
     private async void OnUSBDeviceDetached(UsbDeviceInfo deviceInfo)
-    {
-        //_notificationService.ShowMessage("정보", $"Device closed.");
+    {        
         IsErrOn = true;
-
+        _monitoringService.StopMonitoring();
     }
 
     public void OnTxSignal()
@@ -155,6 +158,8 @@ public partial class HomeViewModel : ViewModelBase
         {
             Type = (SensorType)type,
         };
+
+        SensorUnit = UnitMapper.Units[(SensorType)type];
     }
 
     private void OnSensorValueReceived(float value)
@@ -240,4 +245,18 @@ public class EnumDescriptionConverter : IValueConverter
     {
         throw new NotImplementedException();
     }
+}
+
+public static class UnitMapper
+{
+    public static readonly Dictionary<SensorType, string> Units = new()
+    {
+        { SensorType.None, "" },
+        { SensorType.TurbidityLow, "NTU" },
+        { SensorType.TurbidityHighIR, "NTU" },
+        { SensorType.TurbidityHighColor, "NTU" },
+        { SensorType.PH, "pH" },
+        { SensorType.Conductivity, "㎲/㎝" },
+        { SensorType.Chlorine, "㎎/l" },
+    };
 }

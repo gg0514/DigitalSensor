@@ -23,6 +23,7 @@ public interface IMonitoringService
 
 
     void StartMonitoring();
+    void StopMonitoring();
 }
 
 public class MonitoringService : IMonitoringService
@@ -69,6 +70,8 @@ public class MonitoringService : IMonitoringService
                 await GetSensorValue();
                 await GetSensorMv();
                 await GetSensorTemperature();
+
+                await Task.Delay(1000); // 1초 대기
             }
             catch (Exception ex)
             {
@@ -82,6 +85,21 @@ public class MonitoringService : IMonitoringService
     public async void StopMonitoring()
     {
         _isRunning = false;
+
+
+        SensorInfo info = new SensorInfo()
+        {
+            Type = SensorType.None
+        };
+        SensorInfoReceived?.Invoke(info);
+
+        SensorData data = new SensorData
+        {
+            Value = 0,
+            Mv = 0,
+            Temperature = 0
+        };
+        SensorDataReceived?.Invoke(data);
     }
 
     private async Task GetSlaveID()

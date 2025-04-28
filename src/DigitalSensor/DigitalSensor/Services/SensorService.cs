@@ -41,12 +41,13 @@ public class SensorService : ISensorService
     }
 
     // for Runtime
-    public SensorService(IUsbService usbService, IModbusService modbusService)
+    public SensorService(IUsbService usbService, IModbusService modbusService, NotificationService notificationService)
     {
         // 이벤트구독용
         _usbService = usbService;
         _modbusService = modbusService;
-        _notificationService = App.GlobalHost.GetService<NotificationService>();
+        //_notificationService = App.GlobalHost.GetService<NotificationService>();
+        _notificationService = notificationService;
 
         // USB Device 구독 등록
         _usbService.UsbPermissionGranted += OnUSBPermissionGranted;
