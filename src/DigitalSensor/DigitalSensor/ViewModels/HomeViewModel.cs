@@ -35,6 +35,7 @@ public partial class HomeViewModel : ViewModelBase
 
     private CancellationTokenSource _txCts = new();
     private CancellationTokenSource _rxCts = new();
+    private CancellationTokenSource _ErrCts = new();
 
 
     [ObservableProperty]
@@ -62,6 +63,10 @@ public partial class HomeViewModel : ViewModelBase
 
         _monitoringService.SensorInfoReceived += OnSensorInfoReceived;
         _monitoringService.SensorDataReceived += OnSensorDataReceived;
+        _monitoringService.SensorTypeReceived += OnSensorTypeReceived;
+        _monitoringService.SensorValueReceived += OnSensorValueReceived;
+        _monitoringService.SensorMvReceived += OnSensorMvReceived;
+        _monitoringService.SensorTemperatureReceived += OnSensorTemperatureReceived;
 
         // USB Device 구독 등록
         _usbService.UsbPermissionGranted += OnUSBPermissionGranted;
@@ -70,6 +75,7 @@ public partial class HomeViewModel : ViewModelBase
         // LED 구독 등록
         _modbusService.TxSignal += OnTxSignal;
         _modbusService.RxSignal += OnRxSignal;
+        _monitoringService.ErrSignal += OnErrSignal;
     }
 
 
@@ -107,6 +113,11 @@ public partial class HomeViewModel : ViewModelBase
         BlinkLed(ref _rxCts, val => IsRxOn = val);
     }
 
+    public void OnErrSignal()
+    {
+        BlinkLed(ref _ErrCts, val => IsErrOn = val);
+    }
+
     private void BlinkLed(ref CancellationTokenSource cts, Action<bool> setState)
     {
         // 이전 작업 취소
@@ -130,14 +141,51 @@ public partial class HomeViewModel : ViewModelBase
 
     private void OnSensorInfoReceived(SensorInfo data)
     {
-
-
         ReceivedInfo = data; // UI 자동 갱신
     }
 
     private void OnSensorDataReceived(SensorData data)
     {
         ReceivedData = data; // UI 자동 갱신
+    }
+
+    private void OnSensorTypeReceived(int type)
+    {
+        ReceivedInfo = new SensorInfo()
+        {
+            Type = (SensorType)type,
+        };
+    }
+
+    private void OnSensorValueReceived(float value)
+    {
+        ReceivedData= new SensorData()
+        {
+            Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+            Value = value,
+            Mv = ReceivedData.Mv,
+            Temperature = ReceivedData.Temperature,
+        };
+    }
+    private void OnSensorMvReceived(float mv)
+    {
+        ReceivedData = new SensorData()
+        {
+            Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+            Value = ReceivedData.Value,
+            Mv = mv,
+            Temperature = ReceivedData.Temperature,
+        };
+    }
+    private void OnSensorTemperatureReceived(float temp)
+    {
+        ReceivedData = new SensorData()
+        {
+            Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+            Value = ReceivedData.Value,
+            Mv = ReceivedData.Mv,
+            Temperature = temp,
+        };
     }
 
 }

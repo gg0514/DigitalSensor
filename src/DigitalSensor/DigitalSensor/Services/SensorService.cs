@@ -15,9 +15,14 @@ public interface ISensorService
     Task<bool> Open();
     Task Close();
 
-    Task<int> GetSlaveID();
+    Task<int> Initialize();
     Task<SensorInfo> GetSensorInfoAsync();
     Task<SensorData> GetSensorDataAsync();
+
+    Task<int> GetTypeAsync();
+    Task<float> GetValueAsync();
+    Task<float> GetMVAsync();
+    Task<float> GetTemperatureAsync();
 }
 
 
@@ -120,10 +125,21 @@ public class SensorService : ISensorService
     }
 
 
-    public async Task<int> GetSlaveID()
+    public async Task<int> Initialize()
     {
-        ushort[] values = await _modbusService.ReadSlaveId();
-        return  values[0];
+        while(true)
+        {
+            bool bOK = await _modbusService.Initialize();
+
+            if (bOK)
+            {
+                break;
+            }
+
+            await Task.Delay(1000);
+        }
+
+        return _modbusService.SlaveId;
     }
 
     public async Task<SensorInfo> GetSensorInfoAsync()
@@ -156,5 +172,30 @@ public class SensorService : ISensorService
         };
 
         return data;
+    }
+
+
+    public async Task<int> GetTypeAsync()
+    {
+        int type = await _modbusService.ReadSensorType();
+        return type;
+    }
+
+    public async Task<float> GetValueAsync()
+    {
+        float value = await _modbusService.ReadSensorValue();
+        return value;
+    }
+
+    public async Task<float> GetMVAsync()
+    {
+        float mv = await _modbusService.ReadSensorMV();
+        return mv;
+    }
+
+    public async Task<float> GetTemperatureAsync()
+    {
+        float temperature = await _modbusService.ReadTempValue();
+        return temperature;
     }
 }

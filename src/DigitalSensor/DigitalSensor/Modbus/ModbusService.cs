@@ -22,10 +22,13 @@ public interface IModbusService
     event Action TxSignal;
     event Action RxSignal;
 
+    byte SlaveId { get; set; }
+
     Task<bool> Open(int deviceId);
     Task<bool> Open(int deviceId, int baudRate, byte dataBits, byte stopBits, byte parity);
     Task Close();
 
+    Task<bool> Initialize();
     Task TestConnection();
     Task<ushort[]> ReadSlaveId();
 
@@ -140,6 +143,22 @@ public class ModbusService : IModbusService
             await Task.Run(() => _modbusMaster.Dispose());
             _modbusMaster = null;
         }
+    }
+
+    public async Task<bool> Initialize()
+    {
+        try
+        {
+            SlaveId = (byte)(await ReadSlaveId())[0];
+            return true;
+        }
+        catch(Exception ex)
+        {
+            Debug.WriteLine($"Initialize Error: {ex.Message}");
+            return false;
+        }
+
+        return true;
     }
 
 
