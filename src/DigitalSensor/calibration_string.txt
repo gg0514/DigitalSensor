@@ -1,0 +1,16 @@
+
+< 영점교정>
+Put a sensor into DI water.\nAfter the sensor stabilized, Press [Apply] button.\nIf you want to cancel calibration, Press [Stop] button.
+
+< 1P 샘플 >
+Adjust the 1st value using the arrows or keypad\nand then apply to calibration.\nIf you want to cancel calibration, Press [Stop] button. 
+
+< 1P 버퍼 >
+Put a sensor into 1st Buffer.\nAfter the sensor stabilized, Press [Apply] button.\nIf you want to cancel calibration, Press [Stop] button.
+
+
+< 2P 샘플 >
+Adjust the 2nd value using the arrows or keypad\nand then apply to calibration.\nIf you want to cancel calibration, Press [Stop] button. 
+
+< 2P 버퍼 >
+Put a sensor into 2nd Buffer.\nAfter the sensor stabilized, Press [Apply] button.\nIf you want to cancel calibration, Press [Stop] button.

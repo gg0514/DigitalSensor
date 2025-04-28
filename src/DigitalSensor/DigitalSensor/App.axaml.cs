@@ -44,6 +44,10 @@ public partial class App : Application
                 services.AddSingleton<HomeViewModel>();
                 services.AddSingleton<SettingView>();
                 services.AddSingleton<SettingViewModel>();
+                services.AddSingleton<Calib_ZeroView>();
+                services.AddSingleton<Calib_ZeroViewModel>();
+                services.AddSingleton<Calib_1PSampleView>();
+                services.AddSingleton<Calib_1PSampleViewModel>();
             })
             .Build());
 
