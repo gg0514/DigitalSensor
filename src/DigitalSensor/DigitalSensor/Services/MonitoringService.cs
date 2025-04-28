@@ -84,6 +84,11 @@ public class MonitoringService : IMonitoringService
 
     public async void StopMonitoring()
     {
+        // 초기화
+        _isOpen = false;
+        _isSlaveID = false;
+        _isSensorInfo = false;
+        _isSensorType = false;
         _isRunning = false;
 
 
