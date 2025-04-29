@@ -128,19 +128,22 @@ public class SensorService : ISensorService
 
     public async Task<int> Initialize()
     {
-        while(true)
+        int slaveId = -1;
+
+        for (int i = 0; i < 3; i++)
         {
             bool bOK = await _modbusService.Initialize();
 
             if (bOK)
             {
+                slaveId = _modbusService.SlaveId;
                 break;
             }
 
             await Task.Delay(1000);
         }
 
-        return _modbusService.SlaveId;
+        return slaveId;
     }
 
     public async Task<SensorInfo> GetSensorInfoAsync()
@@ -160,19 +163,15 @@ public class SensorService : ISensorService
 
     public async Task<SensorData> GetSensorDataAsync()
     {
-        float value = await _modbusService.ReadSensorValue();
-        float mv = await _modbusService.ReadSensorMV();
-        float temperature = await _modbusService.ReadTempValue();
+        SensorData data = await _modbusService.ReadSensorData();
 
-        var data = new SensorData
+        return new SensorData
         {
             Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-            Value = value,
-            Mv = mv,
-            Temperature = temperature
+            Value = data.Value,
+            Mv = data.Mv,
+            Temperature = data.Temperature
         };
-
-        return data;
     }
 
 

@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -23,6 +24,7 @@ public partial class HomeViewModel : ViewModelBase
     private readonly IUsbService _usbService;
     private readonly IMonitoringService _monitoringService;
     private readonly IModbusService _modbusService;
+    private readonly NotificationService _notificationService;
 
 
     [ObservableProperty]
@@ -58,12 +60,13 @@ public partial class HomeViewModel : ViewModelBase
     }
 
 
-    public HomeViewModel(IUsbService usbService, IMonitoringService monitoringService, IModbusService modbusService)
+    public HomeViewModel(IUsbService usbService, IMonitoringService monitoringService, IModbusService modbusService, NotificationService notificationService)
     {
         // 이벤트구독용
         _usbService = usbService;
         _monitoringService = monitoringService;
         _modbusService= modbusService;
+        _notificationService= notificationService;
 
         _monitoringService.SensorInfoReceived += OnSensorInfoReceived;
         _monitoringService.SensorDataReceived += OnSensorDataReceived;
@@ -87,13 +90,15 @@ public partial class HomeViewModel : ViewModelBase
     {
         try
         {
-            await Task.Delay(1000); // 1초 대기
+            await Task.Delay(200); 
+            await _monitoringService.Initialize();
 
             IsErrOn = false;
-            _monitoringService.StartMonitoring();
+            await _monitoringService.StartMonitoring();
         }
         catch (Exception ex)
         {
+            _notificationService.ShowMessage("정보", $"Device Initialization failed");
         }
 
         // 센서 진단

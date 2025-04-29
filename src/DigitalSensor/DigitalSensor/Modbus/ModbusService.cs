@@ -34,7 +34,7 @@ public interface IModbusService
 
     Task<string> ReadHoldingRegisters(byte slaveId, ushort startAddress, ushort numRegisters);
 
-
+    Task<SensorData> ReadSensorData();
     Task<float> ReadSensorValue();
     Task<float> ReadTempValue();
     Task<float> ReadSensorMV();
@@ -196,14 +196,26 @@ public class ModbusService : IModbusService
 
     }
 
+    // 센서 데이터 통합
+    public async Task<SensorData> ReadSensorData()
+    {
+        byte slaveId = SlaveId;
+        ushort startAddress = (ushort)_modbusMap["SENSOR_VALUE"]["address"];
+        ushort numRegisters = 6; 
+        ushort[] registers = await _modbusMaster?.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
+
+        return ConvertToSensorData(registers);
+    }
+
+
     // 센서 데이터
     public async Task<float> ReadSensorValue()
     {
         byte slaveId = SlaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_VALUE"]["address"];
-        ushort numRegisters = (ushort)_modbusMap["SENSOR_VALUE"]["dataLength"]; ;
+        ushort numRegisters = (ushort)_modbusMap["SENSOR_VALUE"]["dataLength"]; 
         ushort[] registers = await _modbusMaster?.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
-        
+
 
         return ConvertToFloat(registers);
     }
@@ -377,6 +389,39 @@ public class ModbusService : IModbusService
 
     }
 
+
+    private SensorData ConvertToSensorData(ushort[] registers)
+    {
+        if (registers == null || registers.Length < 6)
+        {
+            throw new ArgumentException("Invalid register data. Expected at least 6 registers.");
+        }
+
+        // SensorData 객체 생성
+        var sensorData = new SensorData();
+
+        // 각 float 값은 2개의 레지스터(32비트)로 구성됨
+        // registers[0]과 registers[1] -> Value
+        sensorData.Value = ConvertRegistersToFloat(registers[0], registers[1]);
+
+        // registers[2]와 registers[3] -> Temperature
+        sensorData.Temperature = ConvertRegistersToFloat(registers[2], registers[3]);
+
+        // registers[4]와 registers[5] -> Mv
+        sensorData.Mv = ConvertRegistersToFloat(registers[4], registers[5]);
+
+        return sensorData;
+    }
+
+    private float ConvertRegistersToFloat(ushort high, ushort low)
+    {
+        byte[] bytes = new byte[4];
+        bytes[0] = (byte)(low & 0xFF);
+        bytes[1] = (byte)(low >> 8);
+        bytes[2] = (byte)(high & 0xFF);
+        bytes[3] = (byte)(high >> 8);
+        return BitConverter.ToSingle(bytes, 0);
+    }
     private float ConvertToFloat(ushort[] registers)
     {
         byte[] bytes = new byte[4];

@@ -21,9 +21,9 @@ public interface IMonitoringService
     event Action<float> SensorMvReceived;
     event Action<float> SensorTemperatureReceived;
 
-
-    void StartMonitoring();
-    void StopMonitoring();
+    Task Initialize();
+    Task StartMonitoring();
+    Task StopMonitoring();
 }
 
 public class MonitoringService : IMonitoringService
@@ -31,7 +31,6 @@ public class MonitoringService : IMonitoringService
     private readonly ISensorService _sensorService;
 
     private bool _isOpen = false;
-    private bool _isSlaveID = false;
     private bool _isSensorInfo = false;
     private bool _isSensorType = false;
     private bool _isRunning = false;
@@ -51,25 +50,30 @@ public class MonitoringService : IMonitoringService
         _sensorService = dataService;
     }
 
-    public async void StartMonitoring()
+    public async Task Initialize()
     {
-        _isOpen = _sensorService.IsOpen();
+        int slaveId = await _sensorService.Initialize();
 
-        if (!_isOpen)
-        {
-            _isOpen = await _sensorService.Open();
-        }
+        if (slaveId > 0)
+            await UpdateSlaveID(slaveId);
+        else
+            throw new Exception("Failed to initialize slave ID.");
+    }
 
+    public async Task StartMonitoring()
+    {
         _isRunning = true;
         while (_isRunning)
         {
             try
             {
-                await GetSlaveID();
                 await GetSensorType();
                 await GetSensorValue();
                 await GetSensorMv();
                 await GetSensorTemperature();
+
+                // 현재는 지원하지 않음
+                //await GetSensorData();
 
                 //await Task.Delay(1000); // 1초 대기
             }
@@ -82,11 +86,10 @@ public class MonitoringService : IMonitoringService
         }
     }
 
-    public async void StopMonitoring()
+    public async Task StopMonitoring()
     {
         // 초기화
         _isOpen = false;
-        _isSlaveID = false;
         _isSensorInfo = false;
         _isSensorType = false;
         _isRunning = false;
@@ -107,24 +110,6 @@ public class MonitoringService : IMonitoringService
         SensorDataReceived?.Invoke(data);
     }
 
-    private async Task GetSlaveID()
-    {
-        if (!_isSlaveID)
-        {
-            int slaveId = await _sensorService.Initialize();
-            if (slaveId > 0)
-            {
-                _isSlaveID = true;
-
-                SettingViewModel vm = App.GlobalHost.GetService<SettingViewModel>();
-
-                await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
-                {
-                    vm.SlaveID = slaveId;
-                });
-            }
-        }
-    }
 
     private async Task GetSensorType()
     {
@@ -140,22 +125,33 @@ public class MonitoringService : IMonitoringService
     private async Task GetSensorValue()
     {
         float value = await _sensorService.GetValueAsync();
+        Debug.WriteLine($"SensorValue: {value}");
         SensorValueReceived?.Invoke(value);
     }
 
     private async Task GetSensorMv()
     {
         float mv = await _sensorService.GetMVAsync();
+        Debug.WriteLine($"SensorMv: {mv}");
         SensorMvReceived?.Invoke(mv);
     }
 
     private async Task GetSensorTemperature()
     {
         float temperature = await _sensorService.GetTemperatureAsync();
+        Debug.WriteLine($"SensorTemperature: {temperature}");
         SensorTemperatureReceived?.Invoke(temperature);
     }
 
+    private async Task UpdateSlaveID(int slaveId)
+    {
+        SettingViewModel vm = App.GlobalHost.GetService<SettingViewModel>();
 
+        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
+        {
+            vm.SlaveID = slaveId;
+        });
+    }
 
 
     private async Task GetSensorInfo()
@@ -172,6 +168,8 @@ public class MonitoringService : IMonitoringService
     private async Task GetSensorData()
     {
         SensorData data = await _sensorService.GetSensorDataAsync();
+
+        Debug.WriteLine($"SensorData: {data.Value}, {data.Mv}, {data.Temperature}");
         SensorDataReceived?.Invoke(data);
     }
 
