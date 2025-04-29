@@ -157,45 +157,57 @@ public partial class HomeViewModel : ViewModelBase
         ReceivedData = data; // UI 자동 갱신
     }
 
-    private void OnSensorTypeReceived(int type)
+    private async void OnSensorTypeReceived(int type)
     {
-        ReceivedInfo = new SensorInfo()
+        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
         {
-            Type = (SensorType)type,
-        };
+            ReceivedInfo = new SensorInfo()
+            {
+                Type = (SensorType)type,
+            };
 
-        SensorUnit = UnitMapper.Units[(SensorType)type];
+            SensorUnit = UnitMapper.Units[(SensorType)type];
+        });
     }
 
-    private void OnSensorValueReceived(float value)
+    private async void OnSensorValueReceived(float value)
     {
-        ReceivedData= new SensorData()
+        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
         {
-            Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-            Value = value,
-            Mv = ReceivedData.Mv,
-            Temperature = ReceivedData.Temperature,
-        };
+            ReceivedData = new SensorData()
+            {
+                Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                Value = value,
+                Mv = ReceivedData.Mv,
+                Temperature = ReceivedData.Temperature,
+            };
+        });
     }
-    private void OnSensorMvReceived(float mv)
+    private async void OnSensorMvReceived(float mv)
     {
-        ReceivedData = new SensorData()
+        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
         {
-            Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-            Value = ReceivedData.Value,
-            Mv = mv,
-            Temperature = ReceivedData.Temperature,
-        };
+            ReceivedData = new SensorData()
+            {
+                Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                Value = ReceivedData.Value,
+                Mv = mv,
+                Temperature = ReceivedData.Temperature,
+            };
+        });
     }
-    private void OnSensorTemperatureReceived(float temp)
+    private async void OnSensorTemperatureReceived(float temp)
     {
-        ReceivedData = new SensorData()
+        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
         {
-            Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-            Value = ReceivedData.Value,
-            Mv = ReceivedData.Mv,
-            Temperature = temp,
-        };
+            ReceivedData = new SensorData()
+            {
+                Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                Value = ReceivedData.Value,
+                Mv = ReceivedData.Mv,
+                Temperature = temp,
+            };
+        });
     }
 
 }
