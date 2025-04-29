@@ -33,6 +33,10 @@ public partial class MainViewModel : ViewModelBase
     {
         Debug.WriteLine($"NavigateTo: {pageKey}");
 
-        CurrentPage = _navigationService.GetPage(pageKey);
+        // Placeholder 
+        if (pageKey != "Calib")
+        {
+            CurrentPage = _navigationService.GetPage(pageKey);
+        }
     }
 }

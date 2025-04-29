@@ -58,7 +58,6 @@
 			<ui:NavigationViewItem
 				FontSize="14"
 				Content="Calibration"
-				IconSource="Play"
 				Tag="Calib">
 
 				<ui:NavigationViewItem.IconSource>
