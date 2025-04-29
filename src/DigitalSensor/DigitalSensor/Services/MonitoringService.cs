@@ -71,7 +71,7 @@ public class MonitoringService : IMonitoringService
                 await GetSensorMv();
                 await GetSensorTemperature();
 
-                await Task.Delay(1000); // 1초 대기
+                //await Task.Delay(1000); // 1초 대기
             }
             catch (Exception ex)
             {

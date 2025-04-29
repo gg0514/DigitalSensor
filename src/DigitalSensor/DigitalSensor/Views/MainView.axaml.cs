@@ -63,14 +63,16 @@ public partial class MainView : UserControl
                 };
 
 
-                Item3.IsEnabled = false; // 비활성화
-                Item4.IsEnabled = false; // 비활성화
-                Item5.IsEnabled = false; // 비활성화
+                //Item3.IsEnabled = false; // 비활성화
+                //Item4.IsEnabled = false; // 비활성화
+                //Item5.IsEnabled = false; // 비활성화
 
                 navItem.MenuItems.Add(Item1);
                 navItem.MenuItems.Add(Item2);
-                navItem.MenuItems.Add(Item3);
-                navItem.MenuItems.Add(Item4);
+
+                // 실질적으로 필요없다고 함.
+                //navItem.MenuItems.Add(Item3);
+                //navItem.MenuItems.Add(Item4);
                 navItem.MenuItems.Add(Item5);
                 break; // 찾았으면 루프 종료
             }

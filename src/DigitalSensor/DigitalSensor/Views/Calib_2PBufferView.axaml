@@ -1,0 +1,102 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:vm="using:DigitalSensor.ViewModels"
+             xmlns:views="using:DigitalSensor.Views"
+			 mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="800"
+             x:Class="DigitalSensor.Views.Calib_2PBufferView"
+             x:DataType="vm:Calib_2PBufferViewModel">
+	
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+	  <vm:Calib_2PBufferViewModel />
+  </Design.DataContext>
+
+
+	<UserControl.Resources>
+		<StreamGeometry x:Key="icon_beaker">M67,334c-14,-14 -6,-39 34,-107 38,-64 41,-73 37,-128l-4,-59 56,0 56,0 -4,59c-4,55 -1,64 38,129 61,104 59,106 -86,110 -66,1 -123,-1 -127,-4zM300,309c0,-6 -12,-30 -26,-55l-26,-44 -58,0 -58,0 -26,44c-14,25 -26,49 -26,55 0,7 38,11 110,11 72,0 110,-4 110,-11zM226,174c-3,-9 -6,-38 -6,-65 0,-48 -1,-49 -30,-49 -29,0 -30,1 -30,49 0,27 -3,56 -6,65 -5,13 2,16 36,16 34,0 41,-3 36,-16z</StreamGeometry>
+	</UserControl.Resources>
+
+	<ScrollViewer Padding="20" Margin="0,30,0,0">
+		<StackPanel Spacing="20">
+
+			<!-- Title -->
+			<TextBlock Text="2P 버퍼" FontSize="28" FontWeight="Bold"/>
+
+
+			<!-- 교정 지침 -->
+			<Border
+				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+				CornerRadius="12"
+				Padding="26"
+				Margin="0,20,0,0"
+				Effect="{DynamicResource ShadowElevation3}" >
+
+				<StackPanel>
+					<TextBlock Text="교정 지침" FontSize="14" Foreground="LightBlue"/>
+					<StackPanel Margin="0,20,10,0">
+						<StackPanel Orientation="Horizontal">
+							<PathIcon Margin="10,20,30,0" Height="40" Width="40" Foreground="Gray" Data="{StaticResource icon_beaker}"/>
+							<StackPanel>
+								<TextBlock Text="1. 센서를 버퍼용액에 담근다." FontSize="16"/>
+								<TextBlock Text="2. 안정화후 적용버튼을 누른다." FontSize="16" Foreground="Gray"/>
+								<TextBlock Text="3. 교정을 중단하려면 중단버튼을 누른다." FontSize="16" Foreground="Gray"/>
+							</StackPanel>
+						</StackPanel>
+					</StackPanel>
+				</StackPanel>
+			</Border>
+
+			<!-- 현재값 -->
+			<Border
+				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+				CornerRadius="12"
+				Padding="26"
+				Margin="0,10,0,0"
+				Effect="{DynamicResource ShadowElevation3}" >
+
+				<StackPanel>
+					<TextBlock Text="현재값" FontSize="14" Foreground="LightBlue"/>
+					<StackPanel Margin="0,15,0,0" Spacing="12">
+						<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
+							<TextBlock Grid.Column="0" Text="0.00" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
+								   Margin="0,0,0,0"/>
+							<Border Grid.Column="1" VerticalAlignment="Bottom" Width="30" Height="20" Margin="0,5,10,0" >
+								<TextBlock Name="SensorUnit" Text="NTU" FontWeight="Light" FontSize="14"/>
+							</Border>
+						</Grid>
+					</StackPanel>
+				</StackPanel>
+			</Border>
+
+			<!-- 교정상태 -->
+			<Border
+				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+				CornerRadius="12"
+				Padding="26"
+				Margin="0,10,0,0"
+				Effect="{DynamicResource ShadowElevation3}" >
+
+				<StackPanel>
+					<TextBlock Text="교정상태" FontSize="14" Foreground="LightBlue"/>
+					<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
+						<TextBlock Grid.Column="0" Text="성 공" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
+							   Margin="0,0,0,0"/>
+						<Border Grid.Column="1" VerticalAlignment="Bottom" Width="30" Height="20" Margin="0,5,10,0" >
+						</Border>
+					</Grid>
+				</StackPanel>
+			</Border>
+
+
+			<UniformGrid Columns="2" Width="300" Height="100">
+				<Button Content="중 단" Classes="reveal" Margin="4" Width="135" Height="60"/>
+				<Button Content="적 용" Classes="accent primary" Margin="4" Width="135" Height="60"/>
+			</UniformGrid>
+
+		</StackPanel>
+	</ScrollViewer>
+</UserControl>

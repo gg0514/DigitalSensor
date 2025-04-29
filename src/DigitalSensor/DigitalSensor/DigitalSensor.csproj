@@ -44,8 +44,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\Calib_2PSampleView.axaml.cs">
+      <DependentUpon>Calib_2PSampleView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Calib_2PBufferView.axaml.cs">
+      <DependentUpon>Calib_2PBufferView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Calib_1PSampleView.axaml.cs">
       <DependentUpon>Calib_1PSampleView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Calib_1PBufferView.axaml.cs">
+      <DependentUpon>Calib_1PBufferView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Calib_ZeroView.axaml.cs">
       <SubType>Code</SubType>
