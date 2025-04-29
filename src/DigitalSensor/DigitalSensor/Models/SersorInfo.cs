@@ -41,8 +41,11 @@ public enum SensorType
 
 public enum CalibrationStatus
 {
+    [Description("대 기")]
     NoSensorCalibration = 0,
+    [Description("진 행")]
     CalInProgress = 1,
+    [Description("성 공")]
     CalOK = 2,
     FailNotStable = 3,
     FailBufferNotFound = 4,

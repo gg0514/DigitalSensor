@@ -11,6 +11,9 @@ namespace DigitalSensor.Services;
 
 public interface IMonitoringService
 {
+    SensorInfo SensorInfo { get; set; }
+    SensorData SensorData { get; set; }
+
     event Action<Models.SensorInfo> SensorInfoReceived;
     event Action<Models.SensorData> SensorDataReceived;
 
@@ -20,10 +23,12 @@ public interface IMonitoringService
     event Action<float> SensorValueReceived;
     event Action<float> SensorMvReceived;
     event Action<float> SensorTemperatureReceived;
+    event Action<int> CalibStatusReceived;
 
     Task InitSensor();
     Task StartMonitoring();
     Task StopMonitoring();
+
 }
 
 public class MonitoringService : IMonitoringService
@@ -35,6 +40,13 @@ public class MonitoringService : IMonitoringService
     private bool _isSensorType = false;
     private bool _isRunning = false;
 
+    private CalibrationStatus CalStatus = CalibrationStatus.NoSensorCalibration;
+
+    public SensorInfo SensorInfo { get; set; } = new();
+    public SensorData SensorData { get; set; } = new();
+
+    public bool CalibMode { get; set; } = false;
+
     public event Action ErrSignal;
     public event Action<Models.SensorInfo> SensorInfoReceived;
     public event Action<Models.SensorData> SensorDataReceived;
@@ -43,6 +55,7 @@ public class MonitoringService : IMonitoringService
     public event Action<float> SensorValueReceived;
     public event Action<float> SensorMvReceived;
     public event Action<float> SensorTemperatureReceived;
+    public event Action<int> CalibStatusReceived;
 
 
     public MonitoringService(ISensorService dataService)
@@ -67,21 +80,31 @@ public class MonitoringService : IMonitoringService
         {
             try
             {
-                await GetSensorType();
-                await GetSensorValue();
-                await GetSensorMv();
-                await GetSensorTemperature();
+                if (!_isSensorType)
+                {
+                    int type= await GetSensorType();
 
-                // 현재는 지원하지 않음
-                //await GetSensorData();
+                    if (type > 0)
+                        _isSensorType = true;
+                }
 
-                //await Task.Delay(1000); // 1초 대기
+                if(CalibMode== true)
+                {
+                    await RunCalibration();
+                }
+                else
+                {
+                    await GetSensorValue();
+                    await GetSensorMv();
+                    await GetSensorTemperature();
+                }
             }
             catch (Exception ex)
             {
                 ErrSignal?.Invoke();
-
-                Debug.WriteLine($"Error: {ex.Message}");
+                await Task.Delay(1000); // 1초 대기
+           
+                Debug.WriteLine($"Error Monitoring: {ex.Message}");
             }
         }
     }
@@ -95,36 +118,49 @@ public class MonitoringService : IMonitoringService
         _isRunning = false;
 
 
-        SensorInfo info = new SensorInfo()
+        SensorInfo = new SensorInfo()
         {
             Type = SensorType.None
         };
-        SensorInfoReceived?.Invoke(info);
+        SensorInfoReceived?.Invoke(SensorInfo);
 
-        SensorData data = new SensorData
+        SensorData = new SensorData
         {
             Value = 0,
             Mv = 0,
             Temperature = 0
         };
-        SensorDataReceived?.Invoke(data);
+        SensorDataReceived?.Invoke(SensorData);
     }
 
 
-    private async Task GetSensorType()
+    private async Task<int> GetSensorType()
     {
-        if (!_isSensorType)
-        {
-            int type = await _sensorService.GetTypeAsync();
-            SensorTypeReceived?.Invoke(type);
+        int type = await _sensorService.GetTypeAsync();
 
-            _isSensorType = true;
+        if (type >0)
+        {
+            SensorInfo = new SensorInfo()
+            {
+                Type = (SensorType)type,
+            };
+
+            SensorTypeReceived?.Invoke(type);
         }
+        return type;
     }
 
     private async Task GetSensorValue()
     {
         float value = await _sensorService.GetValueAsync();
+        SensorData = new SensorData
+        {
+            Value = value,
+            Mv = SensorData.Mv,
+            Temperature = SensorData.Temperature
+        };
+
+
         Debug.WriteLine($"SensorValue: {value}");
         SensorValueReceived?.Invoke(value);
     }
@@ -132,6 +168,13 @@ public class MonitoringService : IMonitoringService
     private async Task GetSensorMv()
     {
         float mv = await _sensorService.GetMVAsync();
+        SensorData = new SensorData
+        {
+            Value = SensorData.Value,
+            Mv = mv,
+            Temperature = SensorData.Temperature
+        };
+
         Debug.WriteLine($"SensorMv: {mv}");
         SensorMvReceived?.Invoke(mv);
     }
@@ -139,6 +182,13 @@ public class MonitoringService : IMonitoringService
     private async Task GetSensorTemperature()
     {
         float temperature = await _sensorService.GetTemperatureAsync();
+        SensorData = new SensorData
+        {
+            Value = SensorData.Value,
+            Mv = SensorData.Mv,
+            Temperature = temperature
+        };
+
         Debug.WriteLine($"SensorTemperature: {temperature}");
         SensorTemperatureReceived?.Invoke(temperature);
     }
@@ -151,6 +201,35 @@ public class MonitoringService : IMonitoringService
         {
             vm.SlaveID = slaveId;
         });
+    }
+
+    private async Task RunCalibration()
+    {
+        try
+        {
+            await GetCalibStatus();
+
+            if (CalStatus == CalibrationStatus.NoSensorCalibration)
+            {
+                await GetSensorValue();
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrSignal?.Invoke();
+            await Task.Delay(1000); // 1초 대기
+
+            Debug.WriteLine($"Error Calibration: {ex.Message}");
+        }
+    }
+
+
+    private async Task GetCalibStatus()
+    {
+        int status = await _sensorService.GetCalibStatusAsync();
+        CalibStatusReceived?.Invoke(status);
+
+        CalStatus = (CalibrationStatus)status;
     }
 
 

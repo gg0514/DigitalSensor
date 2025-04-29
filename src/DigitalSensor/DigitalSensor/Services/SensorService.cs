@@ -18,6 +18,7 @@ public interface ISensorService
     Task<int> InitSensor();
     Task<SensorInfo> GetSensorInfoAsync();
     Task<SensorData> GetSensorDataAsync();
+    Task<int> GetCalibStatusAsync();
 
     Task<int> GetTypeAsync();
     Task<float> GetValueAsync();
@@ -130,7 +131,7 @@ public class SensorService : ISensorService
     {
         int slaveId = -1;
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 5; i++)
         {
             bool bOK = await _modbusService.Initialize();
 
@@ -197,5 +198,11 @@ public class SensorService : ISensorService
     {
         float temperature = await _modbusService.ReadTempValue();
         return temperature;
+    }
+
+    public async Task<int> GetCalibStatusAsync()
+    {
+        int status = await _modbusService.ReadCalibStatus();
+        return status;
     }
 }

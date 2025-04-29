@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:local="using:DigitalSensor"
              xmlns:sty="using:FluentAvalonia.Styling"
+             xmlns:vm="using:DigitalSensor.ViewModels"
 			 x:Class="DigitalSensor.App"
              RequestedThemeVariant="Dark">
              <!-- "Default" ThemeVariant follows system theme variant. 
@@ -16,6 +17,13 @@
 		<StyleInclude Source="avares://FluentAvalonia/Styling/ControlThemes/Controls.axaml"/>
 		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
 	</Application.Styles>
+
+	<Application.Resources>
+		<!-- BoolToBrushConverter를 리소스로 등록 -->
+		<vm:BoolToBrushConverter x:Key="BoolToBrushConverter" />
+		<vm:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+	</Application.Resources>
+
 
 	<!--<Application.Resources>
 		<FontFamily x:Key="FontAwesome">avares://DigitalSensor/Assets/FontAwesome.ttf#FontAwesome</FontFamily>

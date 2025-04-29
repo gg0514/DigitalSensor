@@ -15,13 +15,6 @@
     <vm:HomeViewModel />
   </Design.DataContext>
 
-	<UserControl.Resources>
-		<!-- BoolToBrushConverter를 리소스로 등록 -->
-		<vm:BoolToBrushConverter x:Key="BoolToBrushConverter" />
-		<vm:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
-	</UserControl.Resources>
-
-
 
 	<StackPanel Background="" Margin="10,5">
 		<TextBlock Text="{Binding ReceivedData.Timestamp}" FontSize="14" HorizontalAlignment="Right" VerticalAlignment="Center"

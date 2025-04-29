@@ -17,7 +17,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
 
 
     [ObservableProperty]
-    private string calib_Status;
+    private CalibrationStatus calStatus;
 
     [ObservableProperty]
     private SensorInfo receivedInfo = new();
@@ -38,10 +38,9 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     {
         _monitoringService = monitoringService;
 
-        _monitoringService.SensorTypeReceived += OnSensorTypeReceived;
         _monitoringService.SensorValueReceived += OnSensorValueReceived;
+        _monitoringService.CalibStatusReceived += OnCalibStatusReceived;
     }
-
 
     [RelayCommand]
     private void Apply()
@@ -53,18 +52,19 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     {
     }
 
-    private async void OnSensorTypeReceived(int type)
+    public async void OnViewLoaded()
     {
         await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
         {
-            ReceivedInfo = new SensorInfo()
-            {
-                Type = (SensorType)type,
-            };
+            ReceivedInfo = _monitoringService.SensorInfo;
+            ReceivedData = _monitoringService.SensorData;
 
-            SensorUnit = UnitMapper.Units[(SensorType)type];
+            var type = ReceivedInfo.Type;
+            SensorUnit = UnitMapper.Units[type];
         });
     }
+
+
 
     private async void OnSensorValueReceived(float value)
     {
@@ -77,6 +77,15 @@ public partial class Calib_ZeroViewModel : ViewModelBase
                 Mv = ReceivedData.Mv,
                 Temperature = ReceivedData.Temperature,
             };
+        });
+    }
+
+
+    private async void OnCalibStatusReceived(int status)
+    {
+        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
+        {
+            CalStatus = (CalibrationStatus)status;
         });
     }
 
