@@ -15,7 +15,7 @@ public interface ISensorService
     Task<bool> Open();
     Task Close();
 
-    Task<int> Initialize();
+    Task<int> InitSensor();
     Task<SensorInfo> GetSensorInfoAsync();
     Task<SensorData> GetSensorDataAsync();
 
@@ -126,7 +126,7 @@ public class SensorService : ISensorService
     }
 
 
-    public async Task<int> Initialize()
+    public async Task<int> InitSensor()
     {
         int slaveId = -1;
 

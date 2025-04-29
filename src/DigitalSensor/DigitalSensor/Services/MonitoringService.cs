@@ -21,7 +21,7 @@ public interface IMonitoringService
     event Action<float> SensorMvReceived;
     event Action<float> SensorTemperatureReceived;
 
-    Task Initialize();
+    Task InitSensor();
     Task StartMonitoring();
     Task StopMonitoring();
 }
@@ -50,14 +50,14 @@ public class MonitoringService : IMonitoringService
         _sensorService = dataService;
     }
 
-    public async Task Initialize()
+    public async Task InitSensor()
     {
-        int slaveId = await _sensorService.Initialize();
+        int slaveId = await _sensorService.InitSensor();
 
         if (slaveId > 0)
             await UpdateSlaveID(slaveId);
         else
-            throw new Exception("Failed to initialize slave ID.");
+            throw new Exception("Failed at InitSensor.");
     }
 
     public async Task StartMonitoring()

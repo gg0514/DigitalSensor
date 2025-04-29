@@ -91,7 +91,7 @@ public partial class HomeViewModel : ViewModelBase
         try
         {
             await Task.Delay(200); 
-            await _monitoringService.Initialize();
+            await _monitoringService.InitSensor();
 
             IsErrOn = false;
             await _monitoringService.StartMonitoring();
