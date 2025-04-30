@@ -93,8 +93,8 @@
 
 
 			<UniformGrid Columns="2" Width="300" Height="100">
-				<Button Content="중 단" Command="{Binding ApplyCommand}" Classes="" Margin="4" Width="135" Height="60"/>
-				<Button Content="적 용" Command="{Binding AbortCommand}" Classes="accent" Margin="4" Width="135" Height="60"/>
+				<Button Content="중 단" Command="{Binding AbortCommand}" Classes="" Margin="4" Width="135" Height="60"/>
+				<Button Content="적 용" Command="{Binding ApplyCommand}" Classes="accent" Margin="4" Width="135" Height="60"/>
 			</UniformGrid>
 
 		</StackPanel>

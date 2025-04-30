@@ -147,6 +147,12 @@ public class ModbusService : IModbusService
 
     public async Task<bool> Initialize()
     {
+        if (_modbusMaster == null)
+        {
+            Debug.WriteLine("Modbus master is not initialized.");
+            return false;
+        }
+
         try
         {
             SlaveId = (byte)(await ReadSlaveId())[0];
@@ -157,8 +163,6 @@ public class ModbusService : IModbusService
             Debug.WriteLine($"Initialize Error: {ex.Message}");
             return false;
         }
-
-        return true;
     }
 
 
@@ -192,6 +196,9 @@ public class ModbusService : IModbusService
 
         ushort startAddress = (ushort)_modbusMap["SLAVE_ID"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SLAVE_ID"]["dataLength"]; ;
+
+
+        Debug.WriteLine($"ReadSlaveId : _modbusMaster={_modbusMaster}");
 
         return await _modbusMaster?.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
         
@@ -387,8 +394,7 @@ public class ModbusService : IModbusService
         byte slaveId = SlaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_ABORT"]["address"];
         await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value);
-        
-
+       
     }
 
 

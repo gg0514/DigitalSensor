@@ -21,7 +21,6 @@ namespace DigitalSensor.ViewModels;
 
 public partial class HomeViewModel : ViewModelBase
 {
-    private readonly IUsbService _usbService;
     private readonly IMonitoringService _monitoringService;
     private readonly IModbusService _modbusService;
     private readonly NotificationService _notificationService;
@@ -63,7 +62,6 @@ public partial class HomeViewModel : ViewModelBase
     public HomeViewModel(IUsbService usbService, IMonitoringService monitoringService, IModbusService modbusService, NotificationService notificationService)
     {
         // 이벤트구독용
-        _usbService = usbService;
         _monitoringService = monitoringService;
         _modbusService= modbusService;
         _notificationService= notificationService;
@@ -75,9 +73,6 @@ public partial class HomeViewModel : ViewModelBase
         _monitoringService.SensorMvReceived += OnSensorMvReceived;
         _monitoringService.SensorTemperatureReceived += OnSensorTemperatureReceived;
 
-        // USB Device 구독 등록
-        _usbService.UsbPermissionGranted += OnUSBPermissionGranted;
-        _usbService.UsbDeviceDetached += OnUSBDeviceDetached;
 
         // LED 구독 등록
         _modbusService.TxSignal += OnTxSignal;
@@ -86,38 +81,17 @@ public partial class HomeViewModel : ViewModelBase
     }
 
 
-    private async void OnUSBPermissionGranted(UsbDeviceInfo deviceInfo)
-    {
-        try
-        {
-            await Task.Delay(200); 
-            await _monitoringService.InitSensor();
-
-            IsErrOn = false;
-            await _monitoringService.StartMonitoring();
-        }
-        catch (Exception ex)
-        {
-            _notificationService.ShowMessage("정보", $"Device Initialization failed");
-        }
-
-        // 센서 진단
-        //callHealthCheck();
-    }
-
-    private async void OnUSBDeviceDetached(UsbDeviceInfo deviceInfo)
-    {        
-        IsErrOn = true;
-        _monitoringService.StopMonitoring();
-    }
-
     public void OnTxSignal()
     {
+        IsErrOn = false; 
+
         BlinkLed(ref _txCts, val => IsTxOn = val);
     }
 
     public void OnRxSignal()
     {
+        IsErrOn = false; 
+
         BlinkLed(ref _rxCts, val => IsRxOn = val);
     }
 

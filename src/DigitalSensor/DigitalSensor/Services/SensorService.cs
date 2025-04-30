@@ -11,6 +11,9 @@ namespace DigitalSensor.Services;
 
 public interface ISensorService
 {
+    event Action SensorAttached;
+    event Action SensorDetached;
+
     bool IsOpen();
     Task<bool> Open();
     Task Close();
@@ -24,11 +27,19 @@ public interface ISensorService
     Task<float> GetValueAsync();
     Task<float> GetMVAsync();
     Task<float> GetTemperatureAsync();
+
+    Task SetCalibAbortAsync();
+    Task SetCalibZeroAsync();
+    Task SetCalib1PSampleAsync();
+    Task SetCalib2PBufferAsync(int order);
 }
 
 
 public class SensorService : ISensorService
 {
+    public event Action SensorAttached;
+    public event Action SensorDetached;
+
     private readonly IUsbService    _usbService;
     private readonly IModbusService  _modbusService;
     private readonly NotificationService _notificationService;
@@ -71,6 +82,8 @@ public class SensorService : ISensorService
 
             if (_isOpen)
             {
+                SensorAttached?.Invoke();
+
                 _notificationService.ShowMessage("정보", $"Device {_deviceId} opened successfully.");
                 Debug.WriteLine($"Device {_deviceId}:{deviceInfo.ProductName} opened successfully");
 
@@ -98,6 +111,7 @@ public class SensorService : ISensorService
         await _modbusService.Close();
         _notificationService.ShowMessage("정보", $"Device closed.");
 
+        SensorDetached?.Invoke();       
     }
 
     public async Task<bool> Open()
@@ -204,5 +218,37 @@ public class SensorService : ISensorService
     {
         int status = await _modbusService.ReadCalibStatus();
         return status;
+    }
+
+    public async Task SetCalibZeroAsync()
+    {
+        if (!_isOpen)
+            return;
+
+        await _modbusService.WriteCalibZero(0);
+    }
+
+    public async Task SetCalibAbortAsync()
+    {
+        if (!_isOpen)
+            return;
+
+        await _modbusService.WriteCalibAbort(0);
+    }
+    
+    public async Task SetCalib1PSampleAsync()
+    {
+        if (!_isOpen)
+            return;
+
+        await _modbusService.WriteCalib1pSample(0);
+    }
+
+    public async Task SetCalib2PBufferAsync(int order)
+    {
+        if (!_isOpen)
+            return;
+
+        await _modbusService.WriteCalib2pBuffer((ushort)order);
     }
 }

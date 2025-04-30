@@ -14,6 +14,7 @@ namespace DigitalSensor.ViewModels;
 public partial class Calib_ZeroViewModel : ViewModelBase
 {
     private readonly IMonitoringService _monitoringService;
+    private readonly ISensorService _sensorService;
 
 
     [ObservableProperty]
@@ -32,24 +33,28 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     public Calib_ZeroViewModel()
     {
         _monitoringService = new MonitoringService(new SensorService());
+        _sensorService = new SensorService();
     }
 
-    public Calib_ZeroViewModel(IMonitoringService monitoringService)
+    public Calib_ZeroViewModel(IMonitoringService monitoringService, ISensorService sensorService)
     {
         _monitoringService = monitoringService;
+        _sensorService = sensorService;
 
         _monitoringService.SensorValueReceived += OnSensorValueReceived;
         _monitoringService.CalibStatusReceived += OnCalibStatusReceived;
     }
 
     [RelayCommand]
-    private void Apply()
+    private async void Apply()
     {
+        await _sensorService.SetCalibZeroAsync();
     }
 
     [RelayCommand]
-    private void Abort()
+    private async void Abort()
     {
+        await _sensorService.SetCalibAbortAsync();
     }
 
     public async void OnViewLoaded()

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using DigitalSensor.ViewModels;
+using DigitalSensor.Services;
 using System;
 using System.Diagnostics;
 using Avalonia.Interactivity;
@@ -21,6 +22,9 @@ public class NavigationService : INavigationService
 
     public object GetPage(string name)
     {
+        IMonitoringService monitoringService = _provider.GetService<IMonitoringService>();
+
+        monitoringService?.SetCurrentPage(name);
 
         return name switch
         {

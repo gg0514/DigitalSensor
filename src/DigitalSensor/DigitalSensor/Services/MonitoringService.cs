@@ -1,4 +1,5 @@
 ﻿using DigitalSensor.Extensions;
+using DigitalSensor.Modbus;
 using DigitalSensor.Models;
 using DigitalSensor.ViewModels;
 using System;
@@ -29,6 +30,8 @@ public interface IMonitoringService
     Task StartMonitoring();
     Task StopMonitoring();
 
+    void SetCurrentPage(string pageName);
+
 }
 
 public class MonitoringService : IMonitoringService
@@ -40,12 +43,14 @@ public class MonitoringService : IMonitoringService
     private bool _isSensorType = false;
     private bool _isRunning = false;
 
+    private string _currentPage = string.Empty;
+
     private CalibrationStatus CalStatus = CalibrationStatus.NoSensorCalibration;
 
     public SensorInfo SensorInfo { get; set; } = new();
     public SensorData SensorData { get; set; } = new();
 
-    public bool CalibMode { get; set; } = false;
+    
 
     public event Action ErrSignal;
     public event Action<Models.SensorInfo> SensorInfoReceived;
@@ -61,6 +66,41 @@ public class MonitoringService : IMonitoringService
     public MonitoringService(ISensorService dataService)
     {
         _sensorService = dataService;
+
+        // Sensor 구독 등록
+        _sensorService.SensorAttached += OnSensorAttached;
+        _sensorService.SensorDetached += OnSensorDetached;
+    }
+
+
+    private async void OnSensorAttached()
+    {
+        try
+        {
+            //await Task.Delay(200);
+            await InitSensor();
+            await StartMonitoring();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("정보", $"OnSensorAttached() failed");
+        }
+
+        // 센서 진단
+        //callHealthCheck();
+    }
+
+    private async void OnSensorDetached()
+    {
+        await StopMonitoring();
+    }
+
+
+    public void SetCurrentPage(string pageName)
+    {
+        _currentPage = pageName;
+
+        Debug.WriteLine($"CurrentPage: {_currentPage}");
     }
 
     public async Task InitSensor()
@@ -80,23 +120,17 @@ public class MonitoringService : IMonitoringService
         {
             try
             {
-                if (!_isSensorType)
-                {
-                    int type= await GetSensorType();
-
-                    if (type > 0)
-                        _isSensorType = true;
-                }
-
-                if(CalibMode== true)
-                {
-                    await RunCalibration();
-                }
-                else
+                await GetSensorType();
+                
+                if(_currentPage == "Home")
                 {
                     await GetSensorValue();
                     await GetSensorMv();
                     await GetSensorTemperature();
+                }
+                else
+                {
+                    await RunCalibration();
                 }
             }
             catch (Exception ex)
@@ -134,20 +168,24 @@ public class MonitoringService : IMonitoringService
     }
 
 
-    private async Task<int> GetSensorType()
+    private async Task GetSensorType()
     {
-        int type = await _sensorService.GetTypeAsync();
-
-        if (type >0)
+        if (!_isSensorType)
         {
-            SensorInfo = new SensorInfo()
-            {
-                Type = (SensorType)type,
-            };
+            int type = await _sensorService.GetTypeAsync();
 
-            SensorTypeReceived?.Invoke(type);
+            if (type > 0)
+            {
+                SensorInfo = new SensorInfo()
+                {
+                    Type = (SensorType)type,
+                };
+
+                SensorTypeReceived?.Invoke(type);
+            }
+
+            _isSensorType = true;
         }
-        return type;
     }
 
     private async Task GetSensorValue()
