@@ -42,8 +42,8 @@
 							<PathIcon Margin="10,20,30,0" Height="40" Width="40" Foreground="Gray" Data="{StaticResource icon_beaker}"/>
 							<StackPanel>
 								<TextBlock Text="1. 센서를 버퍼용액에 담근다." FontSize="16"/>
-								<TextBlock Text="2. 안정화후 적용버튼을 누른다." FontSize="16" Foreground="Gray"/>
-								<TextBlock Text="3. 교정을 중단하려면 중단버튼을 누른다." FontSize="16" Foreground="Gray"/>
+								<TextBlock Text="2. 안정화후 적용버튼을 누른다." FontSize="16" Foreground=""/>
+								<TextBlock Text="3. 교정을 중단하려면 중단버튼을 누른다." FontSize="16" Foreground=""/>
 							</StackPanel>
 						</StackPanel>
 					</StackPanel>

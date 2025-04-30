@@ -44,8 +44,8 @@
 							<PathIcon Margin="10,20,30,0" Height="40" Width="40" Foreground="Gray" Data="{StaticResource icon_beaker}"/>
 							<StackPanel>
 								<TextBlock Text="1. 센서를 샘플용액에 담근다." FontSize="16"/>
-								<TextBlock Text="2. 교정값을 입력후, 적용버튼을 누른다." FontSize="16" Foreground="Gray"/>
-								<TextBlock Text="3. 교정을 중단하려면 중단버튼을 누른다." FontSize="16" Foreground="Gray"/>
+								<TextBlock Text="2. 교정값을 입력후, 적용버튼을 누른다." FontSize="16" Foreground=""/>
+								<TextBlock Text="3. 교정을 중단하려면 중단버튼을 누른다." FontSize="16" Foreground=""/>
 							</StackPanel>
 						</StackPanel>
 					</StackPanel>
@@ -63,13 +63,13 @@
 				<StackPanel Background="">
 					<Grid	ColumnDefinitions="Auto, *, Auto" Margin="0,0,0,20">
 						<TextBlock Grid.Column="0" Text="현재값"  VerticalAlignment="Center" FontSize="14" Foreground="LightBlue"/>
-						<TextBlock Grid.Column="1" Text="0.00" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
+						<TextBlock Grid.Column="1" Text="{Binding ReceivedData.Value}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
 							   Margin="0,0,0,0"/>
 						<Border Grid.Column="2" 
 								HorizontalAlignment="Center" 
 								VerticalAlignment="Center" 
 								Width="60" Height="20" Margin="0,5,10,0" >
-							<TextBlock Text="NTU" HorizontalAlignment="Center" FontWeight="Light" FontSize="14"/>
+							<TextBlock Text="{Binding SensorUnit}" HorizontalAlignment="Center" FontWeight="Light" FontSize="14"/>
 						</Border>
 					</Grid>
 					<Grid	ColumnDefinitions="Auto, *, Auto" Margin="0,0,0,0">
@@ -105,7 +105,7 @@
 				<StackPanel>
 					<TextBlock Text="교정상태" FontSize="14" Foreground="LightBlue"/>
 					<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
-						<TextBlock Grid.Column="0" Text="성 공" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
+						<TextBlock Grid.Column="0" Text="{Binding CalStatus, Converter={StaticResource EnumDescriptionConverter}}" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
 							   Margin="0,0,0,0"/>
 						<Border Grid.Column="1" VerticalAlignment="Bottom" Width="30" Height="20" Margin="0,5,10,0" >
 						</Border>
@@ -115,8 +115,8 @@
 
 
 			<UniformGrid Columns="2" Width="300" Height="100">
-				<Button Content="중 단" Classes="reveal" Margin="4" Width="135" Height="60"/>
-				<Button Content="적 용" Classes="accent primary" Margin="4" Width="135" Height="60"/>
+				<Button Content="중 단" Command="{Binding AbortCommand}" Classes="" Margin="4" Width="135" Height="60"/>
+				<Button Content="적 용" Command="{Binding ApplyCommand}" Classes="accent" Margin="4" Width="135" Height="60"/>
 			</UniformGrid>
 
 		</StackPanel>
