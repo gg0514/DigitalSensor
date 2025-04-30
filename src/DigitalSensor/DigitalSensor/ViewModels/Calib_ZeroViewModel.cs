@@ -48,13 +48,13 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     [RelayCommand]
     private async void Apply()
     {
-        await _sensorService.SetCalibZeroAsync();
+        _monitoringService.ApplyCalib = true;
     }
 
     [RelayCommand]
     private async void Abort()
     {
-        await _sensorService.SetCalibAbortAsync();
+        _monitoringService.AbortCalib = true;
     }
 
     public async void OnViewLoaded()

@@ -149,7 +149,7 @@ public class ModbusService : IModbusService
     {
         if (_modbusMaster == null)
         {
-            Debug.WriteLine("Modbus master is not initialized.");
+            Debug.WriteLine("MODBUS - Modbus master is not initialized.");
             return false;
         }
 
@@ -160,7 +160,7 @@ public class ModbusService : IModbusService
         }
         catch(Exception ex)
         {
-            Debug.WriteLine($"Initialize Error: {ex.Message}");
+            Debug.WriteLine($"MODBUS - Initialize Error: {ex.Message}");
             return false;
         }
     }
@@ -198,7 +198,7 @@ public class ModbusService : IModbusService
         ushort numRegisters = (ushort)_modbusMap["SLAVE_ID"]["dataLength"]; ;
 
 
-        Debug.WriteLine($"ReadSlaveId : _modbusMaster={_modbusMaster}");
+        Debug.WriteLine($"MODBUS - ReadSlaveId : _modbusMaster={_modbusMaster}");
 
         return await _modbusMaster?.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
         
@@ -332,8 +332,8 @@ public class ModbusService : IModbusService
         ushort numRegisters = (ushort)_modbusMap["SLAVE_ID"]["dataLength"]; ;
 
         await _modbusMaster?.WriteSingleRegisterAsync(slaveId, startAddress, value);
-        
 
+        Debug.WriteLine($"MODBUS - WriteSlaveId: {value}");
     }
 
     // 센서 팩터
@@ -343,8 +343,8 @@ public class ModbusService : IModbusService
         ushort startAddress = (ushort)_modbusMap["SENSOR_FACTOR"]["address"];
         ushort[] registers = ConvertToRegisters(value);
         await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers);
-        
 
+        Debug.WriteLine($"MODBUS - WriteSensorFactor: {value}");
     }
 
     // 센서 오프셋
@@ -354,8 +354,8 @@ public class ModbusService : IModbusService
         ushort startAddress = (ushort)_modbusMap["SENSOR_OFFSET"]["address"];
         ushort[] registers = ConvertToRegisters(value);
         await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers);
-        
 
+        Debug.WriteLine($"MODBUS - WriteSensorOffset: {value}");
     }
 
     // CALIB_1P_SAMPLE
@@ -365,8 +365,8 @@ public class ModbusService : IModbusService
         ushort startAddress = (ushort)_modbusMap["CALIB_1P_SAMPLE"]["address"];
         ushort[] registers = ConvertToRegisters(value);
         await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers);
-        
 
+        Debug.WriteLine($"MODBUS - WriteCalib1pSample: {value}");
     }
 
     // CALIB_2P_BUFFER
@@ -375,7 +375,8 @@ public class ModbusService : IModbusService
         byte slaveId = SlaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_2P_BUFFER"]["address"];
         await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value);
-        
+
+        Debug.WriteLine($"MODBUS - WriteCalib2pBuffer: {value}");
     }
 
     // CALIB_ZERO
@@ -384,8 +385,8 @@ public class ModbusService : IModbusService
         byte slaveId = SlaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_ZERO"]["address"];
         await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value);
-        
 
+        Debug.WriteLine($"MODBUS - WriteCalibZero: {value}");
     }
 
     // CALIB_ABORT
@@ -394,7 +395,8 @@ public class ModbusService : IModbusService
         byte slaveId = SlaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_ABORT"]["address"];
         await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value);
-       
+
+        Debug.WriteLine($"MODBUS - WriteCalibAbort: {value}");
     }
 
 

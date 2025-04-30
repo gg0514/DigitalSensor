@@ -18,7 +18,7 @@ public interface ISensorService
     Task<bool> Open();
     Task Close();
 
-    Task<int> InitSensor();
+    Task<int> InitSlaveID();
     Task<SensorInfo> GetSensorInfoAsync();
     Task<SensorData> GetSensorDataAsync();
     Task<int> GetCalibStatusAsync();
@@ -141,7 +141,7 @@ public class SensorService : ISensorService
     }
 
 
-    public async Task<int> InitSensor()
+    public async Task<int> InitSlaveID()
     {
         int slaveId = -1;
 
@@ -222,33 +222,21 @@ public class SensorService : ISensorService
 
     public async Task SetCalibZeroAsync()
     {
-        if (!_isOpen)
-            return;
-
         await _modbusService.WriteCalibZero(0);
     }
 
     public async Task SetCalibAbortAsync()
     {
-        if (!_isOpen)
-            return;
-
         await _modbusService.WriteCalibAbort(0);
     }
     
     public async Task SetCalib1PSampleAsync()
     {
-        if (!_isOpen)
-            return;
-
         await _modbusService.WriteCalib1pSample(0);
     }
 
     public async Task SetCalib2PBufferAsync(int order)
     {
-        if (!_isOpen)
-            return;
-
         await _modbusService.WriteCalib2pBuffer((ushort)order);
     }
 }

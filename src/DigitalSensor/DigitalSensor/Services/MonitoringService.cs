@@ -26,12 +26,15 @@ public interface IMonitoringService
     event Action<float> SensorTemperatureReceived;
     event Action<int> CalibStatusReceived;
 
-    Task InitSensor();
+    void SetCurrentPage(string pageName);
+
+    Task InitSlaveID();
     Task StartMonitoring();
     Task StopMonitoring();
 
-    void SetCurrentPage(string pageName);
-
+    bool ApplyCalib { get; set; }
+    bool AbortCalib { get; set; }
+    CommandStatus CommandStatus { get; set; }
 }
 
 public class MonitoringService : IMonitoringService
@@ -45,13 +48,17 @@ public class MonitoringService : IMonitoringService
 
     private string _currentPage = string.Empty;
 
+    public bool ApplyCalib { get; set; } = false;
+    public bool AbortCalib { get; set; } = false;
+    public CommandStatus CommandStatus { get; set; } = CommandStatus.Ready;
+
+
     private CalibrationStatus CalStatus = CalibrationStatus.NoSensorCalibration;
 
     public SensorInfo SensorInfo { get; set; } = new();
     public SensorData SensorData { get; set; } = new();
 
     
-
     public event Action ErrSignal;
     public event Action<Models.SensorInfo> SensorInfoReceived;
     public event Action<Models.SensorData> SensorDataReceived;
@@ -78,7 +85,7 @@ public class MonitoringService : IMonitoringService
         try
         {
             //await Task.Delay(200);
-            await InitSensor();
+            await InitSlaveID();
             await StartMonitoring();
         }
         catch (Exception ex)
@@ -103,43 +110,25 @@ public class MonitoringService : IMonitoringService
         Debug.WriteLine($"CurrentPage: {_currentPage}");
     }
 
-    public async Task InitSensor()
+    public async Task InitSlaveID()
     {
-        int slaveId = await _sensorService.InitSensor();
+        int slaveId = await _sensorService.InitSlaveID();
 
         if (slaveId > 0)
             await UpdateSlaveID(slaveId);
         else
-            throw new Exception("Failed at InitSensor.");
+            throw new Exception("Failed at InitSlaveID.");
     }
 
     public async Task StartMonitoring()
     {
         _isRunning = true;
+
         while (_isRunning)
-        {
-            try
-            {
-                await GetSensorType();
-                
-                if(_currentPage == "Home")
-                {
-                    await GetSensorValue();
-                    await GetSensorMv();
-                    await GetSensorTemperature();
-                }
-                else
-                {
-                    await RunCalibration();
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrSignal?.Invoke();
-                await Task.Delay(1000); // 1초 대기
-           
-                Debug.WriteLine($"Error Monitoring: {ex.Message}");
-            }
+        {                
+            if(_currentPage == "Home")                    await NormalMode();
+            else if (_currentPage == "Setting")           await SettingMode();
+            else                                          await CalibMode();
         }
     }
 
@@ -165,6 +154,123 @@ public class MonitoringService : IMonitoringService
             Temperature = 0
         };
         SensorDataReceived?.Invoke(SensorData);
+    }
+
+
+    private async Task NormalMode()
+    {
+        try
+        {
+            Debug.WriteLine($"[ NormalMode ] ");
+
+            await GetSensorType();
+            await GetSensorValue();
+            await GetSensorMv();
+            await GetSensorTemperature();
+        }
+        catch(Exception ex)
+        {
+            ErrSignal?.Invoke();
+            await Task.Delay(1000); // 1초 대기
+            Debug.WriteLine($"[ NormalMode - Error ] {ex.Message}");
+        }
+    }
+
+    private async Task SettingMode()
+    {
+        try
+        {
+            Debug.WriteLine($"[ SettingMode ] ");
+
+            await GetSensorValue();
+        }
+        catch (Exception ex)
+        {
+            ErrSignal?.Invoke();
+            await Task.Delay(1000); // 1초 대기
+            Debug.WriteLine($"[ SettingMode - Error ] {ex.Message}");
+        }
+    }
+
+    private async Task CalibMode()
+    {
+        try
+        {
+            Debug.WriteLine($"[ CalibMode ] ");
+
+            if (ApplyCalib)
+            {
+                await WriteCalibZeroAsync();
+                await ReadCalibStatus();
+            }
+            else if (AbortCalib)
+            {
+                await WriteCalibAbortAsync();
+                await ReadCalibStatus();
+            }
+            else
+            {
+                await GetSensorValue();
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrSignal?.Invoke();
+            await Task.Delay(1000); // 1초 대기
+            Debug.WriteLine($"[ CalibMode - Error] {ex.Message}");
+        }
+    }
+
+
+
+    private async Task WriteCalibZeroAsync()
+    {
+        if(CommandStatus != CommandStatus.Running)
+        {
+            Debug.WriteLine($"[ 교정 실행 ] ");
+
+            await _sensorService.SetCalibZeroAsync();
+            CommandStatus = CommandStatus.Running;
+        }
+    }
+
+    private async Task WriteCalibAbortAsync()
+    {
+        if (CommandStatus != CommandStatus.Running)
+        {
+            Debug.WriteLine($"[ 교정 중단 ] ");
+
+            await _sensorService.SetCalibAbortAsync();
+            CommandStatus = CommandStatus.Running;
+        }
+    }
+
+    private async Task ReadCalibStatus()
+    {
+        int status = await _sensorService.GetCalibStatusAsync();
+        
+        CalibStatusReceived?.Invoke(status);
+        CalStatus = (CalibrationStatus)status;
+
+        if (CalStatus == CalibrationStatus.CalInProgress)
+        {
+            Debug.WriteLine($"[ 교정 상태 ] 진행중 !!");
+        }
+        else if (CalStatus == CalibrationStatus.CalOK)
+        {
+            Debug.WriteLine($"[ 교정 결과 ] 성공 !!");
+        }
+        else
+        {
+            Debug.WriteLine($"[ 교정 결과 ] 실패 !!");
+
+            ApplyCalib = false;
+            AbortCalib = false;
+
+            CommandStatus = CommandStatus.Ready;
+        }
+
+        Debug.WriteLine($"ReadCalibStatus: {CalStatus}");
     }
 
 
@@ -239,35 +345,6 @@ public class MonitoringService : IMonitoringService
         {
             vm.SlaveID = slaveId;
         });
-    }
-
-    private async Task RunCalibration()
-    {
-        try
-        {
-            await GetCalibStatus();
-
-            if (CalStatus == CalibrationStatus.NoSensorCalibration)
-            {
-                await GetSensorValue();
-            }
-        }
-        catch (Exception ex)
-        {
-            ErrSignal?.Invoke();
-            await Task.Delay(1000); // 1초 대기
-
-            Debug.WriteLine($"Error Calibration: {ex.Message}");
-        }
-    }
-
-
-    private async Task GetCalibStatus()
-    {
-        int status = await _sensorService.GetCalibStatusAsync();
-        CalibStatusReceived?.Invoke(status);
-
-        CalStatus = (CalibrationStatus)status;
     }
 
 

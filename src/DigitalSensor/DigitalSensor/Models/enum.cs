@@ -1,0 +1,73 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DigitalSensor.Models;
+
+
+
+public enum CalibrationStatus
+{
+    [Description("대 기")]
+    NoSensorCalibration = 0,
+    [Description("진 행")]
+    CalInProgress = 1,
+    [Description("성 공")]
+    CalOK = 2,
+    Fail_NotStable = 3,
+    Fail_BufferNotFound = 4,
+    Fail_1BufferNotFound = 5,
+    Fail_2BufferNotFound = 6,
+    Fail_ValueTooLow = 7,
+    Fail_ValueTooHigh = 8,
+    Fail_SlopeTooLow = 9,
+    Fail_SlopeTooHigh = 10,
+    Fail_OffsetTooLow = 11,
+    Fail_OffsetTooHigh = 12,
+    Fail_PointsTooClose = 13,
+    Fail_GeneralCalFail = 14
+}
+
+public enum CommandStatus
+{
+    Ready = 0,
+    Running= 1,
+    Completed = 2
+}
+
+public enum SensorType
+{
+    [Description("None")]
+    None = 0,
+    [Description("pH")]
+    PH = 1,
+    ORP = 2,                // ORP 센서
+    DO = 3,                 // 용존산소 센서    
+    [Description("EC")]
+    Conductivity = 5,       // 전도도 센서
+    Ozone = 6,              // 오존 센서
+    [Description("TU")]
+    TurbidityLow = 7,
+    [Description("TU")]
+    TurbidityHighColor = 8,
+    [Description("TU")]
+    TurbidityHighIR = 9,
+    [Description("CL")]
+    Chlorine = 10,
+    SuspendedSolids = 11    // 부유물질 센서
+}
+
+
+public static class EnumExtensions
+{
+    public static string GetDescription(this Enum value)
+    {
+        FieldInfo field = value.GetType().GetField(value.ToString());
+        DescriptionAttribute attribute = field.GetCustomAttribute<DescriptionAttribute>();
+        return attribute == null ? value.ToString() : attribute.Description;
+    }
+}
