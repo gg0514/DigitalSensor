@@ -126,9 +126,12 @@ public class MonitoringService : IMonitoringService
 
         while (_isRunning)
         {                
-            if(_currentPage == "Home")                    await NormalMode();
-            else if (_currentPage == "Setting")           await SettingMode();
-            else                                          await CalibMode();
+            if(_currentPage == "Home")                    
+                await NormalMode();
+            else if (_currentPage == "Setting")           
+                await SettingMode();
+            else                                          
+                await CalibMode();
         }
     }
 
@@ -198,14 +201,16 @@ public class MonitoringService : IMonitoringService
         {
             Debug.WriteLine($"[ CalibMode ] ");
 
-            if (ApplyCalib)
-            {
-                await WriteCalibZeroAsync();
-                await ReadCalibStatus();
-            }
-            else if (AbortCalib)
+            if (AbortCalib)
             {
                 await WriteCalibAbortAsync();
+
+                // 교정중단후 상태를 읽어도 진행중으로 나옴!!
+                //await ReadCalibStatus();
+            }
+            else if (ApplyCalib)
+            {
+                await WriteCalibZeroAsync();
                 await ReadCalibStatus();
             }
             else
@@ -236,12 +241,12 @@ public class MonitoringService : IMonitoringService
 
     private async Task WriteCalibAbortAsync()
     {
-        if (CommandStatus != CommandStatus.Running)
-        {
-            Debug.WriteLine($"[ 교정 중단 ] ");
+        RestCallibStatus();
+        Debug.WriteLine($"[ 교정 중단 ] ");
 
+        if (CommandStatus == CommandStatus.Running)
+        {
             await _sensorService.SetCalibAbortAsync();
-            CommandStatus = CommandStatus.Running;
         }
     }
 
@@ -259,18 +264,24 @@ public class MonitoringService : IMonitoringService
         else if (CalStatus == CalibrationStatus.CalOK)
         {
             Debug.WriteLine($"[ 교정 결과 ] 성공 !!");
+
+            RestCallibStatus();
         }
         else
         {
             Debug.WriteLine($"[ 교정 결과 ] 실패 !!");
 
-            ApplyCalib = false;
-            AbortCalib = false;
-
-            CommandStatus = CommandStatus.Ready;
+            RestCallibStatus();
         }
 
         Debug.WriteLine($"ReadCalibStatus: {CalStatus}");
+    }
+
+    private void RestCallibStatus()
+    {
+        ApplyCalib = false;
+        AbortCalib = false;
+        CommandStatus = CommandStatus.Ready;
     }
 
 
@@ -336,6 +347,8 @@ public class MonitoringService : IMonitoringService
         Debug.WriteLine($"SensorTemperature: {temperature}");
         SensorTemperatureReceived?.Invoke(temperature);
     }
+
+
 
     private async Task UpdateSlaveID(int slaveId)
     {

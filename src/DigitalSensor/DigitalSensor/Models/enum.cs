@@ -18,17 +18,29 @@ public enum CalibrationStatus
     CalInProgress = 1,
     [Description("성 공")]
     CalOK = 2,
+    [Description("실 패 : 3")]
     Fail_NotStable = 3,
+    [Description("실 패 : 4")]
     Fail_BufferNotFound = 4,
+    [Description("실 패 : 5")]
     Fail_1BufferNotFound = 5,
+    [Description("실 패 : 6")]
     Fail_2BufferNotFound = 6,
+    [Description("실 패 : 7")]
     Fail_ValueTooLow = 7,
+    [Description("실 패 : 8")]
     Fail_ValueTooHigh = 8,
+    [Description("실 패 : 9")]
     Fail_SlopeTooLow = 9,
+    [Description("실 패 : 10")]
     Fail_SlopeTooHigh = 10,
+    [Description("실 패 : 11")]
     Fail_OffsetTooLow = 11,
+    [Description("실 패 : 12")]
     Fail_OffsetTooHigh = 12,
+    [Description("실 패 : 13")]
     Fail_PointsTooClose = 13,
+    [Description("실 패 : 14")]
     Fail_GeneralCalFail = 14
 }
 

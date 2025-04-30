@@ -6,6 +6,7 @@ using DigitalSensor.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO.Ports;
 using System.Threading.Tasks;
 
@@ -49,12 +50,19 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     private async void Apply()
     {
         _monitoringService.ApplyCalib = true;
+
+        Debug.WriteLine($"Apply 버튼클릭: {_monitoringService.ApplyCalib}");
     }
 
     [RelayCommand]
     private async void Abort()
     {
         _monitoringService.AbortCalib = true;
+
+        Debug.WriteLine($"Abort 버튼클릭: {_monitoringService.AbortCalib}");
+
+        // Abort후 상태코드를 받을 수 있는지 체크 필요함
+        ResetCallibStatus(1000);
     }
 
     public async void OnViewLoaded()
@@ -92,7 +100,23 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         {
             CalStatus = (CalibrationStatus)status;
         });
+
+        if(CalStatus != CalibrationStatus.CalInProgress)
+        {
+            ResetCallibStatus();
+        }
     }
 
+    private async void ResetCallibStatus(int msec= 5000)
+    {
+        await Task.Delay(msec); // 5초 대기
+
+        Debug.WriteLine($"ResetCallibStatus: delaytime- {msec}");
+
+        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
+        {
+            CalStatus = CalibrationStatus.NoSensorCalibration;
+        });
+    }
 }
 
