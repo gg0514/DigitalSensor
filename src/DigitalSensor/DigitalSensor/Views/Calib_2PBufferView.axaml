@@ -62,10 +62,10 @@
 					<TextBlock Text="현재값" FontSize="14" Foreground="LightBlue"/>
 					<StackPanel Margin="0,15,0,0" Spacing="12">
 						<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
-							<TextBlock Grid.Column="0" Text="0.00" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
+							<TextBlock Grid.Column="0" Text="{Binding ReceivedData.Value}" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
 								   Margin="0,0,0,0"/>
 							<Border Grid.Column="1" VerticalAlignment="Bottom" Width="30" Height="20" Margin="0,5,10,0" >
-								<TextBlock Name="SensorUnit" Text="NTU" FontWeight="Light" FontSize="14"/>
+								<TextBlock Name="SensorUnit" Text="{Binding SensorUnit}" FontWeight="Light" FontSize="14"/>
 							</Border>
 						</Grid>
 					</StackPanel>
@@ -83,7 +83,7 @@
 				<StackPanel>
 					<TextBlock Text="교정상태" FontSize="14" Foreground="LightBlue"/>
 					<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
-						<TextBlock Grid.Column="0" Text="성 공" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
+						<TextBlock Grid.Column="0" Text="{Binding CalStatus, Converter={StaticResource EnumDescriptionConverter}}" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
 							   Margin="0,0,0,0"/>
 						<Border Grid.Column="1" VerticalAlignment="Bottom" Width="30" Height="20" Margin="0,5,10,0" >
 						</Border>
@@ -93,8 +93,8 @@
 
 
 			<UniformGrid Columns="2" Width="300" Height="100">
-				<Button Content="중 단" Classes="reveal" Margin="4" Width="135" Height="60"/>
-				<Button Content="적 용" Classes="accent primary" Margin="4" Width="135" Height="60"/>
+				<Button Content="중 단" Command="{Binding AbortCommand}" Classes="" Margin="4" Width="135" Height="60"/>
+				<Button Content="적 용" Command="{Binding ApplyCommand}" Classes="accent" Margin="4" Width="135" Height="60"/>
 			</UniformGrid>
 
 		</StackPanel>

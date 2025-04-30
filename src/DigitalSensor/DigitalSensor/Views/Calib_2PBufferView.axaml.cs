@@ -15,7 +15,7 @@ public partial class Calib_2PBufferView : UserControl
         {
             if (DataContext is Calib_2PBufferViewModel vm)
             {
-                //vm.OnViewLoaded(); // ViewModel에서 정의한 메서드 호출
+                vm.OnViewLoaded(); // ViewModel에서 정의한 메서드 호출
             }
         };
     }
