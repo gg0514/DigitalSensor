@@ -8,11 +8,15 @@ using DigitalSensor.Services;
 using DigitalSensor.ViewModels;
 using Avalonia;
 using System.Linq;
+using DigitalSensor.Models;
+using System;
 
 namespace DigitalSensor.Views;
 
 public partial class MainView : UserControl
 {
+    private readonly IMonitoringService _monitoringService;
+
     public MainView()
     {
         InitializeComponent();
@@ -26,6 +30,11 @@ public partial class MainView : UserControl
         }
         
         DataContext = App.GlobalHost.GetService<MainViewModel>();
+
+
+        _monitoringService = App.GlobalHost.GetService<IMonitoringService>();
+        _monitoringService.SensorTypeReceived += OnSensorTypeReceived;
+
     }
 
     private void AddSubMenuToExistingMenu()
@@ -46,16 +55,16 @@ public partial class MainView : UserControl
                     Content = "1Point Sample",
                     Tag = "Calib_1PSample"
                 };
-                var Item3 = new NavigationViewItem
-                {
-                    Content = "1Point Buffer",
-                    Tag = "Calib_1PBuffer"
-                };
-                var Item4 = new NavigationViewItem
-                {
-                    Content = "2Point Sample",
-                    Tag = "Calib_2PSample"
-                };
+                //var Item3 = new NavigationViewItem
+                //{
+                //    Content = "1Point Buffer",
+                //    Tag = "Calib_1PBuffer"
+                //};
+                //var Item4 = new NavigationViewItem
+                //{
+                //    Content = "2Point Sample",
+                //    Tag = "Calib_2PSample"
+                //};
                 var Item5 = new NavigationViewItem
                 {
                     Content = "2Point Buffer",
@@ -78,6 +87,58 @@ public partial class MainView : UserControl
             }
         }
     }
+
+    private async void OnSensorTypeReceived(int type)
+    {
+        SensorType sensorType = (SensorType)type;
+
+        string disableMenuTag = GetDisableMenuTag(sensorType);
+
+        DisableMenuItem(disableMenuTag);
+    }
+
+    private string GetDisableMenuTag(SensorType type)
+    {
+        string disableMenuTag = string.Empty;
+        switch (type)
+        {
+            case SensorType.PH:
+                disableMenuTag = "Calib_Zero";
+                break;
+            case SensorType.Conductivity:
+            case SensorType.Chlorine:
+            case SensorType.TurbidityLow:
+            case SensorType.TurbidityHighColor:
+            case SensorType.TurbidityHighIR:
+                disableMenuTag = "Calib_2PBuffer";
+                break;
+            default:
+                break;
+        }
+        return disableMenuTag;
+    }
+
+
+    private void DisableMenuItem(string tagname)
+    {
+        string parentTag = "Calib"; // 부모 메뉴의 Tag 값
+
+        foreach (var item in NavView.MenuItems)
+        {
+            if (item is NavigationViewItem navItem && navItem.Tag?.ToString() == parentTag)
+            {
+                foreach (var subItem in navItem.MenuItems)
+                {
+                    if (subItem is NavigationViewItem subNavItem && subNavItem.Tag?.ToString() == tagname)
+                    {
+                        subNavItem.IsEnabled = false;
+                        break; // 찾았으면 루프 종료
+                    }
+                }
+            }
+        }
+    }
+
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
