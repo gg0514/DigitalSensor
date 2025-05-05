@@ -30,6 +30,15 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     [ObservableProperty]
     private string sensorUnit;
 
+    [ObservableProperty]
+    private bool isBusy;
+
+    [ObservableProperty]
+    private bool isProgressVisible;
+
+    [ObservableProperty]
+    private string applyButtonText = "적 용";
+
 
     public Calib_ZeroViewModel()
     {
@@ -49,9 +58,26 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     [RelayCommand]
     private async void Apply()
     {
-        _monitoringService.ApplyCalib = true;
+        try
+        {
+            IsBusy = true;
+            IsProgressVisible = true;
+            ApplyButtonText = " ...";
 
-        Debug.WriteLine($"Apply 버튼클릭: {_monitoringService.ApplyCalib}");
+            _monitoringService.ApplyCalib = true;
+
+            Debug.WriteLine($"Apply 버튼클릭: {_monitoringService.ApplyCalib}");
+
+            // 비동기 작업 시뮬레이션 (예: 2초 대기)
+            await Task.Delay(2000); // 실제 작업으로 대체
+        }
+        finally
+        {
+            // 작업 완료 또는 예외 발생 시 상태 복원
+            IsBusy = false;
+            IsProgressVisible = false;
+            ApplyButtonText = "적 용";
+        }
     }
 
     [RelayCommand]
