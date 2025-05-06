@@ -33,6 +33,12 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
     private string sensorUnit;
 
     [ObservableProperty]
+    private bool isEditing = false;
+
+    [ObservableProperty]
+    private bool isModified = false;
+
+    [ObservableProperty]
     private bool isBusy;
 
     [ObservableProperty]
@@ -57,6 +63,38 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
         _monitoringService.CalibStatusReceived += OnCalibStatusReceived;
     }
 
+
+    [RelayCommand]
+    private async void UpButton()
+    {
+        // CalibValue += 0.1f;
+        // CalibValue = MathF.Round(CalibValue, 1);
+        IsModified = true;
+
+        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
+        {
+            CalibValue += 0.01f;
+            CalibValue = (float)Math.Round(CalibValue, 2);
+        });
+    }
+
+    [RelayCommand]
+    private async void DownButton()
+    {
+        IsModified = true;
+
+        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
+        {
+
+            CalibValue -= 0.01f;
+            if(CalibValue < 0)    CalibValue = 0;
+
+            CalibValue = (float)Math.Round(CalibValue, 2);
+        });
+    }
+
+
+
     [RelayCommand]
     private async void Apply()
     {
@@ -67,7 +105,7 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
             ApplyButtonText = " ...";
 
             CalStatus = CalibrationStatus.CalInProgress;
-            _monitoringService.ApplyCalib_1PSample(CalibValue);
+            await _monitoringService.ApplyCalib_1PSample(CalibValue);
 
 
             Debug.WriteLine($"Apply 버튼클릭: {CalStatus}");
@@ -86,12 +124,12 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
     [RelayCommand]
     private async void Abort()
     {
-        _monitoringService.AbortCalib();
+        await _monitoringService.AbortCalib();
 
         Debug.WriteLine($"Abort 버튼클릭: {CalStatus}");
 
         // Abort후 상태코드를 받을 수 있는지 체크 필요함
-        ResetCallibStatus(1000);
+        await ResetCallibStatus(1000);
     }
     private async Task WaitForCalibrationCompletion()
     {
@@ -106,6 +144,8 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
 
     public async void OnViewLoaded()
     {
+        IsModified = false;
+
         await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
         {
             ReceivedInfo = _monitoringService.SensorInfo;
@@ -129,6 +169,9 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
                 Mv = ReceivedData.Mv,
                 Temperature = ReceivedData.Temperature,
             };
+
+            if(!IsModified) 
+                CalibValue = value;
         });
     }
 
@@ -142,11 +185,11 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
 
         if (CalStatus != CalibrationStatus.CalInProgress)
         {
-            ResetCallibStatus();
+            await ResetCallibStatus();
         }
     }
 
-    private async void ResetCallibStatus(int msec = 5000)
+    private async Task ResetCallibStatus(int msec = 5000)
     {
         await Task.Delay(msec);
 
@@ -157,5 +200,14 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
             CalStatus = CalibrationStatus.NoSensorCalibration;
         });
     }
+    public void StartEditing()
+    {
+        IsEditing = true;
+    }
 
+    public void StopEditing()
+    {
+        IsEditing = false;
+        IsModified = true;
+    }
 }

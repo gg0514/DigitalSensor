@@ -68,7 +68,7 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
             ApplyButtonText = " ...";
 
             CalStatus = CalibrationStatus.CalInProgress;
-            _monitoringService.ApplyCalib_2PBuffer(CalibOrder);
+            await _monitoringService.ApplyCalib_2PBuffer(CalibOrder);
 
             Debug.WriteLine($"Apply 버튼클릭: {CalStatus}");
 
@@ -86,12 +86,12 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     [RelayCommand]
     private async void Abort()
     {
-        _monitoringService.AbortCalib();
+        await _monitoringService.AbortCalib();
 
         Debug.WriteLine($"Abort 버튼클릭: {_monitoringService.AbortCalib}");
 
         // Abort후 상태코드를 받을 수 있는지 체크 필요함
-        ResetCallibStatus(1000);
+        await ResetCallibStatus(1000);
     }
     private async Task WaitForCalibrationCompletion()
     {
@@ -142,11 +142,11 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
 
         if (CalStatus != CalibrationStatus.CalInProgress)
         {
-            ResetCallibStatus();
+            await ResetCallibStatus();
         }
     }
 
-    private async void ResetCallibStatus(int msec = 5000)
+    private async Task ResetCallibStatus(int msec = 5000)
     {
         await Task.Delay(msec); // 5초 대기
 

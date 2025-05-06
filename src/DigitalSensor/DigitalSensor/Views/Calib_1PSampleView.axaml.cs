@@ -1,4 +1,6 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using DigitalSensor.ViewModels;
 
 namespace DigitalSensor.Views;
@@ -18,5 +20,29 @@ public partial class Calib_1PSampleView : UserControl
                 vm.OnViewLoaded(); // ViewModel에서 정의한 메서드 호출
             }
         };
+    }
+
+    private void OnTextBlockClick(object sender, PointerPressedEventArgs e)
+    {
+        if (DataContext is Calib_1PSampleViewModel viewModel)
+        {
+            viewModel.StartEditing();
+        }
+    }
+
+    private void OnTextBoxKeyUp(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter && DataContext is Calib_1PSampleViewModel viewModel)
+        {
+            viewModel.StopEditing();
+        }
+    }
+
+    private void OnTextBoxLostFocus(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is Calib_1PSampleViewModel viewModel)
+        {
+            viewModel.StopEditing();
+        }
     }
 }
