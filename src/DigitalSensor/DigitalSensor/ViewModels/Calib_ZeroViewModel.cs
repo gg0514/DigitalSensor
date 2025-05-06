@@ -64,12 +64,12 @@ public partial class Calib_ZeroViewModel : ViewModelBase
             IsProgressVisible = true;
             ApplyButtonText = " ...";
 
+            CalStatus = CalibrationStatus.CalInProgress;
             _monitoringService.ApplyCalib = true;
 
             Debug.WriteLine($"Apply 버튼클릭: {_monitoringService.ApplyCalib}");
 
-            // 비동기 작업 시뮬레이션 (예: 2초 대기)
-            await Task.Delay(2000); // 실제 작업으로 대체
+            await WaitForCalibrationCompletion();
         }
         finally
         {
@@ -88,8 +88,20 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         Debug.WriteLine($"Abort 버튼클릭: {_monitoringService.AbortCalib}");
 
         // Abort후 상태코드를 받을 수 있는지 체크 필요함
-        ResetCallibStatus(1000);
+        ResetCallibStatus(500);
     }
+
+    private async Task WaitForCalibrationCompletion()
+    {
+        //await Task.Delay(1000); 
+
+        while(CalStatus == CalibrationStatus.CalInProgress)
+        {
+            // Calibration이 완료될 때까지 대기
+            await Task.Delay(500); // 0.5초 대기
+        }
+    }
+
 
     public async void OnViewLoaded()
     {
@@ -135,7 +147,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
 
     private async void ResetCallibStatus(int msec= 5000)
     {
-        await Task.Delay(msec); // 5초 대기
+        await Task.Delay(msec); 
 
         Debug.WriteLine($"ResetCallibStatus: delaytime- {msec}");
 
