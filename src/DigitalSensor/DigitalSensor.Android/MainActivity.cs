@@ -3,7 +3,9 @@ using Android.Content.PM;
 
 using Avalonia;
 using Avalonia.Android;
+using Avalonia.Controls.ApplicationLifetimes;
 using DigitalSensor.Modbus;
+using Java.Util;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DigitalSensor.Android;
@@ -28,5 +30,18 @@ public class MainActivity : AvaloniaMainActivity<App>
     {
         services.AddSingleton<IUsbService, UsbService>();
     }
+    public override void OnBackPressed()
+    {
+        // Avalonia View에 접근
+        if (Avalonia.Application.Current?.ApplicationLifetime is ISingleViewApplicationLifetime lifetime &&
+            lifetime.MainView is DigitalSensor.Views.MainView mainView)
+        {
+            mainView.OnBackRequested();
+            // 뒤로 가기 처리
+            return;
+        }
 
+        // 기본 Back 동작 수행
+        base.OnBackPressed();
+    }
 }

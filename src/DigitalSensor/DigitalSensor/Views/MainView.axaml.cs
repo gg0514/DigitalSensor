@@ -10,6 +10,7 @@ using Avalonia;
 using System.Linq;
 using DigitalSensor.Models;
 using System;
+using Avalonia.Input;
 
 namespace DigitalSensor.Views;
 
@@ -173,6 +174,14 @@ public partial class MainView : UserControl
 
             if (iconText != null)
                 iconText.FontSize = 28;
+        }
+    }
+
+    public void OnBackRequested()
+    {
+        if (DataContext is MainViewModel viewModel)
+        {
+            viewModel.NavigateToCommand.Execute("Home");
         }
     }
 }
