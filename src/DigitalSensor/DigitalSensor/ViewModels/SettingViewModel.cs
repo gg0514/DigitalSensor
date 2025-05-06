@@ -17,7 +17,10 @@ public partial class SettingViewModel : ViewModelBase
     public int           _slaveID= 1;
 
     [ObservableProperty]
-    public SerialConn   _serialConn = new();
+    public CalibrationAdjust _calibAdjust = new();
+
+    [ObservableProperty]
+    public SerialConn _serialConn = new();
 
 
     public SettingViewModel()
