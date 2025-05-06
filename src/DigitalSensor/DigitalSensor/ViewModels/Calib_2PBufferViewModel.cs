@@ -29,6 +29,15 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     [ObservableProperty]
     private string sensorUnit;
 
+    [ObservableProperty]
+    private bool isBusy;
+
+    [ObservableProperty]
+    private bool isProgressVisible;
+
+    [ObservableProperty]
+    private string applyButtonText = "적 용";
+
 
     public Calib_2PBufferViewModel()
     {
@@ -48,9 +57,26 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     [RelayCommand]
     private async void Apply()
     {
-        _monitoringService.ApplyCalib = true;
+        try
+        {
+            IsBusy = true;
+            IsProgressVisible = true;
+            ApplyButtonText = " ...";
 
-        Debug.WriteLine($"Apply 버튼클릭: {_monitoringService.ApplyCalib}");
+            CalStatus = CalibrationStatus.CalInProgress;
+            _monitoringService.ApplyCalib = true;
+
+            Debug.WriteLine($"Apply 버튼클릭: {_monitoringService.ApplyCalib}");
+
+            await WaitForCalibrationCompletion();
+        }
+        finally
+        {
+            // 작업 완료 또는 예외 발생 시 상태 복원
+            IsBusy = false;
+            IsProgressVisible = false;
+            ApplyButtonText = "적 용";
+        }
     }
 
     [RelayCommand]
@@ -62,6 +88,16 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
 
         // Abort후 상태코드를 받을 수 있는지 체크 필요함
         ResetCallibStatus(1000);
+    }
+    private async Task WaitForCalibrationCompletion()
+    {
+        //await Task.Delay(1000); 
+
+        while (CalStatus == CalibrationStatus.CalInProgress)
+        {
+            // Calibration이 완료될 때까지 대기
+            await Task.Delay(500); // 0.5초 대기
+        }
     }
 
     public async void OnViewLoaded()

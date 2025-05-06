@@ -48,10 +48,6 @@ public partial class App : Application
                 services.AddSingleton<Calib_ZeroViewModel>();
                 services.AddSingleton<Calib_1PSampleView>();
                 services.AddSingleton<Calib_1PSampleViewModel>();
-                services.AddSingleton<Calib_1PBufferView>();
-                services.AddSingleton<Calib_1PBufferViewModel>();
-                services.AddSingleton<Calib_2PSampleView>();
-                services.AddSingleton<Calib_2PSampleViewModel>();
                 services.AddSingleton<Calib_2PBufferView>();
                 services.AddSingleton<Calib_2PBufferViewModel>();
             })
