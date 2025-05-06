@@ -179,9 +179,20 @@ public partial class MainView : UserControl
 
     public void OnBackRequested()
     {
-        if (DataContext is MainViewModel viewModel)
+
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            viewModel.NavigateToCommand.Execute("Home");
-        }
+            string parentTag = "Home"; // 부모 메뉴의 Tag 값
+
+            foreach (var item in NavView.MenuItems)
+            {
+                if (item is NavigationViewItem navItem && navItem.Tag?.ToString() == parentTag)
+                {
+                    NavView.SelectedItem = navItem;
+
+                    break; // 찾았으면 루프 종료
+                }
+            }
+        });
     }
 }

@@ -29,7 +29,7 @@ public partial class MainViewModel : ViewModelBase
 
 
     [RelayCommand]
-    private void NavigateTo(string pageKey)
+    public void NavigateTo(string pageKey)
     {
         Debug.WriteLine($"NavigateTo: {pageKey}");
 
