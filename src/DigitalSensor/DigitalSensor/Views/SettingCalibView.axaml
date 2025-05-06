@@ -1,0 +1,57 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:vm="using:DigitalSensor.ViewModels"
+             xmlns:views="using:DigitalSensor.Views"
+			 mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="800"
+             x:Class="DigitalSensor.Views.SettingCalibView"
+             x:DataType="vm:SettingCalibViewModel">
+	
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+	  <vm:SettingCalibViewModel />
+  </Design.DataContext>
+
+	<ScrollViewer Padding="20" Margin="0,30,0,0">
+		<StackPanel Spacing="20">
+
+			<!-- Title -->
+			<TextBlock Text="설정" FontSize="28" FontWeight="Bold"/>
+
+
+			
+			<!-- Calibration -->
+			<Border
+				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+				CornerRadius="12"
+				Padding="16"
+				Margin="0,0"
+				Effect="{DynamicResource ShadowElevation3}" >
+
+				<StackPanel>
+					<TextBlock Text="CALIBRATION" FontSize="14" Foreground="LightBlue"/>
+					<StackPanel Margin="0,15,0,0" Spacing="12">
+						<!-- Factor -->
+						<StackPanel>
+							<TextBlock Text="Factor" FontSize="16"/>
+							<TextBlock Text="{Binding CalibAdjust.Factor}" FontSize="14" Foreground="Gray"/>
+						</StackPanel>
+
+						<Separator/>
+						<!-- Offset -->
+						<StackPanel>
+							<TextBlock Text="Offset" FontSize="16"/>
+							<TextBlock Text="{Binding CalibAdjust.Offset}" FontSize="14" Foreground="Gray"/>
+						</StackPanel>
+					</StackPanel>
+				</StackPanel>
+			</Border>
+
+
+
+		</StackPanel>
+	</ScrollViewer>
+</UserControl>

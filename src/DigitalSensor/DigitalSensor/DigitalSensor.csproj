@@ -66,6 +66,15 @@
       <SubType>Code</SubType>
       <DependentUpon>Calib_ZeroView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\SettingModbusView.axaml.cs">
+      <DependentUpon>SettingModbusView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SettingCalibView.axaml.cs">
+      <DependentUpon>SettingCalibView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SettingSerialView.axaml.cs">
+      <DependentUpon>SettingSerialView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\TestView.axaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>TestView.axaml</DependentUpon>

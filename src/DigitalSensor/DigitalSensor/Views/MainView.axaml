@@ -53,6 +53,11 @@
 				Content="Setting"
 				IconSource="Setting"
 				Tag="Setting">
+				<!--<ui:NavigationViewItem.MenuItems>
+					<ui:NavigationViewItem Content="Modbus" Tag="Setting_Modbus" />
+					<ui:NavigationViewItem Content="Calibration" Tag="Setting_Calib" />
+					<ui:NavigationViewItem Content="Serial" Tag="Setting_Serial" />
+				</ui:NavigationViewItem.MenuItems>-->
 			</ui:NavigationViewItem>
 
 			<ui:NavigationViewItem

@@ -54,7 +54,8 @@
 					<StackPanel Margin="0,15,0,0" Spacing="12">
 						<StackPanel>
 							<TextBlock Text="Slave ID" FontSize="16"/>
-							<TextBlock Text="{Binding SlaveID}" FontSize="14" Foreground="Gray"/>
+							<!--<TextBlock Text="{Binding SlaveID}" FontSize="14" Foreground="Gray"/>-->
+							<ui:NumberBox Value="{Binding SlaveID}" FontSize="14" Foreground="Gray" HorizontalAlignment="Stretch"/>
 						</StackPanel>
 					</StackPanel>
 				</StackPanel>
@@ -75,14 +76,16 @@
 						<!-- Factor -->
 						<StackPanel>
 							<TextBlock Text="Factor" FontSize="16"/>
-							<TextBlock Text="{Binding CalibAdjust.Factor}" FontSize="14" Foreground="Gray"/>
+							<!--<TextBlock Text="{Binding CalibAdjust.Factor}" FontSize="14" Foreground="Gray"/>-->
+							<ui:NumberBox Value="{Binding CalibAdjust.Factor}" FontSize="14" Foreground="Gray" HorizontalAlignment="Stretch"/>
 						</StackPanel>
 
 						<Separator/>
 						<!-- Offset -->
 						<StackPanel>
 							<TextBlock Text="Offset" FontSize="16"/>
-							<TextBlock Text="{Binding CalibAdjust.Offset}" FontSize="14" Foreground="Gray"/>
+							<!--<TextBlock Text="{Binding CalibAdjust.Offset}" FontSize="14" Foreground="Gray"/>-->
+							<ui:NumberBox Value="{Binding CalibAdjust.Offset}" FontSize="14" Foreground="Gray" HorizontalAlignment="Stretch"/>
 						</StackPanel>
 					</StackPanel>
 				</StackPanel>
@@ -106,28 +109,47 @@
 						<!-- Baud rate -->
 						<StackPanel>
 							<TextBlock Text="Baud rate" FontSize="16"/>
-							<TextBlock Text="{Binding SerialConn.BaudRate}" FontSize="14" Foreground="Gray"/>
+							<!--<TextBlock Text="{Binding SerialConn.BaudRate}" FontSize="14" Foreground="Gray"/>-->
+							<ui:FAComboBox IsEditable="False" IsTextSearchEnabled="False"
+										   ItemsSource="{Binding SerialBaudrate}"
+										   SelectedItem="{Binding SelectedBaudrate}"
+									       FontSize="14" Foreground="Gray"  HorizontalAlignment="Stretch" />
 						</StackPanel>
 
 						<Separator/>
 						<!-- Data bits -->
 						<StackPanel>
 							<TextBlock Text="Data bits" FontSize="16"/>
-							<TextBlock Text="{Binding SerialConn.DataBits}" FontSize="14" Foreground="Gray"/>
+							<!--<TextBlock Text="{Binding SerialConn.DataBits}" FontSize="14" Foreground="Gray"/>-->
+							<ui:FAComboBox IsEditable="False" IsTextSearchEnabled="False"
+										   ItemsSource="{Binding SerialDatabits}"
+										   SelectedItem="{Binding SelectedDatabits}"
+										   FontSize="14" Foreground="Gray"  HorizontalAlignment="Stretch" />
 						</StackPanel>
 
 						<Separator/>
 						<!-- Parity -->
 						<StackPanel>
 							<TextBlock Text="Parity" FontSize="16"/>
-							<TextBlock Text="{Binding SerialConn.Parity}" FontSize="14" Foreground="Gray"/>
+							<!--<TextBlock Text="{Binding SerialConn.Parity}" FontSize="14" Foreground="Gray"/>-->
+							<ui:FAComboBox IsEditable="False" IsTextSearchEnabled="False"
+										   ItemsSource="{Binding SerialParity}"
+										   SelectedItem="{Binding SelectedParity}"
+										   FontSize="14" Foreground="Gray"  HorizontalAlignment="Stretch" />
 						</StackPanel>
 
 						<Separator/>
 						<!-- Stop bits -->
 						<StackPanel>
 							<TextBlock Text="Stop bits" FontSize="16"/>
-							<TextBlock Text="{Binding SerialConn.StopBits}" FontSize="14" Foreground="Gray"/>
+							<!--<TextBlock Text="{Binding SerialConn.StopBits}" FontSize="14" Foreground="Gray"/>-->
+							<ui:FAComboBox IsEditable="False" IsTextSearchEnabled="False"
+										   ItemsSource="{Binding SerialStopbits}"
+										   SelectedItem="{Binding SelectedStopbits}"
+										   FontSize="14" 
+										   Foreground="Gray"  
+										   HorizontalAlignment="Stretch" 
+										   />
 						</StackPanel>
 					</StackPanel>
 				</StackPanel>
