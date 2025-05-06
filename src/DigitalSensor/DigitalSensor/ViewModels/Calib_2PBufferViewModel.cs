@@ -27,6 +27,10 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     private SensorData receivedData = new();
 
     [ObservableProperty]
+    private int calibOrder = 0;
+
+
+    [ObservableProperty]
     private string sensorUnit;
 
     [ObservableProperty]
@@ -64,9 +68,9 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
             ApplyButtonText = " ...";
 
             CalStatus = CalibrationStatus.CalInProgress;
-            _monitoringService.ApplyCalib = true;
+            _monitoringService.ApplyCalib_2PBuffer(CalibOrder);
 
-            Debug.WriteLine($"Apply 버튼클릭: {_monitoringService.ApplyCalib}");
+            Debug.WriteLine($"Apply 버튼클릭: {CalStatus}");
 
             await WaitForCalibrationCompletion();
         }
@@ -82,7 +86,7 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     [RelayCommand]
     private async void Abort()
     {
-        _monitoringService.AbortCalib = true;
+        _monitoringService.AbortCalib();
 
         Debug.WriteLine($"Abort 버튼클릭: {_monitoringService.AbortCalib}");
 

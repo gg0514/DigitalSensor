@@ -30,7 +30,7 @@ public interface ISensorService
 
     Task SetCalibAbortAsync();
     Task SetCalibZeroAsync();
-    Task SetCalib1PSampleAsync();
+    Task SetCalib1PSampleAsync(float v);
     Task SetCalib2PBufferAsync(int order);
 }
 
@@ -222,21 +222,49 @@ public class SensorService : ISensorService
 
     public async Task SetCalibZeroAsync()
     {
-        await _modbusService.WriteCalibZero(0);
+        try
+        {
+            await _modbusService.WriteCalibZero(0);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"[Error] calibration zero: {ex.Message}");
+        }
     }
 
     public async Task SetCalibAbortAsync()
     {
-        await _modbusService.WriteCalibAbort(0);
+        try
+        {
+            await _modbusService.WriteCalibAbort(0);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"[Error] calibration abort: {ex.Message}");
+        }
     }
-    
-    public async Task SetCalib1PSampleAsync()
+
+    public async Task SetCalib1PSampleAsync(float value)
     {
-        await _modbusService.WriteCalib1pSample(0);
+        try
+        {
+            await _modbusService.WriteCalib1pSample(value);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"[Error] calibration 1p sample: {ex.Message}");
+        }
     }
 
     public async Task SetCalib2PBufferAsync(int order)
     {
-        await _modbusService.WriteCalib2pBuffer((ushort)order);
+        try
+        {
+            await _modbusService.WriteCalib2pBuffer((ushort)order);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"[Error] calibration 2p buffer: {ex.Message}");
+        }
     }
 }

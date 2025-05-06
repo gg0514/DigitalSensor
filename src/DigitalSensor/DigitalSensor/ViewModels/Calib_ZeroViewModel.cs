@@ -65,9 +65,9 @@ public partial class Calib_ZeroViewModel : ViewModelBase
             ApplyButtonText = " ...";
 
             CalStatus = CalibrationStatus.CalInProgress;
-            _monitoringService.ApplyCalib = true;
+            _monitoringService.ApplyCalib_Zero();
 
-            Debug.WriteLine($"Apply 버튼클릭: {_monitoringService.ApplyCalib}");
+            Debug.WriteLine($"Apply 버튼클릭: {CalStatus}");
 
             await WaitForCalibrationCompletion();
         }
@@ -83,9 +83,9 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     [RelayCommand]
     private async void Abort()
     {
-        _monitoringService.AbortCalib = true;
+        _monitoringService.AbortCalib();
 
-        Debug.WriteLine($"Abort 버튼클릭: {_monitoringService.AbortCalib}");
+        Debug.WriteLine($"Abort 버튼클릭: {CalStatus}");
 
         // Abort후 상태코드를 받을 수 있는지 체크 필요함
         ResetCallibStatus(500);

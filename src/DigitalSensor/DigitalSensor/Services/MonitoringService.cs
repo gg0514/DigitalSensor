@@ -14,6 +14,8 @@ public interface IMonitoringService
 {
     SensorInfo SensorInfo { get; set; }
     SensorData SensorData { get; set; }
+    CommandStatus CommandStatus { get; set; }
+
 
     event Action<Models.SensorInfo> SensorInfoReceived;
     event Action<Models.SensorData> SensorDataReceived;
@@ -32,9 +34,10 @@ public interface IMonitoringService
     Task StartMonitoring();
     Task StopMonitoring();
 
-    bool ApplyCalib { get; set; }
-    bool AbortCalib { get; set; }
-    CommandStatus CommandStatus { get; set; }
+    Task ApplyCalib_Zero();
+    Task ApplyCalib_1PSample(float value);
+    Task ApplyCalib_2PBuffer(int order);
+    Task AbortCalib();
 }
 
 public class MonitoringService : IMonitoringService
@@ -46,10 +49,14 @@ public class MonitoringService : IMonitoringService
     private bool _isSensorType = false;
     private bool _isRunning = false;
 
+    private bool _bApplyCalib = false;
+    private bool _bAbortCalib = false;
+
+    private float _calibValue = 0;
+    private int _calibOrder = 0;
+
     private string _currentPage = string.Empty;
 
-    public bool ApplyCalib { get; set; } = false;
-    public bool AbortCalib { get; set; } = false;
     public CommandStatus CommandStatus { get; set; } = CommandStatus.Ready;
 
 
@@ -119,6 +126,27 @@ public class MonitoringService : IMonitoringService
         else
             throw new Exception("Failed at InitSlaveID.");
     }
+
+    public async Task ApplyCalib_Zero()
+    {
+        _bApplyCalib = true;
+    }
+
+    public async Task ApplyCalib_1PSample(float value)
+    {
+        _bApplyCalib = true;
+        _calibValue = value;
+    }
+    public async Task ApplyCalib_2PBuffer(int order)
+    {
+        _bApplyCalib = true;
+        _calibOrder = order;
+    }
+    public async Task AbortCalib()
+    {
+        _bAbortCalib = true;
+    }
+
 
     public async Task StartMonitoring()
     {
@@ -201,16 +229,16 @@ public class MonitoringService : IMonitoringService
         {
             Debug.WriteLine($"[ CalibMode ] ");
 
-            if (AbortCalib)
+            if (_bAbortCalib)
             {
                 await WriteCalibAbortAsync();
 
                 // 교정중단후 상태를 읽어도 진행중으로 나옴!!
                 //await ReadCalibStatus();
             }
-            else if (ApplyCalib)
+            else if (_bApplyCalib)
             {
-                await WriteCalibZeroAsync();
+                await WriteCalibAsync();
                 await ReadCalibStatus();
             }
             else
@@ -228,16 +256,30 @@ public class MonitoringService : IMonitoringService
 
 
 
-    private async Task WriteCalibZeroAsync()
+    private async Task WriteCalibAsync()
     {
-        if(CommandStatus != CommandStatus.Running)
+        if (CommandStatus != CommandStatus.Running)
         {
-            Debug.WriteLine($"[ 교정 실행 ] ");
 
-            await _sensorService.SetCalibZeroAsync();
+            if(_currentPage== "Calib_1PSample")
+            {
+                await _sensorService.SetCalib1PSampleAsync(_calibValue);
+            }
+            else if (_currentPage == "Calib_2PBuffer")
+            {
+                await _sensorService.SetCalib2PBufferAsync(_calibOrder);
+            }
+            else if (_currentPage == "Calib_Zero")
+            {
+                await _sensorService.SetCalibZeroAsync();
+            }
+
+            Debug.WriteLine($"[ 교정 실행 ] ");
             CommandStatus = CommandStatus.Running;
         }
     }
+
+
 
     private async Task WriteCalibAbortAsync()
     {
@@ -279,8 +321,8 @@ public class MonitoringService : IMonitoringService
 
     private void RestCallibStatus()
     {
-        ApplyCalib = false;
-        AbortCalib = false;
+        _bApplyCalib = false;
+        _bAbortCalib = false;
         CommandStatus = CommandStatus.Ready;
     }
 

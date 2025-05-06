@@ -27,6 +27,9 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
     private SensorData receivedData = new();
 
     [ObservableProperty]
+    private float calibValue = 0;
+
+    [ObservableProperty]
     private string sensorUnit;
 
     [ObservableProperty]
@@ -64,9 +67,10 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
             ApplyButtonText = " ...";
 
             CalStatus = CalibrationStatus.CalInProgress;
-            _monitoringService.ApplyCalib = true;
+            _monitoringService.ApplyCalib_1PSample(CalibValue);
 
-            Debug.WriteLine($"Apply 버튼클릭: {_monitoringService.ApplyCalib}");
+
+            Debug.WriteLine($"Apply 버튼클릭: {CalStatus}");
 
             await WaitForCalibrationCompletion();
         }
@@ -82,9 +86,9 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
     [RelayCommand]
     private async void Abort()
     {
-        _monitoringService.AbortCalib = true;
+        _monitoringService.AbortCalib();
 
-        Debug.WriteLine($"Abort 버튼클릭: {_monitoringService.AbortCalib}");
+        Debug.WriteLine($"Abort 버튼클릭: {CalStatus}");
 
         // Abort후 상태코드를 받을 수 있는지 체크 필요함
         ResetCallibStatus(1000);
