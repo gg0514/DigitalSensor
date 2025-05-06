@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DigitalSensor.Models;
 using DigitalSensor.Services;
+using FluentAvalonia.UI.Controls;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -65,14 +66,32 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
         {
             IsBusy = true;
             IsProgressVisible = true;
-            ApplyButtonText = " ...";
 
             CalStatus = CalibrationStatus.CalInProgress;
+
+            ApplyButtonText = $" ({CalibOrder})";
             await _monitoringService.ApplyCalib_2PBuffer(CalibOrder);
+            Debug.WriteLine($"Apply 버튼클릭: 버퍼번호 {CalibOrder}");
 
-            Debug.WriteLine($"Apply 버튼클릭: {CalStatus}");
-
+            // 1번 Calibration이 완료될 때까지 대기
             await WaitForCalibrationCompletion();
+
+
+            CalibOrder++;
+
+            string title = "2P Buffer";
+            string message = $"2번째 버퍼 교정을 시작하시겠습니까?";
+            bool bResult= await ShowConfirmationAsync(title, message);
+
+            if(bResult)
+            {
+                ApplyButtonText = $" ({CalibOrder})";
+                await _monitoringService.ApplyCalib_2PBuffer(CalibOrder);
+                Debug.WriteLine($"Apply 버튼클릭: 버퍼번호 {CalibOrder}");
+
+                // 2번 Calibration이 완료될 때까지 대기
+                await WaitForCalibrationCompletion();
+            }
         }
         finally
         {
@@ -106,6 +125,8 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
 
     public async void OnViewLoaded()
     {
+        CalibOrder = 0;
+
         await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
         {
             ReceivedInfo = _monitoringService.SensorInfo;
@@ -157,4 +178,20 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
             CalStatus = CalibrationStatus.NoSensorCalibration;
         });
     }
+
+    public async Task<bool> ShowConfirmationAsync(string title, string message)
+    {
+        var dialog = new ContentDialog
+        {
+            Title = title,
+            Content = message,
+            PrimaryButtonText = "확인",
+            CloseButtonText = "취소",
+            DefaultButton = ContentDialogButton.Primary
+        };
+
+        var result = await dialog.ShowAsync();
+        return result == ContentDialogResult.Primary;
+    }
+
 }
