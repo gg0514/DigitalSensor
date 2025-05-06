@@ -21,13 +21,19 @@ public partial class Calib_1PSampleView : UserControl
             }
         };
     }
-
+    private void OnBackgroundPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        ValueTextBlock.Focus();
+    }
     private void OnTextBlockClick(object sender, PointerPressedEventArgs e)
     {
         if (DataContext is Calib_1PSampleViewModel viewModel)
         {
             viewModel.StartEditing();
         }
+
+        ValueTextBox.Focus();
+        ValueTextBox.CaretIndex = ValueTextBox.Text?.Length ?? 0;
     }
 
     private void OnTextBoxKeyUp(object sender, KeyEventArgs e)
@@ -45,4 +51,7 @@ public partial class Calib_1PSampleView : UserControl
             viewModel.StopEditing();
         }
     }
+
+
+
 }

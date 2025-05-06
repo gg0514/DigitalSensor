@@ -74,10 +74,16 @@
 						</Border>
 					</Grid>
 					<Grid	ColumnDefinitions="Auto, *, Auto" Margin="0,0,0,0">
+
+						<!-- 배경 클릭 영역 -->
+						<Border Background="Transparent"
+								PointerPressed="OnBackgroundPointerPressed"/>
+						
 						<TextBlock Grid.Column="0" Text="교정값"  VerticalAlignment="Center" FontSize="14" Foreground="LightBlue"/>
 
 						<Grid Grid.Column="1">
-							<TextBlock Text="{Binding CalibValue}"
+							<TextBlock x:Name="ValueTextBlock"
+								       Text="{Binding CalibValue}"
 									   Background=""
 									   Width="120"
 									   TextAlignment="Center"
@@ -87,7 +93,8 @@
 									   FontSize="30"
 									   IsVisible="{Binding !IsEditing}"
 									   PointerPressed="OnTextBlockClick"/>
-							<TextBox Text="{Binding CalibValue, UpdateSourceTrigger=PropertyChanged}"
+							<TextBox x:Name="ValueTextBox"
+								     Text="{Binding CalibValue, UpdateSourceTrigger=PropertyChanged}"
    								     Width="120"
 									 TextAlignment="Center"
 									 VerticalAlignment="Center"
