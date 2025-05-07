@@ -15,12 +15,8 @@
     <vm:SettingModbusViewModel />
   </Design.DataContext>
 
-	<ScrollViewer Padding="20" Margin="0,30,0,0">
+	<ScrollViewer Padding="20" Margin="0,50,0,0">
 		<StackPanel Spacing="20">
-
-			<!-- Title -->
-			<TextBlock Text="설정" FontSize="28" FontWeight="Bold"/>
-
 
 
 			<!-- MODBUS -->
@@ -31,12 +27,15 @@
 				Margin="0,0"
 				Effect="{DynamicResource ShadowElevation3}" >
 
-				<StackPanel>
+				<StackPanel Margin="0,10,0,0">
 					<TextBlock Text="MODBUS" FontSize="14" Foreground="LightBlue"/>
 					<StackPanel Margin="0,15,0,0" Spacing="12">
-						<StackPanel>
+						<StackPanel  Spacing="12">
 							<TextBlock Text="Slave ID" FontSize="16"/>
-							<TextBlock Text="{Binding SlaveID}" FontSize="14" Foreground="Gray"/>
+							<!--<TextBlock Text="{Binding SlaveID}" FontSize="14" Foreground="Gray"/>-->
+							<ui:NumberBox Value="{Binding SlaveID}" Minimum="1" Maximum="30" 
+										  FontSize="24" Foreground="Gray" 
+										  HorizontalAlignment="Stretch" SpinButtonPlacementMode="Inline"/>
 						</StackPanel>
 					</StackPanel>
 				</StackPanel>

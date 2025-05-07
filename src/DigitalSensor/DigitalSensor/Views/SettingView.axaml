@@ -47,7 +47,7 @@
 				CornerRadius="12"
 				Padding="16"
 				Margin="0,0"
-				PointerPressed="OnBackgroundPointerPressed"
+				PointerPressed="OnBackgroundModbus_PointerPressed"
 				Effect="{DynamicResource ShadowElevation3}" >
 
 				<StackPanel>
@@ -69,6 +69,7 @@
 				CornerRadius="12"
 				Padding="16"
 				Margin="0,0"
+				PointerPressed="OnBackgroundCalibration_PointerPressed"
 				Effect="{DynamicResource ShadowElevation3}" >
 
 				<StackPanel>
@@ -101,6 +102,8 @@
 				CornerRadius="12"
 				Padding="16"
 				Margin="0,5"
+				PointerReleased="OnPointerReleased"
+				PointerPressed="OnBackgroundSerial_PointerPressed"
 				Effect="{DynamicResource ShadowElevation3}" >
 
 				<StackPanel>

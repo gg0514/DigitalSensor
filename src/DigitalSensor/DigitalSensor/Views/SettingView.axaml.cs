@@ -3,6 +3,7 @@ using Avalonia.Input;
 using DigitalSensor.Extensions;
 using DigitalSensor.Services;
 using FluentAvalonia.UI.Controls;
+using System;
 
 namespace DigitalSensor.Views;
 
@@ -17,10 +18,27 @@ public partial class SettingView : UserControl
 
     }
 
-    private void OnBackgroundPointerPressed(object? sender, PointerPressedEventArgs e)
+    private void OnPointerReleased(object? sender, PointerReleasedEventArgs e)
+    {
+        //MainView mainView = App.GlobalHost.GetService<MainView>();
+        //mainView.OnNavigateTo("Setting_Modbus");
+    }
+
+    private void OnBackgroundModbus_PointerPressed(object? sender, PointerPressedEventArgs e)
     {
         MainView mainView = App.GlobalHost.GetService<MainView>();
         mainView.OnNavigateTo("Setting_Modbus");
+    }
 
+    private void OnBackgroundCalibration_PointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        MainView mainView = App.GlobalHost.GetService<MainView>();
+        mainView.OnNavigateTo("Setting_Calibration");
+    }
+
+    private void OnBackgroundSerial_PointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        MainView mainView = App.GlobalHost.GetService<MainView>();
+        mainView.OnNavigateTo("Setting_Serial");
     }
 }

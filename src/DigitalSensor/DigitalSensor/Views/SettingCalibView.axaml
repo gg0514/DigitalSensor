@@ -15,12 +15,8 @@
 	  <vm:SettingCalibViewModel />
   </Design.DataContext>
 
-	<ScrollViewer Padding="20" Margin="0,30,0,0">
+	<ScrollViewer Padding="20" Margin="0,50,0,0">
 		<StackPanel Spacing="20">
-
-			<!-- Title -->
-			<TextBlock Text="설정" FontSize="28" FontWeight="Bold"/>
-
 
 			
 			<!-- Calibration -->
@@ -31,20 +27,28 @@
 				Margin="0,0"
 				Effect="{DynamicResource ShadowElevation3}" >
 
-				<StackPanel>
+				<StackPanel Margin="0,10,0,0">
 					<TextBlock Text="CALIBRATION" FontSize="14" Foreground="LightBlue"/>
 					<StackPanel Margin="0,15,0,0" Spacing="12">
 						<!-- Factor -->
-						<StackPanel>
+						<StackPanel Spacing="12">
 							<TextBlock Text="Factor" FontSize="16"/>
-							<TextBlock Text="{Binding CalibAdjust.Factor}" FontSize="14" Foreground="Gray"/>
+							<!--<TextBlock Text="{Binding CalibAdjust.Factor}" FontSize="14" Foreground="Gray"/>-->
+							<ui:NumberBox Value="{Binding CalibAdjust.Factor}" 
+										  SmallChange="0.01"
+										  LargeChange="0.1"
+										  SimpleNumberFormat="F2" FontSize="24" Foreground="Gray" HorizontalAlignment="Stretch" SpinButtonPlacementMode="Inline"/>
 						</StackPanel>
 
 						<Separator/>
 						<!-- Offset -->
-						<StackPanel>
+						<StackPanel Spacing="12">
 							<TextBlock Text="Offset" FontSize="16"/>
-							<TextBlock Text="{Binding CalibAdjust.Offset}" FontSize="14" Foreground="Gray"/>
+							<!--<TextBlock Text="{Binding CalibAdjust.Offset}" FontSize="14" Foreground="Gray"/>-->
+							<ui:NumberBox Value="{Binding CalibAdjust.Offset}" 
+  										  SmallChange="0.01"
+										  LargeChange="0.1"
+										  SimpleNumberFormat="F2" FontSize="24" Foreground="Gray" HorizontalAlignment="Stretch" SpinButtonPlacementMode="Inline"/>
 						</StackPanel>
 					</StackPanel>
 				</StackPanel>

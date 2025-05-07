@@ -15,11 +15,8 @@
     <vm:SettingSerialViewModel />
   </Design.DataContext>
 
-	<ScrollViewer Padding="20" Margin="0,30,0,0">
+	<ScrollViewer Padding="20" Margin="0,50,0,0">
 		<StackPanel Spacing="20">
-
-			<!-- Title -->
-			<TextBlock Text="설정" FontSize="28" FontWeight="Bold"/>
 
 			<!-- 시리얼 통신 -->
 			<Border
@@ -34,30 +31,50 @@
 					<StackPanel Margin="0,15,0,0" Spacing="12">
 
 						<!-- Baud rate -->
-						<StackPanel>
+						<StackPanel Spacing="12">
 							<TextBlock Text="Baud rate" FontSize="16"/>
-							<TextBlock Text="{Binding SerialConn.BaudRate}" FontSize="14" Foreground="Gray"/>
+							<!--<TextBlock Text="{Binding SerialConn.BaudRate}" FontSize="24" Foreground="Gray"/>-->
+							<ui:FAComboBox IsEditable="False" IsTextSearchEnabled="False"
+										   ItemsSource="{Binding SerialBaudrate}"
+										   SelectedItem="{Binding SelectedBaudrate}"
+									       FontSize="24" Foreground="Gray"  HorizontalAlignment="Stretch" />
 						</StackPanel>
 
 						<Separator/>
 						<!-- Data bits -->
-						<StackPanel>
+						<StackPanel Spacing="12">
 							<TextBlock Text="Data bits" FontSize="16"/>
-							<TextBlock Text="{Binding SerialConn.DataBits}" FontSize="14" Foreground="Gray"/>
+							<!--<TextBlock Text="{Binding SerialConn.DataBits}" FontSize="24" Foreground="Gray"/>-->
+							<ui:FAComboBox IsEditable="False" IsTextSearchEnabled="False"
+										   ItemsSource="{Binding SerialDatabits}"
+										   SelectedItem="{Binding SelectedDatabits}"
+										   FontSize="24" Foreground="Gray"  HorizontalAlignment="Stretch" />
 						</StackPanel>
 
 						<Separator/>
 						<!-- Parity -->
-						<StackPanel>
+						<StackPanel Spacing="12">
 							<TextBlock Text="Parity" FontSize="16"/>
-							<TextBlock Text="{Binding SerialConn.Parity}" FontSize="14" Foreground="Gray"/>
+							<!--<TextBlock Text="{Binding SerialConn.Parity}" FontSize="24" Foreground="Gray"/>-->
+							<ui:FAComboBox IsEditable="False" IsTextSearchEnabled="False"
+										   ItemsSource="{Binding SerialParity}"
+										   SelectedItem="{Binding SelectedParity}"
+										   FontSize="24" Foreground="Gray"  HorizontalAlignment="Stretch" />
+
 						</StackPanel>
 
 						<Separator/>
 						<!-- Stop bits -->
-						<StackPanel>
+						<StackPanel Spacing="12">
 							<TextBlock Text="Stop bits" FontSize="16"/>
-							<TextBlock Text="{Binding SerialConn.StopBits}" FontSize="14" Foreground="Gray"/>
+							<!--<TextBlock Text="{Binding SerialConn.StopBits}" FontSize="24" Foreground="Gray"/>-->
+							<ui:FAComboBox IsEditable="False" IsTextSearchEnabled="False"
+										   ItemsSource="{Binding SerialStopbits}"
+										   SelectedItem="{Binding SelectedStopbits}"
+										   FontSize="24" 
+										   Foreground="Gray"  
+										   HorizontalAlignment="Stretch"    />
+
 						</StackPanel>
 					</StackPanel>
 				</StackPanel>

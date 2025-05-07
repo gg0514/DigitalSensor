@@ -53,11 +53,6 @@
 				Content="Setting"
 				IconSource="Setting"
 				Tag="Setting">
-				<!--<ui:NavigationViewItem.MenuItems>
-					<ui:NavigationViewItem Content="Modbus" Tag="Setting_Modbus" IsVisible="False"/>
-					<ui:NavigationViewItem Content="Calibration" Tag="Setting_Calib" IsVisible="False"/>
-					<ui:NavigationViewItem Content="Serial" Tag="Setting_Serial" IsVisible="False"/>
-				</ui:NavigationViewItem.MenuItems>-->
 			</ui:NavigationViewItem>
 
 			<ui:NavigationViewItem
@@ -78,7 +73,7 @@
 			</ui:NavigationViewItem>
 
 			<ui:NavigationViewItem Content="Setting_Modbus" Tag="Setting_Modbus" IsVisible="False"/>
-			<ui:NavigationViewItem Content="Setting_Calibration" Tag="Setting_Calib" IsVisible="False"/>
+			<ui:NavigationViewItem Content="Setting_Calibration" Tag="Setting_Calibration" IsVisible="False"/>
 			<ui:NavigationViewItem Content="Setting_Serial" Tag="Setting_Serial" IsVisible="False"/>
 			
 		</ui:NavigationView.MenuItems>
