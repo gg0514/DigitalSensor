@@ -11,6 +11,7 @@ using System.Linq;
 using DigitalSensor.Models;
 using System;
 using Avalonia.Input;
+using HarfBuzzSharp;
 
 namespace DigitalSensor.Views;
 
@@ -36,6 +37,8 @@ public partial class MainView : UserControl
         _monitoringService = App.GlobalHost.GetService<IMonitoringService>();
         _monitoringService.SensorTypeReceived += OnSensorTypeReceived;
 
+
+        NavView.BackRequested += NavigationView_BackRequested;
     }
 
     private void AddSubMenuToExistingMenu()
@@ -194,5 +197,38 @@ public partial class MainView : UserControl
                 }
             }
         });
+    }
+
+    public void OnNavigateTo(string tagName)
+    {
+        //if (DataContext is MainViewModel vm)
+        //{
+        //    vm.NavigateToCommand.Execute(tagName);
+        //}
+
+        NavView.IsBackButtonVisible = true;
+        NavView.IsBackEnabled = true;
+
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            foreach (var item in NavView.MenuItems)
+            {
+                if (item is NavigationViewItem navItem && navItem.Tag?.ToString() == tagName)
+                {
+                    NavView.SelectedItem = navItem;
+                    break; // 찾았으면 루프 종료
+                }
+            }
+        });
+    }
+
+    private void NavigationView_BackRequested(object sender, NavigationViewBackRequestedEventArgs args)
+    {
+
+        OnNavigateTo("Setting");
+
+        NavView.IsBackButtonVisible = false;
+        NavView.IsBackEnabled = false;
+
     }
 }

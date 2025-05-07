@@ -30,6 +30,7 @@ public class MainActivity : AvaloniaMainActivity<App>
     {
         services.AddSingleton<IUsbService, UsbService>();
     }
+
     public override void OnBackPressed()
     {
         // Avalonia View에 접근
