@@ -11,29 +11,34 @@ namespace DigitalSensor.ViewModels;
 public partial class SettingViewModel : ViewModelBase
 {
     [ObservableProperty]
-    public UsbDeviceInfo _usbDevice = new();
+    public UsbDeviceInfo _usbDevice;
 
     [ObservableProperty]
-    public int           _slaveID= 1;
+    public ModbusInfo _modbusInfo;
 
     [ObservableProperty]
-    public CalibrationAdjust _calibAdjust = new();
+    public CalibrationAdjust _calibAdjust;
 
     [ObservableProperty]
-    public SerialConn _serialConn = new();
-
-
+    public SerialConn _serialConn;
 
 
 
     public SettingViewModel()
     {
-
+        UsbDevice = new UsbDeviceInfo();
+        ModbusInfo = new ModbusInfo();
+        CalibAdjust = new CalibrationAdjust();
+        SerialConn = new SerialConn();
     }
 
-    [RelayCommand]
-    private void SaveSettings()
+    public SettingViewModel(UsbDeviceInfo usbDeviceInfo, ModbusInfo modbusInfo, CalibrationAdjust calibAdjust, SerialConn serialConn)
     {
-        // Save settings logic would go here
+        UsbDevice = usbDeviceInfo;
+        ModbusInfo = modbusInfo;
+        CalibAdjust = calibAdjust;
+        SerialConn = serialConn;
     }
+
+
 }

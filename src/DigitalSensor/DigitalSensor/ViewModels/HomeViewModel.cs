@@ -52,7 +52,7 @@ public partial class HomeViewModel : ViewModelBase
 
     public HomeViewModel()
     {
-        _monitoringService = new MonitoringService(new SensorService());
+        _monitoringService = new MonitoringService(new SensorService(), new ModbusInfo());
         
         _monitoringService.SensorInfoReceived += OnSensorInfoReceived;
         _monitoringService.SensorDataReceived += OnSensorDataReceived;

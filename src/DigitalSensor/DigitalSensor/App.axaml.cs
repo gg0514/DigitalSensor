@@ -14,6 +14,7 @@ using System;
 using System.Threading;
 using DigitalSensor.Extensions;
 using DigitalSensor.Modbus;
+using DigitalSensor.Models;
 
 namespace DigitalSensor;
 
@@ -44,12 +45,22 @@ public partial class App : Application
                 services.AddSingleton<HomeViewModel>();
                 services.AddSingleton<SettingView>();
                 services.AddSingleton<SettingViewModel>();
+                services.AddSingleton<SettingModbusView>();
+                services.AddSingleton<SettingModbusViewModel>();
+                services.AddSingleton<SettingCalibView>();
+                services.AddSingleton<SettingCalibViewModel>();
+                services.AddSingleton<SettingSerialView>();
+                services.AddSingleton<SettingSerialViewModel>();
                 services.AddSingleton<Calib_ZeroView>();
                 services.AddSingleton<Calib_ZeroViewModel>();
                 services.AddSingleton<Calib_1PSampleView>();
                 services.AddSingleton<Calib_1PSampleViewModel>();
                 services.AddSingleton<Calib_2PBufferView>();
                 services.AddSingleton<Calib_2PBufferViewModel>();
+                services.AddSingleton<UsbDeviceInfo>();
+                services.AddSingleton<ModbusInfo>();
+                services.AddSingleton<CalibrationAdjust>();
+                services.AddSingleton<SerialConn>();
             })
             .Build());
 

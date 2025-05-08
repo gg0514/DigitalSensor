@@ -191,8 +191,7 @@ public class ModbusService : IModbusService
     // SLAVE ID
     public async Task<ushort[]> ReadSlaveId()
     {
-        //byte slaveId = 250;
-        byte slaveId = 1;
+        byte slaveId = 250;
 
         ushort startAddress = (ushort)_modbusMap["SLAVE_ID"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SLAVE_ID"]["dataLength"]; ;

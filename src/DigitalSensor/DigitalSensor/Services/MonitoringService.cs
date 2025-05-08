@@ -43,6 +43,7 @@ public interface IMonitoringService
 public class MonitoringService : IMonitoringService
 {
     private readonly ISensorService _sensorService;
+    private readonly ModbusInfo _modbusInfo;
 
     private bool _isOpen = false;
     private bool _isSensorInfo = false;
@@ -77,9 +78,10 @@ public class MonitoringService : IMonitoringService
     public event Action<int> CalibStatusReceived;
 
 
-    public MonitoringService(ISensorService dataService)
+    public MonitoringService(ISensorService dataService, ModbusInfo modbusInfo)
     {
         _sensorService = dataService;
+        _modbusInfo = modbusInfo;
 
         // Sensor 구독 등록
         _sensorService.SensorAttached += OnSensorAttached;
@@ -394,12 +396,14 @@ public class MonitoringService : IMonitoringService
 
     private async Task UpdateSlaveID(int slaveId)
     {
-        SettingViewModel vm = App.GlobalHost.GetService<SettingViewModel>();
+        _modbusInfo.SlaveID = slaveId;
 
-        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
-        {
-            vm.SlaveID = slaveId;
-        });
+        //SettingViewModel vm = App.GlobalHost.GetService<SettingViewModel>();
+
+        //await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
+        //{
+        //    vm.ModbusInfo = newslaveId;
+        //});
     }
 
 

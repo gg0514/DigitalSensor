@@ -42,7 +42,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
 
     public Calib_ZeroViewModel()
     {
-        _monitoringService = new MonitoringService(new SensorService());
+        _monitoringService = new MonitoringService(new SensorService(), new ModbusInfo());
         _sensorService = new SensorService();
     }
 

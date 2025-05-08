@@ -16,19 +16,19 @@ public partial class SettingModbusViewModel : ViewModelBase
     [ObservableProperty]
     public int           _slaveID= 1;
 
-    [ObservableProperty]
-    public CalibrationAdjust _calibAdjust = new();
-
-    [ObservableProperty]
-    public SerialConn _serialConn = new();
-
-
     public SettingModbusViewModel()
     {
     }
 
+
     [RelayCommand]
-    private void SaveSettings()
+    private async void Load()
+    {
+        // Save settings logic would go here
+    }
+
+    [RelayCommand]
+    private async void Apply()
     {
         // Save settings logic would go here
     }

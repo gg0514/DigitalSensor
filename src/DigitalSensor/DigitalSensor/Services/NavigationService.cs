@@ -30,9 +30,9 @@ public class NavigationService : INavigationService
         {
             "Home" => _provider.GetRequiredService<HomeViewModel>(),
             "Setting" => _provider.GetRequiredService<SettingViewModel>(),
-            "Setting_Modbus" => new SettingModbusViewModel(),
-            "Setting_Calibration" => new SettingCalibViewModel(),
-            "Setting_Serial" => new SettingSerialViewModel(),
+            "Setting_Modbus" => _provider.GetRequiredService<SettingModbusViewModel>(),
+            "Setting_Calibration" => _provider.GetRequiredService<SettingCalibViewModel>(),
+            "Setting_Serial" => _provider.GetRequiredService<SettingSerialViewModel>(),
             "Calib_Zero" => _provider.GetRequiredService<Calib_ZeroViewModel>(),
             "Calib_1PSample" => _provider.GetRequiredService<Calib_1PSampleViewModel>(),
             "Calib_2PBuffer" => _provider.GetRequiredService<Calib_2PBufferViewModel>(),

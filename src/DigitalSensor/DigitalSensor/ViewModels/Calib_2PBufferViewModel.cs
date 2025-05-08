@@ -46,7 +46,7 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
 
     public Calib_2PBufferViewModel()
     {
-        _monitoringService = new MonitoringService(new SensorService());
+        _monitoringService = new MonitoringService(new SensorService(), new ModbusInfo());
         _sensorService = new SensorService();
     }
 

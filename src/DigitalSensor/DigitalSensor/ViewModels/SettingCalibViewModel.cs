@@ -10,25 +10,18 @@ namespace DigitalSensor.ViewModels;
 
 public partial class SettingCalibViewModel : ViewModelBase
 {
-    [ObservableProperty]
-    public UsbDeviceInfo _usbDevice = new();
-
-    [ObservableProperty]
-    public int           _slaveID= 1;
 
     [ObservableProperty]
     public CalibrationAdjust _calibAdjust = new();
-
-    [ObservableProperty]
-    public SerialConn _serialConn = new();
 
 
     public SettingCalibViewModel()
     {
     }
 
+
     [RelayCommand]
-    private void SaveSettings()
+    private async void Apply()
     {
         // Save settings logic would go here
     }

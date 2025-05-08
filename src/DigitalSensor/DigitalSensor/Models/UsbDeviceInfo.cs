@@ -4,7 +4,7 @@ namespace DigitalSensor.Models;
 
 public partial class UsbDeviceInfo : ObservableObject
 {
-    [ObservableProperty] private int deviceId;
+    [ObservableProperty] private int deviceId= 1002;
     [ObservableProperty] private string? productName= "No Device";
 
     [ObservableProperty] private int vendorId;

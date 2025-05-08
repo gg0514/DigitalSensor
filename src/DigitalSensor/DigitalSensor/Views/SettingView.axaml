@@ -56,7 +56,7 @@
 								Background="Transparent">
 						<StackPanel >
 							<TextBlock Text="Slave ID" FontSize="16"/>
-							<TextBlock Text="{Binding SlaveID}" FontSize="14" Foreground="Gray"/>
+							<TextBlock Text="{Binding ModbusInfo.SlaveID}" FontSize="14" Foreground="Gray"/>
 							<!--<ui:NumberBox Value="{Binding SlaveID}" FontSize="14" Foreground="Gray" HorizontalAlignment="Stretch"/>-->
 						</StackPanel>
 					</StackPanel>
