@@ -18,11 +18,6 @@ public partial class SettingView : UserControl
 
     }
 
-    private void OnPointerReleased(object? sender, PointerReleasedEventArgs e)
-    {
-        //MainView mainView = App.GlobalHost.GetService<MainView>();
-        //mainView.OnNavigateTo("Setting_Modbus");
-    }
 
     private void OnBackgroundModbus_PointerPressed(object? sender, PointerPressedEventArgs e)
     {

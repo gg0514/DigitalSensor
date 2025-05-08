@@ -46,14 +46,15 @@
 				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
 				CornerRadius="12"
 				Padding="16"
-				Margin="0,0"
-				PointerPressed="OnBackgroundModbus_PointerPressed"
+				Margin="0,0"				
 				Effect="{DynamicResource ShadowElevation3}" >
 
 				<StackPanel>
 					<TextBlock Text="MODBUS" FontSize="14" Foreground="LightBlue"/>
-					<StackPanel Margin="0,15,0,0" Spacing="12">
-						<StackPanel>
+					<StackPanel Margin="0,15,0,0" Spacing="12"
+								PointerPressed="OnBackgroundModbus_PointerPressed"
+								Background="Transparent">
+						<StackPanel >
 							<TextBlock Text="Slave ID" FontSize="16"/>
 							<TextBlock Text="{Binding SlaveID}" FontSize="14" Foreground="Gray"/>
 							<!--<ui:NumberBox Value="{Binding SlaveID}" FontSize="14" Foreground="Gray" HorizontalAlignment="Stretch"/>-->
@@ -69,12 +70,13 @@
 				CornerRadius="12"
 				Padding="16"
 				Margin="0,0"
-				PointerPressed="OnBackgroundCalibration_PointerPressed"
 				Effect="{DynamicResource ShadowElevation3}" >
 
 				<StackPanel>
 					<TextBlock Text="CALIBRATION" FontSize="14" Foreground="LightBlue"/>
-					<StackPanel Margin="0,15,0,0" Spacing="12">
+					<StackPanel Margin="0,15,0,0" Spacing="12"
+								PointerPressed="OnBackgroundCalibration_PointerPressed"
+								Background="Transparent">
 						<!-- Factor -->
 						<StackPanel>
 							<TextBlock Text="Factor" FontSize="16"/>
@@ -102,13 +104,13 @@
 				CornerRadius="12"
 				Padding="16"
 				Margin="0,5"
-				PointerReleased="OnPointerReleased"
-				PointerPressed="OnBackgroundSerial_PointerPressed"
 				Effect="{DynamicResource ShadowElevation3}" >
 
 				<StackPanel>
 					<TextBlock Text="SERIAL" FontSize="14" Foreground="LightBlue"/>
-					<StackPanel Margin="0,15,0,0" Spacing="12">
+					<StackPanel Margin="0,15,0,0" Spacing="12"
+								PointerPressed="OnBackgroundSerial_PointerPressed"
+								Background="Transparent">
 
 						<!-- Baud rate -->
 						<StackPanel>
