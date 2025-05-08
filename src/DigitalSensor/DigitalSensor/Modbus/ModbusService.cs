@@ -191,7 +191,8 @@ public class ModbusService : IModbusService
     // SLAVE ID
     public async Task<ushort[]> ReadSlaveId()
     {
-        byte slaveId = 250;
+        //byte slaveId = 250;
+        byte slaveId = 1;
 
         ushort startAddress = (ushort)_modbusMap["SLAVE_ID"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SLAVE_ID"]["dataLength"]; ;
@@ -199,9 +200,7 @@ public class ModbusService : IModbusService
 
         Debug.WriteLine($"MODBUS - ReadSlaveId : _modbusMaster={_modbusMaster}");
 
-        return await _modbusMaster?.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
-        
-
+        return await _modbusMaster?.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);        
     }
 
     // 센서 데이터 통합
