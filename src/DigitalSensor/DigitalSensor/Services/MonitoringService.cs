@@ -75,10 +75,19 @@ public class MonitoringService : IMonitoringService
     public event Action<int> CalibStatusReceived;
 
 
-    public MonitoringService(ISensorService dataService, ModbusInfo modbusInfo)
+    public MonitoringService()
+    {
+        _sensorService = new SensorService();
+        _modbusInfo = new ModbusInfo();
+        // Sensor 구독 등록
+        _sensorService.SensorAttached += OnSensorAttached;
+        _sensorService.SensorDetached += OnSensorDetached;
+    }
+
+    public MonitoringService(ISensorService dataService, AppSettings settings)
     {
         _sensorService = dataService;
-        _modbusInfo = modbusInfo;
+        _modbusInfo = settings.ModbusInfo;
 
         // Sensor 구독 등록
         _sensorService.SensorAttached += OnSensorAttached;

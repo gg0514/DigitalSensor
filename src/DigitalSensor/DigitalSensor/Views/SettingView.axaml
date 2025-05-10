@@ -34,8 +34,8 @@
 					<TextBlock Text="USB" FontSize="14" Foreground="LightBlue"/>
 					<StackPanel Margin="0,15,0,0" Spacing="12">
 						<StackPanel>
-							<TextBlock Text="{Binding UsbDevice.ProductName}" FontSize="16"/>
-							<TextBlock Text="{Binding UsbDevice.DeviceId}" FontSize="14" Foreground="Gray"/>
+							<TextBlock Text="{Binding ModbusInfo.ProductName}" FontSize="16"/>
+							<TextBlock Text="{Binding ModbusInfo.DeviceId}" FontSize="14" Foreground="Gray"/>
 						</StackPanel>
 					</StackPanel>
 				</StackPanel>

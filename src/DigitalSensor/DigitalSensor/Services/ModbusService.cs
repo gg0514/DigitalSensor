@@ -89,27 +89,9 @@ public class ModbusService : IModbusService
 
     public async Task<bool> Open(int deviceId, int baudRate, byte dataBits, byte stopBits, byte parity)
     {
-        ////USB 연결 열기
-        //bool isUsbOpened = _usbService.Open(deviceId, 9600, 8, 1, 0);
-        //if (!isUsbOpened)
-        //{
-        //    throw new InvalidOperationException("USB 연결을 열 수 없습니다.");
-        //}
-
-        //// Modbus 마스터 초기화
-        //var usbStream = new UsbSerialAdapter(_usbService);
-        //_modbusMaster = ModbusSerialMaster.CreateRtu(usbStream);
-
-        //_modbusMap = await Task.Run(() =>
-        //{
-        //    return JsonLoader.Load_modbusMap("Assets/modbus_config.json");
-        //});
-
-        //return true;
-
         _modbusMap = await Task.Run(() =>
         {
-            return JsonLoader.Load_modbusMap("Assets/modbus_config.json");
+            return JsonLoader.Load_modbusMap("modbus_config.json");
         });
 
         return await Task.Run(() =>

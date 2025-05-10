@@ -51,7 +51,7 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
 
     public Calib_1PSampleViewModel()
     {
-        _monitoringService = new MonitoringService(new SensorService(), new ModbusInfo());
+        _monitoringService = new MonitoringService(new SensorService(), new AppSettings());
         _sensorService = new SensorService();
     }
 

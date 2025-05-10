@@ -15,6 +15,7 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 
+
 namespace DigitalSensor.ViewModels;
 
 
@@ -51,7 +52,7 @@ public partial class HomeViewModel : ViewModelBase
 
     public HomeViewModel()
     {
-        _monitoringService = new MonitoringService(new SensorService(), new ModbusInfo());
+        _monitoringService = new MonitoringService(new SensorService(), new AppSettings());
         
         _monitoringService.SensorInfoReceived += OnSensorInfoReceived;
         _monitoringService.SensorDataReceived += OnSensorDataReceived;

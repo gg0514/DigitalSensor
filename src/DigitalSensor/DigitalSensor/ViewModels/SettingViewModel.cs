@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DigitalSensor.Models;
+using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.IO.Ports;
 using System.Threading.Tasks;
@@ -26,18 +27,17 @@ public partial class SettingViewModel : ViewModelBase
 
     public SettingViewModel()
     {
-        UsbDevice = new UsbDeviceInfo();
         ModbusInfo = new ModbusInfo();
         CalibAdjust = new CalibrationAdjust();
         SerialConn = new SerialConn();
     }
 
-    public SettingViewModel(UsbDeviceInfo usbDeviceInfo, ModbusInfo modbusInfo, CalibrationAdjust calibAdjust, SerialConn serialConn)
+
+    public SettingViewModel(AppSettings settings)
     {
-        UsbDevice = usbDeviceInfo;
-        ModbusInfo = modbusInfo;
-        CalibAdjust = calibAdjust;
-        SerialConn = serialConn;
+        ModbusInfo = settings.ModbusInfo;
+        CalibAdjust = settings.CalibAdjust;
+        SerialConn = settings.SerialConn;
     }
 
 

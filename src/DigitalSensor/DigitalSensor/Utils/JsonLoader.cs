@@ -32,7 +32,7 @@ public class JsonLoader
 
     private static JObject LoadFromResource(string jsonFilePath)
     {
-        using var stream = AssetLoader.Open(new Uri($"avares://DigitalSensor/{jsonFilePath}"));
+        using var stream = AssetLoader.Open(new Uri($"avares://DigitalSensor/Assets/{jsonFilePath}"));
         using var reader = new StreamReader(stream);
         string jsonString = reader.ReadToEnd();
         return JObject.Parse(jsonString);

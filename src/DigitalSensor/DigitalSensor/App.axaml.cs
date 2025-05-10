@@ -14,6 +14,7 @@ using System;
 using System.Threading;
 using DigitalSensor.Extensions;
 using DigitalSensor.Models;
+using DigitalSensor.Utils;
 
 namespace DigitalSensor;
 
@@ -26,7 +27,8 @@ public partial class App : Application
         Host.CreateDefaultBuilder()
             .ConfigureServices((services) =>
             {
-                // 여기서 UsbSerive의 인터페이스와 구현체를 등록합니다.
+
+                // 여기서 UsbService의 인터페이스와 구현체를 등록합니다.
                 RegisterPlatformService?.Invoke(services);
 
                 services.AddSingleton<INavigationService, NavigationService>();
@@ -56,10 +58,21 @@ public partial class App : Application
                 services.AddSingleton<Calib_1PSampleViewModel>();
                 services.AddSingleton<Calib_2PBufferView>();
                 services.AddSingleton<Calib_2PBufferViewModel>();
-                services.AddSingleton<UsbDeviceInfo>();
-                services.AddSingleton<ModbusInfo>();
-                services.AddSingleton<CalibrationAdjust>();
-                services.AddSingleton<SerialConn>();
+                //services.AddSingleton<UsbDeviceInfo>();
+                //services.AddSingleton<ModbusInfo>();
+                //services.AddSingleton<CalibrationAdjust>();
+                //services.AddSingleton<SerialConn>();
+
+                // 지연 등록
+                services.AddSingleton<AppSettings>(sp =>
+                {
+                    var jobject = JsonLoader.Load_AppSettings("appsettings.json");
+                    return new AppSettings(jobject);
+                });
+
+                services.AddSingleton<Lazy<AppSettings>>(sp =>
+                    new Lazy<AppSettings>(() => sp.GetRequiredService<AppSettings>()));
+
             })
             .Build());
 
@@ -79,6 +92,7 @@ public partial class App : Application
 
     public override async void OnFrameworkInitializationCompleted()
     {
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = GlobalHost.GetService<MainWindow>();
