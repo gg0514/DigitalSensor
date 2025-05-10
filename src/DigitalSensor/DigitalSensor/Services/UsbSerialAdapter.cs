@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using DigitalSensor.Models;
 using System.Threading;
 
-namespace DigitalSensor.Modbus;
+namespace DigitalSensor.Services;
 
 public class UsbSerialAdapter : IStreamResource
 {

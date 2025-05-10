@@ -1,5 +1,4 @@
 ﻿using DigitalSensor.Extensions;
-using DigitalSensor.Modbus;
 using DigitalSensor.Models;
 using DigitalSensor.ViewModels;
 using System;
@@ -45,8 +44,6 @@ public class MonitoringService : IMonitoringService
     private readonly ISensorService _sensorService;
     private readonly ModbusInfo _modbusInfo;
 
-    private bool _isOpen = false;
-    private bool _isSensorInfo = false;
     private bool _isSensorType = false;
     private bool _isRunning = false;
 
@@ -168,8 +165,6 @@ public class MonitoringService : IMonitoringService
     public async Task StopMonitoring()
     {
         // 초기화
-        _isOpen = false;
-        _isSensorInfo = false;
         _isSensorType = false;
         _isRunning = false;
 
@@ -404,26 +399,6 @@ public class MonitoringService : IMonitoringService
         //{
         //    vm.ModbusInfo = newslaveId;
         //});
-    }
-
-
-    private async Task GetSensorInfo()
-    {
-        if (!_isSensorInfo)
-        {
-            SensorInfo info = await _sensorService.GetSensorInfoAsync();
-            SensorInfoReceived?.Invoke(info);
-
-            _isSensorInfo = true;
-        }
-    }
-
-    private async Task GetSensorData()
-    {
-        SensorData data = await _sensorService.GetSensorDataAsync();
-
-        Debug.WriteLine($"SensorData: {data.Value}, {data.Mv}, {data.Temperature}");
-        SensorDataReceived?.Invoke(data);
     }
 
 }

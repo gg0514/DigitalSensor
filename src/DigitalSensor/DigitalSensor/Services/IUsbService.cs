@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DigitalSensor.Modbus
+namespace DigitalSensor.Services
 {
     public interface IUsbService
     {

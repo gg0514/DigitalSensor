@@ -13,7 +13,6 @@ using DigitalSensor.Views;
 using System;
 using System.Threading;
 using DigitalSensor.Extensions;
-using DigitalSensor.Modbus;
 using DigitalSensor.Models;
 
 namespace DigitalSensor;

@@ -6,7 +6,7 @@ using System.IO.Ports;
 using static System.Net.Mime.MediaTypeNames;
 using System.Threading.Tasks;
 using System.Threading;
-using DigitalSensor.Modbus;
+using DigitalSensor.Services;
 
 
 namespace DigitalSensor.Desktop

@@ -19,7 +19,7 @@ using UsbSerialForAndroid.Net.Helper;
 using Java.Nio;
 using System.Net;
 using System.Threading;
-using DigitalSensor.Modbus;
+using DigitalSensor.Services;
 
 
 

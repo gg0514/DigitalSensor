@@ -1,4 +1,5 @@
 ﻿using Avalonia.Platform;
+using DigitalSensor.Services;
 using DigitalSensor.Models;
 using DigitalSensor.ViewModels;
 using FluentIcons.Common.Internals;
@@ -10,11 +11,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
+using DigitalSensor.Utils;
 
-namespace DigitalSensor.Modbus;
+namespace DigitalSensor.Services;
 
 
 public interface IModbusService
@@ -62,11 +62,9 @@ public class ModbusService : IModbusService
     public event Action TxSignal;
     public event Action RxSignal;
 
-    private readonly IUsbService _usbService;
-    private readonly HomeViewModel _viewModel;
-
-    private IModbusSerialMaster? _modbusMaster;
     private JObject _modbusMap;
+    private IUsbService _usbService;
+    private IModbusSerialMaster? _modbusMaster;
 
     public byte SlaveId { get; set; } = 1; // 기본값 부여
 
@@ -158,7 +156,7 @@ public class ModbusService : IModbusService
             SlaveId = (byte)(await ReadSlaveId())[0];
             return true;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Debug.WriteLine($"MODBUS - Initialize Error: {ex.Message}");
             return false;
@@ -172,14 +170,14 @@ public class ModbusService : IModbusService
         await _modbusMaster?.ReadHoldingRegistersAsync(250, 20, 1);
     }
 
-    
+
     public async Task<string> ReadHoldingRegisters(byte slaveId, ushort startAddress, ushort numRegisters)
     {
         //byte slaveId = 250;
         //ushort startAddress = 20;
         //ushort numRegisters = 1;
         ushort[] registers = await _modbusMaster?.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
-        
+
 
         string hexString = string.Join(" ", registers.Select(v => v.ToString("X4")));
 
@@ -200,7 +198,7 @@ public class ModbusService : IModbusService
 
         Debug.WriteLine($"MODBUS - ReadSlaveId : _modbusMaster={_modbusMaster}");
 
-        return await _modbusMaster?.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);        
+        return await _modbusMaster?.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
     }
 
     // 센서 데이터 통합
@@ -208,7 +206,7 @@ public class ModbusService : IModbusService
     {
         byte slaveId = SlaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_VALUE"]["address"];
-        ushort numRegisters = 6; 
+        ushort numRegisters = 6;
         ushort[] registers = await _modbusMaster?.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
 
         return ConvertToSensorData(registers);
@@ -220,7 +218,7 @@ public class ModbusService : IModbusService
     {
         byte slaveId = SlaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_VALUE"]["address"];
-        ushort numRegisters = (ushort)_modbusMap["SENSOR_VALUE"]["dataLength"]; 
+        ushort numRegisters = (ushort)_modbusMap["SENSOR_VALUE"]["dataLength"];
         ushort[] registers = await _modbusMaster?.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
 
 
@@ -235,7 +233,7 @@ public class ModbusService : IModbusService
         ushort startAddress = (ushort)_modbusMap["TEMP_VALUE"]["address"];
         ushort numRegisters = (ushort)_modbusMap["TEMP_VALUE"]["dataLength"];
         ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
-        
+
 
         return ConvertToFloat(registers);
     }
@@ -247,7 +245,7 @@ public class ModbusService : IModbusService
         ushort startAddress = (ushort)_modbusMap["SENSOR_MV"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SENSOR_MV"]["dataLength"];
         ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
-        
+
 
         return ConvertToFloat(registers);
     }
@@ -257,7 +255,7 @@ public class ModbusService : IModbusService
     {
         byte slaveId = SlaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_TYPE"]["address"];
-        
+
 
         return (await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, 1))[0];
     }
@@ -269,7 +267,7 @@ public class ModbusService : IModbusService
         ushort startAddress = (ushort)_modbusMap["SENSOR_SERIAL"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SENSOR_SERIAL"]["dataLength"];
         ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
-        
+
 
         return ConvertToHexString(registers);
     }
@@ -281,7 +279,7 @@ public class ModbusService : IModbusService
         ushort startAddress = (ushort)_modbusMap["SENSOR_FACTOR"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SENSOR_FACTOR"]["dataLength"];
         ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
-        
+
 
         return ConvertToFloat(registers);
     }
@@ -293,7 +291,7 @@ public class ModbusService : IModbusService
         ushort startAddress = (ushort)_modbusMap["SENSOR_OFFSET"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SENSOR_OFFSET"]["dataLength"];
         ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
-        
+
 
         return ConvertToFloat(registers);
     }
@@ -305,7 +303,7 @@ public class ModbusService : IModbusService
         ushort startAddress = (ushort)_modbusMap["CALIB_1P_SAMPLE"]["address"];
         ushort numRegisters = (ushort)_modbusMap["CALIB_1P_SAMPLE"]["dataLength"];
         ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
-        
+
 
         return ConvertToFloat(registers);
     }
@@ -315,7 +313,7 @@ public class ModbusService : IModbusService
     {
         byte slaveId = SlaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_STATUS"]["address"];
-        
+
 
         return (await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, 1))[0];
     }
@@ -486,7 +484,8 @@ public class ModbusService : IModbusService
 
     public bool RecoverConnection()
     {
-        bool recovered = _usbService.TryRecover(() => {
+        bool recovered = _usbService.TryRecover(() =>
+        {
             try
             {
                 TestConnection();
@@ -503,23 +502,3 @@ public class ModbusService : IModbusService
 
 }
 
-
-public class JsonLoader
-{
-    public static JObject Load_modbusMap(string jsonFilePath)
-    {
-        // 더이상 사용하지 않음 - AssetLoader 가져오기
-        // var assetLoader = AvaloniaLocator.Current.GetService<IAssetLoader>();
-        // if (assetLoader == null)
-        //    throw new InvalidOperationException("AssetLoader not found.");
-
-        // 리소스 스트림 열기
-        //using var stream = AssetLoader.Open(new Uri("avares://MyApp/Assets/data.json"));
-        using var stream = AssetLoader.Open(new Uri($"avares://DigitalSensor/{jsonFilePath}"));
-        using var reader = new StreamReader(stream);
-
-        // JSON 문자열 읽기
-        var jsonString = reader.ReadToEnd();
-        return JObject.Parse(jsonString);
-    }
-}

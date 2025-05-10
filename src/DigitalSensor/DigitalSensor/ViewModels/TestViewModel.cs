@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DigitalSensor.Extensions;
-using DigitalSensor.Modbus;
 using DigitalSensor.Models;
 using DigitalSensor.Services;
 using Modbus.Device;
