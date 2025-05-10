@@ -1,5 +1,6 @@
 ﻿using DigitalSensor.Extensions;
 using DigitalSensor.Models;
+using DigitalSensor.USB;
 using DigitalSensor.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -39,8 +40,8 @@ public class SensorService : ISensorService
     public event Action SensorAttached;
     public event Action SensorDetached;
 
+    private readonly IModbusService _modbusService;
     private readonly IUsbService    _usbService;
-    private readonly IModbusService  _modbusService;
     private readonly NotificationService _notificationService;
 
     private int _deviceId = 0;

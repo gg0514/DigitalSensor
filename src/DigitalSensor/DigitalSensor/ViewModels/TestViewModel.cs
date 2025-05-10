@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 using DigitalSensor.Extensions;
 using DigitalSensor.Models;
 using DigitalSensor.Services;
+using DigitalSensor.USB;
 using Modbus.Device;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 

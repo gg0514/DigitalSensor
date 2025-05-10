@@ -4,7 +4,7 @@ using Android.Content.PM;
 using Avalonia;
 using Avalonia.Android;
 using Avalonia.Controls.ApplicationLifetimes;
-using DigitalSensor.Services;
+using DigitalSensor.USB;
 using Java.Util;
 using Microsoft.Extensions.DependencyInjection;
 

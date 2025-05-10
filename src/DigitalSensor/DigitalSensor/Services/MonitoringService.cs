@@ -33,9 +33,13 @@ public interface IMonitoringService
     Task StartMonitoring();
     Task StopMonitoring();
 
+    // 영점 교정
     Task ApplyCalib_Zero();
+    // 1점 샘플
     Task ApplyCalib_1PSample(float value);
+    // 2점 버퍼
     Task ApplyCalib_2PBuffer(int order);
+    // 교정 취소
     Task AbortCalib();
 }
 

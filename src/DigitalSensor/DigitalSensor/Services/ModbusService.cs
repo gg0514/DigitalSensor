@@ -1,5 +1,4 @@
 ﻿using Avalonia.Platform;
-using DigitalSensor.Services;
 using DigitalSensor.Models;
 using DigitalSensor.ViewModels;
 using FluentIcons.Common.Internals;
@@ -13,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DigitalSensor.Utils;
+using DigitalSensor.USB;
 
 namespace DigitalSensor.Services;
 
@@ -62,8 +62,9 @@ public class ModbusService : IModbusService
     public event Action TxSignal;
     public event Action RxSignal;
 
-    private JObject _modbusMap;
+    // Source
     private IUsbService _usbService;
+    private JObject _modbusMap;
     private IModbusSerialMaster? _modbusMaster;
 
     public byte SlaveId { get; set; } = 1; // 기본값 부여

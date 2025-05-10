@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using DigitalSensor.Extensions;
 using DigitalSensor.Models;
 using DigitalSensor.Services;
+using DigitalSensor.USB;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
