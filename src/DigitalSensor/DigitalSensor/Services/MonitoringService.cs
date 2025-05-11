@@ -65,7 +65,7 @@ public class MonitoringService : IMonitoringService
     public SensorInfo SensorInfo { get; set; } = new();
     public SensorData SensorData { get; set; } = new();
 
-    
+
     public event Action ErrSignal;
     public event Action<Models.SensorInfo> SensorInfoReceived;
     public event Action<Models.SensorData> SensorDataReceived;
@@ -159,14 +159,17 @@ public class MonitoringService : IMonitoringService
     public async Task StartMonitoring()
     {
         _isRunning = true;
+        //_modbusInfo.IsAlive = true;
 
         while (_isRunning)
         {
             await Task.Delay(1000); // 1초 대기
 
+            //Debug.WriteLine($"_currentPage.Contains(\"Setting\") : {_currentPage.Contains("Setting")}");
+
             if (_currentPage == "Home")                    
                 await NormalMode();
-            else if (_currentPage == "Setting")           
+            else if (_currentPage.Contains("Setting"))           
                 await SettingMode();
             else                                          
                 await CalibMode();
@@ -178,6 +181,7 @@ public class MonitoringService : IMonitoringService
         // 초기화
         _isSensorType = false;
         _isRunning = false;
+        //_modbusInfo.IsAlive = false;
 
 
         SensorInfo = new SensorInfo()
@@ -221,7 +225,7 @@ public class MonitoringService : IMonitoringService
         {
             Debug.WriteLine($"[ SettingMode ] ");
 
-            await GetSensorValue();
+            await Task.Delay(1000); // 1초 대기
         }
         catch (Exception ex)
         {

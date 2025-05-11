@@ -138,9 +138,9 @@ public class ModbusService : IModbusService
 
     public async Task<int> VerifyID()
     {
-        if (_modbusMaster == null)
+        if(!_usbService.IsConnection())
         {
-            Debug.WriteLine("MODBUS - Modbus master is null");
+            Debug.WriteLine("MODBUS - USB is not connected");
             return -1;
         }
 
@@ -159,15 +159,20 @@ public class ModbusService : IModbusService
     }
 
 
-    // 현재 동작하지 않음.
     public async Task TestConnection()
     {
+        if (!_usbService.IsConnection())
+            return;
+
         await _modbusMaster?.ReadHoldingRegistersAsync(250, 25, 1);
     }
 
 
     public async Task<string> ReadHoldingRegisters(byte slaveId, ushort startAddress, ushort numRegisters)
     {
+        if (!_usbService.IsConnection())
+            return null;
+
         //byte slaveId = 250;
         //ushort startAddress = 20;
         //ushort numRegisters = 1;
@@ -183,6 +188,9 @@ public class ModbusService : IModbusService
     // SLAVE ID
     public async Task<ushort[]> ReadSlaveId()
     {
+        if (!_usbService.IsConnection())
+            return null;
+
         // 만능키ID
         byte SecretId = 250;
 
@@ -200,6 +208,9 @@ public class ModbusService : IModbusService
     // 센서 데이터 통합
     public async Task<SensorData> ReadSensorData()
     {
+        if (!_usbService.IsConnection())
+            return null;
+
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_VALUE"]["address"];
         ushort numRegisters = 6;
@@ -216,6 +227,9 @@ public class ModbusService : IModbusService
     // 센서 데이터
     public async Task<float> ReadSensorValue()
     {
+        if (!_usbService.IsConnection())
+            return -1;
+
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_VALUE"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SENSOR_VALUE"]["dataLength"];
@@ -232,6 +246,9 @@ public class ModbusService : IModbusService
     // 수온
     public async Task<float> ReadTempValue()
     {
+        if (!_usbService.IsConnection())
+            return -1;
+
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["TEMP_VALUE"]["address"];
         ushort numRegisters = (ushort)_modbusMap["TEMP_VALUE"]["dataLength"];
@@ -247,6 +264,9 @@ public class ModbusService : IModbusService
     // MV
     public async Task<float> ReadSensorMV()
     {
+        if (!_usbService.IsConnection())
+            return -1;
+
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_MV"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SENSOR_MV"]["dataLength"];
@@ -262,6 +282,9 @@ public class ModbusService : IModbusService
     // 센서 타입
     public async Task<ushort> ReadSensorType()
     {
+        if (!_usbService.IsConnection())
+            return 0;
+
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_TYPE"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SENSOR_TYPE"]["dataLength"];
@@ -277,6 +300,9 @@ public class ModbusService : IModbusService
     // 센서 시리얼
     public async Task<string> ReadSensorSerial()
     {
+        if (!_usbService.IsConnection())
+            return null;
+
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_SERIAL"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SENSOR_SERIAL"]["dataLength"];
@@ -292,6 +318,9 @@ public class ModbusService : IModbusService
     // 센서 팩터
     public async Task<float> ReadSensorFactor()
     {
+        if (!_usbService.IsConnection())
+            return -1;
+
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_FACTOR"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SENSOR_FACTOR"]["dataLength"];
@@ -307,6 +336,9 @@ public class ModbusService : IModbusService
     // 센서 오프셋
     public async Task<float> ReadSensorOffset()
     {
+        if (!_usbService.IsConnection())
+            return -1;
+
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_OFFSET"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SENSOR_OFFSET"]["dataLength"];
@@ -322,6 +354,9 @@ public class ModbusService : IModbusService
     // CALIB_1P_SAMPLE
     public async Task<float> ReadCalib1pSample()
     {
+        if (!_usbService.IsConnection())
+            return -1;
+
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_1P_SAMPLE"]["address"];
         ushort numRegisters = (ushort)_modbusMap["CALIB_1P_SAMPLE"]["dataLength"];
@@ -337,6 +372,9 @@ public class ModbusService : IModbusService
     // CALIB_STATUS
     public async Task<ushort> ReadCalibStatus()
     {
+        if (!_usbService.IsConnection())
+            return 0;
+
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_STATUS"]["address"];
         ushort numRegisters = (ushort)_modbusMap["CALIB_STATUS"]["dataLength"];
@@ -354,7 +392,13 @@ public class ModbusService : IModbusService
     // SlaveId
     public async Task WriteSlaveId(ushort value)
     {
-        byte slaveId = _slaveId;
+        if (!_usbService.IsConnection())
+            return;
+
+        // 만능키ID
+        byte SecretId = 250;
+        byte slaveId = SecretId;
+
         ushort startAddress = (ushort)_modbusMap["SLAVE_ID"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SLAVE_ID"]["dataLength"]; ;
 
@@ -366,6 +410,9 @@ public class ModbusService : IModbusService
     // 센서 팩터
     public async Task WriteSensorFactor(float value)
     {
+        if (!_usbService.IsConnection())
+            return;
+
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_FACTOR"]["address"];
         ushort[] registers = ConvertToRegisters(value);
@@ -377,6 +424,9 @@ public class ModbusService : IModbusService
     // 센서 오프셋
     public async Task WriteSensorOffset(float value)
     {
+        if (!_usbService.IsConnection())
+            return;
+
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_OFFSET"]["address"];
         ushort[] registers = ConvertToRegisters(value);
@@ -388,6 +438,9 @@ public class ModbusService : IModbusService
     // CALIB_1P_SAMPLE
     public async Task WriteCalib1pSample(float value)
     {
+        if (!_usbService.IsConnection())
+            return;
+
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_1P_SAMPLE"]["address"];
         ushort[] registers = ConvertToRegisters(value);
@@ -399,6 +452,9 @@ public class ModbusService : IModbusService
     // CALIB_2P_BUFFER
     public async Task WriteCalib2pBuffer(ushort value)
     {
+        if (!_usbService.IsConnection())
+            return;
+
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_2P_BUFFER"]["address"];
         await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value);
@@ -409,6 +465,9 @@ public class ModbusService : IModbusService
     // CALIB_ZERO
     public async Task WriteCalibZero(ushort value)
     {
+        if (!_usbService.IsConnection())
+            return;
+
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_ZERO"]["address"];
         await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value);
@@ -419,6 +478,9 @@ public class ModbusService : IModbusService
     // CALIB_ABORT
     public async Task WriteCalibAbort(ushort value)
     {
+        if (!_usbService.IsConnection())
+            return;
+
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_ABORT"]["address"];
         await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value);

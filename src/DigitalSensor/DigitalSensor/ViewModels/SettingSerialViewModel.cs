@@ -39,6 +39,13 @@ public partial class SettingSerialViewModel : ViewModelBase
     [ObservableProperty]
     private string? _selectedStopbits = "1";
 
+
+
+    public SettingSerialViewModel()
+    {
+        SerialConn= new SerialConn();
+    }
+
     public SettingSerialViewModel(AppSettings settings)
     {
         SerialConn = settings.SerialConn;

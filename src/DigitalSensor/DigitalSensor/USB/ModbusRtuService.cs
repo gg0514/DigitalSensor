@@ -98,6 +98,10 @@ public class ModbusRtuService
         frame[7] = (byte)(crc >> 8);
 
         _TxSignal?.Invoke();
+
+        string hex_req = BitConverter.ToString(frame, 0, 8).Replace("-", " ");
+        Debug.WriteLine($"MODBUS Write (0:8): {hex_req}");
+
         await _usbService.WriteAsync(frame);
 
         _RxSignal?.Invoke();
@@ -108,14 +112,22 @@ public class ModbusRtuService
         int expectedLength = 8;
         byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(500));
 
+        string hex_resp = BitConverter.ToString(response, 0, response.Length).Replace("-", " ");
+        Debug.WriteLine($"MODBUS Read (0:{response.Length}): {hex_resp}");
 
 
         if (!ValidateCrc(response))
             throw new Exception("CRC mismatch");
 
-        // 간단한 유효성 검사
-        if (!frame.Take(6).SequenceEqual(response.Take(6)))
-            throw new Exception("Mismatch response");
+        // 요청의 앞부분과 응답이 일치하는지 확인
+        if (!(response[0] == slaveId && response[1] == functionCode &&
+              response[2] == frame[2] && response[3] == frame[3] &&
+              response[4] == frame[4] && response[5] == frame[5]))
+        {
+            // SecretKey 250이 아닌 경우에만 예외 발생
+            if (slaveId != 250) 
+                throw new Exception("Mismatch response");
+        }
     }
 
     public async Task WriteMultipleRegistersAsync(byte slaveId, ushort startAddress, ushort[] values)
@@ -147,6 +159,10 @@ public class ModbusRtuService
         frame[^1] = (byte)(crc >> 8);
 
         _TxSignal?.Invoke();
+
+        string hex_req = BitConverter.ToString(frame, 0, 8).Replace("-", " ");
+        Debug.WriteLine($"MODBUS Write (0:8): {hex_req}");
+
         await _usbService.WriteAsync(frame);
 
    
@@ -157,6 +173,8 @@ public class ModbusRtuService
         int expectedLength = 8;
         byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(500));
 
+        string hex_resp = BitConverter.ToString(response, 0, response.Length).Replace("-", " ");
+        Debug.WriteLine($"MODBUS Read (0:{response.Length}): {hex_resp}");
 
         if (!ValidateCrc(response))
             throw new Exception("CRC mismatch");
@@ -166,7 +184,9 @@ public class ModbusRtuService
               response[2] == frame[2] && response[3] == frame[3] &&
               response[4] == frame[4] && response[5] == frame[5]))
         {
-            throw new Exception("Mismatch response");
+            // SecretKey 250이 아닌 경우에만 예외 발생
+            if (slaveId != 250)
+                throw new Exception("Mismatch response");
         }
     }
 
