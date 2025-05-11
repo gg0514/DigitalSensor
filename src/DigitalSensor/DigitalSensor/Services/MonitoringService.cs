@@ -159,7 +159,7 @@ public class MonitoringService : IMonitoringService
     public async Task StartMonitoring()
     {
         _isRunning = true;
-        //_modbusInfo.IsAlive = true;
+        _modbusInfo.IsAlive = true;
 
         while (_isRunning)
         {
@@ -181,7 +181,7 @@ public class MonitoringService : IMonitoringService
         // 초기화
         _isSensorType = false;
         _isRunning = false;
-        //_modbusInfo.IsAlive = false;
+        _modbusInfo.IsAlive = false;
 
 
         SensorInfo = new SensorInfo()

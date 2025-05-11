@@ -32,9 +32,9 @@ public partial class SettingModbusViewModel : ViewModelBase
     public SettingModbusViewModel(IModbusService modbusService, AppSettings settings, NotificationService notificationService)
     {
         _modbusService = modbusService;
+        _modbusInfo = settings.ModbusInfo;
         _notificationService = notificationService;
 
-        ModbusInfo = settings.ModbusInfo;
     }
 
 
