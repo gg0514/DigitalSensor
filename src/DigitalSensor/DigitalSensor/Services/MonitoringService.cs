@@ -161,8 +161,10 @@ public class MonitoringService : IMonitoringService
         _isRunning = true;
 
         while (_isRunning)
-        {                
-            if(_currentPage == "Home")                    
+        {
+            await Task.Delay(1000); // 1초 대기
+
+            if (_currentPage == "Home")                    
                 await NormalMode();
             else if (_currentPage == "Setting")           
                 await SettingMode();

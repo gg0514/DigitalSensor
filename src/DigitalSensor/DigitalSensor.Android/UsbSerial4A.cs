@@ -195,6 +195,62 @@ public class UsbSerial4A : IUsbService
     }
 
 
+    public async Task<byte[]?> ReadAsync()
+    {
+        return await Task.Run(() =>
+        {
+            int timeoutMs = 500;
+            var buffer = new byte[256];
+
+            int bytesRead = _usbSerialPort.Read(buffer, timeoutMs);
+
+            if (bytesRead <= 0)
+                return null;
+
+            var result = new byte[bytesRead];
+            Array.Copy(buffer, result, bytesRead);
+            return result;
+        });
+    }
+
+
+    public async Task<byte[]> ReadAsync(int length, TimeSpan timeout)
+    {
+        return await Task.Run(() =>
+        {
+            var resultBuffer = new byte[length];
+            int bytesRead = 0;
+            int timeoutMs = (int)timeout.TotalMilliseconds;
+
+            while (bytesRead < length)
+            {
+                int remaining = length - bytesRead;
+                var tempBuffer = new byte[remaining];
+
+                int read = _usbSerialPort.Read(tempBuffer, timeoutMs);
+
+                if (read <= 0)
+                    throw new TimeoutException("Serial read timed out");
+
+                Array.Copy(tempBuffer, 0, resultBuffer, bytesRead, read);
+                bytesRead += read;
+            }
+
+            return resultBuffer;
+        });
+    }
+
+    public async Task WriteAsync(byte[] buffer)
+    {
+        if (buffer == null)
+            throw new ArgumentNullException(nameof(buffer));
+
+        await Task.Run(() => _usbSerialPort.Write(buffer, DefaultTimeout));
+    }
+
+
+
+
     public int Read(byte[] buffer, int offset, int count)
     {
         if (buffer == null)
@@ -279,62 +335,6 @@ public class UsbSerial4A : IUsbService
 
         _usbSerialPort.Write(buffer, offset, count, DefaultTimeout);
     }
-
-
-
-    public async Task<byte[]?> ReadAsync()
-    {
-        return await Task.Run(() =>
-        {
-            int timeoutMs = 500;
-            var buffer = new byte[256];
-
-            int bytesRead = _usbSerialPort.Read(buffer, timeoutMs);
-
-            if (bytesRead <= 0)
-                return null;
-
-            var result = new byte[bytesRead];
-            Array.Copy(buffer, result, bytesRead);
-            return result;
-        });
-    }
-
-
-    public async Task<byte[]> ReadAsync(int length, TimeSpan timeout)
-    {
-        return await Task.Run(() =>
-        {
-            var resultBuffer = new byte[length];
-            int bytesRead = 0;
-            int timeoutMs = (int)timeout.TotalMilliseconds;
-
-            while (bytesRead < length)
-            {
-                int remaining = length - bytesRead;
-                var tempBuffer = new byte[remaining];
-
-                int read = _usbSerialPort.Read(tempBuffer, timeoutMs);
-
-                if (read <= 0)
-                    throw new TimeoutException("Serial read timed out");
-
-                Array.Copy(tempBuffer, 0, resultBuffer, bytesRead, read);
-                bytesRead += read;
-            }
-
-            return resultBuffer;
-        });
-    }
-
-    public async Task WriteAsync(byte[] buffer)
-    {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
-
-        await Task.Run(() => _usbSerialPort.Write(buffer, DefaultTimeout));
-    }
-
 
 
     public void DiscardInBuffer()
