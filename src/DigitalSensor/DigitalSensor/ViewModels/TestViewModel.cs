@@ -34,7 +34,7 @@ public partial class TestViewModel : ViewModelBase
     private byte slaveId = 250;
 
     [ObservableProperty]
-    private ushort registerAddress = 20;
+    private ushort registerAddress = 25;
 
     [ObservableProperty]
     private byte dataLength = 1;
@@ -81,7 +81,7 @@ public partial class TestViewModel : ViewModelBase
             int slaveID = values[0];
 
             string msg = $"Slave ID: {slaveID}";
-            Debug.WriteLine(msg);
+            //Debug.WriteLine(msg);
             _notificationService.ShowMessage("정보", msg);
 
             string msg2 = $"{DateTime.Now.ToString("[HH:mm:ss] ")} {msg}";

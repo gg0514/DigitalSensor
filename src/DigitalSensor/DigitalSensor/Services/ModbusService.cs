@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DigitalSensor.Utils;
 using DigitalSensor.USB;
+using Microsoft.Win32;
 
 namespace DigitalSensor.Services;
 
@@ -22,18 +23,16 @@ public interface IModbusService
     event Action TxSignal;
     event Action RxSignal;
 
-    byte SlaveId { get; set; }
-
     Task<bool> Open(int deviceId);
     Task<bool> Open(int deviceId, int baudRate, byte dataBits, byte stopBits, byte parity);
     Task Close();
 
-    Task<bool> Initialize();
     Task TestConnection();
-    Task<ushort[]> ReadSlaveId();
+    Task<int> VerifyID();
 
     Task<string> ReadHoldingRegisters(byte slaveId, ushort startAddress, ushort numRegisters);
 
+    Task<ushort[]> ReadSlaveId();
     Task<SensorData> ReadSensorData();
     Task<float> ReadSensorValue();
     Task<float> ReadTempValue();
@@ -65,13 +64,12 @@ public class ModbusService : IModbusService
     // Source
     private IUsbService _usbService;
     private JObject _modbusMap;
+    private byte _slaveId = 1;
 
     //private IModbusSerialMaster? _modbusMaster1;
     private ModbusRtuService _modbusMaster;
 
-    public byte SlaveId { get; set; } = 1; // 기본값 부여
-
-
+    
     public ModbusService(IUsbService usbService)
     {
         _usbService = usbService;
@@ -94,6 +92,7 @@ public class ModbusService : IModbusService
     {
         _modbusMap = await Task.Run(() =>
         {
+            Debug.WriteLine($"MODBUS - Loding Modbus Map File (modbus_config.json)");
             return JsonLoader.Load_modbusMap("modbus_config.json");
         });
 
@@ -105,6 +104,8 @@ public class ModbusService : IModbusService
             {
                 throw new InvalidOperationException("USB 연결을 열 수 없습니다.");
             }
+
+            Debug.WriteLine($"MODBUS - Device (ID:{deviceId}) Open Success!!");
 
             // Modbus 마스터 초기화
             //var usbStream = new UsbSerialAdapter(_usbService, TxSignal, RxSignal);
@@ -122,6 +123,7 @@ public class ModbusService : IModbusService
         if (_modbusMaster != null)
         {
             // USB 연결 비동기 닫기
+            Debug.WriteLine($"MODBUS - Close Device ...");
             await Task.Run(() => _usbService.Close());
 
             // Modbus 마스터 비동기 해제
@@ -130,23 +132,25 @@ public class ModbusService : IModbusService
         }
     }
 
-    public async Task<bool> Initialize()
+    public async Task<int> VerifyID()
     {
         if (_modbusMaster == null)
         {
-            Debug.WriteLine("MODBUS - Modbus master is not initialized.");
-            return false;
+            Debug.WriteLine("MODBUS - Modbus master is null");
+            return -1;
         }
 
         try
         {
-            SlaveId = (byte)(await ReadSlaveId())[0];
-            return true;
+            _slaveId = (byte)(await ReadSlaveId())[0];
+            Debug.WriteLine($"MODBUS - Verify ID: {_slaveId}");
+
+            return _slaveId;
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"MODBUS - Initialize Error: {ex.Message}");
-            return false;
+            Debug.WriteLine($"MODBUS - Verify Identification Error: {ex.Message}");
+            return -1;
         }
     }
 
@@ -154,7 +158,7 @@ public class ModbusService : IModbusService
     // 현재 동작하지 않음.
     public async Task TestConnection()
     {
-        await _modbusMaster?.ReadHoldingRegistersAsync(250, 20, 1);
+        await _modbusMaster?.ReadHoldingRegistersAsync(250, 25, 1);
     }
 
 
@@ -168,7 +172,6 @@ public class ModbusService : IModbusService
 
         string hexString = string.Join(" ", registers.Select(v => v.ToString("X4")));
 
-
         return $"ReadHoldingRegisters: {hexString}";
     }
 
@@ -176,25 +179,31 @@ public class ModbusService : IModbusService
     // SLAVE ID
     public async Task<ushort[]> ReadSlaveId()
     {
-        //byte slaveId = 250;
-        byte slaveId = 1;
+        // 만능키ID
+        byte SecretId = 250;
 
         ushort startAddress = (ushort)_modbusMap["SLAVE_ID"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SLAVE_ID"]["dataLength"]; ;
+        ushort[] registers = await _modbusMaster?.ReadHoldingRegistersAsync(SecretId, startAddress, numRegisters);
 
+        string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
 
-        Debug.WriteLine($"MODBUS - ReadSlaveId : _modbusMaster={_modbusMaster}");
+        Debug.WriteLine($"MODBUS - ReadSlaveId: {SecretId}, {startAddress}, {numRegisters}, Result= 0x{result}");
 
-        return await _modbusMaster?.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
+        return registers;
     }
 
     // 센서 데이터 통합
     public async Task<SensorData> ReadSensorData()
     {
-        byte slaveId = SlaveId;
+        byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_VALUE"]["address"];
         ushort numRegisters = 6;
         ushort[] registers = await _modbusMaster?.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
+
+        string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
+
+        Debug.WriteLine($"MODBUS - ReadSensorData: {slaveId}, {startAddress}, {numRegisters}, Result= 0x{result}");
 
         return ConvertToSensorData(registers);
     }
@@ -203,11 +212,14 @@ public class ModbusService : IModbusService
     // 센서 데이터
     public async Task<float> ReadSensorValue()
     {
-        byte slaveId = SlaveId;
+        byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_VALUE"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SENSOR_VALUE"]["dataLength"];
         ushort[] registers = await _modbusMaster?.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
 
+        string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
+
+        Debug.WriteLine($"MODBUS - ReadSensorValue: {slaveId}, {startAddress}, {numRegisters}, Result= 0x{result}");
 
         return ConvertToFloat(registers);
     }
@@ -216,11 +228,14 @@ public class ModbusService : IModbusService
     // 수온
     public async Task<float> ReadTempValue()
     {
-        byte slaveId = SlaveId;
+        byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["TEMP_VALUE"]["address"];
         ushort numRegisters = (ushort)_modbusMap["TEMP_VALUE"]["dataLength"];
         ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
 
+        string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
+
+        Debug.WriteLine($"MODBUS - ReadTempValue: {slaveId}, {startAddress}, {numRegisters}, Result= 0x{result}");
 
         return ConvertToFloat(registers);
     }
@@ -228,11 +243,14 @@ public class ModbusService : IModbusService
     // MV
     public async Task<float> ReadSensorMV()
     {
-        byte slaveId = SlaveId;
+        byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_MV"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SENSOR_MV"]["dataLength"];
         ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
 
+        string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
+
+        Debug.WriteLine($"MODBUS - ReadSensorMV: {slaveId}, {startAddress}, {numRegisters}, Result= 0x{result}");
 
         return ConvertToFloat(registers);
     }
@@ -240,21 +258,29 @@ public class ModbusService : IModbusService
     // 센서 타입
     public async Task<ushort> ReadSensorType()
     {
-        byte slaveId = SlaveId;
+        byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_TYPE"]["address"];
+        ushort numRegisters = (ushort)_modbusMap["SENSOR_TYPE"]["dataLength"];
+        ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
 
+        string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
 
-        return (await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, 1))[0];
+        Debug.WriteLine($"MODBUS - ReadSensorType: {slaveId}, {startAddress}, {numRegisters}, Result= 0x{result}");
+
+        return registers[0];
     }
 
     // 센서 시리얼
     public async Task<string> ReadSensorSerial()
     {
-        byte slaveId = SlaveId;
+        byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_SERIAL"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SENSOR_SERIAL"]["dataLength"];
         ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
 
+        string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
+
+        Debug.WriteLine($"MODBUS - ReadSensorSerial: {slaveId}, {startAddress}, {numRegisters}, Result= 0x{result}");
 
         return ConvertToHexString(registers);
     }
@@ -262,11 +288,14 @@ public class ModbusService : IModbusService
     // 센서 팩터
     public async Task<float> ReadSensorFactor()
     {
-        byte slaveId = SlaveId;
+        byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_FACTOR"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SENSOR_FACTOR"]["dataLength"];
         ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
 
+        string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
+
+        Debug.WriteLine($"MODBUS - ReadSensorFactor: {slaveId}, {startAddress}, {numRegisters}, Result= 0x{result}");
 
         return ConvertToFloat(registers);
     }
@@ -274,11 +303,14 @@ public class ModbusService : IModbusService
     // 센서 오프셋
     public async Task<float> ReadSensorOffset()
     {
-        byte slaveId = SlaveId;
+        byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_OFFSET"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SENSOR_OFFSET"]["dataLength"];
         ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
 
+        string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
+
+        Debug.WriteLine($"MODBUS - ReadSensorOffset: {slaveId}, {startAddress}, {numRegisters}, Result= 0x{result}");
 
         return ConvertToFloat(registers);
     }
@@ -286,11 +318,14 @@ public class ModbusService : IModbusService
     // CALIB_1P_SAMPLE
     public async Task<float> ReadCalib1pSample()
     {
-        byte slaveId = SlaveId;
+        byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_1P_SAMPLE"]["address"];
         ushort numRegisters = (ushort)_modbusMap["CALIB_1P_SAMPLE"]["dataLength"];
         ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
 
+        string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
+
+        Debug.WriteLine($"MODBUS - ReadCalib1pSample: {slaveId}, {startAddress}, {numRegisters}, Result= 0x{result}");
 
         return ConvertToFloat(registers);
     }
@@ -298,11 +333,16 @@ public class ModbusService : IModbusService
     // CALIB_STATUS
     public async Task<ushort> ReadCalibStatus()
     {
-        byte slaveId = SlaveId;
+        byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_STATUS"]["address"];
+        ushort numRegisters = (ushort)_modbusMap["CALIB_STATUS"]["dataLength"];
+        ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
 
+        string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
 
-        return (await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, 1))[0];
+        Debug.WriteLine($"MODBUS - ReadCalibStatus: {slaveId}, {startAddress}, {numRegisters}, Result= 0x{result}");
+
+        return registers[0];
     }
 
 
@@ -310,7 +350,7 @@ public class ModbusService : IModbusService
     // SlaveId
     public async Task WriteSlaveId(ushort value)
     {
-        byte slaveId = SlaveId;
+        byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SLAVE_ID"]["address"];
         ushort numRegisters = (ushort)_modbusMap["SLAVE_ID"]["dataLength"]; ;
 
@@ -322,7 +362,7 @@ public class ModbusService : IModbusService
     // 센서 팩터
     public async Task WriteSensorFactor(float value)
     {
-        byte slaveId = SlaveId;
+        byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_FACTOR"]["address"];
         ushort[] registers = ConvertToRegisters(value);
         await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers);
@@ -333,7 +373,7 @@ public class ModbusService : IModbusService
     // 센서 오프셋
     public async Task WriteSensorOffset(float value)
     {
-        byte slaveId = SlaveId;
+        byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_OFFSET"]["address"];
         ushort[] registers = ConvertToRegisters(value);
         await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers);
@@ -344,7 +384,7 @@ public class ModbusService : IModbusService
     // CALIB_1P_SAMPLE
     public async Task WriteCalib1pSample(float value)
     {
-        byte slaveId = SlaveId;
+        byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_1P_SAMPLE"]["address"];
         ushort[] registers = ConvertToRegisters(value);
         await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers);
@@ -355,7 +395,7 @@ public class ModbusService : IModbusService
     // CALIB_2P_BUFFER
     public async Task WriteCalib2pBuffer(ushort value)
     {
-        byte slaveId = SlaveId;
+        byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_2P_BUFFER"]["address"];
         await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value);
 
@@ -365,7 +405,7 @@ public class ModbusService : IModbusService
     // CALIB_ZERO
     public async Task WriteCalibZero(ushort value)
     {
-        byte slaveId = SlaveId;
+        byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_ZERO"]["address"];
         await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value);
 
@@ -375,7 +415,7 @@ public class ModbusService : IModbusService
     // CALIB_ABORT
     public async Task WriteCalibAbort(ushort value)
     {
-        byte slaveId = SlaveId;
+        byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_ABORT"]["address"];
         await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value);
 

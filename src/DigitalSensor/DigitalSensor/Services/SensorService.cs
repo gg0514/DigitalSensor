@@ -11,14 +11,13 @@ namespace DigitalSensor.Services;
 
 public interface ISensorService
 {
-    event Action SensorAttached;
+    event Action<UsbDeviceInfo> SensorAttached;
     event Action SensorDetached;
 
-    bool IsOpen();
     Task<bool> Open();
     Task Close();
 
-    Task<int> InitSlaveID();
+    Task<int> RetrieveID();
     Task<SensorInfo> GetSensorInfoAsync();
     Task<SensorData> GetSensorDataAsync();
     Task<int> GetCalibStatusAsync();
@@ -37,15 +36,14 @@ public interface ISensorService
 
 public class SensorService : ISensorService
 {
-    public event Action SensorAttached;
+    public event Action<UsbDeviceInfo> SensorAttached;
     public event Action SensorDetached;
 
     private readonly IModbusService _modbusService;
     private readonly IUsbService    _usbService;
     private readonly NotificationService _notificationService;
 
-    private int _deviceId = 0;
-    private bool _isOpen = false;
+    private UsbDeviceInfo _usbDeviceInfo;
 
     // for Design
     public SensorService()
@@ -66,31 +64,27 @@ public class SensorService : ISensorService
         _usbService.UsbDeviceDetached += OnUSBDeviceDetached;
     }
 
-    public bool IsOpen()
-    {
-        return _isOpen;
-    }
 
     private async void OnUSBPermissionGranted(UsbDeviceInfo deviceInfo)
     {
-        SettingViewModel vm = App.GlobalHost.GetService<SettingViewModel>();
-
         try
         {
-            _deviceId = deviceInfo.DeviceId;
-            _isOpen = await Open();
+            _usbDeviceInfo= deviceInfo;
+            bool isOpen = await Open();
 
-            if (_isOpen)
+            if (isOpen)
             {
-                SensorAttached?.Invoke();
+                SensorAttached?.Invoke(deviceInfo);
 
-                _notificationService.ShowMessage("정보", $"Device {_deviceId} opened successfully.");
-                Debug.WriteLine($"Device {_deviceId}:{deviceInfo.ProductName} opened successfully");
+                _notificationService.ShowMessage("정보", $"Device {deviceInfo.DeviceId} opened successfully.");
+                Debug.WriteLine($"USB - {deviceInfo.ProductName}:{deviceInfo.DeviceId} Device Attached");
 
-                await UiDispatcherHelper.RunOnUiThreadAsync( async () =>
-                {
-                    vm.UsbDevice = deviceInfo;
-                });
+                //SettingViewModel vm = App.GlobalHost.GetService<SettingViewModel>();
+
+                //await UiDispatcherHelper.RunOnUiThreadAsync( async () =>
+                //{
+                //    vm.UsbDevice = deviceInfo;
+                //});
             }
         }
         catch(Exception ex)
@@ -118,7 +112,7 @@ public class SensorService : ISensorService
     {
         try
         {
-            await _modbusService.Open(_deviceId);
+            await _modbusService.Open(_usbDeviceInfo.DeviceId);
             return true;
         }
         catch (Exception ex)
@@ -132,7 +126,6 @@ public class SensorService : ISensorService
         try
         {
             await _modbusService.Close();
-            _isOpen = false;
         }
         catch (Exception ex)
         {
@@ -141,24 +134,19 @@ public class SensorService : ISensorService
     }
 
 
-    public async Task<int> InitSlaveID()
+    public async Task<int> RetrieveID()
     {
-        int slaveId = -1;
-
         for (int i = 0; i < 5; i++)
         {
-            bool bOK = await _modbusService.Initialize();
+            int slaveId = await _modbusService.VerifyID();
 
-            if (bOK)
-            {
-                slaveId = _modbusService.SlaveId;
-                break;
-            }
+            if (slaveId > 0)
+                return slaveId;
 
             await Task.Delay(1000);
         }
 
-        return slaveId;
+        return -1;
     }
 
     public async Task<SensorInfo> GetSensorInfoAsync()

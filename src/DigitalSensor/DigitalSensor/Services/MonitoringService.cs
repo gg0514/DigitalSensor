@@ -15,7 +15,6 @@ public interface IMonitoringService
     SensorData SensorData { get; set; }
     CommandStatus CommandStatus { get; set; }
 
-
     event Action<Models.SensorInfo> SensorInfoReceived;
     event Action<Models.SensorData> SensorDataReceived;
 
@@ -29,7 +28,6 @@ public interface IMonitoringService
 
     void SetCurrentPage(string pageName);
 
-    Task InitSlaveID();
     Task StartMonitoring();
     Task StopMonitoring();
 
@@ -99,12 +97,13 @@ public class MonitoringService : IMonitoringService
     }
 
 
-    private async void OnSensorAttached()
+    private async void OnSensorAttached(UsbDeviceInfo deviceInfo)
     {
         try
         {
-            //await Task.Delay(200);
-            await InitSlaveID();
+            int slaveId = await RetrieveSensorID();
+
+            await UpdateInfo(deviceInfo, slaveId);
             await StartMonitoring();
         }
         catch (Exception ex)
@@ -129,14 +128,11 @@ public class MonitoringService : IMonitoringService
         Debug.WriteLine($"CurrentPage: {_currentPage}");
     }
 
-    public async Task InitSlaveID()
+    public async Task<int> RetrieveSensorID()
     {
-        int slaveId = await _sensorService.InitSlaveID();
+        Debug.WriteLine($"Monitoring - RetrieveSensorID ...");
 
-        if (slaveId > 0)
-            await UpdateSlaveID(slaveId);
-        else
-            throw new Exception("Failed at InitSlaveID.");
+        return await _sensorService.RetrieveID();
     }
 
     public async Task ApplyCalib_Zero()
@@ -402,8 +398,10 @@ public class MonitoringService : IMonitoringService
 
 
 
-    private async Task UpdateSlaveID(int slaveId)
+    private async Task UpdateInfo(UsbDeviceInfo usbInfo, int slaveId)
     {
+        _modbusInfo.DeviceId = usbInfo.DeviceId;
+        _modbusInfo.ProductName = usbInfo.ProductName;
         _modbusInfo.SlaveID = slaveId;
 
         //SettingViewModel vm = App.GlobalHost.GetService<SettingViewModel>();

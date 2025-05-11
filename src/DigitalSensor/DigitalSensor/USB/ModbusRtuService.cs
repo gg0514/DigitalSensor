@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using DigitalSensor.Models;
 using System.Threading;
 using System.Linq;
+using HarfBuzzSharp;
+using System.Diagnostics;
 
 namespace DigitalSensor.USB;
 
@@ -44,6 +46,10 @@ public class ModbusRtuService
         frame[6] = (byte)(crc & 0xFF);
         frame[7] = (byte)(crc >> 8);
 
+
+        string hex_req = BitConverter.ToString(frame, 0, 8).Replace("-", " ");
+        Debug.WriteLine($"MODBUS Write (0:8): {hex_req}");
+
         _TxSignal?.Invoke();
         await _usbService.WriteAsync(frame);
 
@@ -53,6 +59,9 @@ public class ModbusRtuService
 
         _RxSignal?.Invoke();
         byte[] response = await _usbService.ReadAsync();
+
+        string hex_resp = BitConverter.ToString(response, 0, response.Length).Replace("-", " ");
+        Debug.WriteLine($"MODBUS Read (0:{response.Length}): {hex_resp}");
 
         if (!ValidateCrc(response))
             throw new Exception("CRC mismatch");
