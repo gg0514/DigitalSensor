@@ -120,6 +120,7 @@
 			CornerRadius="12"
 			Padding="16"
 			Margin="10,5,5,20"
+			PointerPressed="OnBackgroundPointerPressed"
 			Effect="{DynamicResource ShadowElevation3}" >
 
 			<StackPanel>

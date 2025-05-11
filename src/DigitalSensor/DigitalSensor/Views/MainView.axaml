@@ -75,7 +75,7 @@
 			<ui:NavigationViewItem Content="Setting_Modbus" Tag="Setting_Modbus" IsVisible="False"/>
 			<ui:NavigationViewItem Content="Setting_Calibration" Tag="Setting_Calibration" IsVisible="False"/>
 			<ui:NavigationViewItem Content="Setting_Serial" Tag="Setting_Serial" IsVisible="False"/>
-			<ui:NavigationViewItem Content="pH" Tag="pH" />
+			<ui:NavigationViewItem Content="pH" Tag="pH" IsVisible="False"/>
 
 		</ui:NavigationView.MenuItems>
 

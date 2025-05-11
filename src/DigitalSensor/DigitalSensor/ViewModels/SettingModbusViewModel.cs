@@ -13,6 +13,8 @@ public partial class SettingModbusViewModel : ViewModelBase
     [ObservableProperty]
     public ModbusInfo _modbusInfo;
 
+
+
     public SettingModbusViewModel(AppSettings settings)
     {
         ModbusInfo = settings.ModbusInfo;

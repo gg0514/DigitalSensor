@@ -11,8 +11,6 @@ namespace DigitalSensor.ViewModels;
 
 public partial class SettingViewModel : ViewModelBase
 {
-    [ObservableProperty]
-    public UsbDeviceInfo _usbDevice;
 
     [ObservableProperty]
     public ModbusInfo _modbusInfo;
