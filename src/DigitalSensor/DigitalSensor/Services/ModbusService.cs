@@ -415,6 +415,7 @@ public class ModbusService : IModbusService
 
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_FACTOR"]["address"];
+
         ushort[] registers = ConvertToRegisters(value);
         await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers);
 
@@ -430,6 +431,7 @@ public class ModbusService : IModbusService
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["SENSOR_OFFSET"]["address"];
         ushort[] registers = ConvertToRegisters(value);
+
         await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers);
 
         Debug.WriteLine($"MODBUS - WriteSensorOffset: {slaveId},{startAddress},{value}");
@@ -444,6 +446,7 @@ public class ModbusService : IModbusService
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_1P_SAMPLE"]["address"];
         ushort[] registers = ConvertToRegisters(value);
+
         await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers);
 
         Debug.WriteLine($"MODBUS - WriteCalib1pSample: {slaveId},{startAddress},{value}");
@@ -545,13 +548,21 @@ public class ModbusService : IModbusService
         return hexString;
     }
 
+
+    // float	1.0f
+    // IEEE 754 (Hex)	0x3F800000
+    // ushort[] (Little-Endian)	{ 0x0000, 0x3F80 }
+
+    // Big-Endian	0x3F80 0x0000
+    // ushort[] = { 0x3F80, 0x0000 }
+    
     private ushort[] ConvertToRegisters(float value)
     {
-        byte[] bytes = BitConverter.GetBytes(value);
+        byte[] bytes = BitConverter.GetBytes(value); // [0x00, 0x00, 0x80, 0x3F]
         return new ushort[]
         {
-           (ushort)(bytes[2] << 8 | bytes[3]),
-           (ushort)(bytes[0] << 8 | bytes[1])
+        (ushort)(bytes[3] << 8 | bytes[2]), // 0x3F80
+        (ushort)(bytes[1] << 8 | bytes[0])  // 0x0000
         };
     }
 
