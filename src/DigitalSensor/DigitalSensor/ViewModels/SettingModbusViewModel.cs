@@ -11,13 +11,11 @@ namespace DigitalSensor.ViewModels;
 public partial class SettingModbusViewModel : ViewModelBase
 {
     [ObservableProperty]
-    public UsbDeviceInfo _usbDevice = new();
+    public ModbusInfo _modbusInfo;
 
-    [ObservableProperty]
-    public int           _slaveID= 1;
-
-    public SettingModbusViewModel()
+    public SettingModbusViewModel(AppSettings settings)
     {
+        ModbusInfo = settings.ModbusInfo;
     }
 
 

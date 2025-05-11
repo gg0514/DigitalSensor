@@ -4,6 +4,7 @@ using DigitalSensor.Services;
 using System;
 using System.Diagnostics;
 using Avalonia.Interactivity;
+using DigitalSensor.Models;
 
 
 namespace DigitalSensor.Services;
@@ -52,9 +53,9 @@ public class FakeNavigationService : INavigationService
     {
         "Home" => new HomeViewModel(),
         "Setting" => new SettingViewModel(),
-        "Setting_Modbus" => new SettingModbusViewModel(),
-        "Setting_Calibration" => new SettingCalibViewModel(),
-        "Setting_Serial" => new SettingSerialViewModel(),
+        "Setting_Modbus" => new SettingModbusViewModel(new Models.AppSettings()),
+        "Setting_Calibration" => new SettingCalibViewModel(new Models.AppSettings()),
+        "Setting_Serial" => new SettingSerialViewModel(new Models.AppSettings()),
         "Calib_Zero" => new Calib_ZeroViewModel(),
         "Calib_1PSample" => new Calib_1PSampleViewModel(),
         "Calib_2PBuffer" => new Calib_2PBufferViewModel(),

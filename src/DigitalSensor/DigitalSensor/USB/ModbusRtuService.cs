@@ -53,12 +53,12 @@ public class ModbusRtuService
         _TxSignal?.Invoke();
         await _usbService.WriteAsync(frame);
 
+        _RxSignal?.Invoke();
+        //byte[] response = await _usbService.ReadAsync();
+
         // 예상 응답: SlaveID + Function + ByteCount + Data... + CRC_L + CRC_H
         int expectedLength = 5 + numberOfPoints * 2;
-        //byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(500));
-
-        _RxSignal?.Invoke();
-        byte[] response = await _usbService.ReadAsync();
+        byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(500));
 
         string hex_resp = BitConverter.ToString(response, 0, response.Length).Replace("-", " ");
         Debug.WriteLine($"MODBUS Read (0:{response.Length}): {hex_resp}");
@@ -100,9 +100,16 @@ public class ModbusRtuService
         _TxSignal?.Invoke();
         await _usbService.WriteAsync(frame);
 
-        // 응답은 요청과 동일한 구조 (에코됨)
         _RxSignal?.Invoke();
-        byte[] response = await _usbService.ReadAsync();
+
+        //byte[] response = await _usbService.ReadAsync();
+
+        // 응답은 요청과 동일한 구조 (에코됨)
+        int expectedLength = 8;
+        byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(500));
+
+
+
         if (!ValidateCrc(response))
             throw new Exception("CRC mismatch");
 
@@ -142,9 +149,15 @@ public class ModbusRtuService
         _TxSignal?.Invoke();
         await _usbService.WriteAsync(frame);
 
-        // 응답: SlaveId + Func + StartAddr + Quantity + CRC = 8 bytes
+   
         _RxSignal?.Invoke();
-        byte[] response = await _usbService.ReadAsync();
+        //byte[] response = await _usbService.ReadAsync();
+
+        // 응답: SlaveId + Func + StartAddr + Quantity + CRC = 8 bytes
+        int expectedLength = 8;
+        byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(500));
+
+
         if (!ValidateCrc(response))
             throw new Exception("CRC mismatch");
 

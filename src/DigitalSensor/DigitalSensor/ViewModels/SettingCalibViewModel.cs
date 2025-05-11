@@ -12,11 +12,12 @@ public partial class SettingCalibViewModel : ViewModelBase
 {
 
     [ObservableProperty]
-    public CalibrationAdjust _calibAdjust = new();
+    public CalibrationAdjust _calibAdjust;
 
 
-    public SettingCalibViewModel()
+    public SettingCalibViewModel(AppSettings settings)
     {
+        CalibAdjust = settings.CalibAdjust;
     }
 
 

@@ -50,10 +50,10 @@ public class JsonLoader
         try
         {
             // 내부 저장소에 파일이 있는 경우 읽기
-            if (File.Exists(fullPath))
-            {
-                return LoadFromFile(fullPath);
-            }
+            //if (File.Exists(fullPath))
+            //{
+            //    return LoadFromFile(fullPath);
+            //}
 
             // 내부 저장소에 파일이 없으면 리소스에서 로드
             JObject jObject = LoadFromResource(jsonFilePath);

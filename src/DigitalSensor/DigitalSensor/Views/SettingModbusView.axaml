@@ -33,7 +33,7 @@
 						<StackPanel  Spacing="12">
 							<TextBlock Text="Slave ID" FontSize="16"/>
 							<!--<TextBlock Text="{Binding SlaveID}" FontSize="14" Foreground="Gray"/>-->
-							<ui:NumberBox Value="{Binding SlaveID}" Minimum="1" Maximum="30" 
+							<ui:NumberBox Value="{Binding ModbusInfo.SlaveID}" Minimum="1" Maximum="30" 
 										  FontSize="24" Foreground="Gray" 
 										  HorizontalAlignment="Stretch" SpinButtonPlacementMode="Inline"/>
 						</StackPanel>

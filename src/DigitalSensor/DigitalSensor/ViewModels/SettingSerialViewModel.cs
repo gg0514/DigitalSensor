@@ -13,7 +13,7 @@ public partial class SettingSerialViewModel : ViewModelBase
 {
 
     [ObservableProperty]
-    public SerialConn _serialConn = new();
+    public SerialConn _serialConn;
 
     [ObservableProperty]
     private ObservableCollection<string> _serialBaudrate;
@@ -39,8 +39,10 @@ public partial class SettingSerialViewModel : ViewModelBase
     [ObservableProperty]
     private string? _selectedStopbits = "1";
 
-    public SettingSerialViewModel()
+    public SettingSerialViewModel(AppSettings settings)
     {
+        SerialConn = settings.SerialConn;
+
         // 초기 항목 설정
         _serialBaudrate = new ObservableCollection<string>
             {

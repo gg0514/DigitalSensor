@@ -63,6 +63,8 @@ public class ModbusService : IModbusService
 
     // Source
     private IUsbService _usbService;
+    private SerialConn _serialConn;
+
     private JObject _modbusMap;
     private byte _slaveId = 1;
 
@@ -70,17 +72,19 @@ public class ModbusService : IModbusService
     private ModbusRtuService _modbusMaster;
 
     
-    public ModbusService(IUsbService usbService)
+    public ModbusService(IUsbService usbService, AppSettings settings)
     {
         _usbService = usbService;
+        _serialConn = settings.SerialConn;
     }
 
     public async Task<bool> Open(int deviceId)
     {
-        int buadRate = 9600;
-        int dataBits = 8;
-        int stopBits = 1;
-        int parity = 0;
+
+        int buadRate = int.Parse(_serialConn.BaudRate);
+        int dataBits = int.Parse(_serialConn.DataBits);
+        int stopBits = int.Parse(_serialConn.StopBits);    
+        int parity = int.Parse(_serialConn.Parity);    
 
         return await Open(deviceId, buadRate, (byte)dataBits, (byte)stopBits, (byte)parity);
 
