@@ -26,7 +26,8 @@ public partial class SettingModbusViewModel : ViewModelBase
 
     public SettingModbusViewModel()
     {
-        ModbusInfo = new ModbusInfo();
+        _modbusInfo = new ModbusInfo();
+
     }
 
     public SettingModbusViewModel(IModbusService modbusService, AppSettings settings, NotificationService notificationService)

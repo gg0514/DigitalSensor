@@ -43,12 +43,12 @@ public partial class SettingSerialViewModel : ViewModelBase
 
     public SettingSerialViewModel()
     {
-        SerialConn= new SerialConn();
+        _serialConn = new SerialConn();
     }
 
     public SettingSerialViewModel(AppSettings settings)
     {
-        SerialConn = settings.SerialConn;
+        _serialConn = settings.SerialConn;
 
         // 초기 항목 설정
         _serialBaudrate = new ObservableCollection<string>

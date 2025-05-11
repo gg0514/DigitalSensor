@@ -14,18 +14,23 @@ public partial class SettingCalibViewModel : ViewModelBase
     private readonly IModbusService _modbusService;
 
     [ObservableProperty]
+    public ModbusInfo _modbusInfo;
+
+    [ObservableProperty]
     public CalibrationAdjust _calibAdjust;
 
 
     public SettingCalibViewModel()
     {
-        CalibAdjust = new CalibrationAdjust();
+        _modbusInfo = new ModbusInfo();
+        _calibAdjust = new CalibrationAdjust();
     }
 
     public SettingCalibViewModel(IModbusService modbusService, AppSettings settings)
     {
         _modbusService = modbusService;
-        CalibAdjust = settings.CalibAdjust;
+        _modbusInfo = settings.ModbusInfo;
+        _calibAdjust = settings.CalibAdjust;
     }
 
 

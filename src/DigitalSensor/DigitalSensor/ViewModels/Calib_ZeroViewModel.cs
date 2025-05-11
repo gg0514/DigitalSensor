@@ -47,6 +47,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     {
         _monitoringService = new MonitoringService(new SensorService(), new AppSettings());
         _sensorService = new SensorService();
+        _modbusInfo = new ModbusInfo();
     }
 
     public Calib_ZeroViewModel(IMonitoringService monitoringService, ISensorService sensorService, AppSettings settings)

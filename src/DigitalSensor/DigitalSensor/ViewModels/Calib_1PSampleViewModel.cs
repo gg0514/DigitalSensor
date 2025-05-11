@@ -17,6 +17,8 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
     private readonly IMonitoringService _monitoringService;
     private readonly ISensorService _sensorService;
 
+    [ObservableProperty]
+    public ModbusInfo _modbusInfo;
 
     [ObservableProperty]
     private CalibrationStatus calStatus;
@@ -53,12 +55,15 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
     {
         _monitoringService = new MonitoringService(new SensorService(), new AppSettings());
         _sensorService = new SensorService();
+        _modbusInfo = new ModbusInfo();
+
     }
 
-    public Calib_1PSampleViewModel(IMonitoringService monitoringService, ISensorService sensorService)
+    public Calib_1PSampleViewModel(IMonitoringService monitoringService, ISensorService sensorService, AppSettings settings)
     {
         _monitoringService = monitoringService;
         _sensorService = sensorService;
+        _modbusInfo = settings.ModbusInfo;
 
         _monitoringService.SensorValueReceived += OnSensorValueReceived;
         _monitoringService.CalibStatusReceived += OnCalibStatusReceived;
