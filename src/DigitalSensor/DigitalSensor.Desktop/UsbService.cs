@@ -70,6 +70,37 @@ namespace DigitalSensor.Desktop
             _port.Write(buffer, offset, count);
         }
 
+        public Task<byte[]?> ReadAsync()
+        {
+            ArgumentNullException.ThrowIfNull(_port);
+
+            byte[] buffer = new byte[1024]; // Adjust the size as needed
+            int bytesRead = _port.Read(buffer, 0, buffer.Length);
+            byte[] result = new byte[bytesRead];
+            Array.Copy(buffer, result, bytesRead);
+            return Task.FromResult<byte[]>(result);
+        }
+
+        public Task<byte[]?> ReadAsync(int length, TimeSpan timeout)
+        {
+            ArgumentNullException.ThrowIfNull(_port);
+            byte[] buffer = new byte[length]; // Adjust the size as needed
+            _port.ReadTimeout = (int)timeout.TotalMilliseconds;
+            int bytesRead = _port.Read(buffer, 0, buffer.Length);
+            byte[] result = new byte[bytesRead];
+            Array.Copy(buffer, result, bytesRead);
+            return Task.FromResult<byte[]>(result);
+        }
+
+        public Task WriteAsync(byte[] buffer)
+        {
+            ArgumentNullException.ThrowIfNull(_port);
+            _port.Write(buffer, 0, buffer.Length);
+            return Task.CompletedTask;
+        }
+
+
+
         public Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
             return Task.Run(() => Read(buffer, offset, count));

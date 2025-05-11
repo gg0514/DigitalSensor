@@ -139,6 +139,50 @@ namespace DigitalSensor.Android
         }
 
 
+        public byte[]? Read()
+        {
+            ArgumentNullException.ThrowIfNull(_usbDriver);
+            return _usbDriver.Read();
+        }
+        public void Write(byte[] buffer)
+        {
+            ArgumentNullException.ThrowIfNull(_usbDriver);
+            _usbDriver.Write(buffer);
+        }
+
+        public async Task<byte[]?> ReadAsync()
+        {
+            ArgumentNullException.ThrowIfNull(_usbDriver);
+            return await _usbDriver.ReadAsync();
+        }
+
+        public async Task<byte[]?> ReadAsync(int length, TimeSpan timeout)
+        {
+            byte[] buffer = new byte[length];
+            int totalRead = 0;
+            var sw = Stopwatch.StartNew();
+
+            while (totalRead < length && sw.Elapsed < timeout)
+            {
+                int len = _usbDriver.Read(buffer, totalRead, length - totalRead);
+                if (len > 0)
+                    totalRead += len;
+            }
+
+            if (totalRead < length)
+                throw new TimeoutException();
+
+            return await Task.FromResult(buffer);
+        }
+
+        public async Task WriteAsync(byte[] buffer)
+        {
+            ArgumentNullException.ThrowIfNull(_usbDriver);
+            await _usbDriver.WriteAsync(buffer);
+        }
+        
+
+
         public int Read(byte[] buffer, int offset, int count)
         {
             int nRead = _usbDriver.Read(buffer, offset, count);
@@ -161,72 +205,6 @@ namespace DigitalSensor.Android
         }
 
 
-        public async Task<int> ReadAsync(byte[] buffer, int offset, int size, CancellationToken cancellationToken)
-        {
-            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
-            if (offset < 0 || size < 0 || offset + size > buffer.Length)
-                throw new ArgumentOutOfRangeException();
-
-            await _semaphore.WaitAsync();
-            
-                var byteBuffer = ByteBuffer.Allocate(size);
-                using var request = new UsbRequest();
-                request.Initialize(_usbConnection, _endpointRead);
-
-                if (!request.Queue(byteBuffer, size))
-                    throw new InvalidOperationException("Failed to queue read request.");
-
-                var completedRequest = await Task.Run(() => _usbConnection.RequestWait(1000));
-                if (completedRequest != request)
-                    throw new InvalidOperationException("Read request failed or timed out.");
-
-                int bytesRead = byteBuffer.Position();
-                if (bytesRead > 0)
-                {
-                    byteBuffer.Flip();
-                    byteBuffer.Get(buffer, offset, bytesRead);
-                }
-                string text = BitConverter.ToString(buffer, offset, size).Replace("-", " ");
-                Debug.WriteLine($"Read ({offset}:{size}): {text}");
-
-
-            _semaphore.Release();
-
-            return bytesRead;
-            
-        }
-
-        public async Task WriteAsync(byte[] buffer, int offset, int size, CancellationToken cancellationToken)
-        {
-            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
-            if (offset < 0 || size < 0 || offset + size > buffer.Length)
-                throw new ArgumentOutOfRangeException();
-
-            await _semaphore.WaitAsync();
-            {
-                var byteBuffer = ByteBuffer.Allocate(size);
-                byteBuffer.Put(buffer, offset, size);
-                byteBuffer.Flip();
-
-                string text = BitConverter.ToString(buffer, offset, size).Replace("-", " ");
-                Debug.WriteLine($"Write ({offset}:{size}): {text}");
-
-                using var request = new UsbRequest();
-                request.Initialize(_usbConnection, _endpointWrite);
-
-                if (!request.Queue(byteBuffer, size))
-                    throw new InvalidOperationException("Failed to queue write request.");
-
-                var completedRequest = await Task.Run(() => _usbConnection.RequestWait(1000));
-                if (completedRequest != request)
-                    throw new InvalidOperationException("Write request failed or timed out.");
-
-                int position = byteBuffer.Position();
-                if (position != size)
-                    throw new InvalidOperationException($"Incomplete write: {position} of {size} bytes.");
-            }
-            _semaphore.Release();
-        }
 
         public void DiscardInBuffer()
         {

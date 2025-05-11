@@ -8,6 +8,7 @@ using Modbus.Serial;
 using System.Collections.Generic;
 using DigitalSensor.Models;
 using System.Threading;
+using System.Linq;
 
 namespace DigitalSensor.USB;
 
@@ -24,31 +25,129 @@ public class ModbusRtuService
         _RxSignal = RxSignal;
     }
 
-    //public async Task<byte[]> ReadHoldingRegistersAsync(byte slaveId, ushort startAddress, ushort numberOfPoints)
-    //{
-    //    byte functionCode = 0x03;
-    //    byte[] frame = new byte[8];
-    //    frame[0] = slaveId;
-    //    frame[1] = functionCode;
-    //    frame[2] = (byte)(startAddress >> 8);
-    //    frame[3] = (byte)(startAddress & 0xFF);
-    //    frame[4] = (byte)(numberOfPoints >> 8);
-    //    frame[5] = (byte)(numberOfPoints & 0xFF);
-    //    ushort crc = Crc16(frame, 6);
-    //    frame[6] = (byte)(crc & 0xFF);
-    //    frame[7] = (byte)(crc >> 8);
+    public void Dispose()
+    {
+        _usbService.Close();
+    }
 
-    //    await _usbService.WriteAsync(frame);
+    public async Task<ushort[]> ReadHoldingRegistersAsync(byte slaveId, ushort startAddress, ushort numberOfPoints)
+    {
+        byte functionCode = 0x03;
+        byte[] frame = new byte[8];
+        frame[0] = slaveId;
+        frame[1] = functionCode;
+        frame[2] = (byte)(startAddress >> 8);
+        frame[3] = (byte)(startAddress & 0xFF);
+        frame[4] = (byte)(numberOfPoints >> 8);
+        frame[5] = (byte)(numberOfPoints & 0xFF);
+        ushort crc = Crc16(frame, 6);
+        frame[6] = (byte)(crc & 0xFF);
+        frame[7] = (byte)(crc >> 8);
 
-    //    // 예상 응답: SlaveID + Function + ByteCount + Data... + CRC_L + CRC_H
-    //    int expectedLength = 5 + numberOfPoints * 2;
-    //    byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(500));
+        _TxSignal?.Invoke();
+        await _usbService.WriteAsync(frame);
 
-    //    if (!ValidateCrc(response))
-    //        throw new Exception("CRC mismatch");
+        // 예상 응답: SlaveID + Function + ByteCount + Data... + CRC_L + CRC_H
+        int expectedLength = 5 + numberOfPoints * 2;
+        //byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(500));
 
-    //    return response;
-    //}
+        _RxSignal?.Invoke();
+        byte[] response = await _usbService.ReadAsync();
+
+        if (!ValidateCrc(response))
+            throw new Exception("CRC mismatch");
+
+
+        // ByteCount 읽기
+        int byteCount = response[2];
+        if (byteCount != numberOfPoints * 2)
+            throw new Exception($"Unexpected byte count: {byteCount}");
+
+        // 데이터 파싱
+        ushort[] registers = new ushort[numberOfPoints];
+        for (int i = 0; i < numberOfPoints; i++)
+        {
+            int dataIndex = 3 + i * 2;
+            registers[i] = (ushort)((response[dataIndex] << 8) | response[dataIndex + 1]);
+        }
+
+        return registers;
+    }
+
+    public async Task WriteSingleRegisterAsync(byte slaveId, ushort address, ushort value)
+    {
+        byte functionCode = 0x06;
+        byte[] frame = new byte[8];
+        frame[0] = slaveId;
+        frame[1] = functionCode;
+        frame[2] = (byte)(address >> 8);
+        frame[3] = (byte)(address & 0xFF);
+        frame[4] = (byte)(value >> 8);
+        frame[5] = (byte)(value & 0xFF);
+        ushort crc = Crc16(frame, 6);
+        frame[6] = (byte)(crc & 0xFF);
+        frame[7] = (byte)(crc >> 8);
+
+        _TxSignal?.Invoke();
+        await _usbService.WriteAsync(frame);
+
+        // 응답은 요청과 동일한 구조 (에코됨)
+        _RxSignal?.Invoke();
+        byte[] response = await _usbService.ReadAsync();
+        if (!ValidateCrc(response))
+            throw new Exception("CRC mismatch");
+
+        // 간단한 유효성 검사
+        if (!frame.Take(6).SequenceEqual(response.Take(6)))
+            throw new Exception("Mismatch response");
+    }
+
+    public async Task WriteMultipleRegistersAsync(byte slaveId, ushort startAddress, ushort[] values)
+    {
+        if (values == null || values.Length == 0)
+            throw new ArgumentException("Values cannot be null or empty");
+
+        byte functionCode = 0x10;
+        int registerCount = values.Length;
+        byte byteCount = (byte)(registerCount * 2);
+
+        byte[] frame = new byte[9 + byteCount]; // header(7) + data(N*2) + CRC(2)
+        frame[0] = slaveId;
+        frame[1] = functionCode;
+        frame[2] = (byte)(startAddress >> 8);
+        frame[3] = (byte)(startAddress & 0xFF);
+        frame[4] = (byte)(registerCount >> 8);
+        frame[5] = (byte)(registerCount & 0xFF);
+        frame[6] = byteCount;
+
+        for (int i = 0; i < registerCount; i++)
+        {
+            frame[7 + i * 2] = (byte)(values[i] >> 8);
+            frame[8 + i * 2] = (byte)(values[i] & 0xFF);
+        }
+
+        ushort crc = Crc16(frame, frame.Length - 2);
+        frame[^2] = (byte)(crc & 0xFF);
+        frame[^1] = (byte)(crc >> 8);
+
+        _TxSignal?.Invoke();
+        await _usbService.WriteAsync(frame);
+
+        // 응답: SlaveId + Func + StartAddr + Quantity + CRC = 8 bytes
+        _RxSignal?.Invoke();
+        byte[] response = await _usbService.ReadAsync();
+        if (!ValidateCrc(response))
+            throw new Exception("CRC mismatch");
+
+        // 요청의 앞부분과 응답이 일치하는지 확인
+        if (!(response[0] == slaveId && response[1] == functionCode &&
+              response[2] == frame[2] && response[3] == frame[3] &&
+              response[4] == frame[4] && response[5] == frame[5]))
+        {
+            throw new Exception("Mismatch response");
+        }
+    }
+
 
     private ushort Crc16(byte[] data, int length)
     {

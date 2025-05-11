@@ -19,14 +19,12 @@ namespace DigitalSensor.USB
         int Read(byte[] buffer, int offset, int count);
         void Write(byte[] buffer, int offset, int count);
 
+        Task<byte[]?> ReadAsync();
+        Task<byte[]?> ReadAsync(int length, TimeSpan timeout);
 
-
-
-        Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken);
-        Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken);
+        Task WriteAsync(byte[] buffer);
 
         void DiscardInBuffer();
-
         void Close();
         bool IsConnection();
     }
@@ -56,20 +54,27 @@ namespace DigitalSensor.USB
         {
         }
 
-        public Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+        public Task<byte[]?> ReadAsync()
         {
-            return Task.FromResult(0); // Return a completed task with a result of 0
+            return Task.FromResult<byte[]>(null); // Return a completed task with a null result
         }
 
-        public Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+        public Task<byte[]?> ReadAsync(int length, TimeSpan timeout)
+        {
+            return Task.FromResult<byte[]>(null); // Return a completed task with a null result
+        }
+
+        public Task WriteAsync(byte[] buffer)
         {
             return Task.CompletedTask; // Return a completed task
         }
+
 
         public bool TryRecover(Func<bool> communicationTest)
         {
             return false;
         }
+
 
         public void DiscardInBuffer()
         {

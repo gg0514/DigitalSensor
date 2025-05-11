@@ -65,7 +65,9 @@ public class ModbusService : IModbusService
     // Source
     private IUsbService _usbService;
     private JObject _modbusMap;
-    private IModbusSerialMaster? _modbusMaster;
+
+    //private IModbusSerialMaster? _modbusMaster1;
+    private ModbusRtuService _modbusMaster;
 
     public byte SlaveId { get; set; } = 1; // 기본값 부여
 
@@ -105,8 +107,10 @@ public class ModbusService : IModbusService
             }
 
             // Modbus 마스터 초기화
-            var usbStream = new UsbSerialAdapter(_usbService, TxSignal, RxSignal);
-            _modbusMaster = ModbusSerialMaster.CreateRtu(usbStream);
+            //var usbStream = new UsbSerialAdapter(_usbService, TxSignal, RxSignal);
+            //_modbusMaster = ModbusSerialMaster.CreateRtu(usbStream);
+
+            _modbusMaster = new ModbusRtuService(_usbService, TxSignal, RxSignal);
 
             return true;
         });
