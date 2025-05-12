@@ -16,6 +16,7 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
 {
     private readonly IMonitoringService _monitoringService;
     private readonly ISensorService _sensorService;
+    private readonly NotificationService _notificationService;
 
     [ObservableProperty]
     public ModbusInfo _modbusInfo;
@@ -59,11 +60,12 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
 
     }
 
-    public Calib_1PSampleViewModel(IMonitoringService monitoringService, ISensorService sensorService, AppSettings settings)
+    public Calib_1PSampleViewModel(IMonitoringService monitoringService, ISensorService sensorService, AppSettings settings, NotificationService notificationService)
     {
         _monitoringService = monitoringService;
         _sensorService = sensorService;
         _modbusInfo = settings.ModbusInfo;
+        _notificationService = notificationService;
 
         _monitoringService.SensorValueReceived += OnSensorValueReceived;
         _monitoringService.CalibStatusReceived += OnCalibStatusReceived;
@@ -117,6 +119,8 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
             Debug.WriteLine($"Apply 버튼클릭: {CalStatus}");
 
             await WaitForCalibrationCompletion();
+            _notificationService.ShowMessage("정보", $"1P Sample Calibration Completed");
+
         }
         finally
         {
@@ -136,6 +140,8 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
 
         // Abort후 상태코드를 받을 수 있는지 체크 필요함
         await ResetCallibStatus(1000);
+        _notificationService.ShowMessage("정보", $"1P Sample Calibration Aborted");
+
     }
     private async Task WaitForCalibrationCompletion()
     {

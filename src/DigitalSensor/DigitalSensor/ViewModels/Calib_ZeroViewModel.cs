@@ -16,6 +16,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
 {
     private readonly IMonitoringService _monitoringService;
     private readonly ISensorService _sensorService;
+    private readonly NotificationService _notificationService;
 
 
     [ObservableProperty]
@@ -50,7 +51,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         _modbusInfo = new ModbusInfo();
     }
 
-    public Calib_ZeroViewModel(IMonitoringService monitoringService, ISensorService sensorService, AppSettings settings)
+    public Calib_ZeroViewModel(IMonitoringService monitoringService, ISensorService sensorService, AppSettings settings, NotificationService notificationService)
     {
         _monitoringService = monitoringService;
         _sensorService = sensorService;
@@ -58,6 +59,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
 
         _monitoringService.SensorValueReceived += OnSensorValueReceived;
         _monitoringService.CalibStatusReceived += OnCalibStatusReceived;
+        _notificationService = notificationService;
     }
 
     [RelayCommand]
@@ -75,6 +77,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
             Debug.WriteLine($"Apply 버튼클릭: {CalStatus}");
 
             await WaitForCalibrationCompletion();
+            _notificationService.ShowMessage("정보", $"Zero Calibration Completed");
         }
         finally
         {
@@ -94,6 +97,8 @@ public partial class Calib_ZeroViewModel : ViewModelBase
 
         // Abort후 상태코드를 받을 수 있는지 체크 필요함
         await ResetCallibStatus(500);
+
+        _notificationService.ShowMessage("정보", $"Zero Calibration Aborted");
     }
 
     private async Task WaitForCalibrationCompletion()
