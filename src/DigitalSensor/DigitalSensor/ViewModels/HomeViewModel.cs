@@ -6,6 +6,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DigitalSensor.Extensions;
 using DigitalSensor.Models;
+using DigitalSensor.Resources;
 using DigitalSensor.Services;
 using DigitalSensor.USB;
 using System;
@@ -79,6 +80,11 @@ public partial class HomeViewModel : ViewModelBase
         _modbusService.TxSignal += OnTxSignal;
         _modbusService.RxSignal += OnRxSignal;
         _monitoringService.ErrSignal += OnErrSignal;
+
+
+        string Greeting = LocalizationManager.GetString("Greeting");
+
+        Debug.WriteLine(Greeting); // "안녕하세요" 출력
     }
 
 

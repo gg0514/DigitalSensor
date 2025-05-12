@@ -15,6 +15,8 @@ using System.Threading;
 using DigitalSensor.Extensions;
 using DigitalSensor.Models;
 using DigitalSensor.Utils;
+using DigitalSensor.Resources;
+using System.Globalization;
 
 namespace DigitalSensor;
 
@@ -88,6 +90,12 @@ public partial class App : Application
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
+
+        // 메인스레드에서만 동작  
+        //Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+
+        // 전체스레드에서 동작함
+        LocalizationManager.SetCulture("en-US");
     }
 
     public override async void OnFrameworkInitializationCompleted()
