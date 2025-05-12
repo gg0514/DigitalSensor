@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DigitalSensor.Models;
+using DigitalSensor.Services;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO.Ports;
@@ -11,9 +12,11 @@ namespace DigitalSensor.ViewModels;
 
 public partial class SettingSerialViewModel : ViewModelBase
 {
+    private AppSettings _settings;
+    private SerialConn _serialConn;
+    private readonly NotificationService _notificationService;
 
-    [ObservableProperty]
-    public SerialConn _serialConn;
+
 
     [ObservableProperty]
     private ObservableCollection<string> _serialBaudrate;
@@ -34,7 +37,7 @@ public partial class SettingSerialViewModel : ViewModelBase
     private string? _selectedDatabits = "8";
 
     [ObservableProperty]
-    private string? _selectedParity = "None";
+    private string? _selectedParity = "0";
 
     [ObservableProperty]
     private string? _selectedStopbits = "1";
@@ -44,12 +47,22 @@ public partial class SettingSerialViewModel : ViewModelBase
     public SettingSerialViewModel()
     {
         _serialConn = new SerialConn();
+
+        InitCombo();
     }
 
-    public SettingSerialViewModel(AppSettings settings)
+    public SettingSerialViewModel(AppSettings settings, NotificationService notificationService)
     {
+        _settings = settings;
         _serialConn = settings.SerialConn;
+        _notificationService = notificationService;
 
+        InitCombo();
+    }
+
+
+    private void InitCombo()
+    {
         // 초기 항목 설정
         _serialBaudrate = new ObservableCollection<string>
             {
@@ -65,22 +78,47 @@ public partial class SettingSerialViewModel : ViewModelBase
             };
         _serialParity = new ObservableCollection<string>
             {
-                "None",
-                "Odd",
-                "Even"
+                "0",
+                "1",
+                "2"
             };
         _serialStopbits = new ObservableCollection<string>
             {
                 "1",
                 "2"
             };
+
+
+
+        _selectedBaudrate = _serialConn.BaudRate;
+        _selectedDatabits = _serialConn.DataBits;
+        _selectedParity = _serialConn.Parity;
+        _selectedStopbits = _serialConn.StopBits;
     }
+
 
     [RelayCommand]
     private async void Apply()
     {
         // Save settings logic would go here
-    }
 
+        string baudRate = SelectedBaudrate ?? "9600";
+        string dataBits = SelectedDatabits ?? "8";
+        string parity = SelectedParity ?? "0";
+        string stopBits = SelectedStopbits ?? "1";
+
+        Debug.WriteLine($"Apply 버튼클릭: {baudRate}, {dataBits}, {parity}, {stopBits}");
+
+        // Update the SerialConn object
+        _serialConn.BaudRate = baudRate;
+        _serialConn.DataBits = dataBits;
+        _serialConn.Parity = parity;
+        _serialConn.StopBits = stopBits;
+
+        // Save the settings to the AppSettings
+        await Task.Run(() => _settings.SaveSettings());
+
+        _notificationService.ShowMessage("정보", $"Serial Info: {baudRate}, {dataBits}, {parity}, {stopBits}");
+    }
 
 }

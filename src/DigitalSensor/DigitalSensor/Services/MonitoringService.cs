@@ -91,6 +91,9 @@ public class MonitoringService : IMonitoringService
         _sensorService = dataService;
         _modbusInfo = settings.ModbusInfo;
 
+        // 상태 초기화
+        _modbusInfo.IsAlive = false;
+
         // Sensor 구독 등록
         _sensorService.SensorAttached += OnSensorAttached;
         _sensorService.SensorDetached += OnSensorDetached;

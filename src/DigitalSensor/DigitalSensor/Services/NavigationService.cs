@@ -55,7 +55,7 @@ public class FakeNavigationService : INavigationService
         "Setting" => new SettingViewModel(),
         "Setting_Modbus" => new SettingModbusViewModel(),
         "Setting_Calibration" => new SettingCalibViewModel(),
-        "Setting_Serial" => new SettingSerialViewModel(new Models.AppSettings()),
+        "Setting_Serial" => new SettingSerialViewModel(),
         "Calib_Zero" => new Calib_ZeroViewModel(),
         "Calib_1PSample" => new Calib_1PSampleViewModel(),
         "Calib_2PBuffer" => new Calib_2PBufferViewModel(),

@@ -7,20 +7,22 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO.Ports;
+using System.Runtime;
 using System.Threading.Tasks;
 
 namespace DigitalSensor.ViewModels;
 
 public partial class SettingCalibViewModel : ViewModelBase
 {
+    private readonly AppSettings _settings;
     private readonly IModbusService _modbusService;
     private readonly NotificationService _notificationService;
 
     [ObservableProperty]
-    public ModbusInfo _modbusInfo;
+    private ModbusInfo _modbusInfo;
 
     [ObservableProperty]
-    public CalibrationAdjust _calibAdjust;
+    private CalibrationAdjust _calibAdjust;
 
 
     public SettingCalibViewModel()
@@ -31,6 +33,7 @@ public partial class SettingCalibViewModel : ViewModelBase
 
     public SettingCalibViewModel(IModbusService modbusService, AppSettings settings, NotificationService notificationService)
     {
+        _settings= settings;
         _modbusService = modbusService;
         _modbusInfo = settings.ModbusInfo;
         _calibAdjust = settings.CalibAdjust;
@@ -42,8 +45,8 @@ public partial class SettingCalibViewModel : ViewModelBase
     [RelayCommand]
     private async void Apply()
     {
-        float factor = _calibAdjust.Factor;
-        float offset = _calibAdjust.Offset;
+        float factor = CalibAdjust.Factor;
+        float offset = CalibAdjust.Offset;
 
         try
         {
@@ -53,6 +56,9 @@ public partial class SettingCalibViewModel : ViewModelBase
             await Task.Delay(1000); // Simulate a delay for loading
 
             await _modbusService.WriteSensorOffset(offset);
+
+            // Save the settings to the AppSettings
+            await Task.Run(() => _settings.SaveSettings());
 
             _notificationService.ShowMessage("정보", $"Sensor Factor: {factor}, Offset: {offset}");
         }

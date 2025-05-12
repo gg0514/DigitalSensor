@@ -76,6 +76,8 @@ public class ModbusService : IModbusService
     {
         _usbService = usbService;
         _serialConn = settings.SerialConn;
+
+
     }
 
     public async Task<bool> Open(int deviceId)
@@ -404,6 +406,8 @@ public class ModbusService : IModbusService
 
         await _modbusMaster?.WriteSingleRegisterAsync(slaveId, startAddress, value);
 
+        // slave ID 변경
+        _slaveId = (byte)value;
         Debug.WriteLine($"MODBUS - WriteSlaveId: {slaveId},{startAddress},{value}");
     }
 

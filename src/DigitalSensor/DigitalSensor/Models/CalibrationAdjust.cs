@@ -1,4 +1,5 @@
 ﻿using Avalonia.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,8 +12,8 @@ using System.Threading.Tasks;
 
 namespace DigitalSensor.Models;
 
-public class CalibrationAdjust
+public partial class CalibrationAdjust : ObservableObject
 {
-    public float Factor { get; set; } = 1;          // slope
-    public float Offset { get; set; } = 0;           
+    [ObservableProperty] private float factor = 1;          // slope
+    [ObservableProperty] private float offset = 0;           
 }

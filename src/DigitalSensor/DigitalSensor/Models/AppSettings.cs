@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DigitalSensor.Models;
 using Newtonsoft.Json.Linq;
+using DigitalSensor.Utils;
 
 namespace DigitalSensor.Models;
 
@@ -30,6 +31,25 @@ public class AppSettings
         ModbusInfo = settings["ModbusInfo"].ToObject<ModbusInfo>();
         SerialConn = settings["SerialConn"].ToObject<SerialConn>();
         CalibAdjust = settings["CalibrationAdjust"].ToObject<CalibrationAdjust>();
+    }
+
+    public JObject ToJObject()
+    {
+        var settings = new JObject
+        {
+            ["ModbusInfo"] = JObject.FromObject(ModbusInfo),
+            ["SerialConn"] = JObject.FromObject(SerialConn),
+            ["CalibrationAdjust"] = JObject.FromObject(CalibAdjust)
+        };
+        return settings;
+    }
+
+    public void SaveSettings()
+    {
+        var settings = ToJObject();
+        string filePath= "appsettings.json";
+
+        JsonLoader.Save_toJson(settings, filePath);
     }
 }
 

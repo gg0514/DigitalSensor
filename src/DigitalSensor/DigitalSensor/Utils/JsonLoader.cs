@@ -44,37 +44,9 @@ public class JsonLoader
         if (string.IsNullOrWhiteSpace(jsonFilePath))
             throw new ArgumentException("File path cannot be empty or null.", nameof(jsonFilePath));
 
-        // 내부 저장소 경로
-        string fullPath = Path.Combine(BasePath, Path.GetFileName(jsonFilePath));
-
-        try
-        {
-            // 내부 저장소에 파일이 있는 경우 읽기
-            //if (File.Exists(fullPath))
-            //{
-            //    return LoadFromFile(fullPath);
-            //}
-
-            // 내부 저장소에 파일이 없으면 리소스에서 로드
-            JObject jObject = LoadFromResource(jsonFilePath);
-
-            // 리소스 데이터를 내부 저장소에 저장 (초기화)
-            Save_toJson(jObject, jsonFilePath);
-
-            return jObject;
-        }
-        catch (FileNotFoundException ex)
-        {
-            throw new FileNotFoundException($"JSON file not found: {jsonFilePath}", ex);
-        }
-        catch (IOException ex)
-        {
-            throw new IOException($"Failed to load JSON from file: {jsonFilePath}", ex);
-        }
-        catch (JsonReaderException ex)
-        {
-            throw new JsonReaderException($"Invalid JSON format in file: {jsonFilePath}", ex);
-        }
+        // 내부 저장소에 파일이 없으면 리소스에서 로드
+        JObject jObject = LoadFromResource(jsonFilePath);
+        return jObject;
     }
 
 
