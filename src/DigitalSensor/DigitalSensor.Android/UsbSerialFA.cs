@@ -8,14 +8,13 @@ using Android.Content;
 using Android.Hardware.Usb;
 using Android.App;
 
+using DigitalSensor.USB;
+using DigitalSensor.Models;
+
 
 //*********************************************
 // UsbSerial4Android 라이브러리 사용
 using UsbSerial4Android;
-using Org.Xmlpull.V1.Sax2;
-using System.Threading;
-using DigitalSensor.USB;
-using DigitalSensor.Models;
 
 //*********************************************
 // UsbSerialForAndroid.Net 라이브러리 사용
@@ -27,7 +26,7 @@ using System.IO.Ports;
 
 namespace DigitalSensor.Android;
 
-public class UsbSerial4A : IUsbService
+public class UsbSerialFA : IUsbService
 {
 
     public event Action<UsbDeviceInfo> UsbPermissionGranted;
@@ -49,7 +48,7 @@ public class UsbSerial4A : IUsbService
     private const int DefaultTimeout = 1000;
 
 
-    public UsbSerial4A()
+    public UsbSerialFA()
     {
         bool isShowToast = false;
 
