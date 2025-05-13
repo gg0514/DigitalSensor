@@ -80,7 +80,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
             Debug.WriteLine($"Apply 버튼클릭: {CalStatus}");
 
             await WaitForCalibrationCompletion();
-            _notificationService.ShowMessage("정보", $"Zero Calibration Completed");
+            _notificationService.ShowMessage(Localize["Information"], $"Zero Calibration Completed");
         }
         finally
         {
@@ -101,7 +101,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         // Abort후 상태코드를 받을 수 있는지 체크 필요함
         await ResetCallibStatus(500);
 
-        _notificationService.ShowMessage("정보", $"Zero Calibration Aborted");
+        _notificationService.ShowMessage(Localize["Information"], $"Zero Calibration Aborted");
     }
 
     private async Task WaitForCalibrationCompletion()

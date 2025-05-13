@@ -97,7 +97,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   2P Buffer과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   2P Buffer Calibration과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string _2PBuffer {
             get {
@@ -192,6 +192,15 @@ namespace DigitalSensor.Resources {
         internal static string Guide {
             get {
                 return ResourceManager.GetString("Guide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Information과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string Information {
+            get {
+                return ResourceManager.GetString("Information", resourceCulture);
             }
         }
         

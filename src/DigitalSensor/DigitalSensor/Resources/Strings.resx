@@ -203,4 +203,7 @@
   <data name="2PGuide3" xml:space="preserve">
     <value>3. If you want to cancel calibration, Press [Stop] button.</value>
   </data>
+  <data name="Information" xml:space="preserve">
+    <value>Information</value>
+  </data>
 </root>

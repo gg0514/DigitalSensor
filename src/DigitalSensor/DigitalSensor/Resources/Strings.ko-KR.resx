@@ -195,4 +195,7 @@
   <data name="2PGuide3" xml:space="preserve">
     <value>3. 교정을 중단하려면 중단버튼을 누른다.</value>
   </data>
+  <data name="Information" xml:space="preserve">
+    <value>정보</value>
+  </data>
 </root>

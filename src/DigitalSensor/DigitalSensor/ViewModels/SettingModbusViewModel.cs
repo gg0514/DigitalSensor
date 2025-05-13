@@ -54,7 +54,7 @@ public partial class SettingModbusViewModel : ViewModelBase
             int slaveID = await _modbusService.VerifyID();
             ModbusInfo.SlaveID = slaveID;
 
-            _notificationService.ShowMessage("정보", $"Current SlaveID : {slaveID}");
+            _notificationService.ShowMessage(Localize["Information"], $"Current SlaveID : {slaveID}");
 
             await Task.Delay(1000); // Simulate a delay for loading
         }
@@ -81,7 +81,7 @@ public partial class SettingModbusViewModel : ViewModelBase
 
             await _modbusService.WriteSlaveId((ushort)slaveID);
 
-            _notificationService.ShowMessage("정보", $"Current SlaveID : {slaveID}");
+            _notificationService.ShowMessage(Localize["Information"], $"Current SlaveID : {slaveID}");
 
             await Task.Delay(1000); // Simulate a delay for loading
         }

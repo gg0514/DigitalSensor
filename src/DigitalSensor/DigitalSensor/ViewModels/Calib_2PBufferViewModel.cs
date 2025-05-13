@@ -102,7 +102,7 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
                 // 2번 Calibration이 완료될 때까지 대기
                 await WaitForCalibrationCompletion();
 
-                _notificationService.ShowMessage("정보", $"2P Buffer Calibration Completed");
+                _notificationService.ShowMessage(Localize["Information"], $"2P Buffer Calibration Completed");
             }
         }
         finally
@@ -123,7 +123,7 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
 
         // Abort후 상태코드를 받을 수 있는지 체크 필요함
         await ResetCallibStatus(1000);
-        _notificationService.ShowMessage("정보", $"2P Buffer Calibration Aborted");
+        _notificationService.ShowMessage(Localize["Information"], $"2P Buffer Calibration Aborted");
 
     }
     private async Task WaitForCalibrationCompletion()

@@ -121,7 +121,7 @@ public partial class SettingSerialViewModel : ViewModelBase
         // Save the settings to the AppSettings
         await Task.Run(() => _settings.SaveSettings());
 
-        _notificationService.ShowMessage("정보", $"Serial Info: {baudRate}, {dataBits}, {parity}, {stopBits}");
+        _notificationService.ShowMessage(Localize["Information"], $"Serial Info: {baudRate}, {dataBits}, {parity}, {stopBits}");
     }
 
 }

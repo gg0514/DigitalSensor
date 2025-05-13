@@ -12,6 +12,7 @@ using DigitalSensor.Models;
 using DigitalSensor.Resources;
 using DigitalSensor.Services;
 using DigitalSensor.USB;
+using Microsoft.VisualBasic;
 using Modbus.Device;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -87,7 +88,7 @@ public partial class TestViewModel : ViewModelBase
 
             string msg = $"Slave ID: {slaveID}";
             //Debug.WriteLine(msg);
-            _notificationService.ShowMessage("정보", msg);
+            _notificationService.ShowMessage(Localize["Information"], msg);
 
             string msg2 = $"{DateTime.Now.ToString("[HH:mm:ss] ")} {msg}";
 
@@ -157,7 +158,7 @@ public partial class TestViewModel : ViewModelBase
             // Desktop에서 테스트할 때는 DeviceId를 직접 지정
             await _modbusService.Open(DeviceId);
 
-            _notificationService.ShowMessage("정보", $"Device {DeviceId} opened successfully.");
+            _notificationService.ShowMessage(Localize["Information"], $"Device {DeviceId} opened successfully.");
         }
         catch (Exception ex)
         {
@@ -177,7 +178,7 @@ public partial class TestViewModel : ViewModelBase
         {
             await _modbusService.Close();
 
-            _notificationService.ShowMessage("정보", $"Device closed.");
+            _notificationService.ShowMessage(Localize["Information"], $"Device closed.");
         }
         catch (Exception ex)
         {
@@ -200,18 +201,18 @@ public partial class TestViewModel : ViewModelBase
             if (deviceIds.Count == 0)
             {
                 ResultText = "No devices found.";
-                _notificationService.ShowMessage("정보", $"{ResultText}");
+                _notificationService.ShowMessage(Localize["Information"], $"{ResultText}");
 
                 return;
             }
 
             DeviceId = deviceIds[0];
-            _notificationService.ShowMessage("정보", $"Device {DeviceId} detected.");
+            _notificationService.ShowMessage(Localize["Information"], $"Device {DeviceId} detected.");
 
             //await RunOnUiAsync(() =>
             //{
             //    DeviceId = deviceIds[0];
-            //    _notificationService.ShowMessage("정보", $"Device {DeviceId} detected.");
+            //    _notificationService.ShowMessage(Localize["Information"], $"Device {DeviceId} detected.");
             //    return Task.CompletedTask;
             //});
         }

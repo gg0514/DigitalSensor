@@ -1,5 +1,6 @@
 ﻿using DigitalSensor.Extensions;
 using DigitalSensor.Models;
+using DigitalSensor.Resources;
 using DigitalSensor.USB;
 using DigitalSensor.ViewModels;
 using System;
@@ -44,6 +45,7 @@ public class SensorService : ISensorService
     private readonly NotificationService _notificationService;
 
     private UsbDeviceInfo _usbDeviceInfo;
+    public Localize Localize { get; } = new();
 
     // for Design
     public SensorService()
@@ -76,7 +78,7 @@ public class SensorService : ISensorService
             {
                 SensorAttached?.Invoke(deviceInfo);
 
-                _notificationService.ShowMessage("정보", $"Device {deviceInfo.DeviceId} opened successfully.");
+                _notificationService.ShowMessage(Localize["Information"], $"Device {deviceInfo.DeviceId} opened successfully.");
                 Debug.WriteLine($"USB - {deviceInfo.ProductName}:{deviceInfo.DeviceId} Device Attached");
 
                 //SettingViewModel vm = App.GlobalHost.GetService<SettingViewModel>();
@@ -90,7 +92,7 @@ public class SensorService : ISensorService
         catch(Exception ex)
         {
             Debug.WriteLine($"Error opening device: {ex.Message}");
-            _notificationService.ShowMessage("정보", $"Error opening device: {ex.Message}");
+            _notificationService.ShowMessage(Localize["Information"], $"Error opening device: {ex.Message}");
             return;
         }
 
@@ -103,7 +105,7 @@ public class SensorService : ISensorService
     private async void OnUSBDeviceDetached(UsbDeviceInfo deviceInfo)
     {
         await _modbusService.Close();
-        _notificationService.ShowMessage("정보", $"Device closed.");
+        _notificationService.ShowMessage(Localize["Information"], $"Device closed.");
 
         SensorDetached?.Invoke();       
     }
