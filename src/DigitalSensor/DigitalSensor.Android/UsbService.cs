@@ -36,7 +36,7 @@ namespace DigitalSensor.Android
         private UsbDriverBase? _usbDriver;
         private UsbRecoveryHandler? _usbRecoveryHandler;
 
-        private UsbDeviceConnection _usbConnection ;
+        private UsbDeviceConnection _usbConnection ; 
         private UsbEndpoint _endpointRead;
         private UsbEndpoint _endpointWrite;
         private UsbInterface _usbInterface;

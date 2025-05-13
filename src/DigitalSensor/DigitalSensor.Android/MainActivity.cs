@@ -28,8 +28,9 @@ public class MainActivity : AvaloniaMainActivity<App>
 
     private void OnRegisterPlatformService(IServiceCollection services)
     {
-//        services.AddSingleton<IUsbService, UsbService>();
-        services.AddSingleton<IUsbService, UsbSerial4A>();
+        //services.AddSingleton<IUsbService, UsbService>();
+        //services.AddSingleton<IUsbService, UsbSerial4A>();
+        services.AddSingleton<IUsbService, UsbSerialFA>();
     }
 
     public override void OnBackPressed()

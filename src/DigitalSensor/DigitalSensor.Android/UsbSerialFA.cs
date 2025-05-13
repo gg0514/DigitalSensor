@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using Android.Content;
@@ -13,15 +13,15 @@ using DigitalSensor.Models;
 
 
 //*********************************************
-// UsbSerial4Android 라이브러리 사용
-using UsbSerial4Android;
+// UsbSerialForAndroid 라이브러리 사용
+using Hoho.Android.UsbSerial.Driver;
 
 //*********************************************
 // UsbSerialForAndroid.Net 라이브러리 사용
 using UsbSerialForAndroid.Net;
 using UsbSerialForAndroid.Net.Drivers;
 using UsbSerialForAndroid.Net.Helper;
-using System.IO.Ports;
+//using System.IO.Ports;
 
 
 namespace DigitalSensor.Android;
@@ -37,13 +37,10 @@ public class UsbSerialFA : IUsbService
 
     // USB 드라이버
     private UsbDeviceConnection _usbConnection;
-    private UsbEndpoint _endpointRead;
-    private UsbEndpoint _endpointWrite;
-    private UsbInterface _usbInterface;
 
 
     private IUsbSerialDriver _usbSerialDriver;
-    private IUsbSerialPort _usbSerialPort;                      // port 번호는 0부터 시작 (Interface 0)
+    private UsbSerialPort _usbSerialPort;                      // port 번호는 0부터 시작 (Interface 0)
 
     private const int DefaultTimeout = 1000;
 
@@ -91,11 +88,10 @@ public class UsbSerialFA : IUsbService
 
     public void CreateDriver(UsbDevice device)
     {
-        // UsbSerial4Android 드라이버 생성
+        // UsbSerialForAndroid 드라이버 생성
         _usbSerialDriver = UsbSerialProber.GetDefaultProber().ProbeDevice(device);
         _usbSerialPort = _usbSerialDriver.GetPorts()[0]; // Get the first port available
 
-        _usbInterface = device.GetInterface(0);
     }
 
     private static UsbManager GetUsbManager()
@@ -144,10 +140,53 @@ public class UsbSerialFA : IUsbService
         try
         {
             _usbSerialPort.Open(_usbConnection);
-            _usbSerialPort.SetParameters(baudRate, dataBits, stopBits, parity);
+            _usbSerialPort.SetParameters(baudRate, dataBits, (StopBits)stopBits, (Parity)parity);
 
-            _endpointRead = _usbSerialPort.GetReadEndpoint();
-            _endpointWrite = _usbSerialPort.GetWriteEndpoint();
+
+            bool isConnected = IsOpen();
+
+            if (isConnected)
+            {
+                byte[] frame = new byte[8];
+                frame[0] = 0xfa;
+                frame[1] = 0x03;
+                frame[2] = 0x00;
+                frame[3] = 0x19;
+                frame[4] = 0x00;
+                frame[5] = 0x01;
+                frame[6] = 0x40;
+                frame[7] = 0x46;
+                _usbSerialPort.Write(frame, 1000);
+
+                // 핵심 로직
+                Thread.Sleep(200);
+
+                //byte[] buffer = new byte[64];
+                //int numBytesRead = _usbSerialPort.Read(buffer, 1000);
+                //string hex_read = BitConverter.ToString(buffer, 0, 16).Replace("-", " ");
+                //Debug.WriteLine($"USB Serial Port opened successfully: {deviceId}, nRead: {numBytesRead}, Data: {hex_read}");
+
+
+                // 성공
+                //byte[]? buffer = ReadTest(7, TimeSpan.FromMilliseconds(500));
+                //string hex_read = BitConverter.ToString(buffer, 0, 16).Replace("-", " ");
+
+
+                // 에러 생김
+                Task<byte[]> task = ReadAsync(7, TimeSpan.FromMilliseconds(500));
+                byte[]? buffer = task.Result;
+                string hex_read = BitConverter.ToString(buffer, 0, buffer.Length).Replace("-", " ");
+
+
+
+                // 포트가 열렸을 때 추가 작업 수행
+                Debug.WriteLine($"USB Serial Port opened successfully: {deviceId}, nRead: {buffer.Length}, Data: {hex_read}");
+            }
+            else
+            {
+                // 포트 열기에 실패했을 때 처리
+                Debug.WriteLine($"Failed to open USB Serial Port: {deviceId}");
+            }    
 
             return true;
         }
@@ -166,7 +205,8 @@ public class UsbSerialFA : IUsbService
         if (_usbSerialPort == null)
             throw new NullReferenceException("UsbSerialPort is null");
 
-        return _usbSerialPort.IsOpen();
+        CommonUsbSerialPort commonUsbSerialPort = _usbSerialPort as CommonUsbSerialPort;
+        return commonUsbSerialPort.IsConnected();
     }
 
     public void Close()
@@ -213,38 +253,58 @@ public class UsbSerialFA : IUsbService
     }
 
 
-    public async Task<byte[]> ReadAsync(int length, TimeSpan timeout)
+    // 성공
+    //public byte[] ReadTest(int length, TimeSpan timeout)
+    //{
+    //    var resultBuffer = new byte[length+64];
+    //    int numBytesRead = _usbSerialPort.Read(resultBuffer, 1000);
+
+    //    return resultBuffer;
+    //}
+
+    // 성공
+    //public Task<byte[]> ReadAsync(int length, TimeSpan timeout)
+    //{
+    //    var resultBuffer = new byte[length+64];
+    //    int numBytesRead = _usbSerialPort.Read(resultBuffer, 1000);
+
+    //    return Task.FromResult(resultBuffer);
+    //}
+
+
+    public Task<byte[]> ReadAsync(int length, TimeSpan timeout)
     {
-        return await Task.Run(() =>
+        var resultBuffer = new byte[length];
+        int bytesRead = 0;
+        int timeoutMs = (int)timeout.TotalMilliseconds;
+
+        while (bytesRead < length)
         {
-            var resultBuffer = new byte[length];
-            int bytesRead = 0;
-            int timeoutMs = (int)timeout.TotalMilliseconds;
+            int remaining = length - bytesRead;
 
-            while (bytesRead < length)
-            {
-                int remaining = length - bytesRead;
-                var tempBuffer = new byte[remaining];
+            //****************************************************
+            // FTDI의 경우, 상태바이트 2바이트를 포함하여 읽어야 함
+            var tempBuffer = new byte[remaining+2];
 
-                int read = _usbSerialPort.Read(tempBuffer, timeoutMs);
+            int read = _usbSerialPort.Read(tempBuffer, timeoutMs);
 
-                if (read <= 0)
-                    throw new TimeoutException("Serial read timed out");
+            if (read <= 0)
+                throw new TimeoutException("Serial read timed out");
 
-                Array.Copy(tempBuffer, 0, resultBuffer, bytesRead, read);
-                bytesRead += read;
-            }
+            Array.Copy(tempBuffer, 0, resultBuffer, bytesRead, read);
+            bytesRead += read;
+        }
 
-            return resultBuffer;
-        });
+        return Task.FromResult(resultBuffer);
     }
 
-    public async Task WriteAsync(byte[] buffer)
+    public Task WriteAsync(byte[] buffer)
     {
         if (buffer == null)
             throw new ArgumentNullException(nameof(buffer));
 
-        await Task.Run(() => _usbSerialPort.Write(buffer, DefaultTimeout));
+        _usbSerialPort.Write(buffer, DefaultTimeout);
+        return Task.CompletedTask;
     }
 
 
@@ -266,7 +326,7 @@ public class UsbSerialFA : IUsbService
 
         while (true)
         {
-            int bytesRead = _usbSerialPort.Read(temp, count, DefaultTimeout);
+            int bytesRead = _usbSerialPort.Read(temp, DefaultTimeout);
             if (bytesRead < 0)
             {
                 throw new Exception("USB Read failed via usb-serial-for-android");
@@ -332,7 +392,7 @@ public class UsbSerialFA : IUsbService
         string text = BitConverter.ToString(buffer, offset, count).Replace("-", " ");
         Debug.WriteLine($"Write ({offset}:{count}): {text}");
 
-        _usbSerialPort.Write(buffer, offset, count, DefaultTimeout);
+        _usbSerialPort.Write(buffer, DefaultTimeout);
     }
 
 

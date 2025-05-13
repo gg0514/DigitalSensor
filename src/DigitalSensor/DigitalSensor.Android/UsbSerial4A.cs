@@ -38,8 +38,6 @@ public class UsbSerial4A : IUsbService
 
     // USB 드라이버
     private UsbDeviceConnection _usbConnection;
-    private UsbEndpoint _endpointRead;
-    private UsbEndpoint _endpointWrite;
     private UsbInterface _usbInterface;
 
 
@@ -146,9 +144,6 @@ public class UsbSerial4A : IUsbService
         {
             _usbSerialPort.Open(_usbConnection);
             _usbSerialPort.SetParameters(baudRate, dataBits, stopBits, parity);
-
-            _endpointRead = _usbSerialPort.GetReadEndpoint();
-            _endpointWrite = _usbSerialPort.GetWriteEndpoint();
 
             return true;
         }

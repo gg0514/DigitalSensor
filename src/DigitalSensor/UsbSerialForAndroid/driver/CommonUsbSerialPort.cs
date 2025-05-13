@@ -58,6 +58,11 @@ namespace Hoho.Android.UsbSerial.Driver
                 $"<{this.GetType().Name} device_name={mDevice.DeviceName} device_id={mDevice.DeviceId} port_number={mPortNumber}>";
         }
 
+        public bool IsConnected()
+        {
+            return mConnection != null;
+        }
+
         /**
             * Returns the currently-bound USB device.
             *
