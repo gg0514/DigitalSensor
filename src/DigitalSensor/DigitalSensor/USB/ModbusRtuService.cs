@@ -52,7 +52,9 @@ public class ModbusRtuService
 
         _TxSignal?.Invoke();
         await _usbService.WriteAsync(frame);
-        await Task.Delay(1000); // 100ms 대기
+
+        // 장비 테스트해 보니, 200ms 정도 필요함
+        await Task.Delay(200); // 200ms 대기
 
         _RxSignal?.Invoke();
         //byte[] response = await _usbService.ReadAsync();
@@ -104,7 +106,7 @@ public class ModbusRtuService
         Debug.WriteLine($"MODBUS Write (0:8): {hex_req}");
 
         await _usbService.WriteAsync(frame);
-        await Task.Delay(200); // 100ms 대기
+        await Task.Delay(200); // 200ms 대기
 
         _RxSignal?.Invoke();
 
@@ -166,8 +168,9 @@ public class ModbusRtuService
         Debug.WriteLine($"MODBUS Write (0:{frame.Length}): {hex_req}");
 
         await _usbService.WriteAsync(frame);
+        await Task.Delay(200); // 200ms 대기
 
-   
+
         _RxSignal?.Invoke();
         //byte[] response = await _usbService.ReadAsync();
 

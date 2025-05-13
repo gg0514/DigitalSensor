@@ -220,7 +220,9 @@ public class UsbSerial4A : IUsbService
             while (bytesRead < length)
             {
                 int remaining = length - bytesRead;
-                var tempBuffer = new byte[remaining];
+
+                // FTDI USB Serial은 상태바이트 2바이트 필요함
+                var tempBuffer = new byte[remaining+2];
 
                 int read = _usbSerialPort.Read(tempBuffer, timeoutMs);
 
