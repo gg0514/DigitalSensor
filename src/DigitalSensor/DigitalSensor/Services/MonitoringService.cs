@@ -186,6 +186,7 @@ public class MonitoringService : IMonitoringService
         _isRunning = false;
         _modbusInfo.IsAlive = false;
 
+        ErrSignal?.Invoke();
 
         SensorInfo = new SensorInfo()
         {

@@ -108,7 +108,8 @@ public partial class HomeViewModel : ViewModelBase
 
     public void OnErrSignal()
     {
-        BlinkLed(ref _ErrCts, val => IsErrOn = val);
+        // Err신호는 Tx/Rx와 다르게 LED가 꺼지지 않도록 설정
+        IsErrOn = true;
     }
 
     private void BlinkLed(ref CancellationTokenSource cts, Action<bool> setState)
