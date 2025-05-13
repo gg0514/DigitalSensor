@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO.Ports;
 using System;
 using System.Threading.Tasks;
+using DigitalSensor.Resources;
 
 namespace DigitalSensor.ViewModels;
 
@@ -16,6 +17,9 @@ public partial class SettingModbusViewModel : ViewModelBase
     private readonly IModbusService _modbusService;
     private readonly NotificationService _notificationService;
 
+
+    // 다국어 지원을 위한 Localize 객체
+    public Localize Localize { get; } = new();
 
     [ObservableProperty]
     public ModbusInfo _modbusInfo;

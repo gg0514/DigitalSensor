@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DigitalSensor.Extensions;
 using DigitalSensor.Models;
+using DigitalSensor.Resources;
 using DigitalSensor.Services;
 using DigitalSensor.USB;
 using Modbus.Device;
@@ -26,6 +27,10 @@ public partial class TestViewModel : ViewModelBase
 {
     private readonly NotificationService    _notificationService;
     private readonly IModbusService          _modbusService;
+
+
+    // 다국어 지원을 위한 Localize 객체
+    public Localize Localize { get; } = new();
 
     [ObservableProperty]
     private int deviceId = 5;

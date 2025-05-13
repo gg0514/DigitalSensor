@@ -60,7 +60,7 @@
 			Effect="{DynamicResource ShadowElevation3}" >
 
 			<StackPanel>
-				<TextBlock Text="센서종류 Type" FontSize="14"
+				<TextBlock Text="{Binding Localize[SensorType]}" FontSize="14"
 						   Margin="0,0,0,15" />
 				<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
 					<TextBlock Grid.Column="0" Text="{Binding ReceivedInfo.Type, Converter={StaticResource EnumDescriptionConverter}}" HorizontalAlignment="Center" FontWeight="Bold" FontSize="50"
@@ -81,7 +81,7 @@
 			Effect="{DynamicResource ShadowElevation3}" >
 
 			<StackPanel>
-				<TextBlock Text="데이터 Data" FontSize="14"
+				<TextBlock Text="{Binding Localize[SensorData]}" FontSize="14"
 						   Margin="0,0,0,15" />
 				<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
 					<TextBlock Grid.Column="0" Text="{Binding ReceivedData.Value}" HorizontalAlignment="Center" FontWeight="Bold" FontSize="50"
@@ -102,7 +102,7 @@
 			Effect="{DynamicResource ShadowElevation3}" >
 
 			<StackPanel>
-				<TextBlock Text="데이터 Data (mV)" FontSize="14"
+				<TextBlock Text="{Binding Localize[SensorDataMv]}" FontSize="14"
 						   Margin="0,0,0,15" />
 				<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
 					<TextBlock Grid.Column="0" Text="{Binding ReceivedData.Mv}" HorizontalAlignment="Center" FontWeight="Bold" FontSize="50"

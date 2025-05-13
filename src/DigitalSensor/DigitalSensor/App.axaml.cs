@@ -96,6 +96,7 @@ public partial class App : Application
 
         // 전체스레드에서 동작함
         LocalizationManager.SetCulture("en-US");
+        //LocalizationManager.SetCulture("ko-KR");
     }
 
     public override async void OnFrameworkInitializationCompleted()

@@ -202,7 +202,7 @@ public class ModbusService : IModbusService
 
         string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
 
-        Debug.WriteLine($"MODBUS - ReadSlaveId: {SecretId}, {startAddress}, {numRegisters}, Result= 0x{result}");
+        Debug.WriteLine($"MODBUS - ReadSlaveId:  REQ= {SecretId},{startAddress},{numRegisters}, Result= 0x{result}");
 
         return registers;
     }
@@ -220,7 +220,7 @@ public class ModbusService : IModbusService
 
         string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
 
-        Debug.WriteLine($"MODBUS - ReadSensorData: {slaveId}, {startAddress}, {numRegisters}, Result= 0x{result}");
+        Debug.WriteLine($"MODBUS - ReadSensorData:  REQ= {slaveId},{startAddress},{numRegisters}, Result= 0x{result}");
 
         return ConvertToSensorData(registers);
     }
@@ -239,7 +239,7 @@ public class ModbusService : IModbusService
 
         string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
 
-        Debug.WriteLine($"MODBUS - ReadSensorValue: {slaveId}, {startAddress}, {numRegisters}, Result= 0x{result}");
+        Debug.WriteLine($"MODBUS - ReadSensorValue: REQ= {slaveId},{startAddress},{numRegisters}, Result= 0x{result}");
 
         return ConvertToFloat(registers);
     }
@@ -258,7 +258,7 @@ public class ModbusService : IModbusService
 
         string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
 
-        Debug.WriteLine($"MODBUS - ReadTempValue: {slaveId}, {startAddress}, {numRegisters}, Result= 0x{result}");
+        Debug.WriteLine($"MODBUS - ReadTempValue:  REQ= {slaveId},{startAddress},{numRegisters}, Result= 0x{result}");
 
         return ConvertToFloat(registers);
     }
@@ -276,7 +276,7 @@ public class ModbusService : IModbusService
 
         string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
 
-        Debug.WriteLine($"MODBUS - ReadSensorMV: {slaveId}, {startAddress}, {numRegisters}, Result= 0x{result}");
+        Debug.WriteLine($"MODBUS - ReadSensorMV:  REQ= {slaveId},{startAddress},{numRegisters}, Result= 0x{result}");
 
         return ConvertToFloat(registers);
     }
@@ -294,7 +294,7 @@ public class ModbusService : IModbusService
 
         string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
 
-        Debug.WriteLine($"MODBUS - ReadSensorType: {slaveId}, {startAddress}, {numRegisters}, Result= 0x{result}");
+        Debug.WriteLine($"MODBUS - ReadSensorType:  REQ= {slaveId},{startAddress},{numRegisters}, Result= 0x{result}");
 
         return registers[0];
     }
@@ -312,7 +312,7 @@ public class ModbusService : IModbusService
 
         string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
 
-        Debug.WriteLine($"MODBUS - ReadSensorSerial: {slaveId}, {startAddress}, {numRegisters}, Result= 0x{result}");
+        Debug.WriteLine($"MODBUS - ReadSensorSerial:  REQ= {slaveId},{startAddress},{numRegisters}, Result= 0x{result}");
 
         return ConvertToHexString(registers);
     }
@@ -330,7 +330,7 @@ public class ModbusService : IModbusService
 
         string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
 
-        Debug.WriteLine($"MODBUS - ReadSensorFactor: {slaveId}, {startAddress}, {numRegisters}, Result= 0x{result}");
+        Debug.WriteLine($"MODBUS - ReadSensorFactor:  REQ= {slaveId},{startAddress},{numRegisters}, Result= 0x{result}");
 
         return ConvertToFloat(registers);
     }
@@ -348,7 +348,7 @@ public class ModbusService : IModbusService
 
         string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
 
-        Debug.WriteLine($"MODBUS - ReadSensorOffset: {slaveId}, {startAddress}, {numRegisters}, Result= 0x{result}");
+        Debug.WriteLine($"MODBUS - ReadSensorOffset:  REQ= {slaveId},{startAddress},{numRegisters}, Result= 0x{result}");
 
         return ConvertToFloat(registers);
     }
@@ -366,7 +366,7 @@ public class ModbusService : IModbusService
 
         string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
 
-        Debug.WriteLine($"MODBUS - ReadCalib1pSample: {slaveId}, {startAddress}, {numRegisters}, Result= 0x{result}");
+        Debug.WriteLine($"MODBUS - ReadCalib1pSample:  REQ= {slaveId},{startAddress},{numRegisters}, Result= 0x{result}");
 
         return ConvertToFloat(registers);
     }
@@ -384,7 +384,7 @@ public class ModbusService : IModbusService
 
         string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
 
-        Debug.WriteLine($"MODBUS - ReadCalibStatus: {slaveId}, {startAddress}, {numRegisters}, Result= 0x{result}");
+        Debug.WriteLine($"MODBUS - ReadCalibStatus: REQ= {slaveId},{startAddress},{numRegisters}, Result= 0x{result}");
 
         return registers[0];
     }
@@ -408,7 +408,7 @@ public class ModbusService : IModbusService
 
         // slave ID 변경
         _slaveId = (byte)value;
-        Debug.WriteLine($"MODBUS - WriteSlaveId: {slaveId},{startAddress},{value}");
+        Debug.WriteLine($"MODBUS - WriteSlaveId:  REQ= {slaveId},{startAddress},{value}");
     }
 
     // 센서 팩터
@@ -423,7 +423,7 @@ public class ModbusService : IModbusService
         ushort[] registers = ConvertToRegisters(value);
         await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers);
 
-        Debug.WriteLine($"MODBUS - WriteSensorFactor: {slaveId},{startAddress},{value}");
+        Debug.WriteLine($"MODBUS - WriteSensorFactor:  REQ= {slaveId},{startAddress},{value}");
     }
 
     // 센서 오프셋
@@ -438,7 +438,7 @@ public class ModbusService : IModbusService
 
         await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers);
 
-        Debug.WriteLine($"MODBUS - WriteSensorOffset: {slaveId},{startAddress},{value}");
+        Debug.WriteLine($"MODBUS - WriteSensorOffset:  REQ= {slaveId},{startAddress},{value}");
     }
 
     // CALIB_1P_SAMPLE
@@ -453,7 +453,7 @@ public class ModbusService : IModbusService
 
         await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers);
 
-        Debug.WriteLine($"MODBUS - WriteCalib1pSample: {slaveId},{startAddress},{value}");
+        Debug.WriteLine($"MODBUS - WriteCalib1pSample:  REQ= {slaveId},{startAddress},{value}");
     }
 
     // CALIB_2P_BUFFER
@@ -466,7 +466,7 @@ public class ModbusService : IModbusService
         ushort startAddress = (ushort)_modbusMap["CALIB_2P_BUFFER"]["address"];
         await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value);
 
-        Debug.WriteLine($"MODBUS - WriteCalib2pBuffer: {slaveId},{startAddress},{value}");
+        Debug.WriteLine($"MODBUS - WriteCalib2pBuffer:  REQ= {slaveId},{startAddress},{value}");
     }
 
     // CALIB_ZERO
@@ -479,7 +479,7 @@ public class ModbusService : IModbusService
         ushort startAddress = (ushort)_modbusMap["CALIB_ZERO"]["address"];
         await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value);
 
-        Debug.WriteLine($"MODBUS - WriteCalibZero: {slaveId},{startAddress},{value}");
+        Debug.WriteLine($"MODBUS - WriteCalibZero:  REQ= {slaveId},{startAddress},{value}");
     }
 
     // CALIB_ABORT
@@ -492,7 +492,7 @@ public class ModbusService : IModbusService
         ushort startAddress = (ushort)_modbusMap["CALIB_ABORT"]["address"];
         await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value);
 
-        Debug.WriteLine($"MODBUS - WriteCalibAbort: {slaveId},{startAddress},{value}");
+        Debug.WriteLine($"MODBUS - WriteCalibAbort:  REQ= {slaveId},{startAddress},{value}");
     }
 
 

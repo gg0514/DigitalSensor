@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DigitalSensor.Models;
+using DigitalSensor.Resources;
 using DigitalSensor.Services;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     private readonly ISensorService _sensorService;
     private readonly NotificationService _notificationService;
 
+    // 다국어 지원을 위한 Localize 객체
+    public Localize Localize { get; } = new();
 
     [ObservableProperty]
     private ModbusInfo _modbusInfo;

@@ -4,6 +4,7 @@ using DigitalSensor.Extensions;
 using System.Diagnostics;
 using System.Security.Principal;
 using System;
+using DigitalSensor.Resources;
 
 namespace DigitalSensor.Views;
 
@@ -16,6 +17,12 @@ public partial class HomeView : UserControl
     public HomeView()
     {
         InitializeComponent();
+
+
+        string Greeting = LocalizationManager.GetString("Greeting");
+
+        Debug.WriteLine(Greeting); // "안녕하세요" 출력
+
     }
 
     private void OnBackgroundPointerPressed(object? sender, PointerPressedEventArgs e)

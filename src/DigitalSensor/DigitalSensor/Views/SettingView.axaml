@@ -19,7 +19,7 @@
 		<StackPanel Spacing="20">
 
 			<!-- Title -->
-			<TextBlock Text="설정" FontSize="28" FontWeight="Bold"/>
+			<TextBlock Text="{Binding Localize[Setting]}" FontSize="28" FontWeight="Bold"/>
 
 
 			<!-- USB Devices -->

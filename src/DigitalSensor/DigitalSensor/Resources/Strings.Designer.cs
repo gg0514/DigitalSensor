@@ -61,6 +61,114 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
+        ///   1. Put a sensor into 1st Sample.과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string _1PGuide1 {
+            get {
+                return ResourceManager.GetString("1PGuide1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   2. Adjust the 1st value using the arrows or keypad, and then apply to calibration.과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string _1PGuide2 {
+            get {
+                return ResourceManager.GetString("1PGuide2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   3. If you want to cancel calibration, Press [Stop] button.과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string _1PGuide3 {
+            get {
+                return ResourceManager.GetString("1PGuide3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   1P Sample과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string _1PSample {
+            get {
+                return ResourceManager.GetString("1PSample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   2P Buffer과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string _2PBuffer {
+            get {
+                return ResourceManager.GetString("2PBuffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   1. Put a sensor into 1st Buffer.과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string _2PGuide1 {
+            get {
+                return ResourceManager.GetString("2PGuide1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   2. After the sensor stabilized, Press [Apply] button.과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string _2PGuide2 {
+            get {
+                return ResourceManager.GetString("2PGuide2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   3. If you want to cancel calibration, Press [Stop] button.과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string _2PGuide3 {
+            get {
+                return ResourceManager.GetString("2PGuide3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Apply과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string Apply {
+            get {
+                return ResourceManager.GetString("Apply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Calibration Status과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string CalibrationStatus {
+            get {
+                return ResourceManager.GetString("CalibrationStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Calibration Value과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string CalibrationValue {
+            get {
+                return ResourceManager.GetString("CalibrationValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Current Value과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string CurrentValue {
+            get {
+                return ResourceManager.GetString("CurrentValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Goodbye과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string Farewell {
@@ -75,6 +183,114 @@ namespace DigitalSensor.Resources {
         internal static string Greeting {
             get {
                 return ResourceManager.GetString("Greeting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Guide과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string Guide {
+            get {
+                return ResourceManager.GetString("Guide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Loading과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string Loading {
+            get {
+                return ResourceManager.GetString("Loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sensor Data과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string SensorData {
+            get {
+                return ResourceManager.GetString("SensorData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Data (mV)과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string SensorDataMv {
+            get {
+                return ResourceManager.GetString("SensorDataMv", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sensor Type과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string SensorType {
+            get {
+                return ResourceManager.GetString("SensorType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Setting과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string Setting {
+            get {
+                return ResourceManager.GetString("Setting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Stop과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string Stop {
+            get {
+                return ResourceManager.GetString("Stop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Temperature과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string Temperature {
+            get {
+                return ResourceManager.GetString("Temperature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Zero Calibration과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string ZeroCalibration {
+            get {
+                return ResourceManager.GetString("ZeroCalibration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   1. Put a sensor into DI water.과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string ZeroGuide1 {
+            get {
+                return ResourceManager.GetString("ZeroGuide1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   2. After the sensor stabilized, Press [Apply] button.과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string ZeroGuide2 {
+            get {
+                return ResourceManager.GetString("ZeroGuide2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   3. If you want to cancel calibration, Press [Stop] button.과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string ZeroGuide3 {
+            get {
+                return ResourceManager.GetString("ZeroGuide3", resourceCulture);
             }
         }
     }

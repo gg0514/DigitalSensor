@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DigitalSensor.Models;
+using DigitalSensor.Resources;
 using DigitalSensor.Services;
 using FluentAvalonia.UI.Controls;
 using System;
@@ -17,6 +18,9 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     private readonly IMonitoringService _monitoringService;
     private readonly ISensorService _sensorService;
     private readonly NotificationService _notificationService;
+
+    // 다국어 지원을 위한 Localize 객체
+    public Localize Localize { get; } = new();
 
     [ObservableProperty]
     public ModbusInfo _modbusInfo;

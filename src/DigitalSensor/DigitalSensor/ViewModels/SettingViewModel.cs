@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DigitalSensor.Models;
+using DigitalSensor.Resources;
 using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.IO.Ports;
@@ -11,6 +12,9 @@ namespace DigitalSensor.ViewModels;
 
 public partial class SettingViewModel : ViewModelBase
 {
+
+    // 다국어 지원을 위한 Localize 객체
+    public Localize Localize { get; } = new();
 
     [ObservableProperty]
     public ModbusInfo _modbusInfo;

@@ -28,6 +28,9 @@ public partial class HomeViewModel : ViewModelBase
     private readonly NotificationService _notificationService;
 
 
+    // 다국어 지원을 위한 Localize 객체
+    public Localize Localize { get; } = new();
+
     [ObservableProperty]
     private bool isTxOn;
 
@@ -80,6 +83,7 @@ public partial class HomeViewModel : ViewModelBase
         _modbusService.TxSignal += OnTxSignal;
         _modbusService.RxSignal += OnRxSignal;
         _monitoringService.ErrSignal += OnErrSignal;
+
 
 
         string Greeting = LocalizationManager.GetString("Greeting");

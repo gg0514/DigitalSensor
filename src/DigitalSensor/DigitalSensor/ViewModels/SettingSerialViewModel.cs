@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DigitalSensor.Models;
+using DigitalSensor.Resources;
 using DigitalSensor.Services;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -17,6 +18,8 @@ public partial class SettingSerialViewModel : ViewModelBase
     private readonly NotificationService _notificationService;
 
 
+    // 다국어 지원을 위한 Localize 객체
+    public Localize Localize { get; } = new();
 
     [ObservableProperty]
     private ObservableCollection<string> _serialBaudrate;

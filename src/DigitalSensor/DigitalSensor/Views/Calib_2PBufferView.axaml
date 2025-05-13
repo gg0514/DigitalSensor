@@ -24,7 +24,7 @@
 		<StackPanel Spacing="20">
 
 			<!-- Title -->
-			<TextBlock Text="2P 버퍼" FontSize="28" FontWeight="Bold"/>
+			<TextBlock Text="{Binding Localize[2PBuffer]}" FontSize="28" FontWeight="Bold"/>
 
 
 			<!-- 교정 지침 -->
@@ -36,14 +36,14 @@
 				Effect="{DynamicResource ShadowElevation3}" >
 
 				<StackPanel>
-					<TextBlock Text="교정 지침" FontSize="14" Foreground="LightBlue"/>
+					<TextBlock Text="{Binding Localize[Guide]}" FontSize="14" Foreground="LightBlue"/>
 					<StackPanel Margin="0,20,10,0">
 						<StackPanel Orientation="Horizontal">
 							<PathIcon Margin="10,20,30,0" Height="40" Width="40" Foreground="Gray" Data="{StaticResource icon_beaker}"/>
-							<StackPanel>
-								<TextBlock Text="1. 센서를 버퍼용액에 담근다." FontSize="16"/>
-								<TextBlock Text="2. 안정화후 적용버튼을 누른다." FontSize="16" Foreground=""/>
-								<TextBlock Text="3. 교정을 중단하려면 중단버튼을 누른다." FontSize="16" Foreground=""/>
+							<StackPanel Spacing="10">
+								<TextBlock Text="{Binding Localize[2PGuide1]}" TextWrapping="Wrap" FontSize="15" HorizontalAlignment="Left"/>
+								<TextBlock Text="{Binding Localize[2PGuide2]}" TextWrapping="Wrap" Width="310" FontSize="15" Foreground="" HorizontalAlignment="Left"/>
+								<TextBlock Text="{Binding Localize[2PGuide3]}" TextWrapping="Wrap" Width="310"  FontSize="15" Foreground="" HorizontalAlignment="Left"/>
 							</StackPanel>
 						</StackPanel>
 					</StackPanel>
@@ -59,7 +59,7 @@
 				Effect="{DynamicResource ShadowElevation3}" >
 
 				<StackPanel>
-					<TextBlock Text="현재값" FontSize="14" Foreground="LightBlue"/>
+					<TextBlock Text="{Binding Localize[CurrentValue]}" FontSize="14" Foreground="LightBlue"/>
 					<StackPanel Margin="0,15,0,0" Spacing="12">
 						<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
 							<TextBlock Grid.Column="0" Text="{Binding ReceivedData.Value}" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
@@ -81,7 +81,7 @@
 				Effect="{DynamicResource ShadowElevation3}" >
 
 				<StackPanel>
-					<TextBlock Text="교정상태" FontSize="14" Foreground="LightBlue"/>
+					<TextBlock Text="{Binding Localize[CalibrationStatus]}" FontSize="14" Foreground="LightBlue"/>
 					<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
 						<TextBlock Grid.Column="0" Text="{Binding CalStatus, Converter={StaticResource EnumDescriptionConverter}}" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
 							   Margin="0,0,0,0"/>
@@ -93,7 +93,7 @@
 
 
 			<UniformGrid Columns="2" Width="300" Height="100">
-				<Button Content="중 단" Command="{Binding AbortCommand}" IsEnabled="{Binding ModbusInfo.IsAlive}" Classes="" Margin="4" Width="135" Height="60"/>
+				<Button Content="{Binding Localize[Stop]}" Command="{Binding AbortCommand}" IsEnabled="{Binding ModbusInfo.IsAlive}" Classes="" Margin="4" Width="135" Height="60"/>
 				<Button Command="{Binding ApplyCommand}" IsEnabled="{Binding ModbusInfo.IsAlive}" Classes="accent" Margin="4" Width="135" Height="60">
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
 						<ui:ProgressRing IsVisible="{Binding IsProgressVisible}"
