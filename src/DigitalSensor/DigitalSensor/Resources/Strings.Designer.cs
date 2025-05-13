@@ -88,7 +88,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   1P Sample과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   1P Sample Calibration과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string _1PSample {
             get {
@@ -214,7 +214,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   Data (mV)과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   Sensor Data (mV)과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string SensorDataMv {
             get {

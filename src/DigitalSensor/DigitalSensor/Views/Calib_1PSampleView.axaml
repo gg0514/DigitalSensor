@@ -39,13 +39,13 @@
 
 				<StackPanel>
 					<TextBlock Text="{Binding Localize[Guide]}" FontSize="14" Foreground="LightBlue"/>
-					<StackPanel Margin="0,20,10,0">
+					<StackPanel Margin="0,0,10,0">
 						<StackPanel Orientation="Horizontal">
 							<PathIcon Margin="10,20,30,0" Height="40" Width="40" Foreground="Gray" Data="{StaticResource icon_beaker}"/>
 							<StackPanel Spacing="10">
-								<TextBlock Text="{Binding Localize[1PGuide1]}" TextWrapping="Wrap" FontSize="15" HorizontalAlignment="Left"/>
-								<TextBlock Text="{Binding Localize[1PGuide2]}" TextWrapping="Wrap" Width="310" FontSize="15" Foreground="" HorizontalAlignment="Left"/>
-								<TextBlock Text="{Binding Localize[1PGuide3]}" TextWrapping="Wrap" Width="310"  FontSize="15" Foreground="" HorizontalAlignment="Left"/>
+								<TextBlock Text="{Binding Localize[1PGuide1]}" TextWrapping="Wrap" Width="270" FontSize="15" HorizontalAlignment="Left"/>
+								<TextBlock Text="{Binding Localize[1PGuide2]}" TextWrapping="Wrap" Width="270" FontSize="15" Foreground="" HorizontalAlignment="Left"/>
+								<TextBlock Text="{Binding Localize[1PGuide3]}" TextWrapping="Wrap" Width="270"  FontSize="15" Foreground="" HorizontalAlignment="Left"/>
 							</StackPanel>
 						</StackPanel>
 					</StackPanel>
@@ -61,7 +61,7 @@
 				Effect="{DynamicResource ShadowElevation3}" >
 
 				<StackPanel Background="">
-					<Grid	ColumnDefinitions="Auto, *, Auto" Margin="0,0,0,20">
+					<Grid  ColumnDefinitions="120, *, Auto" Margin="0,0,0,0">
 						<TextBlock Grid.Column="0" Text="{Binding Localize[CurrentValue]}"  VerticalAlignment="Center" FontSize="14" Foreground="LightBlue"/>
 						<TextBlock Grid.Column="1" Text="{Binding ReceivedData.Value}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
 							   Margin="0,0,0,0"/>
@@ -73,7 +73,7 @@
 							<TextBlock Text="{Binding SensorUnit}" HorizontalAlignment="Center" FontWeight="Light" FontSize="14"/>
 						</Border>
 					</Grid>
-					<Grid	ColumnDefinitions="Auto, *, Auto" Margin="0,0,0,0">
+					<Grid	ColumnDefinitions="120, *, Auto" Margin="0,0,0,0">
 
 						<!-- 배경 클릭 영역 -->
 						<Border Background="Transparent"
@@ -131,11 +131,11 @@
 				Effect="{DynamicResource ShadowElevation3}" >
 
 				<StackPanel>
-					<TextBlock Text="{Binding Localize[CalibrationStatus]}" FontSize="14" Foreground="LightBlue"/>
-					<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
-						<TextBlock Grid.Column="0" Text="{Binding CalStatus, Converter={StaticResource EnumDescriptionConverter}}" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
+					<Grid ColumnDefinitions="120, *, auto" Margin="0,0,0,10">
+						<TextBlock Grid.Column="0" Text="{Binding Localize[CalibrationStatus]}" FontSize="14" Foreground="LightBlue"/>
+						<TextBlock Grid.Column="1" Text="{Binding CalStatus, Converter={StaticResource EnumDescriptionConverter}}" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
 							   Margin="0,0,0,0"/>
-						<Border Grid.Column="1" VerticalAlignment="Bottom" Width="30" Height="20" Margin="0,5,10,0" >
+						<Border Grid.Column="2" VerticalAlignment="Bottom" Width="50" Height="20" Margin="0,5,10,0" >
 						</Border>
 					</Grid>
 				</StackPanel>

@@ -22,8 +22,10 @@
 			<TextBlock Text="{Binding Localize[Setting]}" FontSize="28" FontWeight="Bold"/>
 
 
-			<!-- USB Devices -->
-			<Border
+			<!-- USB Devices 
+			     화면에서 삭제 
+			-->			
+			<!--<Border
 				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
 				CornerRadius="12"
 				Padding="16"
@@ -39,7 +41,7 @@
 						</StackPanel>
 					</StackPanel>
 				</StackPanel>
-			</Border>
+			</Border>-->
 
 			<!-- MODBUS -->
 			<Border

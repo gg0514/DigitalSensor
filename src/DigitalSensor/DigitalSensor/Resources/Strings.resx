@@ -165,10 +165,10 @@
     <value>Calibration Status</value>
   </data>
   <data name="1PSample" xml:space="preserve">
-    <value>1P Sample</value>
+    <value>1P Sample Calibration</value>
   </data>
   <data name="2PBuffer" xml:space="preserve">
-    <value>2P Buffer</value>
+    <value>2P Buffer Calibration</value>
   </data>
   <data name="CalibrationValue" xml:space="preserve">
     <value>Calibration Value</value>
