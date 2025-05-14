@@ -46,7 +46,6 @@ public class MonitoringService : IMonitoringService
     private readonly ISensorService _sensorService;
     private readonly ModbusInfo _modbusInfo;
 
-    private bool _isSensorType = false;
     private bool _isRunning = false;
 
     private bool _bApplyCalib = false;
@@ -182,7 +181,6 @@ public class MonitoringService : IMonitoringService
     public async Task StopMonitoring()
     {
         // 초기화
-        _isSensorType = false;
         _isRunning = false;
         _modbusInfo.IsAlive = false;
 
@@ -345,21 +343,16 @@ public class MonitoringService : IMonitoringService
 
     private async Task GetSensorType()
     {
-        if (!_isSensorType)
+        int type = await _sensorService.GetTypeAsync();
+
+        if (type > 0)
         {
-            int type = await _sensorService.GetTypeAsync();
-
-            if (type > 0)
+            SensorInfo = new SensorInfo()
             {
-                SensorInfo = new SensorInfo()
-                {
-                    Type = (SensorType)type,
-                };
+                Type = (SensorType)type,
+            };
 
-                SensorTypeReceived?.Invoke(type);
-            }
-
-            _isSensorType = true;
+            SensorTypeReceived?.Invoke(type);
         }
     }
 
