@@ -270,7 +270,8 @@ public class MonitoringService : IMonitoringService
                 // 교정 실행
                 await WriteCalibAsync();
 
-                await Task.Delay(1000); 
+                // 폴링 주기
+                await Task.Delay(2000); 
                 await ReadCalibStatus();
             }
             else

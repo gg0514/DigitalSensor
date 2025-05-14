@@ -53,6 +53,7 @@ public class ModbusRtuService
         _TxSignal?.Invoke();
         await _usbService.WriteAsync(frame);
 
+        // 폴링주기 (교정시에서는 500ms 정도 필요함)
         // 장비 테스트해 보니, 200ms 정도 필요함
         await Task.Delay(500); // 200ms 대기
 
