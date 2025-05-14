@@ -54,7 +54,7 @@ public class ModbusRtuService
         await _usbService.WriteAsync(frame);
 
         // 장비 테스트해 보니, 200ms 정도 필요함
-        await Task.Delay(200); // 200ms 대기
+        await Task.Delay(500); // 200ms 대기
 
         _RxSignal?.Invoke();
         //byte[] response = await _usbService.ReadAsync();

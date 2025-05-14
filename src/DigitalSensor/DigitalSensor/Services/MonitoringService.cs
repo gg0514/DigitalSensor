@@ -269,6 +269,8 @@ public class MonitoringService : IMonitoringService
             {
                 // 교정 실행
                 await WriteCalibAsync();
+
+                await Task.Delay(1000); 
                 await ReadCalibStatus();
             }
             else

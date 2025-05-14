@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using DigitalSensor.Models;
 using DigitalSensor.Resources;
 using DigitalSensor.Services;
+using DigitalSensor.USB;
 using DigitalSensor.Utils;
 
 using System;
@@ -24,7 +25,8 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     // 다국어 지원을 위한 Localize 객체
     public Localize Localize { get; } = new();
 
-    public bool IsButtonEnabled => _modbusInfo.IsAlive && !IsBusy;
+    public bool IsAbortButtonEnabled => ModbusInfo.IsAlive && IsBusy;
+    public bool IsApplyButtonEnabled => ModbusInfo.IsAlive && !IsBusy;
 
 
     [ObservableProperty]
@@ -47,7 +49,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     private bool isBusy;
 
     [ObservableProperty]
-    private bool isProgressVisible= true;
+    private bool isProgressVisible= false;
 
     [ObservableProperty]
     private string applyButtonText;
@@ -70,6 +72,10 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         _sensorService = sensorService;
         _modbusInfo = settings.ModbusInfo;
 
+        // Sensor 구독 등록
+        _sensorService.SensorAttached += OnSensorAttached;
+        _sensorService.SensorDetached += OnSensorDetached;
+
         _monitoringService.SensorValueReceived += OnSensorValueReceived;
         _monitoringService.CalibStatusReceived += OnCalibStatusReceived;
         _notificationService = notificationService;
@@ -78,15 +84,26 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         applyButtonText = Localize["Apply"];
     }
 
-    partial void OnModbusInfoChanged(ModbusInfo value)
-    {
-        OnPropertyChanged(nameof(IsButtonEnabled));
-    }
+
 
     partial void OnIsBusyChanged(bool value)
     {
-        OnPropertyChanged(nameof(IsButtonEnabled));
+        OnPropertyChanged(nameof(IsAbortButtonEnabled));
+        OnPropertyChanged(nameof(IsApplyButtonEnabled));
     }
+
+    private async void OnSensorAttached(UsbDeviceInfo info)
+    {
+        OnPropertyChanged(nameof(IsAbortButtonEnabled));
+        OnPropertyChanged(nameof(IsApplyButtonEnabled));
+    }
+
+    private async void OnSensorDetached()
+    {
+        OnPropertyChanged(nameof(IsAbortButtonEnabled));
+        OnPropertyChanged(nameof(IsApplyButtonEnabled));
+    }
+
 
     [RelayCommand]
     private async void Apply()
@@ -95,8 +112,8 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         try
         {
             IsBusy = true;
-            IsProgressVisible = true;
-            ApplyButtonText = " ...";
+            IsProgressVisible = false;
+            //ApplyButtonText = " ...";
 
             CalStatus = CalibrationStatus.CalInProgress;
             await _monitoringService.ApplyCalib_Zero();
@@ -104,8 +121,6 @@ public partial class Calib_ZeroViewModel : ViewModelBase
             Debug.WriteLine($"Apply 버튼클릭: {CalStatus}");
 
             await WaitForCalibrationCompletion();
-
-            _notificationService.ShowMessage(Localize["Information"], $"Zero Calibration Completed");
         }
         catch(Exception ex)
         {
@@ -160,7 +175,6 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     }
 
 
-
     private async void OnSensorValueReceived(float value)
     {
         await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
@@ -185,7 +199,8 @@ public partial class Calib_ZeroViewModel : ViewModelBase
 
         if(CalStatus != CalibrationStatus.CalInProgress)
         {
-            ResetCallibStatus();
+            // 10초 후에 상태를 초기화
+            ResetCallibStatus(10000);
         }
     }
 

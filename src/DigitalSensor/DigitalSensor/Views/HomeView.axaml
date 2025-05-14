@@ -86,7 +86,7 @@
 				<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
 					<TextBlock Grid.Column="0" Text="{Binding ReceivedData.Value}" HorizontalAlignment="Center" FontWeight="Bold" FontSize="50"
 						   Margin="0,0,0,0"/>
-					<Border Grid.Column="1" VerticalAlignment="Bottom" Width="30" Height="20" Margin="0,5,10,0" >
+					<Border Grid.Column="1" VerticalAlignment="Bottom" Width="40" Height="20" Margin="0,5,10,0" >
 						<TextBlock Name="SensorUnit" Text="{Binding SensorUnit}" FontWeight="Light" FontSize="14"/>
 					</Border>
 				</Grid>
@@ -107,7 +107,7 @@
 				<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
 					<TextBlock Grid.Column="0" Text="{Binding ReceivedData.Mv}" HorizontalAlignment="Center" FontWeight="Bold" FontSize="50"
 						   Margin="0,0,0,0"/>
-					<Border Grid.Column="1" VerticalAlignment="Bottom" Width="30" Height="20" Margin="0,5,10,0" >
+					<Border Grid.Column="1" VerticalAlignment="Bottom" Width="40" Height="20" Margin="0,5,10,0" >
 						<TextBlock Text="mV" FontWeight="Light" FontSize="14"/>
 					</Border>
 				</Grid>
@@ -129,7 +129,7 @@
 				<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
 					<TextBlock Grid.Column="0" Text="{Binding ReceivedData.Temperature}" HorizontalAlignment="Center" FontWeight="Bold" FontSize="50"
 						   Margin="0,0,0,0"/>
-					<Border Grid.Column="1" VerticalAlignment="Bottom" Width="30" Height="20" Margin="0,5,10,0" >
+					<Border Grid.Column="1" VerticalAlignment="Bottom" Width="40" Height="20" Margin="0,5,10,0" >
 						<TextBlock Text="°C" FontWeight="Light" FontSize="14"/>
 					</Border>
 				</Grid>
