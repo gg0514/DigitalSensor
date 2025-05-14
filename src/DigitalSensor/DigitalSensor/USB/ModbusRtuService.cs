@@ -62,7 +62,7 @@ public class ModbusRtuService
 
         // 예상 응답: SlaveID + Function + ByteCount + Data... + CRC_L + CRC_H
         int expectedLength = 5 + numberOfPoints * 2;
-        byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(500));
+        byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(1500));
 
         string hex_resp = BitConverter.ToString(response, 0, response.Length).Replace("-", " ");
         Debug.WriteLine($"MODBUS Read (0:{response.Length}): {hex_resp}");
@@ -115,7 +115,7 @@ public class ModbusRtuService
 
         // 응답은 요청과 동일한 구조 (에코됨)
         int expectedLength = 8;
-        byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(500));
+        byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(1500));
 
         string hex_resp = BitConverter.ToString(response, 0, response.Length).Replace("-", " ");
         Debug.WriteLine($"MODBUS Read (0:{response.Length}): {hex_resp}");
