@@ -159,7 +159,7 @@ public class UsbSerialFA : IUsbService
                 _usbSerialPort.Write(frame, 1000);
 
                 // 핵심 로직
-                Thread.Sleep(200);
+                Thread.Sleep(500);
 
                 //byte[] buffer = new byte[64];
                 //int numBytesRead = _usbSerialPort.Read(buffer, 1000);
@@ -192,7 +192,7 @@ public class UsbSerialFA : IUsbService
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error opening port: {ex.Message}");
+            Debug.WriteLine($"Error opening port: {ex.Message}");
         }
 
         return false;

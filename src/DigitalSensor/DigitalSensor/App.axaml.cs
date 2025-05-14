@@ -91,12 +91,9 @@ public partial class App : Application
     {
         AvaloniaXamlLoader.Load(this);
 
-        // 메인스레드에서만 동작  
-        //Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
-
         // 전체스레드에서 동작함
-        LocalizationManager.SetCulture("en-US");
-        //LocalizationManager.SetCulture("ko-KR");
+        //LocalizationManager.SetCulture("en-US");
+        LocalizationManager.SetCulture("ko-KR");
     }
 
     public override async void OnFrameworkInitializationCompleted()

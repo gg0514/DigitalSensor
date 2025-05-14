@@ -140,21 +140,37 @@ public class MonitoringService : IMonitoringService
     public async Task ApplyCalib_Zero()
     {
         _bApplyCalib = true;
+        Debug.WriteLine($"[ 적용 버튼 클릭 ] ");
+
+        await Task.Delay(100);
     }
 
     public async Task ApplyCalib_1PSample(float value)
     {
         _bApplyCalib = true;
         _calibValue = value;
+        Debug.WriteLine($"[ 적용 버튼 클릭 ] ");
+
+        await Task.Delay(100);
     }
+
     public async Task ApplyCalib_2PBuffer(int order)
     {
         _bApplyCalib = true;
         _calibOrder = order;
+        Debug.WriteLine($"[ 적용 버튼 클릭 ] ");
+
+        await Task.Delay(100);
     }
+
     public async Task AbortCalib()
     {
         _bAbortCalib = true;
+
+        ResetCallibStatus();
+        Debug.WriteLine($"[ 중단 버튼 클릭 ] ");
+
+        await Task.Delay(100);
     }
 
 
@@ -165,16 +181,14 @@ public class MonitoringService : IMonitoringService
 
         while (_isRunning)
         {
-            await Task.Delay(1000); // 1초 대기
-
-            //Debug.WriteLine($"_currentPage.Contains(\"Setting\") : {_currentPage.Contains("Setting")}");
-
             if (_currentPage == "Home")                    
                 await NormalMode();
             else if (_currentPage.Contains("Setting"))           
                 await SettingMode();
             else                                          
                 await CalibMode();
+
+            await Task.Delay(1000); // 1초 대기
         }
     }
 
@@ -245,6 +259,7 @@ public class MonitoringService : IMonitoringService
 
             if (_bAbortCalib)
             {
+                // 교정 중단
                 await WriteCalibAbortAsync();
 
                 // 교정중단후 상태를 읽어도 진행중으로 나옴!!
@@ -252,6 +267,7 @@ public class MonitoringService : IMonitoringService
             }
             else if (_bApplyCalib)
             {
+                // 교정 실행
                 await WriteCalibAsync();
                 await ReadCalibStatus();
             }
@@ -274,8 +290,7 @@ public class MonitoringService : IMonitoringService
     {
         if (CommandStatus != CommandStatus.Running)
         {
-
-            if(_currentPage== "Calib_1PSample")
+            if (_currentPage == "Calib_1PSample")
             {
                 await _sensorService.SetCalib1PSampleAsync(_calibValue);
             }
@@ -297,11 +312,9 @@ public class MonitoringService : IMonitoringService
 
     private async Task WriteCalibAbortAsync()
     {
-        RestCallibStatus();
-        Debug.WriteLine($"[ 교정 중단 ] ");
-
         if (CommandStatus == CommandStatus.Running)
         {
+            Debug.WriteLine($"[ 교정 중단 ] ");
             await _sensorService.SetCalibAbortAsync();
         }
     }
@@ -319,21 +332,19 @@ public class MonitoringService : IMonitoringService
         }
         else if (CalStatus == CalibrationStatus.CalOK)
         {
-            Debug.WriteLine($"[ 교정 결과 ] 성공 !!");
-
-            RestCallibStatus();
+            Debug.WriteLine($"[ 교정 상태 ] 성공 !!");
+            ResetCallibStatus();
         }
         else
         {
-            Debug.WriteLine($"[ 교정 결과 ] 실패 !!");
-
-            RestCallibStatus();
+            Debug.WriteLine($"[ 교정 상태 ] 실패 !!");
+            ResetCallibStatus();
         }
 
         Debug.WriteLine($"ReadCalibStatus: {CalStatus}");
     }
 
-    private void RestCallibStatus()
+    private void ResetCallibStatus()
     {
         _bApplyCalib = false;
         _bAbortCalib = false;

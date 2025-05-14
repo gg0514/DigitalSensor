@@ -90,7 +90,8 @@ public static class UnitMapper
         { SensorType.TurbidityHighIR, "NTU" },
         { SensorType.TurbidityHighColor, "NTU" },
         { SensorType.PH, "pH" },
-        { SensorType.Conductivity, "㎲/㎝" },
+        { SensorType.ContactingConductivity, "㎲/㎝" },
+        { SensorType.NonContactingConductivity, "㎲/㎝" },
         { SensorType.Chlorine, "㎎/l" },
     };
 }

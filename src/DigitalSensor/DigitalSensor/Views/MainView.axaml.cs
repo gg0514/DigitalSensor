@@ -109,7 +109,8 @@ public partial class MainView : UserControl
             case SensorType.PH:
                 disableMenuTag = "Calib_Zero";
                 break;
-            case SensorType.Conductivity:
+            case SensorType.ContactingConductivity:
+            case SensorType.NonContactingConductivity:
             case SensorType.Chlorine:
             case SensorType.TurbidityLow:
             case SensorType.TurbidityHighColor:

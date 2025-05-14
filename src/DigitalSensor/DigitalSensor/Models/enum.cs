@@ -63,8 +63,9 @@ public enum SensorType
     ORP = 2,                // ORP 센서
     DO = 3,                 // 용존산소 센서    
     [Description("EC")]
-    Conductivity = 5,       // 전도도 센서
-    Ozone = 6,              // 오존 센서
+    ContactingConductivity = 4,             // 접촉식 전도도 센서
+    NonContactingConductivity = 5,          // 비접촉식 전도도 센서
+    Ozone = 6,                              // 오존 센서
     [Description("TU")]
     TurbidityLow = 7,
     [Description("TU")]
@@ -93,12 +94,12 @@ public static class EnumExtensions
         // 키는 enum 이름으로 결정 (예: CalibrationStatus.Fail_SlopeTooLow)
         //string resourceKey = $"{value.GetType().Name}_{value}";
 
-        string resourceKey = "StatusPending";
+        string resourceKey = "StatusReady";
 
         if (value is CalibrationStatus status)
         {
             if (status == CalibrationStatus.NoSensorCalibration)
-                resourceKey = "StatusPending";
+                resourceKey = "StatusReady";
             else if (status == CalibrationStatus.CalInProgress)
                 resourceKey = "StatusProgress";
             else if (status == CalibrationStatus.CalOK)

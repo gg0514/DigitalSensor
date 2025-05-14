@@ -24,8 +24,8 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     // 다국어 지원을 위한 Localize 객체
     public Localize Localize { get; } = new();
 
-    [ObservableProperty]
-    private ModbusInfo _modbusInfo;
+    public bool IsButtonEnabled => _modbusInfo.IsAlive && !IsBusy;
+
 
     [ObservableProperty]
     private CalibrationStatus calStatus;
@@ -39,11 +39,15 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     [ObservableProperty]
     private string sensorUnit;
 
+
+    [ObservableProperty]
+    private ModbusInfo _modbusInfo;
+
     [ObservableProperty]
     private bool isBusy;
 
     [ObservableProperty]
-    private bool isProgressVisible;
+    private bool isProgressVisible= true;
 
     [ObservableProperty]
     private string applyButtonText;
@@ -54,6 +58,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         _monitoringService = new MonitoringService(new SensorService(), new AppSettings());
         _sensorService = new SensorService();
         _modbusInfo = new ModbusInfo();
+
 
         applyButtonText = Localize["Apply"];
 
@@ -69,13 +74,24 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         _monitoringService.CalibStatusReceived += OnCalibStatusReceived;
         _notificationService = notificationService;
 
+        isProgressVisible = false;
         applyButtonText = Localize["Apply"];
+    }
 
+    partial void OnModbusInfoChanged(ModbusInfo value)
+    {
+        OnPropertyChanged(nameof(IsButtonEnabled));
+    }
+
+    partial void OnIsBusyChanged(bool value)
+    {
+        OnPropertyChanged(nameof(IsButtonEnabled));
     }
 
     [RelayCommand]
     private async void Apply()
     {
+
         try
         {
             IsBusy = true;
@@ -88,7 +104,14 @@ public partial class Calib_ZeroViewModel : ViewModelBase
             Debug.WriteLine($"Apply 버튼클릭: {CalStatus}");
 
             await WaitForCalibrationCompletion();
+
             _notificationService.ShowMessage(Localize["Information"], $"Zero Calibration Completed");
+        }
+        catch(Exception ex)
+        {
+            // 예외 처리
+            Debug.WriteLine($"Error during calibration: {ex.Message}");
+            _notificationService.ShowMessage(Localize["Error"], $"Error during calibration: {ex.Message}");
         }
         finally
         {

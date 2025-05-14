@@ -20,12 +20,13 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     private readonly IMonitoringService _monitoringService;
     private readonly ISensorService _sensorService;
     private readonly NotificationService _notificationService;
+    private readonly ModbusInfo _modbusInfo;
 
     // 다국어 지원을 위한 Localize 객체
     public Localize Localize { get; } = new();
 
-    [ObservableProperty]
-    public ModbusInfo _modbusInfo;
+    public bool IsButtonEnabled => _modbusInfo.IsAlive && !IsBusy;
+
 
     [ObservableProperty]
     private CalibrationStatus calStatus;

@@ -206,8 +206,8 @@
   <data name="Information" xml:space="preserve">
     <value>Information</value>
   </data>
-  <data name="StatusPending" xml:space="preserve">
-    <value>Pending</value>
+  <data name="StatusReady" xml:space="preserve">
+    <value>Ready</value>
   </data>
   <data name="StatusProgress" xml:space="preserve">
     <value>Progress</value>
