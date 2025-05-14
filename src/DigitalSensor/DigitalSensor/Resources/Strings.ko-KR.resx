@@ -198,4 +198,16 @@
   <data name="Information" xml:space="preserve">
     <value>정보</value>
   </data>
+  <data name="StatusPending" xml:space="preserve">
+    <value>대 기</value>
+  </data>
+  <data name="StatusProgress" xml:space="preserve">
+    <value>진 행</value>
+  </data>
+  <data name="StatusSuccess" xml:space="preserve">
+    <value>성 공</value>
+  </data>
+  <data name="StatusFail" xml:space="preserve">
+    <value>실 패</value>
+  </data>
 </root>

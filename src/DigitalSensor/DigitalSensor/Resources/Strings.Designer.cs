@@ -250,6 +250,42 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
+        ///   Fail과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string StatusFail {
+            get {
+                return ResourceManager.GetString("StatusFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Pending과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string StatusPending {
+            get {
+                return ResourceManager.GetString("StatusPending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Progress과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string StatusProgress {
+            get {
+                return ResourceManager.GetString("StatusProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Success과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string StatusSuccess {
+            get {
+                return ResourceManager.GetString("StatusSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Stop과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string Stop {

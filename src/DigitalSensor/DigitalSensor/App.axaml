@@ -3,6 +3,7 @@
 			 xmlns:local="using:DigitalSensor"
              xmlns:sty="using:FluentAvalonia.Styling"
              xmlns:vm="using:DigitalSensor.ViewModels"
+             xmlns:util="using:DigitalSensor.Utils"
 			 x:Class="DigitalSensor.App"
              RequestedThemeVariant="Dark">
              <!-- "Default" ThemeVariant follows system theme variant. 
@@ -20,8 +21,9 @@
 
 	<Application.Resources>
 		<!-- BoolToBrushConverter를 리소스로 등록 -->
-		<vm:BoolToBrushConverter x:Key="BoolToBrushConverter" />
-		<vm:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+		<util:BoolToBrushConverter x:Key="BoolToBrushConverter" />
+		<util:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+		<util:StatusDescriptionConverter x:Key="StatusDescriptionConverter" />
 	</Application.Resources>
 
 

@@ -1,13 +1,16 @@
-﻿using System;
+﻿using DigitalSensor.Resources;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using DigitalSensor.Resources;
+using System.Globalization;
+using System.Resources;
 
 namespace DigitalSensor.Models;
-
 
 
 public enum CalibrationStatus
@@ -76,10 +79,34 @@ public enum SensorType
 
 public static class EnumExtensions
 {
+
     public static string GetDescription(this Enum value)
     {
         FieldInfo field = value.GetType().GetField(value.ToString());
         DescriptionAttribute attribute = field.GetCustomAttribute<DescriptionAttribute>();
         return attribute == null ? value.ToString() : attribute.Description;
+    }
+
+
+    public static string GetLocalizedDescription(this Enum value)
+    {
+        // 키는 enum 이름으로 결정 (예: CalibrationStatus.Fail_SlopeTooLow)
+        //string resourceKey = $"{value.GetType().Name}_{value}";
+
+        string resourceKey = "StatusPending";
+
+        if (value is CalibrationStatus status)
+        {
+            if (status == CalibrationStatus.NoSensorCalibration)
+                resourceKey = "StatusPending";
+            else if (status == CalibrationStatus.CalInProgress)
+                resourceKey = "StatusProgress";
+            else if (status == CalibrationStatus.CalOK)
+                resourceKey = "StatusSuccess";
+            else 
+                resourceKey = "StatusFail";
+        }
+
+        return LocalizationManager.GetString(resourceKey);
     }
 }
