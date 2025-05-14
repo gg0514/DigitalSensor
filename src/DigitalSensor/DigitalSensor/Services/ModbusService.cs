@@ -451,7 +451,7 @@ public class ModbusService : IModbusService
         ushort startAddress = (ushort)_modbusMap["CALIB_1P_SAMPLE"]["address"];
         ushort[] registers = ConvertToRegisters(value);
 
-        await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers);
+        await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers, 2000);
 
         Debug.WriteLine($"MODBUS - WriteCalib1pSample:  REQ= {slaveId},{startAddress},{value}");
     }
@@ -464,7 +464,7 @@ public class ModbusService : IModbusService
 
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_2P_BUFFER"]["address"];
-        await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value);
+        await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value, 2000);
 
         Debug.WriteLine($"MODBUS - WriteCalib2pBuffer:  REQ= {slaveId},{startAddress},{value}");
     }
@@ -477,7 +477,7 @@ public class ModbusService : IModbusService
 
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_ZERO"]["address"];
-        await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value);
+        await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value, 2000);
 
         Debug.WriteLine($"MODBUS - WriteCalibZero:  REQ= {slaveId},{startAddress},{value}");
     }

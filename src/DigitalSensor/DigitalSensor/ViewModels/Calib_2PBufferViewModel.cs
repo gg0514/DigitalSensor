@@ -145,12 +145,12 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
             _notificationService.ShowMessage(Localize["Error"], $"Error during calibration: {ex.Message}");
 
             // 작업 완료 또는 예외 발생 시 상태 복원
-            await ResetCallibStatus();
+            await ResetCallibStatus(1000);
         }
         finally
         {
             // 작업 완료 또는 예외 발생 시 상태 복원
-            await ResetCallibStatus();
+            await ResetCallibStatus(1000);
         }
     }
 

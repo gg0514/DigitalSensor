@@ -119,8 +119,6 @@ public partial class Calib_ZeroViewModel : ViewModelBase
             await _monitoringService.ApplyCalib_Zero();
 
             Debug.WriteLine($"Apply 버튼클릭: {CalStatus}");
-
-            await WaitForCalibrationCompletion();
         }
         catch(Exception ex)
         {
@@ -128,12 +126,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
             Debug.WriteLine($"Error during calibration: {ex.Message}");
             _notificationService.ShowMessage(Localize["Error"], $"Error during calibration: {ex.Message}");
 
-            await ResetCallibStatus();
-        }
-        finally
-        {
-            // 작업 완료 또는 예외 발생 시 상태 복원
-            await ResetCallibStatus();
+            await ResetCallibStatus(1000);
         }
     }
 
@@ -150,16 +143,6 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         _notificationService.ShowMessage(Localize["Information"], $"Zero Calibration Aborted");
     }
 
-    private async Task WaitForCalibrationCompletion()
-    {
-        //await Task.Delay(1000); 
-
-        while(CalStatus == CalibrationStatus.CalInProgress)
-        {
-            // Calibration이 완료될 때까지 대기
-            await Task.Delay(500); // 0.5초 대기
-        }
-    }
 
 
     public async void OnViewLoaded()
@@ -192,33 +175,32 @@ public partial class Calib_ZeroViewModel : ViewModelBase
 
     private async void OnCalibStatusReceived(int status)
     {
-        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
-        {
-            CalStatus = (CalibrationStatus)status;
-        });
+        CalStatus = (CalibrationStatus)status;
+        Debug.WriteLine($"OnCalibStatusReceived: {CalStatus}");
 
-        if(CalStatus != CalibrationStatus.CalInProgress)
+
+        if (CalStatus != CalibrationStatus.CalInProgress)
         {
             // 10초 후에 상태를 초기화
-            ResetCallibStatus(10000);
+            await ResetCallibStatus(10000);
         }
     }
 
     private async Task ResetCallibStatus(int msec= 5000)
     {
-        await Task.Delay(msec);
-
-        if (_sensorAttached)
-        {
-            ModbusInfo.IsAlive = true;
-            IsProgressVisible = false;
-        }
-
         Debug.WriteLine($"ResetCallibStatus: delaytime- {msec}");
+
+        await Task.Delay(msec);
 
         await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
         {
             CalStatus = CalibrationStatus.NoSensorCalibration;
+
+            if (_sensorAttached)
+            {
+                ModbusInfo.IsAlive = true;
+                IsProgressVisible = false;
+            }
         });
     }
 }

@@ -269,10 +269,6 @@ public class MonitoringService : IMonitoringService
             {
                 // 교정 실행
                 await WriteCalibAsync();
-
-                // 폴링 주기
-                await Task.Delay(2000); 
-                await ReadCalibStatus();
             }
             else
             {
@@ -291,25 +287,63 @@ public class MonitoringService : IMonitoringService
 
     private async Task WriteCalibAsync()
     {
-        if (CommandStatus != CommandStatus.Running)
+        if (_currentPage == "Calib_Zero")
         {
-            if (_currentPage == "Calib_1PSample")
-            {
-                await _sensorService.SetCalib1PSampleAsync(_calibValue);
-            }
-            else if (_currentPage == "Calib_2PBuffer")
-            {
-                await _sensorService.SetCalib2PBufferAsync(_calibOrder);
-            }
-            else if (_currentPage == "Calib_Zero")
-            {
-                await _sensorService.SetCalibZeroAsync();
-            }
-
-            Debug.WriteLine($"[ 교정 실행 ] ");
-            CommandStatus = CommandStatus.Running;
+            await WriteZeroCalibAsync();
+        }
+        else if (_currentPage == "Calib_1PSample")
+        {
+            await Write1PSampleCalibAsync();
+        }
+        else if (_currentPage == "Calib_2PBuffer")
+        {
+            await Write2PBufferCalibAsync();
         }
     }
+
+    private async Task WriteZeroCalibAsync()
+    {
+        if (CommandStatus != CommandStatus.Running)
+        {
+            CommandStatus = CommandStatus.Running;
+
+            await _sensorService.SetCalibZeroAsync();
+            Debug.WriteLine($"[ 영점 교정 실행 ] ");
+
+            await WaitForCalibrationCompletion();
+
+            // 교정 상태 초기화
+            ResetCallibStatus();
+        }
+    }
+
+    private async Task Write1PSampleCalibAsync()
+    {
+        if (CommandStatus != CommandStatus.Running)
+        {
+            CommandStatus = CommandStatus.Running;
+
+            await _sensorService.SetCalib1PSampleAsync(_calibValue);
+            Debug.WriteLine($"[ 1PSample 교정 실행 ] ");
+
+            await WaitForCalibrationCompletion();
+
+            // 교정 상태 초기화
+            ResetCallibStatus();
+        }
+    }
+
+    private async Task Write2PBufferCalibAsync()
+    {
+        if (CommandStatus != CommandStatus.Running)
+        {
+            CommandStatus = CommandStatus.Running;
+
+            await _sensorService.SetCalib2PBufferAsync(_calibOrder);
+            Debug.WriteLine($"[ 2PBuffer 교정 실행 ] ");
+        }
+    }
+
 
 
 
@@ -322,28 +356,31 @@ public class MonitoringService : IMonitoringService
         }
     }
 
+    private async Task WaitForCalibrationCompletion()
+    {
+        // 폴링 주기
+        await Task.Delay(2000);
+        await ReadCalibStatus();
+
+        while (CalStatus == CalibrationStatus.CalInProgress)
+        {
+            // Calibration이 완료될 때까지 대기
+            await Task.Delay(2000);
+            await ReadCalibStatus();
+        }
+
+        if (CalStatus == CalibrationStatus.CalOK)   Debug.WriteLine($" => 교정 성공!! ");
+        else                                        Debug.WriteLine($" => 교정 실패!! ");
+    }
+
+
     private async Task ReadCalibStatus()
     {
         int status = await _sensorService.GetCalibStatusAsync();
         
         CalibStatusReceived?.Invoke(status);
+
         CalStatus = (CalibrationStatus)status;
-
-        if (CalStatus == CalibrationStatus.CalInProgress)
-        {
-            Debug.WriteLine($"[ 교정 상태 ] 진행중 !!");
-        }
-        else if (CalStatus == CalibrationStatus.CalOK)
-        {
-            Debug.WriteLine($"[ 교정 상태 ] 성공 !!");
-            ResetCallibStatus();
-        }
-        else
-        {
-            Debug.WriteLine($"[ 교정 상태 ] 실패 !!");
-            ResetCallibStatus();
-        }
-
         Debug.WriteLine($"ReadCalibStatus: {CalStatus}");
     }
 

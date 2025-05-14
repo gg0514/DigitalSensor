@@ -32,7 +32,7 @@ public class ModbusRtuService
         _usbService.Close();
     }
 
-    public async Task<ushort[]> ReadHoldingRegistersAsync(byte slaveId, ushort startAddress, ushort numberOfPoints)
+    public async Task<ushort[]> ReadHoldingRegistersAsync(byte slaveId, ushort startAddress, ushort numberOfPoints, int ms = 1500)
     {
         byte functionCode = 0x03;
         byte[] frame = new byte[8];
@@ -62,7 +62,7 @@ public class ModbusRtuService
 
         // 예상 응답: SlaveID + Function + ByteCount + Data... + CRC_L + CRC_H
         int expectedLength = 5 + numberOfPoints * 2;
-        byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(1500));
+        byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(ms));
 
         string hex_resp = BitConverter.ToString(response, 0, response.Length).Replace("-", " ");
         Debug.WriteLine($"MODBUS Read (0:{response.Length}): {hex_resp}");
@@ -87,7 +87,7 @@ public class ModbusRtuService
         return registers;
     }
 
-    public async Task WriteSingleRegisterAsync(byte slaveId, ushort address, ushort value)
+    public async Task WriteSingleRegisterAsync(byte slaveId, ushort address, ushort value, int ms=1500)
     {
         byte functionCode = 0x06;
         byte[] frame = new byte[8];
@@ -115,7 +115,7 @@ public class ModbusRtuService
 
         // 응답은 요청과 동일한 구조 (에코됨)
         int expectedLength = 8;
-        byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(1500));
+        byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(ms));
 
         string hex_resp = BitConverter.ToString(response, 0, response.Length).Replace("-", " ");
         Debug.WriteLine($"MODBUS Read (0:{response.Length}): {hex_resp}");
@@ -135,7 +135,7 @@ public class ModbusRtuService
         }
     }
 
-    public async Task WriteMultipleRegistersAsync(byte slaveId, ushort startAddress, ushort[] values)
+    public async Task WriteMultipleRegistersAsync(byte slaveId, ushort startAddress, ushort[] values, int ms = 1500)
     {
         if (values == null || values.Length == 0)
             throw new ArgumentException("Values cannot be null or empty");
@@ -177,7 +177,7 @@ public class ModbusRtuService
 
         // 응답: SlaveId + Func + StartAddr + Quantity + CRC = 8 bytes
         int expectedLength = 8;
-        byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(1500));
+        byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(ms));
 
         string hex_resp = BitConverter.ToString(response, 0, response.Length).Replace("-", " ");
         Debug.WriteLine($"MODBUS Read (0:{response.Length}): {hex_resp}");

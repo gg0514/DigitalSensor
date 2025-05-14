@@ -162,12 +162,12 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
             Debug.WriteLine($"Error during calibration: {ex.Message}");
             _notificationService.ShowMessage(Localize["Error"], $"Error during calibration: {ex.Message}");
 
-            await ResetCallibStatus();
+            await ResetCallibStatus(1000);
         }
         finally
         {
             // 작업 완료 또는 예외 발생 시 상태 복원
-            await ResetCallibStatus();
+            await ResetCallibStatus(1000);
         }
     }
 
