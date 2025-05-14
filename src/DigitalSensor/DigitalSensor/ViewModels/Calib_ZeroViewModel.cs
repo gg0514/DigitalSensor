@@ -46,7 +46,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     private bool isProgressVisible;
 
     [ObservableProperty]
-    private string applyButtonText = "적 용";
+    private string applyButtonText;
 
 
     public Calib_ZeroViewModel()
@@ -54,6 +54,9 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         _monitoringService = new MonitoringService(new SensorService(), new AppSettings());
         _sensorService = new SensorService();
         _modbusInfo = new ModbusInfo();
+
+        applyButtonText = Localize["Apply"];
+
     }
 
     public Calib_ZeroViewModel(IMonitoringService monitoringService, ISensorService sensorService, AppSettings settings, NotificationService notificationService)
@@ -65,6 +68,9 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         _monitoringService.SensorValueReceived += OnSensorValueReceived;
         _monitoringService.CalibStatusReceived += OnCalibStatusReceived;
         _notificationService = notificationService;
+
+        applyButtonText = Localize["Apply"];
+
     }
 
     [RelayCommand]
@@ -89,7 +95,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
             // 작업 완료 또는 예외 발생 시 상태 복원
             IsBusy = false;
             IsProgressVisible = false;
-            ApplyButtonText = "적 용";
+            applyButtonText = Localize["Apply"];
         }
     }
 

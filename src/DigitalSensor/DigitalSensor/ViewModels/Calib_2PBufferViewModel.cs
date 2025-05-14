@@ -50,7 +50,7 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     private bool isProgressVisible;
 
     [ObservableProperty]
-    private string applyButtonText = "적 용";
+    private string applyButtonText;
 
 
     public Calib_2PBufferViewModel()
@@ -58,6 +58,8 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
         _monitoringService = new MonitoringService(new SensorService(), new AppSettings());
         _sensorService = new SensorService();
         _modbusInfo = new ModbusInfo();
+
+        applyButtonText = Localize["Apply"];
     }
 
     public Calib_2PBufferViewModel(IMonitoringService monitoringService, ISensorService sensorService, AppSettings settings, NotificationService notificationService)
@@ -65,6 +67,8 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
         _monitoringService = monitoringService;
         _sensorService = sensorService;
         _modbusInfo = settings.ModbusInfo;
+
+        applyButtonText = Localize["Apply"];
 
         _monitoringService.SensorValueReceived += OnSensorValueReceived;
         _monitoringService.CalibStatusReceived += OnCalibStatusReceived;
@@ -112,7 +116,7 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
             // 작업 완료 또는 예외 발생 시 상태 복원
             IsBusy = false;
             IsProgressVisible = false;
-            ApplyButtonText = "적 용";
+            applyButtonText = Localize["Apply"];
         }
     }
 
