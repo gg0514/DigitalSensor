@@ -25,10 +25,6 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     // 다국어 지원을 위한 Localize 객체
     public Localize Localize { get; } = new();
 
-    public bool IsAbortButtonEnabled => ModbusInfo.IsAlive && IsBusy;
-    public bool IsApplyButtonEnabled => ModbusInfo.IsAlive && !IsBusy;
-
-
     [ObservableProperty]
     private CalibrationStatus calStatus;
 
@@ -82,26 +78,26 @@ public partial class Calib_ZeroViewModel : ViewModelBase
 
         isProgressVisible = false;
         applyButtonText = Localize["Apply"];
+
+        IsBusy = false; // 초기값 설정
     }
 
 
 
     partial void OnIsBusyChanged(bool value)
     {
-        OnPropertyChanged(nameof(IsAbortButtonEnabled));
-        OnPropertyChanged(nameof(IsApplyButtonEnabled));
     }
 
     private async void OnSensorAttached(UsbDeviceInfo info)
     {
-        OnPropertyChanged(nameof(IsAbortButtonEnabled));
-        OnPropertyChanged(nameof(IsApplyButtonEnabled));
+        //OnPropertyChanged(nameof(IsAbortButtonEnabled));
+        //OnPropertyChanged(nameof(IsApplyButtonEnabled));
     }
 
     private async void OnSensorDetached()
     {
-        OnPropertyChanged(nameof(IsAbortButtonEnabled));
-        OnPropertyChanged(nameof(IsApplyButtonEnabled));
+        //OnPropertyChanged(nameof(IsAbortButtonEnabled));
+        //OnPropertyChanged(nameof(IsApplyButtonEnabled));
     }
 
 
@@ -112,8 +108,9 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         try
         {
             IsBusy = true;
-            IsProgressVisible = false;
-            //ApplyButtonText = " ...";
+            IsProgressVisible = true;
+
+            ModbusInfo.IsAlive = false;
 
             CalStatus = CalibrationStatus.CalInProgress;
             await _monitoringService.ApplyCalib_Zero();
@@ -133,7 +130,6 @@ public partial class Calib_ZeroViewModel : ViewModelBase
             // 작업 완료 또는 예외 발생 시 상태 복원
             IsBusy = false;
             IsProgressVisible = false;
-            applyButtonText = Localize["Apply"];
         }
     }
 
@@ -146,6 +142,10 @@ public partial class Calib_ZeroViewModel : ViewModelBase
 
         // Abort후 상태코드를 받을 수 있는지 체크 필요함
         await ResetCallibStatus(500);
+
+
+        ModbusInfo.IsAlive = true;
+        IsProgressVisible = false;
 
         _notificationService.ShowMessage(Localize["Information"], $"Zero Calibration Aborted");
     }

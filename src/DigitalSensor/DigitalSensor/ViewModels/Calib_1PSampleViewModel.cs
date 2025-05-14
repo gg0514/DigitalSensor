@@ -19,13 +19,13 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
     private readonly IMonitoringService _monitoringService;
     private readonly ISensorService _sensorService;
     private readonly NotificationService _notificationService;
-    private readonly ModbusInfo _modbusInfo;
 
     // 다국어 지원을 위한 Localize 객체
     public Localize Localize { get; } = new();
 
-    public bool IsButtonEnabled => _modbusInfo.IsAlive && !IsBusy;
 
+    [ObservableProperty]
+    private ModbusInfo _modbusInfo;
 
     [ObservableProperty]
     private CalibrationStatus calStatus;
@@ -120,7 +120,8 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
         {
             IsBusy = true;
             IsProgressVisible = true;
-            ApplyButtonText = " ...";
+            ModbusInfo.IsAlive = false;
+
 
             CalStatus = CalibrationStatus.CalInProgress;
             await _monitoringService.ApplyCalib_1PSample(CalibValue);
@@ -132,12 +133,18 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
             _notificationService.ShowMessage(Localize["Information"], $"1P Sample Calibration Completed");
 
         }
+        catch (Exception ex)
+        {
+            // 예외 처리
+            Debug.WriteLine($"Error during calibration: {ex.Message}");
+            _notificationService.ShowMessage(Localize["Error"], $"Error during calibration: {ex.Message}");
+        }
         finally
         {
             // 작업 완료 또는 예외 발생 시 상태 복원
             IsBusy = false;
             IsProgressVisible = false;
-            applyButtonText = Localize["Apply"];
+            ApplyButtonText = Localize["Apply"];
         }
     }
 
@@ -150,6 +157,10 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
 
         // Abort후 상태코드를 받을 수 있는지 체크 필요함
         await ResetCallibStatus(1000);
+
+        ModbusInfo.IsAlive = true;
+        IsProgressVisible = false;
+
         _notificationService.ShowMessage(Localize["Information"], $"1P Sample Calibration Aborted");
 
     }
