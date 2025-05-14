@@ -1,6 +1,7 @@
 ﻿using DigitalSensor.Extensions;
 using DigitalSensor.Models;
 using DigitalSensor.ViewModels;
+using FluentAvalonia.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -36,7 +37,7 @@ public interface IMonitoringService
     // 1점 샘플
     Task ApplyCalib_1PSample(float value);
     // 2점 버퍼
-    Task ApplyCalib_2PBuffer(int order);
+    Task ApplyCalib_2PBuffer();
     // 교정 취소
     Task AbortCalib();
 }
@@ -52,7 +53,6 @@ public class MonitoringService : IMonitoringService
     private bool _bAbortCalib = false;
 
     private float _calibValue = 0;
-    private int _calibOrder = 0;
 
     private string _currentPage = string.Empty;
 
@@ -140,7 +140,6 @@ public class MonitoringService : IMonitoringService
     public async Task ApplyCalib_Zero()
     {
         _bApplyCalib = true;
-        Debug.WriteLine($"[ 적용 버튼 클릭 ] ");
 
         await Task.Delay(100);
     }
@@ -149,16 +148,13 @@ public class MonitoringService : IMonitoringService
     {
         _bApplyCalib = true;
         _calibValue = value;
-        Debug.WriteLine($"[ 적용 버튼 클릭 ] ");
 
         await Task.Delay(100);
     }
 
-    public async Task ApplyCalib_2PBuffer(int order)
+    public async Task ApplyCalib_2PBuffer()
     {
         _bApplyCalib = true;
-        _calibOrder = order;
-        Debug.WriteLine($"[ 적용 버튼 클릭 ] ");
 
         await Task.Delay(100);
     }
@@ -168,7 +164,6 @@ public class MonitoringService : IMonitoringService
         _bAbortCalib = true;
 
         ResetCallibStatus();
-        Debug.WriteLine($"[ 중단 버튼 클릭 ] ");
 
         await Task.Delay(100);
     }
@@ -339,8 +334,27 @@ public class MonitoringService : IMonitoringService
         {
             CommandStatus = CommandStatus.Running;
 
-            await _sensorService.SetCalib2PBufferAsync(_calibOrder);
+            // 1P Buffer 교정
+            int calibOrder = 0;
+            await _sensorService.SetCalib2PBufferAsync(calibOrder);
+            Debug.WriteLine($"[ 1PBuffer 교정 실행 ] ");
+
+            await WaitForCalibrationCompletion();
+
+            string title = "2P Buffer";
+            string message = $"2번째 버퍼 교정을 시작하시겠습니까?";
+            bool bResult = await ShowConfirmationAsync(title, message);
+
+            // 2P Buffer 교정
+            calibOrder = 1;
+            await _sensorService.SetCalib2PBufferAsync(calibOrder);
             Debug.WriteLine($"[ 2PBuffer 교정 실행 ] ");
+
+            await WaitForCalibrationCompletion();
+
+
+            // 교정 상태 초기화
+            ResetCallibStatus();
         }
     }
 
@@ -464,6 +478,21 @@ public class MonitoringService : IMonitoringService
         //{
         //    vm.ModbusInfo = newslaveId;
         //});
+    }
+
+    public async Task<bool> ShowConfirmationAsync(string title, string message)
+    {
+        var dialog = new ContentDialog
+        {
+            Title = title,
+            Content = message,
+            PrimaryButtonText = "확인",
+            CloseButtonText = "취소",
+            DefaultButton = ContentDialogButton.Primary
+        };
+
+        var result = await dialog.ShowAsync();
+        return result == ContentDialogResult.Primary;
     }
 
 }

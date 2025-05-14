@@ -39,10 +39,6 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     private SensorData receivedData = new();
 
     [ObservableProperty]
-    private int calibOrder = 0;
-
-
-    [ObservableProperty]
     private string sensorUnit;
 
     [ObservableProperty]
@@ -109,34 +105,10 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
             IsProgressVisible = true;
             ModbusInfo.IsAlive = false;
 
-
             CalStatus = CalibrationStatus.CalInProgress;
+            await _monitoringService.ApplyCalib_2PBuffer();
 
-            ApplyButtonText = $" ({CalibOrder})";
-            await _monitoringService.ApplyCalib_2PBuffer(CalibOrder);
-            Debug.WriteLine($"Apply 버튼클릭: 버퍼번호 {CalibOrder}");
-
-            // 1번 Calibration이 완료될 때까지 대기
-            await WaitForCalibrationCompletion();
-
-
-            CalibOrder++;
-
-            string title = "2P Buffer";
-            string message = $"2번째 버퍼 교정을 시작하시겠습니까?";
-            bool bResult= await ShowConfirmationAsync(title, message);
-
-            if(bResult)
-            {
-                ApplyButtonText = $" ({CalibOrder})";
-                await _monitoringService.ApplyCalib_2PBuffer(CalibOrder);
-                Debug.WriteLine($"Apply 버튼클릭: 버퍼번호 {CalibOrder}");
-
-                // 2번 Calibration이 완료될 때까지 대기
-                await WaitForCalibrationCompletion();
-
-                _notificationService.ShowMessage(Localize["Information"], $"2P Buffer Calibration Completed");
-            }
+            Debug.WriteLine($"Apply 버튼클릭: {CalStatus}");
         }
         catch (Exception ex)
         {
@@ -144,12 +116,6 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
             Debug.WriteLine($"Error during calibration: {ex.Message}");
             _notificationService.ShowMessage(Localize["Error"], $"Error during calibration: {ex.Message}");
 
-            // 작업 완료 또는 예외 발생 시 상태 복원
-            await ResetCallibStatus(1000);
-        }
-        finally
-        {
-            // 작업 완료 또는 예외 발생 시 상태 복원
             await ResetCallibStatus(1000);
         }
     }
@@ -159,29 +125,18 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     {
         await _monitoringService.AbortCalib();
 
-        Debug.WriteLine($"Abort 버튼클릭: {_monitoringService.AbortCalib}");
+        Debug.WriteLine($"Abort 버튼클릭: {CalStatus}");
 
         // Abort후 상태코드를 받을 수 있는지 체크 필요함
-        await ResetCallibStatus(1000);
+        await ResetCallibStatus(500);
 
         _notificationService.ShowMessage(Localize["Information"], $"2P Buffer Calibration Aborted");
 
     }
-    private async Task WaitForCalibrationCompletion()
-    {
-        //await Task.Delay(1000); 
 
-        while (CalStatus == CalibrationStatus.CalInProgress)
-        {
-            // Calibration이 완료될 때까지 대기
-            await Task.Delay(500); // 0.5초 대기
-        }
-    }
 
     public async void OnViewLoaded()
     {
-        CalibOrder = 0;
-
         await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
         {
             ReceivedInfo = _monitoringService.SensorInfo;
@@ -211,48 +166,32 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
 
     private async void OnCalibStatusReceived(int status)
     {
-        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
-        {
-            CalStatus = (CalibrationStatus)status;
-        });
+        CalStatus = (CalibrationStatus)status;
+        Debug.WriteLine($"OnCalibStatusReceived: {CalStatus}");
 
         if (CalStatus != CalibrationStatus.CalInProgress)
         {
-            await ResetCallibStatus();
+            // 10초 후에 상태를 초기화
+            await ResetCallibStatus(10000);
         }
     }
 
     private async Task ResetCallibStatus(int msec = 5000)
     {
-        await Task.Delay(msec); // 5초 대기
-
-        if (_sensorAttached)
-        {
-            ModbusInfo.IsAlive = true;
-            IsProgressVisible = false;
-        }
-
         Debug.WriteLine($"ResetCallibStatus: delaytime- {msec}");
+
+        await Task.Delay(msec);
 
         await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
         {
             CalStatus = CalibrationStatus.NoSensorCalibration;
+
+            if (_sensorAttached)
+            {
+                ModbusInfo.IsAlive = true;
+                IsProgressVisible = false;
+            }
         });
-    }
-
-    public async Task<bool> ShowConfirmationAsync(string title, string message)
-    {
-        var dialog = new ContentDialog
-        {
-            Title = title,
-            Content = message,
-            PrimaryButtonText = "확인",
-            CloseButtonText = "취소",
-            DefaultButton = ContentDialogButton.Primary
-        };
-
-        var result = await dialog.ShowAsync();
-        return result == ContentDialogResult.Primary;
     }
 
 }

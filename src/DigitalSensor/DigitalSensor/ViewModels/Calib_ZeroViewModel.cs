@@ -69,6 +69,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         _monitoringService = monitoringService;
         _sensorService = sensorService;
         _modbusInfo = settings.ModbusInfo;
+        _notificationService = notificationService;
 
         // Sensor 구독 등록
         _sensorService.SensorAttached += OnSensorAttached;
@@ -76,7 +77,6 @@ public partial class Calib_ZeroViewModel : ViewModelBase
 
         _monitoringService.SensorValueReceived += OnSensorValueReceived;
         _monitoringService.CalibStatusReceived += OnCalibStatusReceived;
-        _notificationService = notificationService;
 
         isProgressVisible = false;
         applyButtonText = Localize["Apply"];
@@ -188,7 +188,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
 
     private async Task ResetCallibStatus(int msec= 5000)
     {
-        Debug.WriteLine($"ResetCallibStatus: delaytime- {msec}");
+        Debug.WriteLine($"ResetCallibStatus: delaytime- {msec}, SensorAttached: {_sensorAttached}");
 
         await Task.Delay(msec);
 

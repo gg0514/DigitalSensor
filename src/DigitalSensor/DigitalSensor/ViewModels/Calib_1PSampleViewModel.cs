@@ -83,7 +83,10 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
         _monitoringService.CalibStatusReceived += OnCalibStatusReceived;
 
 
+        isProgressVisible = false;
         applyButtonText = Localize["Apply"];
+
+        IsBusy = false; // 초기값 설정
     }
 
 
@@ -149,12 +152,7 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
             CalStatus = CalibrationStatus.CalInProgress;
             await _monitoringService.ApplyCalib_1PSample(CalibValue);
 
-
             Debug.WriteLine($"Apply 버튼클릭: {CalStatus}");
-
-            await WaitForCalibrationCompletion();
-            _notificationService.ShowMessage(Localize["Information"], $"1P Sample Calibration Completed");
-
         }
         catch (Exception ex)
         {
@@ -162,11 +160,6 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
             Debug.WriteLine($"Error during calibration: {ex.Message}");
             _notificationService.ShowMessage(Localize["Error"], $"Error during calibration: {ex.Message}");
 
-            await ResetCallibStatus(1000);
-        }
-        finally
-        {
-            // 작업 완료 또는 예외 발생 시 상태 복원
             await ResetCallibStatus(1000);
         }
     }
@@ -179,21 +172,10 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
         Debug.WriteLine($"Abort 버튼클릭: {CalStatus}");
 
         // Abort후 상태코드를 받을 수 있는지 체크 필요함
-        await ResetCallibStatus(1000);
-
+        await ResetCallibStatus(500);
 
         _notificationService.ShowMessage(Localize["Information"], $"1P Sample Calibration Aborted");
 
-    }
-    private async Task WaitForCalibrationCompletion()
-    {
-        //await Task.Delay(1000); 
-
-        while (CalStatus == CalibrationStatus.CalInProgress)
-        {
-            // Calibration이 완료될 때까지 대기
-            await Task.Delay(500); // 0.5초 대기
-        }
     }
 
     public async void OnViewLoaded()
@@ -232,34 +214,36 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
 
     private async void OnCalibStatusReceived(int status)
     {
-        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
-        {
-            CalStatus = (CalibrationStatus)status;
-        });
+        CalStatus = (CalibrationStatus)status;
+        Debug.WriteLine($"OnCalibStatusReceived: {CalStatus}");
+
 
         if (CalStatus != CalibrationStatus.CalInProgress)
         {
-            await ResetCallibStatus();
+            // 10초 후에 상태를 초기화
+            await ResetCallibStatus(1000);
         }
     }
 
     private async Task ResetCallibStatus(int msec = 5000)
     {
+        Debug.WriteLine($"ResetCallibStatus: delaytime- {msec}, SensorAttached: {_sensorAttached}");
+
         await Task.Delay(msec);
-
-        if (_sensorAttached)
-        {
-            ModbusInfo.IsAlive = true;
-            IsProgressVisible = false;
-        }
-
-        Debug.WriteLine($"ResetCallibStatus: delaytime- {msec}");
 
         await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
         {
             CalStatus = CalibrationStatus.NoSensorCalibration;
+
+            if (_sensorAttached)
+            {
+                ModbusInfo.IsAlive = true;
+                IsProgressVisible = false;
+            }
         });
     }
+
+
     public void StartEditing()
     {
         IsEditing = true;
