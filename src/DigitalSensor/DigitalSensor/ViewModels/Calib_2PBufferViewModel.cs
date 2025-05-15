@@ -42,9 +42,6 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     private string sensorUnit;
 
     [ObservableProperty]
-    private bool isBusy;
-
-    [ObservableProperty]
     private bool isProgressVisible= false;
 
 
@@ -67,10 +64,6 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
         _notificationService = notificationService;
     }
 
-
-    partial void OnIsBusyChanged(bool value)
-    {
-    }
 
 
 
@@ -97,7 +90,6 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     {
         try
         {
-            IsBusy = true;
             IsProgressVisible = true;
             ModbusInfo.IsAlive = false;
 

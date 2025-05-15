@@ -50,9 +50,6 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
     private bool isModified = false;
 
     [ObservableProperty]
-    private bool isBusy;
-
-    [ObservableProperty]
     private bool isProgressVisible= false;
 
 
@@ -73,14 +70,8 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
 
 
         isProgressVisible = false;
-
-        IsBusy = false; // 초기값 설정
     }
 
-
-    partial void OnIsBusyChanged(bool value)
-    {
-    }
 
     public async void OnViewLoaded()
     {
@@ -137,7 +128,6 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
     {
         try
         {
-            IsBusy = true;
             IsProgressVisible = true;
             ModbusInfo.IsAlive = false;
 

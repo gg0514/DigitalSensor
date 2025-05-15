@@ -24,9 +24,6 @@ public partial class SettingModbusViewModel : ViewModelBase
     [ObservableProperty]
     public ModbusInfo _modbusInfo;
 
-    [ObservableProperty]
-    private bool isBusy = false;
-
 
     public SettingModbusViewModel()
     {
@@ -48,7 +45,6 @@ public partial class SettingModbusViewModel : ViewModelBase
     {
         try
         {
-            IsBusy = true;
             Debug.WriteLine($"Load 버튼클릭");
 
             int slaveID = await _modbusService.VerifyID();
@@ -64,8 +60,6 @@ public partial class SettingModbusViewModel : ViewModelBase
         }
         finally
         {
-            // 작업 완료 또는 예외 발생 시 상태 복원
-            IsBusy = false;
         }
     }
 
@@ -76,7 +70,6 @@ public partial class SettingModbusViewModel : ViewModelBase
 
         try
         {
-            IsBusy = true;
             Debug.WriteLine($"Apply 버튼클릭");
 
             await _modbusService.WriteSlaveId((ushort)slaveID);
@@ -91,8 +84,6 @@ public partial class SettingModbusViewModel : ViewModelBase
         }
         finally
         {
-            // 작업 완료 또는 예외 발생 시 상태 복원
-            IsBusy = false;
         }
     }
 }
