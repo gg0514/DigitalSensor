@@ -15,6 +15,7 @@ public class SensorInfo
 {
     public SensorType Type { get; set; }
     public string Serial { get; set; }             // hexstring으로 표시
+    public bool IsAttached { get; set; } = false;
 }
 
 // ** 참고

@@ -18,13 +18,10 @@ namespace DigitalSensor.ViewModels;
 public partial class Calib_2PBufferViewModel : ViewModelBase
 {
     private readonly IMonitoringService _monitoringService;
-    private readonly ISensorService _sensorService;
     private readonly NotificationService _notificationService;
 
     // 다국어 지원을 위한 Localize 객체
     public Localize Localize { get; } = new();
-
-    private bool _sensorAttached = false;
 
     [ObservableProperty]
     private bool isVisible;
@@ -55,20 +52,15 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     public Calib_2PBufferViewModel()
     {
         _monitoringService = new MonitoringService(new SensorService(), new AppSettings());
-        _sensorService = new SensorService();
         _modbusInfo = new ModbusInfo();
 
     }
 
-    public Calib_2PBufferViewModel(IMonitoringService monitoringService, ISensorService sensorService, AppSettings settings, NotificationService notificationService)
+    public Calib_2PBufferViewModel(IMonitoringService monitoringService, AppSettings settings, NotificationService notificationService)
     {
         _monitoringService = monitoringService;
-        _sensorService = sensorService;
         _modbusInfo = settings.ModbusInfo;
 
-        // Sensor 구독 등록
-        _sensorService.SensorAttached += OnSensorAttached;
-        _sensorService.SensorDetached += OnSensorDetached;
 
         _monitoringService.SensorValueReceived += OnSensorValueReceived;
         _monitoringService.CalibStatusReceived += OnCalibStatusReceived;
@@ -80,19 +72,6 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     {
     }
 
-    private async void OnSensorAttached(UsbDeviceInfo info)
-    {
-        _sensorAttached = true;
-        //OnPropertyChanged(nameof(IsAbortButtonEnabled));
-        //OnPropertyChanged(nameof(IsApplyButtonEnabled));
-    }
-
-    private async void OnSensorDetached()
-    {
-        _sensorAttached = false;
-        //OnPropertyChanged(nameof(IsAbortButtonEnabled));
-        //OnPropertyChanged(nameof(IsApplyButtonEnabled));
-    }
 
 
     public async void OnViewLoaded()
@@ -190,7 +169,7 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
         {
             CalStatus = CalibrationStatus.NoSensorCalibration;
 
-            if (_sensorAttached)
+            //if (_sensorAttached)
             {
                 ModbusInfo.IsAlive = true;
                 IsProgressVisible = false;

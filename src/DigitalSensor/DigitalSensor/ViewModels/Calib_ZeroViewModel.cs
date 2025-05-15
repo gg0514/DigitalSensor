@@ -19,13 +19,10 @@ namespace DigitalSensor.ViewModels;
 public partial class Calib_ZeroViewModel : ViewModelBase
 {
     private readonly IMonitoringService _monitoringService;
-    private readonly ISensorService _sensorService;
     private readonly NotificationService _notificationService;
 
     // 다국어 지원을 위한 Localize 객체
     public Localize Localize { get; } = new();
-
-    private bool _sensorAttached = false;
 
     [ObservableProperty]
     private bool isVisible;
@@ -56,21 +53,15 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     public Calib_ZeroViewModel()
     {
         _monitoringService = new MonitoringService(new SensorService(), new AppSettings());
-        _sensorService = new SensorService();
         _modbusInfo = new ModbusInfo();
 
     }
 
-    public Calib_ZeroViewModel(IMonitoringService monitoringService, ISensorService sensorService, AppSettings settings, NotificationService notificationService)
+    public Calib_ZeroViewModel(IMonitoringService monitoringService, AppSettings settings, NotificationService notificationService)
     {
         _monitoringService = monitoringService;
-        _sensorService = sensorService;
         _modbusInfo = settings.ModbusInfo;
         _notificationService = notificationService;
-
-        // Sensor 구독 등록
-        _sensorService.SensorAttached += OnSensorAttached;
-        _sensorService.SensorDetached += OnSensorDetached;
 
         _monitoringService.SensorValueReceived += OnSensorValueReceived;
         _monitoringService.CalibStatusReceived += OnCalibStatusReceived;
@@ -85,19 +76,6 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     {
     }
 
-    private async void OnSensorAttached(UsbDeviceInfo info)
-    {
-        _sensorAttached = true;
-        //OnPropertyChanged(nameof(IsAbortButtonEnabled));
-        //OnPropertyChanged(nameof(IsApplyButtonEnabled));
-    }
-
-    private async void OnSensorDetached()
-    {
-        _sensorAttached = false;
-        //OnPropertyChanged(nameof(IsAbortButtonEnabled));
-        //OnPropertyChanged(nameof(IsApplyButtonEnabled));
-    }
 
 
     public async void OnViewLoaded()
