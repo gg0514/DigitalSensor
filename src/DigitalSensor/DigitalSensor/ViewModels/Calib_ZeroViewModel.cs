@@ -181,8 +181,8 @@ public partial class Calib_ZeroViewModel : ViewModelBase
 
         if (CalStatus != CalibrationStatus.CalInProgress)
         {
-            // 10초 후에 상태를 초기화
-            await ResetCallibStatus(10000);
+            // 2초 후에 상태를 초기화
+            await ResetCallibStatus(2000);
         }
     }
 
@@ -194,9 +194,11 @@ public partial class Calib_ZeroViewModel : ViewModelBase
 
         await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
         {
-            CalStatus = CalibrationStatus.NoSensorCalibration;
+            // 교정상태 주석처리
+            //CalStatus = CalibrationStatus.NoSensorCalibration;
 
-            if (_sensorAttached)
+            // 중간에 케이블이 빠지는 경우 고려하지 않음
+            //if (_sensorAttached)
             {
                 ModbusInfo.IsAlive = true;
                 IsProgressVisible = false;

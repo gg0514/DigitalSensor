@@ -275,6 +275,9 @@ public class MonitoringService : IMonitoringService
             ErrSignal?.Invoke();
             await Task.Delay(1000); // 1초 대기
             Debug.WriteLine($"[ CalibMode - Error] {ex.Message}");
+
+            _sensorService.DiscardInBuffer();
+            CalibStatusReceived?.Invoke(0);
         }
     }
 
@@ -345,13 +348,15 @@ public class MonitoringService : IMonitoringService
             string message = $"2번째 버퍼 교정을 시작하시겠습니까?";
             bool bResult = await ShowConfirmationAsync(title, message);
 
-            // 2P Buffer 교정
-            calibOrder = 1;
-            await _sensorService.SetCalib2PBufferAsync(calibOrder);
-            Debug.WriteLine($"[ 2PBuffer 교정 실행 ] ");
+            if(bResult)
+            {
+                // 2P Buffer 교정
+                calibOrder = 1;
+                await _sensorService.SetCalib2PBufferAsync(calibOrder);
+                Debug.WriteLine($"[ 2PBuffer 교정 실행 ] ");
 
-            await WaitForCalibrationCompletion();
-
+                await WaitForCalibrationCompletion();
+            }
 
             // 교정 상태 초기화
             ResetCallibStatus();

@@ -32,6 +32,8 @@ public interface ISensorService
     Task SetCalibZeroAsync();
     Task SetCalib1PSampleAsync(float v);
     Task SetCalib2PBufferAsync(int order);
+
+    void DiscardInBuffer();
 }
 
 
@@ -261,6 +263,19 @@ public class SensorService : ISensorService
         catch (Exception ex)
         {
             Debug.WriteLine($"[Error] calibration 2p buffer: {ex.Message}");
+        }
+    }
+
+
+    public void DiscardInBuffer()
+    {
+        try
+        {
+            _usbService.DiscardInBuffer();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"[Error] DiscardInBuffer: {ex.Message}");
         }
     }
 }
