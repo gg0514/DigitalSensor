@@ -21,14 +21,6 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     private readonly IMonitoringService _monitoringService;
     private readonly NotificationService _notificationService;
 
-    // 다국어 지원을 위한 Localize 객체
-    public Localize Localize { get; } = new();
-
-    [ObservableProperty]
-    private bool isVisible;
-
-    [ObservableProperty]
-    private CalibrationStatus calStatus;
 
     [ObservableProperty]
     private SensorInfo receivedInfo;
@@ -36,48 +28,47 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     [ObservableProperty]
     private SensorData receivedData;
 
+    [ObservableProperty]
+    private CalInfo _calInfo;
+
+
+
+
+    // 다국어 지원을 위한 Localize 객체
+    public Localize Localize { get; } = new();
 
     [ObservableProperty]
-    private ModbusInfo _modbusInfo;
-
-    [ObservableProperty]
-    private bool isProgressVisible= false;
+    private bool isVisible;
 
 
     public Calib_ZeroViewModel()
     {
         _monitoringService = new MonitoringService(new SensorService(), new AppSettings());
-        _modbusInfo = new ModbusInfo();
 
+        // 이것으로 이벤트핸들러를 대체하는 효과
+        ReceivedInfo = _monitoringService.SensorInfo;
+        ReceivedData = _monitoringService.SensorData;
+        CalInfo = _monitoringService.CalInfo;
     }
 
     public Calib_ZeroViewModel(IMonitoringService monitoringService, AppSettings settings, NotificationService notificationService)
     {
         _monitoringService = monitoringService;
-        _modbusInfo = settings.ModbusInfo;
         _notificationService = notificationService;
 
-        _monitoringService.SensorValueReceived += OnSensorValueReceived;
-        _monitoringService.CalibStatusReceived += OnCalibStatusReceived;
-
-        isProgressVisible = false;
+        // 이것으로 이벤트핸들러를 대체하는 효과
+        ReceivedInfo = _monitoringService.SensorInfo;
+        ReceivedData = _monitoringService.SensorData;
+        CalInfo = _monitoringService.CalInfo;
     }
 
 
     public async void OnViewLoaded()
     {
-        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
-        {
-            ReceivedInfo = _monitoringService.SensorInfo;
-            ReceivedData = _monitoringService.SensorData;
-        });
-
-        Debug.WriteLine($"OnViewLoaded: {ReceivedInfo.Type} - {ReceivedInfo.SensorUnit}");
     }
 
     public async void OnViewUnloaded()
     {
-
         Debug.WriteLine($"OnViewUnloaded: {ReceivedInfo.Type} - {ReceivedInfo.SensorUnit}");
     }
 
@@ -88,13 +79,9 @@ public partial class Calib_ZeroViewModel : ViewModelBase
 
         try
         {
-            IsProgressVisible = true;
-            ModbusInfo.IsAlive = false;
-
-            CalStatus = CalibrationStatus.CalInProgress;
             await _monitoringService.ApplyCalib_Zero();
 
-            Debug.WriteLine($"Apply 버튼클릭: {CalStatus}");
+            Debug.WriteLine($"Apply 버튼클릭: {CalInfo.IsRun}");
         }
         catch(Exception ex)
         {
@@ -111,43 +98,12 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     {
         await _monitoringService.AbortCalib();
 
-        Debug.WriteLine($"Abort 버튼클릭: {CalStatus}");
+        Debug.WriteLine($"Abort 버튼클릭: {CalInfo.CalStatus}");
 
         // Abort후 상태코드를 받을 수 있는지 체크 필요함
         await ResetCallibStatus(500);
 
         _notificationService.ShowMessage(Localize["Information"], $"Zero Calibration Aborted");
-    }
-
-
-
-
-    private async void OnSensorValueReceived(float value)
-    {
-        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
-        {
-            ReceivedData = new SensorData()
-            {
-                Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                Value = value,
-                Mv = ReceivedData.Mv,
-                Temperature = ReceivedData.Temperature,
-            };
-        });
-    }
-
-
-    private async void OnCalibStatusReceived(int status)
-    {
-        CalStatus = (CalibrationStatus)status;
-        Debug.WriteLine($"OnCalibStatusReceived: {CalStatus}");
-
-
-        if (CalStatus != CalibrationStatus.CalInProgress)
-        {
-            // 2초 후에 상태를 초기화
-            await ResetCallibStatus(2000);
-        }
     }
 
     private async Task ResetCallibStatus(int msec= 5000)
@@ -160,13 +116,6 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         {
             // 교정상태 주석처리
             //CalStatus = CalibrationStatus.NoSensorCalibration;
-
-            // 중간에 케이블이 빠지는 경우 고려하지 않음
-            //if (_sensorAttached)
-            {
-                ModbusInfo.IsAlive = true;
-                IsProgressVisible = false;
-            }
         });
     }
 }

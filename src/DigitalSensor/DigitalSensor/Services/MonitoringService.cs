@@ -15,9 +15,9 @@ namespace DigitalSensor.Services;
 
 public interface IMonitoringService
 {
-    SensorInfo SensorInfo { get; set; }
-    SensorData SensorData { get; set; }
-    CommandStatus CommandStatus { get; set; }
+    SensorInfo  SensorInfo { get; set; }
+    SensorData  SensorData { get; set; }
+    CalInfo     CalInfo { get; set; }
 
     event Action ErrSignal;
 
@@ -46,10 +46,14 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     private readonly ModbusInfo _modbusInfo;
 
     [ObservableProperty]
-    public SensorInfo _sensorInfo= new();
+    private SensorInfo _sensorInfo= new();
 
     [ObservableProperty]
-    public SensorData _sensorData= new();
+    private SensorData _sensorData= new();
+
+    [ObservableProperty]
+    private CalInfo  _calInfo = new();
+
 
 
     private bool _isRunning = false;
@@ -61,10 +65,6 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     private string _currentPage = string.Empty;
 
-    public CommandStatus CommandStatus { get; set; } = CommandStatus.Ready;
-
-
-    private CalibrationStatus CalStatus = CalibrationStatus.NoSensorCalibration;
 
 
     public event Action ErrSignal;
@@ -138,6 +138,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     public async Task ApplyCalib_Zero()
     {
         _bApplyCalib = true;
+
 
         await Task.Delay(100);
     }
@@ -260,6 +261,8 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
             }
             else if (_bApplyCalib)
             {
+                CalInfo.IsRun = true;
+
                 // 교정 실행
                 await WriteCalibAsync();
             }
@@ -303,9 +306,9 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     private async Task WriteZeroCalibAsync()
     {
-        if (CommandStatus != CommandStatus.Running)
+        if (CalInfo.CmdStatus != CommandStatus.Running)
         {
-            CommandStatus = CommandStatus.Running;
+            CalInfo.CmdStatus = CommandStatus.Running;
 
             await _sensorService.SetCalibZeroAsync();
             Debug.WriteLine($"[ 영점 교정 실행 ] ");
@@ -319,9 +322,9 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     private async Task Write1PSampleCalibAsync()
     {
-        if (CommandStatus != CommandStatus.Running)
+        if (CalInfo.CmdStatus != CommandStatus.Running)
         {
-            CommandStatus = CommandStatus.Running;
+            CalInfo.CmdStatus = CommandStatus.Running;
 
             await _sensorService.SetCalib1PSampleAsync(_calibValue);
             Debug.WriteLine($"[ 1PSample 교정 실행 ] ");
@@ -335,9 +338,9 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     private async Task Write2PBufferCalibAsync()
     {
-        if (CommandStatus != CommandStatus.Running)
+        if (CalInfo.CmdStatus != CommandStatus.Running)
         {
-            CommandStatus = CommandStatus.Running;
+            CalInfo.CmdStatus = CommandStatus.Running;
 
             // 1P Buffer 교정
             int calibOrder = 0;
@@ -370,7 +373,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     private async Task WriteCalibAbortAsync()
     {
-        if (CommandStatus == CommandStatus.Running)
+        if (CalInfo.CmdStatus == CommandStatus.Running)
         {
             Debug.WriteLine($"[ 교정 중단 ] ");
             await _sensorService.SetCalibAbortAsync();
@@ -383,14 +386,14 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         await Task.Delay(2000);
         await ReadCalibStatus();
 
-        while (CalStatus == CalibrationStatus.CalInProgress)
+        while (CalInfo.CalStatus == CalibrationStatus.CalInProgress)
         {
             // Calibration이 완료될 때까지 대기
             await Task.Delay(2000);
             await ReadCalibStatus();
         }
 
-        if (CalStatus == CalibrationStatus.CalOK)   Debug.WriteLine($" => 교정 성공!! ");
+        if (CalInfo.CalStatus == CalibrationStatus.CalOK)   Debug.WriteLine($" => 교정 성공!! ");
         else                                        Debug.WriteLine($" => 교정 실패!! ");
     }
 
@@ -401,15 +404,17 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         
         CalibStatusReceived?.Invoke(status);
 
-        CalStatus = (CalibrationStatus)status;
-        Debug.WriteLine($"ReadCalibStatus: {CalStatus}");
+        CalInfo.CalStatus = (CalibrationStatus)status;
+        Debug.WriteLine($"ReadCalibStatus: {CalInfo.CalStatus}");
     }
 
     private void ResetCallibStatus()
     {
+        CalInfo.IsRun = false;
+
         _bApplyCalib = false;
         _bAbortCalib = false;
-        CommandStatus = CommandStatus.Ready;
+        CalInfo.CmdStatus = CommandStatus.Ready;
     }
 
 
