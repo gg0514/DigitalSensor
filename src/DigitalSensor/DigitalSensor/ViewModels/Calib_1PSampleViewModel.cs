@@ -58,17 +58,12 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
     [ObservableProperty]
     private bool isProgressVisible= false;
 
-    [ObservableProperty]
-    private string applyButtonText;
-
 
     public Calib_1PSampleViewModel()
     {
         _monitoringService = new MonitoringService(new SensorService(), new AppSettings());
         _sensorService = new SensorService();
         _modbusInfo = new ModbusInfo();
-
-        applyButtonText = Localize["Apply"];
     }
 
     public Calib_1PSampleViewModel(IMonitoringService monitoringService, ISensorService sensorService, AppSettings settings, NotificationService notificationService)
@@ -87,7 +82,6 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
 
 
         isProgressVisible = false;
-        applyButtonText = Localize["Apply"];
 
         IsBusy = false; // 초기값 설정
     }

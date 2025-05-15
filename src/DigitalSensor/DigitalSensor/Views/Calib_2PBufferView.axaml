@@ -97,7 +97,7 @@
 						<ui:ProgressRing IsVisible="{Binding IsProgressVisible}"
 									  Width="40" Height="40" Margin="0,0,15,0"
 									  IsActive="True"/>
-						<TextBlock Text="{Binding ApplyButtonText}" VerticalAlignment="Center"/>
+						<TextBlock Text="{Binding Localize[Apply]}" VerticalAlignment="Center"/>
 					</StackPanel>
 				</Button>
 			</UniformGrid>

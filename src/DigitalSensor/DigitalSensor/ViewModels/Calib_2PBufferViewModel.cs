@@ -50,8 +50,6 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     [ObservableProperty]
     private bool isProgressVisible= false;
 
-    [ObservableProperty]
-    private string applyButtonText;
 
 
     public Calib_2PBufferViewModel()
@@ -60,7 +58,6 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
         _sensorService = new SensorService();
         _modbusInfo = new ModbusInfo();
 
-        applyButtonText = Localize["Apply"];
     }
 
     public Calib_2PBufferViewModel(IMonitoringService monitoringService, ISensorService sensorService, AppSettings settings, NotificationService notificationService)
@@ -68,8 +65,6 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
         _monitoringService = monitoringService;
         _sensorService = sensorService;
         _modbusInfo = settings.ModbusInfo;
-
-        applyButtonText = Localize["Apply"];
 
         // Sensor 구독 등록
         _sensorService.SensorAttached += OnSensorAttached;

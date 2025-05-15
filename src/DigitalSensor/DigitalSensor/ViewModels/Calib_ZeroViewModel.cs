@@ -52,18 +52,12 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     [ObservableProperty]
     private bool isProgressVisible= false;
 
-    [ObservableProperty]
-    private string applyButtonText;
-
 
     public Calib_ZeroViewModel()
     {
         _monitoringService = new MonitoringService(new SensorService(), new AppSettings());
         _sensorService = new SensorService();
         _modbusInfo = new ModbusInfo();
-
-
-        applyButtonText = Localize["Apply"];
 
     }
 
@@ -82,8 +76,6 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         _monitoringService.CalibStatusReceived += OnCalibStatusReceived;
 
         isProgressVisible = false;
-        applyButtonText = Localize["Apply"];
-
         IsBusy = false; // 초기값 설정
     }
 
@@ -118,11 +110,14 @@ public partial class Calib_ZeroViewModel : ViewModelBase
             var type = ReceivedInfo.Type;
             SensorUnit = UnitMapper.Units[type];
         });
+
+        Debug.WriteLine($"OnViewLoaded: {ReceivedInfo.Type} - {SensorUnit}");
     }
 
     public async void OnViewUnloaded()
     {
 
+        Debug.WriteLine($"OnViewUnloaded: {ReceivedInfo.Type} - {SensorUnit}");
     }
 
 
