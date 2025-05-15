@@ -19,7 +19,6 @@ public partial class Calib_1PSampleView : UserControl
             if (DataContext is Calib_1PSampleViewModel vm)
             {
                 vm.OnViewLoaded(); // ViewModel에서 정의한 메서드 호출
-                vm.IsVisible = true;
             }
         };
 
@@ -29,7 +28,6 @@ public partial class Calib_1PSampleView : UserControl
             if (DataContext is Calib_1PSampleViewModel vm)
             {
                 vm.OnViewUnloaded();
-                vm.IsVisible = false;
             }
         };
 

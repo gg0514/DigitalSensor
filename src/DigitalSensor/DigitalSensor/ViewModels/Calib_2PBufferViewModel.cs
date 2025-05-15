@@ -23,8 +23,6 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     // 다국어 지원을 위한 Localize 객체
     public Localize Localize { get; } = new();
 
-    [ObservableProperty]
-    private bool isVisible;
 
     [ObservableProperty]
     private ModbusInfo _modbusInfo;
@@ -54,11 +52,10 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     {
         _monitoringService = monitoringService;
         _modbusInfo = settings.ModbusInfo;
+        _notificationService = notificationService;
 
 
         _monitoringService.SensorValueReceived += OnSensorValueReceived;
-        _monitoringService.CalibStatusReceived += OnCalibStatusReceived;
-        _notificationService = notificationService;
     }
 
 
@@ -132,18 +129,6 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
         });
     }
 
-
-    private async void OnCalibStatusReceived(int status)
-    {
-        CalStatus = (CalibrationStatus)status;
-        Debug.WriteLine($"OnCalibStatusReceived: {CalStatus}");
-
-        if (CalStatus != CalibrationStatus.CalInProgress)
-        {
-            // 10초 후에 상태를 초기화
-            await ResetCallibStatus(10000);
-        }
-    }
 
     private async Task ResetCallibStatus(int msec = 5000)
     {

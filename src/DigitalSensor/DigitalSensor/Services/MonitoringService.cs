@@ -4,10 +4,12 @@ using DigitalSensor.Models;
 using DigitalSensor.Utils;
 using DigitalSensor.ViewModels;
 using FluentAvalonia.UI.Controls;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Mail;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DigitalSensor.Services;
@@ -23,7 +25,6 @@ public interface IMonitoringService
 
     event Action<int> SensorTypeReceived;
     event Action<float> SensorValueReceived;
-    event Action<int> CalibStatusReceived;
 
     void SetCurrentPage(string pageName);
 
@@ -56,22 +57,20 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
 
 
-    private bool _isRunning = false;
-
-    private bool _bApplyCalib = false;
-    private bool _bAbortCalib = false;
+    private bool _isMonitoring = false;
+    private bool _isCalibration = false;
 
     private float _calibValue = 0;
 
     private string _currentPage = string.Empty;
 
 
-
     public event Action ErrSignal;
 
     public event Action<int> SensorTypeReceived;
     public event Action<float> SensorValueReceived;
-    public event Action<int> CalibStatusReceived;
+
+    private CancellationTokenSource? _calibrationCts;
 
 
     public MonitoringService()
@@ -135,45 +134,13 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         return await _sensorService.RetrieveID();
     }
 
-    public async Task ApplyCalib_Zero()
-    {
-        _bApplyCalib = true;
-
-
-        await Task.Delay(100);
-    }
-
-    public async Task ApplyCalib_1PSample(float value)
-    {
-        _bApplyCalib = true;
-        _calibValue = value;
-
-        await Task.Delay(100);
-    }
-
-    public async Task ApplyCalib_2PBuffer()
-    {
-        _bApplyCalib = true;
-
-        await Task.Delay(100);
-    }
-
-    public async Task AbortCalib()
-    {
-        _bAbortCalib = true;
-
-        ResetCallibStatus();
-
-        await Task.Delay(100);
-    }
-
 
     public async Task StartMonitoring()
     {
-        _isRunning = true;
+        _isMonitoring = true;
         _modbusInfo.IsAlive = true;
 
-        while (_isRunning)
+        while (_isMonitoring)
         {
             if (_currentPage == "Home")                    
                 await NormalMode();
@@ -189,7 +156,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     public async Task StopMonitoring()
     {
         // 초기화
-        _isRunning = false;
+        _isMonitoring = false;
         _modbusInfo.IsAlive = false;
 
         ErrSignal?.Invoke();
@@ -245,26 +212,54 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         }
     }
 
+
+
+
+
+    public async Task AbortCalib()
+    {
+        _calibrationCts?.Cancel();
+        _calibrationCts?.Dispose();
+        _calibrationCts = null;
+
+        await Task.Delay(100);
+    }
+
+
+    public async Task ApplyCalib_Zero()
+    {
+        _isCalibration = true;
+        await Task.Delay(100);
+    }
+
+    public async Task ApplyCalib_1PSample(float value)
+    {
+        _isCalibration = true;
+        _calibValue = value;
+
+        await Task.Delay(100);
+    }
+
+    public async Task ApplyCalib_2PBuffer()
+    {
+        _isCalibration = true;
+        await Task.Delay(100);
+    }
+
+
     private async Task CalibMode()
     {
         try
         {
             Debug.WriteLine($"[ CalibMode ] ");
 
-            if (_bAbortCalib)
+            if (_isCalibration)
             {
-                // 교정 중단
-                await WriteCalibAbortAsync();
-
-                // 교정중단후 상태를 읽어도 진행중으로 나옴!!
-                //await ReadCalibStatus();
-            }
-            else if (_bApplyCalib)
-            {
-                CalInfo.IsRun = true;
+                _calibrationCts = new CancellationTokenSource();
 
                 // 교정 실행
-                await WriteCalibAsync();
+                CalInfo.IsRun = true;
+                await WriteCalibAsync(_calibrationCts.Token);
             }
             else
             {
@@ -277,119 +272,111 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
             await Task.Delay(1000); // 1초 대기
             Debug.WriteLine($"[ CalibMode - Error] {ex.Message}");
 
-
             // 에러발생시 센서 재연결
             await _sensorService.Close();
             await _sensorService.Open();
 
-            CalibStatusReceived?.Invoke(0);
+            CalInfo.CalStatus = CalibrationStatus.NoSensorCalibration;
         }
     }
 
 
 
-    private async Task WriteCalibAsync()
+    private async Task WriteCalibAsync(CancellationToken token)
     {
-        if (_currentPage == "Calib_Zero")
+        try
         {
-            await WriteZeroCalibAsync();
-        }
-        else if (_currentPage == "Calib_1PSample")
-        {
-            await Write1PSampleCalibAsync();
-        }
-        else if (_currentPage == "Calib_2PBuffer")
-        {
-            await Write2PBufferCalibAsync();
-        }
-    }
-
-    private async Task WriteZeroCalibAsync()
-    {
-        if (CalInfo.CmdStatus != CommandStatus.Running)
-        {
-            CalInfo.CmdStatus = CommandStatus.Running;
-
-            await _sensorService.SetCalibZeroAsync();
-            Debug.WriteLine($"[ 영점 교정 실행 ] ");
-
-            await WaitForCalibrationCompletion();
-
-            // 교정 상태 초기화
-            ResetCallibStatus();
-        }
-    }
-
-    private async Task Write1PSampleCalibAsync()
-    {
-        if (CalInfo.CmdStatus != CommandStatus.Running)
-        {
-            CalInfo.CmdStatus = CommandStatus.Running;
-
-            await _sensorService.SetCalib1PSampleAsync(_calibValue);
-            Debug.WriteLine($"[ 1PSample 교정 실행 ] ");
-
-            await WaitForCalibrationCompletion();
-
-            // 교정 상태 초기화
-            ResetCallibStatus();
-        }
-    }
-
-    private async Task Write2PBufferCalibAsync()
-    {
-        if (CalInfo.CmdStatus != CommandStatus.Running)
-        {
-            CalInfo.CmdStatus = CommandStatus.Running;
-
-            // 1P Buffer 교정
-            int calibOrder = 0;
-            await _sensorService.SetCalib2PBufferAsync(calibOrder);
-            Debug.WriteLine($"[ 1PBuffer 교정 실행 ] ");
-
-            await WaitForCalibrationCompletion();
-
-            string title = "2P Buffer";
-            string message = $"2번째 버퍼 교정을 시작하시겠습니까?";
-            bool bResult = await ShowConfirmationAsync(title, message);
-
-            if(bResult)
+            if (_currentPage == "Calib_Zero")
             {
-                // 2P Buffer 교정
-                calibOrder = 1;
-                await _sensorService.SetCalib2PBufferAsync(calibOrder);
-                Debug.WriteLine($"[ 2PBuffer 교정 실행 ] ");
-
-                await WaitForCalibrationCompletion();
+                await WriteZeroCalibAsync(token);
             }
-
-            // 교정 상태 초기화
-            ResetCallibStatus();
+            else if (_currentPage == "Calib_1PSample")
+            {
+                await Write1PSampleCalibAsync(token);
+            }
+            else if (_currentPage == "Calib_2PBuffer")
+            {
+                await Write2PBufferCalibAsync(token);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            await WriteCalibAbortAsync();
         }
     }
 
+    private async Task WriteZeroCalibAsync(CancellationToken token)
+    {
+        await _sensorService.SetCalibZeroAsync();
+        Debug.WriteLine($"[ 영점 교정 실행 ] ");
 
+        await WaitForCalibrationCompletion(token);
+
+        // 교정 상태 초기화
+        ResetCallibStatus();
+    }
+
+    private async Task Write1PSampleCalibAsync(CancellationToken token)
+    {
+        await _sensorService.SetCalib1PSampleAsync(_calibValue);
+        Debug.WriteLine($"[ 1PSample 교정 실행 ] ");
+
+        await WaitForCalibrationCompletion(token);
+
+        // 교정 상태 초기화
+        ResetCallibStatus();
+    }
+
+    private async Task Write2PBufferCalibAsync(CancellationToken token)
+    {
+        // 1P Buffer 교정
+        int calibOrder = 0;
+        await _sensorService.SetCalib2PBufferAsync(calibOrder);
+        Debug.WriteLine($"[ 1PBuffer 교정 실행 ] ");
+
+        await WaitForCalibrationCompletion(token);
+
+        string title = "2P Buffer";
+        string message = $"2번째 버퍼 교정을 시작하시겠습니까?";
+        bool bResult = await ShowConfirmationAsync(title, message);
+
+        if(bResult)
+        {
+            // 2P Buffer 교정
+            calibOrder = 1;
+            await _sensorService.SetCalib2PBufferAsync(calibOrder);
+            Debug.WriteLine($"[ 2PBuffer 교정 실행 ] ");
+
+            await WaitForCalibrationCompletion(token);
+        }
+
+        // 교정 상태 초기화
+        ResetCallibStatus();
+    }
 
 
     private async Task WriteCalibAbortAsync()
     {
-        if (CalInfo.CmdStatus == CommandStatus.Running)
-        {
-            Debug.WriteLine($"[ 교정 중단 ] ");
-            await _sensorService.SetCalibAbortAsync();
-        }
+        Debug.WriteLine($"[ 교정 중단 ] ");
+        await _sensorService.SetCalibAbortAsync();
+
+        // 교정 상태 초기화
+        ResetCallibStatus();
     }
 
-    private async Task WaitForCalibrationCompletion()
+    private async Task WaitForCalibrationCompletion(CancellationToken token)
     {
+        token.ThrowIfCancellationRequested();
+
         // 폴링 주기
-        await Task.Delay(2000);
+        await Task.Delay(2000, token);
         await ReadCalibStatus();
 
         while (CalInfo.CalStatus == CalibrationStatus.CalInProgress)
         {
+            token.ThrowIfCancellationRequested();
             // Calibration이 완료될 때까지 대기
-            await Task.Delay(2000);
+            await Task.Delay(2000, token);
             await ReadCalibStatus();
         }
 
@@ -402,8 +389,6 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     {
         int status = await _sensorService.GetCalibStatusAsync();
         
-        CalibStatusReceived?.Invoke(status);
-
         CalInfo.CalStatus = (CalibrationStatus)status;
         Debug.WriteLine($"ReadCalibStatus: {CalInfo.CalStatus}");
     }
@@ -411,11 +396,12 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     private void ResetCallibStatus()
     {
         CalInfo.IsRun = false;
-
-        _bApplyCalib = false;
-        _bAbortCalib = false;
-        CalInfo.CmdStatus = CommandStatus.Ready;
+        _isCalibration = false;
     }
+
+
+
+
 
 
     private async Task GetSensorType()

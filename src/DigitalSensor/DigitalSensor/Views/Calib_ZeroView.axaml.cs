@@ -18,7 +18,6 @@ public partial class Calib_ZeroView : UserControl
             if (DataContext is Calib_ZeroViewModel vm)
             {
                 vm.OnViewLoaded(); 
-                vm.IsVisible = true;
             }
         };
 
@@ -28,7 +27,6 @@ public partial class Calib_ZeroView : UserControl
             if (DataContext is Calib_ZeroViewModel vm)
             {
                 vm.OnViewUnloaded();
-                vm.IsVisible = false;
             }
         };
 

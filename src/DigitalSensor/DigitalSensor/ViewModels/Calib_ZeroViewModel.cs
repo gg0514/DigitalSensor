@@ -37,9 +37,6 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     // 다국어 지원을 위한 Localize 객체
     public Localize Localize { get; } = new();
 
-    [ObservableProperty]
-    private bool isVisible;
-
 
     public Calib_ZeroViewModel()
     {
@@ -76,21 +73,9 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     [RelayCommand]
     private async void Apply()
     {
+        await _monitoringService.ApplyCalib_Zero();
 
-        try
-        {
-            await _monitoringService.ApplyCalib_Zero();
-
-            Debug.WriteLine($"Apply 버튼클릭: {CalInfo.IsRun}");
-        }
-        catch(Exception ex)
-        {
-            // 예외 처리
-            Debug.WriteLine($"Error during calibration: {ex.Message}");
-            _notificationService.ShowMessage(Localize["Error"], $"Error during calibration: {ex.Message}");
-
-            await ResetCallibStatus(1000);
-        }
+        Debug.WriteLine($"Apply 버튼클릭: {CalInfo.IsRun}");
     }
 
     [RelayCommand]
@@ -99,24 +84,9 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         await _monitoringService.AbortCalib();
 
         Debug.WriteLine($"Abort 버튼클릭: {CalInfo.CalStatus}");
-
-        // Abort후 상태코드를 받을 수 있는지 체크 필요함
-        await ResetCallibStatus(500);
-
         _notificationService.ShowMessage(Localize["Information"], $"Zero Calibration Aborted");
     }
 
-    private async Task ResetCallibStatus(int msec= 5000)
-    {
-        Debug.WriteLine($"ResetCallibStatus: delaytime- {msec}");
 
-        await Task.Delay(msec);
-
-        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
-        {
-            // 교정상태 주석처리
-            //CalStatus = CalibrationStatus.NoSensorCalibration;
-        });
-    }
 }
 
