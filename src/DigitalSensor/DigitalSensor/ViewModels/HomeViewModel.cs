@@ -86,11 +86,6 @@ public partial class HomeViewModel : ViewModelBase
         _modbusService.RxSignal += OnRxSignal;
         _monitoringService.ErrSignal += OnErrSignal;
 
-
-
-        string Greeting = LocalizationManager.GetString("Greeting");
-
-        Debug.WriteLine(Greeting); // "안녕하세요" 출력
     }
 
 

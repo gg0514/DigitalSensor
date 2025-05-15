@@ -214,7 +214,7 @@ public class SensorService : ISensorService
     {
         try
         {
-            await _modbusService.WriteCalibZero(0);
+            await _modbusService.WriteCalibZero(1);
         }
         catch (Exception ex)
         {
@@ -226,7 +226,7 @@ public class SensorService : ISensorService
     {
         try
         {
-            await _modbusService.WriteCalibAbort(0);
+            await _modbusService.WriteCalibAbort(1);
         }
         catch (Exception ex)
         {
@@ -250,7 +250,13 @@ public class SensorService : ISensorService
     {
         try
         {
-            await _modbusService.WriteCalib2pBuffer((ushort)order);
+            float value = order switch
+            {
+                0 => 0.0f,
+                1 => 1.0f,
+                _ => throw new ArgumentOutOfRangeException(nameof(order), "Invalid order value")
+            };
+            await _modbusService.WriteCalib2pBuffer(value);
         }
         catch (Exception ex)
         {
