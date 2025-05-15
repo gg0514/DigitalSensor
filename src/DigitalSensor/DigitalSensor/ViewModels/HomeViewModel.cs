@@ -58,9 +58,10 @@ public partial class HomeViewModel : ViewModelBase
     public HomeViewModel()
     {
         _monitoringService = new MonitoringService(new SensorService(), new AppSettings());
-        
-        _monitoringService.SensorInfoReceived += OnSensorInfoReceived;
-        _monitoringService.SensorDataReceived += OnSensorDataReceived;
+
+        // 이것으로 이벤트핸들러를 대체하는 효과
+        ReceivedInfo = _monitoringService.SensorInfo;
+        ReceivedData = _monitoringService.SensorData;
     }
 
 
@@ -71,17 +72,9 @@ public partial class HomeViewModel : ViewModelBase
         _modbusService= modbusService;
         _notificationService= notificationService;
 
-        // 이것으로 아래의 이벤트핸들러를 대체하는 효과
+        // 이것으로 이벤트핸들러를 대체하는 효과
         ReceivedInfo = monitoringService.SensorInfo;
         ReceivedData = monitoringService.SensorData;
-
-        _monitoringService.SensorInfoReceived += OnSensorInfoReceived;
-        _monitoringService.SensorDataReceived += OnSensorDataReceived;
-        _monitoringService.SensorTypeReceived += OnSensorTypeReceived;
-        _monitoringService.SensorValueReceived += OnSensorValueReceived;
-        _monitoringService.SensorMvReceived += OnSensorMvReceived;
-        _monitoringService.SensorTemperatureReceived += OnSensorTemperatureReceived;
-
 
         // LED 구독 등록
         _modbusService.TxSignal += OnTxSignal;
@@ -130,69 +123,4 @@ public partial class HomeViewModel : ViewModelBase
         }
         catch (OperationCanceledException) { /* 취소된 경우 무시 */ }
     }
-
-
-    private void OnSensorInfoReceived(SensorInfo data)
-    {
-        ReceivedInfo = data; // UI 자동 갱신
-    }
-
-    private void OnSensorDataReceived(SensorData data)
-    {
-        ReceivedData = data; // UI 자동 갱신
-    }
-
-    private async void OnSensorTypeReceived(int type)
-    {
-        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
-        {
-            ReceivedInfo = new SensorInfo()
-            {
-                Type = (SensorType)type,
-                SensorUnit = UnitMapper.Units[(SensorType)type]
-            };
-
-        });
-    }
-
-    private async void OnSensorValueReceived(float value)
-    {
-        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
-        {
-            ReceivedData = new SensorData()
-            {
-                Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                Value = value,
-                Mv = ReceivedData.Mv,
-                Temperature = ReceivedData.Temperature,
-            };
-        });
-    }
-    private async void OnSensorMvReceived(float mv)
-    {
-        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
-        {
-            ReceivedData = new SensorData()
-            {
-                Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                Value = ReceivedData.Value,
-                Mv = mv,
-                Temperature = ReceivedData.Temperature,
-            };
-        });
-    }
-    private async void OnSensorTemperatureReceived(float temp)
-    {
-        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
-        {
-            ReceivedData = new SensorData()
-            {
-                Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                Value = ReceivedData.Value,
-                Mv = ReceivedData.Mv,
-                Temperature = temp,
-            };
-        });
-    }
-
 }

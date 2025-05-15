@@ -7,6 +7,7 @@ using FluentAvalonia.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace DigitalSensor.Services;
@@ -18,15 +19,10 @@ public interface IMonitoringService
     SensorData SensorData { get; set; }
     CommandStatus CommandStatus { get; set; }
 
-    event Action<Models.SensorInfo> SensorInfoReceived;
-    event Action<Models.SensorData> SensorDataReceived;
-
     event Action ErrSignal;
 
     event Action<int> SensorTypeReceived;
     event Action<float> SensorValueReceived;
-    event Action<float> SensorMvReceived;
-    event Action<float> SensorTemperatureReceived;
     event Action<int> CalibStatusReceived;
 
     void SetCurrentPage(string pageName);
@@ -72,13 +68,9 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
 
     public event Action ErrSignal;
-    public event Action<Models.SensorInfo> SensorInfoReceived;
-    public event Action<Models.SensorData> SensorDataReceived;
 
     public event Action<int> SensorTypeReceived;
     public event Action<float> SensorValueReceived;
-    public event Action<float> SensorMvReceived;
-    public event Action<float> SensorTemperatureReceived;
     public event Action<int> CalibStatusReceived;
 
 
@@ -201,20 +193,19 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
         ErrSignal?.Invoke();
 
-        SensorInfo = new SensorInfo()
-        {
-            Type = SensorType.None,
-            SensorUnit= string.Empty
-        };
-        SensorInfoReceived?.Invoke(SensorInfo);
 
-        SensorData = new SensorData
-        {
-            Value = 0,
-            Mv = 0,
-            Temperature = 0
-        };
-        SensorDataReceived?.Invoke(SensorData);
+        // 이렇게 하면 안됨
+        // 왜냐면, 외부에서 참조하고 있는 SensorInfo, SensorData가 초기화됨
+        // 즉, 데이터의 소스가 없어지는 것임
+        //SensorInfo = new();
+        //SensorData = new();
+
+        SensorInfo.Type = SensorType.None;
+        SensorInfo.SensorUnit = string.Empty;
+
+        SensorData.Value = 0;
+        SensorData.Mv = 0;
+        SensorData.Temperature = 0;
     }
 
 
@@ -428,12 +419,10 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
         if (type > 0)
         {
-            SensorInfo = new SensorInfo()
-            {
-                Type = (SensorType)type,
-                SensorUnit= UnitMapper.Units[(SensorType)type]
-            };
+            SensorInfo.Type = (SensorType)type;
+            SensorInfo.SensorUnit = UnitMapper.Units[(SensorType)type];
 
+            // 메뉴 비활성화에 대한 이벤트 발생
             SensorTypeReceived?.Invoke(type);
         }
     }
@@ -441,13 +430,8 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     private async Task GetSensorValue()
     {
         float value = await _sensorService.GetValueAsync();
-        SensorData = new SensorData
-        {
-            Value = value,
-            Mv = SensorData.Mv,
-            Temperature = SensorData.Temperature
-        };
 
+        SensorData.Value = value;
 
         Debug.WriteLine($"SensorValue: {value}");
         SensorValueReceived?.Invoke(value);
@@ -456,29 +440,17 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     private async Task GetSensorMv()
     {
         float mv = await _sensorService.GetMVAsync();
-        SensorData = new SensorData
-        {
-            Value = SensorData.Value,
-            Mv = mv,
-            Temperature = SensorData.Temperature
-        };
 
+        SensorData.Mv = mv;
         Debug.WriteLine($"SensorMv: {mv}");
-        SensorMvReceived?.Invoke(mv);
     }
 
     private async Task GetSensorTemperature()
     {
         float temperature = await _sensorService.GetTemperatureAsync();
-        SensorData = new SensorData
-        {
-            Value = SensorData.Value,
-            Mv = SensorData.Mv,
-            Temperature = temperature
-        };
 
+        SensorData.Temperature = temperature;
         Debug.WriteLine($"SensorTemperature: {temperature}");
-        SensorTemperatureReceived?.Invoke(temperature);
     }
 
 
@@ -488,13 +460,6 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         _modbusInfo.DeviceId = usbInfo.DeviceId;
         _modbusInfo.ProductName = usbInfo.ProductName;
         _modbusInfo.SlaveID = slaveId;
-
-        //SettingViewModel vm = App.GlobalHost.GetService<SettingViewModel>();
-
-        //await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
-        //{
-        //    vm.ModbusInfo = newslaveId;
-        //});
     }
 
     public async Task<bool> ShowConfirmationAsync(string title, string message)
