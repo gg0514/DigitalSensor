@@ -1,5 +1,7 @@
-﻿using DigitalSensor.Extensions;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using DigitalSensor.Extensions;
 using DigitalSensor.Models;
+using DigitalSensor.Utils;
 using DigitalSensor.ViewModels;
 using FluentAvalonia.UI.Controls;
 using System;
@@ -42,10 +44,17 @@ public interface IMonitoringService
     Task AbortCalib();
 }
 
-public class MonitoringService : IMonitoringService
+public partial class MonitoringService : ObservableObject, IMonitoringService
 {
     private readonly ISensorService _sensorService;
     private readonly ModbusInfo _modbusInfo;
+
+    [ObservableProperty]
+    public SensorInfo _sensorInfo= new();
+
+    [ObservableProperty]
+    public SensorData _sensorData= new();
+
 
     private bool _isRunning = false;
 
@@ -60,9 +69,6 @@ public class MonitoringService : IMonitoringService
 
 
     private CalibrationStatus CalStatus = CalibrationStatus.NoSensorCalibration;
-
-    public SensorInfo SensorInfo { get; set; } = new();
-    public SensorData SensorData { get; set; } = new();
 
 
     public event Action ErrSignal;
@@ -197,7 +203,8 @@ public class MonitoringService : IMonitoringService
 
         SensorInfo = new SensorInfo()
         {
-            Type = SensorType.None
+            Type = SensorType.None,
+            SensorUnit= string.Empty
         };
         SensorInfoReceived?.Invoke(SensorInfo);
 
@@ -424,6 +431,7 @@ public class MonitoringService : IMonitoringService
             SensorInfo = new SensorInfo()
             {
                 Type = (SensorType)type,
+                SensorUnit= UnitMapper.Units[(SensorType)type]
             };
 
             SensorTypeReceived?.Invoke(type);

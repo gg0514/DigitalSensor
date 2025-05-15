@@ -41,9 +41,6 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
     private float calibValue = 0;
 
     [ObservableProperty]
-    private string sensorUnit;
-
-    [ObservableProperty]
     private bool isEditing = false;
 
     [ObservableProperty]
@@ -81,9 +78,6 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
         {
             ReceivedInfo = _monitoringService.SensorInfo;
             ReceivedData = _monitoringService.SensorData;
-
-            var type = ReceivedInfo.Type;
-            SensorUnit = UnitMapper.Units[type];
         });
     }
 

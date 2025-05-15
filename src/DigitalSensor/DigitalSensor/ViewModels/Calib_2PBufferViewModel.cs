@@ -39,9 +39,6 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     private SensorData receivedData = new();
 
     [ObservableProperty]
-    private string sensorUnit;
-
-    [ObservableProperty]
     private bool isProgressVisible= false;
 
 
@@ -73,9 +70,6 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
         {
             ReceivedInfo = _monitoringService.SensorInfo;
             ReceivedData = _monitoringService.SensorData;
-
-            var type = ReceivedInfo.Type;
-            SensorUnit = UnitMapper.Units[type];
         });
     }
 

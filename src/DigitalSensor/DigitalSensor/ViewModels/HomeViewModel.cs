@@ -30,6 +30,13 @@ public partial class HomeViewModel : ViewModelBase
     private readonly NotificationService _notificationService;
 
 
+    [ObservableProperty]
+    private SensorInfo receivedInfo;
+
+    [ObservableProperty]
+    private SensorData receivedData;
+
+
     // 다국어 지원을 위한 Localize 객체
     public Localize Localize { get; } = new();
 
@@ -42,19 +49,10 @@ public partial class HomeViewModel : ViewModelBase
     [ObservableProperty]
     private bool isErrOn = true;
 
-    [ObservableProperty]
-    private string sensorUnit;
-
     private CancellationTokenSource _txCts = new();
     private CancellationTokenSource _rxCts = new();
     private CancellationTokenSource _ErrCts = new();
 
-
-    [ObservableProperty]
-    private SensorInfo receivedInfo = new();
-
-    [ObservableProperty]
-    private SensorData receivedData = new();
 
 
     public HomeViewModel()
@@ -72,6 +70,10 @@ public partial class HomeViewModel : ViewModelBase
         _monitoringService = monitoringService;
         _modbusService= modbusService;
         _notificationService= notificationService;
+
+        // 이것으로 아래의 이벤트핸들러를 대체하는 효과
+        ReceivedInfo = monitoringService.SensorInfo;
+        ReceivedData = monitoringService.SensorData;
 
         _monitoringService.SensorInfoReceived += OnSensorInfoReceived;
         _monitoringService.SensorDataReceived += OnSensorDataReceived;
@@ -147,9 +149,9 @@ public partial class HomeViewModel : ViewModelBase
             ReceivedInfo = new SensorInfo()
             {
                 Type = (SensorType)type,
+                SensorUnit = UnitMapper.Units[(SensorType)type]
             };
 
-            SensorUnit = UnitMapper.Units[(SensorType)type];
         });
     }
 

@@ -31,13 +31,10 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     private CalibrationStatus calStatus;
 
     [ObservableProperty]
-    private SensorInfo receivedInfo = new();
+    private SensorInfo receivedInfo;
 
     [ObservableProperty]
-    private SensorData receivedData = new();
-
-    [ObservableProperty]
-    private string sensorUnit;
+    private SensorData receivedData;
 
 
     [ObservableProperty]
@@ -73,18 +70,15 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         {
             ReceivedInfo = _monitoringService.SensorInfo;
             ReceivedData = _monitoringService.SensorData;
-
-            var type = ReceivedInfo.Type;
-            SensorUnit = UnitMapper.Units[type];
         });
 
-        Debug.WriteLine($"OnViewLoaded: {ReceivedInfo.Type} - {SensorUnit}");
+        Debug.WriteLine($"OnViewLoaded: {ReceivedInfo.Type} - {ReceivedInfo.SensorUnit}");
     }
 
     public async void OnViewUnloaded()
     {
 
-        Debug.WriteLine($"OnViewUnloaded: {ReceivedInfo.Type} - {SensorUnit}");
+        Debug.WriteLine($"OnViewUnloaded: {ReceivedInfo.Type} - {ReceivedInfo.SensorUnit}");
     }
 
 

@@ -1,4 +1,5 @@
 ﻿using Avalonia.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,11 +12,12 @@ using System.Threading.Tasks;
 
 namespace DigitalSensor.Models;
 
-public class SensorInfo
+public partial class SensorInfo : ObservableObject
 {
-    public SensorType Type { get; set; }
-    public string Serial { get; set; }             // hexstring으로 표시
-    public bool IsAttached { get; set; } = false;
+    [ObservableProperty] private SensorType _type= SensorType.None;
+    [ObservableProperty] private string _serial;             // hexstring으로 표시
+    [ObservableProperty] private string _sensorUnit;
+    [ObservableProperty] private bool _isAttached= false;
 }
 
 // ** 참고

@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace DigitalSensor.Models
+
+namespace DigitalSensor.Models;
+
+public partial class SensorData : ObservableObject
 {
-
-    public class SensorData
-    {
-        public string   Timestamp { get; set; }
-        public float    Value     { get; set; }
-        public float    Mv        { get; set; }
-        public float    Temperature { get; set; }
-    }
+    [ObservableProperty] private string _timestamp;
+    [ObservableProperty] private float _value= 0;
+    [ObservableProperty] private float _mv= 0;
+    [ObservableProperty] private float _temperature = 0;
 }
 
 

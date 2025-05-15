@@ -64,7 +64,7 @@
 							<TextBlock Grid.Column="1" Text="{Binding ReceivedData.Value}" HorizontalAlignment="Center" FontWeight="Normal" FontSize="35"
 								   Margin="0,0,0,0"/>
 							<Border Grid.Column="2" VerticalAlignment="Bottom" Width="30" Height="20" Margin="0,5,10,0" >
-								<TextBlock Name="SensorUnit" Text="{Binding SensorUnit}" FontWeight="Light" FontSize="14"/>
+								<TextBlock Name="SensorUnit" Text="{Binding ReceivedInfo.SensorUnit}" FontWeight="Light" FontSize="14"/>
 							</Border>
 						</Grid>
 				</StackPanel>
