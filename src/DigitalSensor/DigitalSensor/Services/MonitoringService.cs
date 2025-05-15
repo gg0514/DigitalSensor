@@ -276,7 +276,11 @@ public class MonitoringService : IMonitoringService
             await Task.Delay(1000); // 1초 대기
             Debug.WriteLine($"[ CalibMode - Error] {ex.Message}");
 
-            _sensorService.DiscardInBuffer();
+
+            // 에러발생시 센서 재연결
+            await _sensorService.Close();
+            await _sensorService.Open();
+
             CalibStatusReceived?.Invoke(0);
         }
     }

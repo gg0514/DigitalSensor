@@ -188,7 +188,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
 
     private async Task ResetCallibStatus(int msec= 5000)
     {
-        Debug.WriteLine($"ResetCallibStatus: delaytime- {msec}, SensorAttached: {_sensorAttached}");
+        Debug.WriteLine($"ResetCallibStatus: delaytime- {msec}");
 
         await Task.Delay(msec);
 
