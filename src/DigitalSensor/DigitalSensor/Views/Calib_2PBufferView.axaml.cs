@@ -16,6 +16,17 @@ public partial class Calib_2PBufferView : UserControl
             if (DataContext is Calib_2PBufferViewModel vm)
             {
                 vm.OnViewLoaded(); // ViewModel에서 정의한 메서드 호출
+                vm.IsVisible = true;
+            }
+        };
+
+        // 화면에서 사라질때
+        this.DetachedFromVisualTree += (s, e) =>
+        {
+            if (DataContext is Calib_2PBufferViewModel vm)
+            {
+                vm.OnViewUnloaded();
+                vm.IsVisible = false;
             }
         };
     }

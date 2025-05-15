@@ -28,6 +28,9 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     private bool _sensorAttached = false;
 
     [ObservableProperty]
+    private bool isVisible;
+
+    [ObservableProperty]
     private CalibrationStatus calStatus;
 
     [ObservableProperty]
@@ -105,6 +108,24 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     }
 
 
+    public async void OnViewLoaded()
+    {
+        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
+        {
+            ReceivedInfo = _monitoringService.SensorInfo;
+            ReceivedData = _monitoringService.SensorData;
+
+            var type = ReceivedInfo.Type;
+            SensorUnit = UnitMapper.Units[type];
+        });
+    }
+
+    public async void OnViewUnloaded()
+    {
+
+    }
+
+
     [RelayCommand]
     private async void Apply()
     {
@@ -144,18 +165,6 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     }
 
 
-
-    public async void OnViewLoaded()
-    {
-        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
-        {
-            ReceivedInfo = _monitoringService.SensorInfo;
-            ReceivedData = _monitoringService.SensorData;
-
-            var type = ReceivedInfo.Type;
-            SensorUnit = UnitMapper.Units[type];
-        });
-    }
 
 
     private async void OnSensorValueReceived(float value)

@@ -26,6 +26,9 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
     private bool _sensorAttached = false;
 
     [ObservableProperty]
+    private bool isVisible;
+
+    [ObservableProperty]
     private ModbusInfo _modbusInfo;
 
     [ObservableProperty]
@@ -108,6 +111,26 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
         //OnPropertyChanged(nameof(IsApplyButtonEnabled));
     }
 
+
+    public async void OnViewLoaded()
+    {
+        IsModified = false;
+
+        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
+        {
+            ReceivedInfo = _monitoringService.SensorInfo;
+            ReceivedData = _monitoringService.SensorData;
+
+            var type = ReceivedInfo.Type;
+            SensorUnit = UnitMapper.Units[type];
+        });
+    }
+
+    public async void OnViewUnloaded()
+    {
+
+    }
+
     [RelayCommand]
     private async void UpButton()
     {
@@ -177,21 +200,6 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
         _notificationService.ShowMessage(Localize["Information"], $"1P Sample Calibration Aborted");
 
     }
-
-    public async void OnViewLoaded()
-    {
-        IsModified = false;
-
-        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
-        {
-            ReceivedInfo = _monitoringService.SensorInfo;
-            ReceivedData = _monitoringService.SensorData;
-
-            var type = ReceivedInfo.Type;
-            SensorUnit = UnitMapper.Units[type];
-        });
-    }
-
 
 
     private async void OnSensorValueReceived(float value)

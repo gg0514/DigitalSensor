@@ -12,15 +12,30 @@ public partial class Calib_1PSampleView : UserControl
         InitializeComponent();
 
         // BreadcrumbBar를 사용하면, 메뉴이동 기능도 같이 만들어야 한다.
-        //BreadcrumbBar1.ItemsSource = new string[] { "Setting", "Comm", };
+        // BreadcrumbBar1.ItemsSource = new string[] { "Setting", "Comm", };
+
         this.AttachedToVisualTree += (_, _) =>
         {
             if (DataContext is Calib_1PSampleViewModel vm)
             {
                 vm.OnViewLoaded(); // ViewModel에서 정의한 메서드 호출
+                vm.IsVisible = true;
             }
         };
+
+        // 화면에서 사라질때
+        this.DetachedFromVisualTree += (s, e) =>
+        {
+            if (DataContext is Calib_1PSampleViewModel vm)
+            {
+                vm.OnViewUnloaded();
+                vm.IsVisible = false;
+            }
+        };
+
     }
+
+
     private void OnBackgroundPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         ValueTextBlock.Focus();
