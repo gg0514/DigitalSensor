@@ -116,6 +116,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     private async void OnSensorDetached()
     {
+        await ResetCallibStatus();
         await StopMonitoring();
     }
 
@@ -216,10 +217,10 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     {
         try
         {
-            Debug.WriteLine($"[ CalibMode ] ");
-
             if (_isCalibration)
             {
+                Debug.WriteLine($"[ CalibMode ] ");
+
                 // 교정 실행
                 CalibInfo.IsRun = true;
                 CalibInfo.CalStatus = CalibrationStatus.NoSensorCalibration;
@@ -229,6 +230,8 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
             }
             else
             {
+                Debug.WriteLine($"[ Calibration - Ready] ");
+
                 await GetSensorType();
                 await GetSensorValue();
             }
@@ -397,7 +400,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         Debug.WriteLine($"ReadCalibStatus: {CalibInfo.CalStatus}");
     }
 
-    private void ResetCallibStatus()
+    private Task ResetCallibStatus()
     {
         _isCalibration = false;
 
@@ -406,6 +409,8 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
         // 교정결과는 마지막 교정상태를 유지
         // CalibInfo.CalStatus = CalibrationStatus.NoSensorCalibration;
+
+        return Task.CompletedTask;
     }
 
 

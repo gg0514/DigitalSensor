@@ -25,8 +25,42 @@
 	<ScrollViewer Padding="20" Margin="0,30,0,0">
 		<StackPanel Spacing="20">
 
-			<!-- Title -->
-			<TextBlock Text="{Binding Localize[1PSample]}" FontSize="28" FontWeight="Bold"/>
+			<!-- LED 영역-->
+			<Grid ColumnDefinitions="*, Auto, Auto, Auto, 10">
+				<!-- Title -->
+				<StackPanel Grid.Column="0" Margin="0,10,10,10">
+					<TextBlock Text="{Binding Localize[1PSample]}" FontSize="28" FontWeight="Bold"/>
+				</StackPanel>
+
+				<StackPanel Grid.Column="1" Margin="0,10,10,10">
+					<TextBlock Text="TX"
+								FontSize="12"
+								Margin="0,0,0,0"
+								FontWeight="SemiBold"/>
+					<Border Width="10" Height="10" Margin="0,5,0,0" >
+						<Ellipse Fill="{Binding IsTxOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='Orange'}"/>
+					</Border>
+				</StackPanel>
+				<StackPanel Grid.Column="2" Margin="0,10,10,10">
+					<TextBlock Text="RX"
+								FontSize="12"
+								Margin="0,0,0,0"
+								FontWeight="SemiBold"/>
+					<Border Width="10" Height="10" Margin="0,5,0,0" >
+						<Ellipse Fill="{Binding IsRxOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='GreenYellow'}"/>
+					</Border>
+				</StackPanel>
+				<StackPanel Grid.Column="3" Margin="0,10,10,10">
+					<TextBlock Text="ERR"
+								FontSize="12"
+								Margin="0,0,0,0"
+								FontWeight="SemiBold"/>
+					<Border Width="10" Height="10" Margin="0,5,0,0" >
+						<Ellipse Fill="{Binding IsErrOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='Red'}"/>
+					</Border>
+				</StackPanel>
+			</Grid>
+
 
 
 			<!-- 교정 지침 -->
