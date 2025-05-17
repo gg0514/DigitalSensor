@@ -193,7 +193,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         {
             ErrSignal?.Invoke();
             await Task.Delay(1000); // 1초 대기
-            Debug.WriteLine($"[ NormalMode - Error ] {ex.Message}");
+            Debug.WriteLine($"NormalMode - Error : {ex.Message}");
         }
     }
 
@@ -209,7 +209,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         {
             ErrSignal?.Invoke();
             await Task.Delay(1000); // 1초 대기
-            Debug.WriteLine($"[ SettingMode - Error ] {ex.Message}");
+            Debug.WriteLine($"SettingMode - Error: {ex.Message}");
         }
     }
 
@@ -240,7 +240,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         {
             ErrSignal?.Invoke();
             await Task.Delay(1000); // 1초 대기
-            Debug.WriteLine($"[ CalibMode - Error] {ex.Message}");
+            Debug.WriteLine($"CalibMode - Error: {ex.Message}");
 
             // 에러발생시 센서 재연결
             await _sensorService.Close();
@@ -315,7 +315,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     private async Task WriteZeroCalibAsync(CancellationToken token)
     {
         await _sensorService.SetCalibZeroAsync();
-        Debug.WriteLine($"[ Zero 교정 실행 ] ");
+        Debug.WriteLine($" => Zero 교정 실행 ");
 
         await WaitForCalibrationCompletion(token);
 
@@ -326,7 +326,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     private async Task Write1PSampleCalibAsync(CancellationToken token)
     {
         await _sensorService.SetCalib1PSampleAsync(_calibValue);
-        Debug.WriteLine($"[ 1PSample 교정 실행 ] ");
+        Debug.WriteLine($" => 1PSample 교정 실행 ");
 
         await WaitForCalibrationCompletion(token);
 
@@ -339,7 +339,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         // 2P Buffer 교정
         int calibOrder = 0;
         await _sensorService.SetCalib2PBufferAsync(calibOrder);
-        Debug.WriteLine($"[ 2PBuffer - 1st 교정 실행 ] ");
+        Debug.WriteLine($" => 2PBuffer - 1st 교정 실행 ");
 
         await WaitForCalibrationCompletion(token);
 
@@ -352,7 +352,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
             // 2P Buffer 교정
             calibOrder = 1;
             await _sensorService.SetCalib2PBufferAsync(calibOrder);
-            Debug.WriteLine($"[ 2PBuffer - 2nd 교정 실행 ] ");
+            Debug.WriteLine($" => 2PBuffer - 2nd 교정 실행 ");
 
             await WaitForCalibrationCompletion(token);
         }
@@ -364,7 +364,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     private async Task WriteCalibAbortAsync()
     {
-        Debug.WriteLine($"[ 교정 중단 ] ");
+        Debug.WriteLine($" => 교정 중단!! ");
         await _sensorService.SetCalibAbortAsync();
 
         // 교정 상태 초기화
@@ -477,8 +477,8 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         {
             Title = title,
             Content = message,
-            PrimaryButtonText = "확인",
-            CloseButtonText = "취소",
+            PrimaryButtonText = "OK",
+            CloseButtonText = "Cancel",
             DefaultButton = ContentDialogButton.Primary
         };
 
