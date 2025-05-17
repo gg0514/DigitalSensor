@@ -26,10 +26,10 @@ public partial class App : Application
     public static Action<IServiceCollection>? RegisterPlatformService;
 
     private static readonly Lazy<IHost> _globalHost = new Lazy<IHost>(() =>
-        Host.CreateDefaultBuilder()
+    {
+        var host = Host.CreateDefaultBuilder()
             .ConfigureServices((services) =>
             {
-
                 // 여기서 UsbService의 인터페이스와 구현체를 등록합니다.
                 RegisterPlatformService?.Invoke(services);
 
@@ -60,10 +60,6 @@ public partial class App : Application
                 services.AddSingleton<Calib_1PSampleViewModel>();
                 services.AddSingleton<Calib_2PBufferView>();
                 services.AddSingleton<Calib_2PBufferViewModel>();
-                //services.AddSingleton<UsbDeviceInfo>();
-                //services.AddSingleton<ModbusInfo>();
-                //services.AddSingleton<CalibrationAdjust>();
-                //services.AddSingleton<SerialConn>();
 
                 // 지연 등록
                 services.AddSingleton<AppSettings>(sp =>
@@ -76,7 +72,17 @@ public partial class App : Application
                     new Lazy<AppSettings>(() => sp.GetRequiredService<AppSettings>()));
 
             })
-            .Build());
+            .Build();
+
+        // 즉시 생성할 인스턴스 Resolve
+        // LED Tx, Rx Signal 구독 등록 목적
+        _ = host.Services.GetRequiredService<Calib_ZeroViewModel>();
+        _ = host.Services.GetRequiredService<Calib_1PSampleViewModel>();
+        _ = host.Services.GetRequiredService<Calib_2PBufferViewModel>();
+
+
+        return host;
+    });
 
     public static IHost GlobalHost
     {

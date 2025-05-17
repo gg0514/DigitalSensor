@@ -117,6 +117,10 @@ public class ModbusService : IModbusService
             //var usbStream = new UsbSerialAdapter(_usbService, TxSignal, RxSignal);
             //_modbusMaster = ModbusSerialMaster.CreateRtu(usbStream);
 
+
+            // Device Open할때, 등록된 이벤트에 대해서만 처리함
+            // 따라서, Device Open 후에 이벤트를 재등록해야 하거나,
+            // Device Open 전에 이벤트를 모두 등록해야 함
             _modbusMaster = new ModbusRtuService(_usbService, TxSignal, RxSignal);
 
             return true;
