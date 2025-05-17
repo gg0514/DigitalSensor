@@ -369,6 +369,10 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
         // 교정 상태 초기화
         ResetCallibStatus();
+
+        // 교정결과 초기화
+        CalibInfo.CalStatus = CalibrationStatus.NoSensorCalibration;
+
     }
 
     private async Task WaitForCalibrationCompletion(CancellationToken token)
