@@ -229,6 +229,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
             }
             else
             {
+                await GetSensorType();
                 await GetSensorValue();
             }
         }
@@ -332,10 +333,10 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     private async Task Write2PBufferCalibAsync(CancellationToken token)
     {
-        // 1P Buffer 교정
+        // 2P Buffer 교정
         int calibOrder = 0;
         await _sensorService.SetCalib2PBufferAsync(calibOrder);
-        Debug.WriteLine($"[ 1PBuffer 교정 실행 ] ");
+        Debug.WriteLine($"[ 2PBuffer - 1st 교정 실행 ] ");
 
         await WaitForCalibrationCompletion(token);
 
@@ -348,7 +349,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
             // 2P Buffer 교정
             calibOrder = 1;
             await _sensorService.SetCalib2PBufferAsync(calibOrder);
-            Debug.WriteLine($"[ 2PBuffer 교정 실행 ] ");
+            Debug.WriteLine($"[ 2PBuffer - 2nd 교정 실행 ] ");
 
             await WaitForCalibrationCompletion(token);
         }

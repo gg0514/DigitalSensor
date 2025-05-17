@@ -20,54 +20,47 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     private readonly IMonitoringService _monitoringService;
     private readonly NotificationService _notificationService;
 
+
+    [ObservableProperty]
+    private SensorInfo receivedInfo;
+
+    [ObservableProperty]
+    private SensorData receivedData;
+
+    [ObservableProperty]
+    private CalibInfo _calibInfo;
+
+
+
     // 다국어 지원을 위한 Localize 객체
     public Localize Localize { get; } = new();
-
-
-    [ObservableProperty]
-    private ModbusInfo _modbusInfo;
-
-    [ObservableProperty]
-    private CalibrationStatus calStatus;
-
-    [ObservableProperty]
-    private SensorInfo receivedInfo = new();
-
-    [ObservableProperty]
-    private SensorData receivedData = new();
-
-    [ObservableProperty]
-    private bool isProgressVisible= false;
-
 
 
     public Calib_2PBufferViewModel()
     {
         _monitoringService = new MonitoringService(new SensorService(), new AppSettings());
-        _modbusInfo = new ModbusInfo();
 
+        // 이것으로 이벤트핸들러를 대체하는 효과
+        ReceivedInfo = _monitoringService.SensorInfo;
+        ReceivedData = _monitoringService.SensorData;
+        CalibInfo = _monitoringService.CalibInfo;
     }
 
     public Calib_2PBufferViewModel(IMonitoringService monitoringService, AppSettings settings, NotificationService notificationService)
     {
         _monitoringService = monitoringService;
-        _modbusInfo = settings.ModbusInfo;
         _notificationService = notificationService;
 
-
-        _monitoringService.SensorValueReceived += OnSensorValueReceived;
+        // 이것으로 이벤트핸들러를 대체하는 효과
+        ReceivedInfo = _monitoringService.SensorInfo;
+        ReceivedData = _monitoringService.SensorData;
+        CalibInfo = _monitoringService.CalibInfo;
     }
-
 
 
 
     public async void OnViewLoaded()
     {
-        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
-        {
-            ReceivedInfo = _monitoringService.SensorInfo;
-            ReceivedData = _monitoringService.SensorData;
-        });
     }
 
     public async void OnViewUnloaded()
@@ -79,24 +72,9 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     [RelayCommand]
     private async void Apply()
     {
-        try
-        {
-            IsProgressVisible = true;
-            ModbusInfo.IsAlive = false;
+        await _monitoringService.ApplyCalib_2PBuffer();
 
-            CalStatus = CalibrationStatus.CalInProgress;
-            await _monitoringService.ApplyCalib_2PBuffer();
-
-            Debug.WriteLine($"Apply 버튼클릭: {CalStatus}");
-        }
-        catch (Exception ex)
-        {
-            // 예외 처리
-            Debug.WriteLine($"Error during calibration: {ex.Message}");
-            _notificationService.ShowMessage(Localize["Error"], $"Error during calibration: {ex.Message}");
-
-            await ResetCallibStatus(1000);
-        }
+        Debug.WriteLine($"Apply 버튼클릭: Run= {CalibInfo.IsRun}");
     }
 
     [RelayCommand]
@@ -104,48 +82,9 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     {
         await _monitoringService.AbortCalib();
 
-        Debug.WriteLine($"Abort 버튼클릭: {CalStatus}");
-
-        // Abort후 상태코드를 받을 수 있는지 체크 필요함
-        await ResetCallibStatus(500);
-
+        Debug.WriteLine($"Abort 버튼클릭: {CalibInfo.CalStatus}");
         _notificationService.ShowMessage(Localize["Information"], $"2P Buffer Calibration Aborted");
 
-    }
-
-
-
-    private async void OnSensorValueReceived(float value)
-    {
-        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
-        {
-            ReceivedData = new SensorData()
-            {
-                Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                Value = value,
-                Mv = ReceivedData.Mv,
-                Temperature = ReceivedData.Temperature,
-            };
-        });
-    }
-
-
-    private async Task ResetCallibStatus(int msec = 5000)
-    {
-        Debug.WriteLine($"ResetCallibStatus: delaytime- {msec}");
-
-        await Task.Delay(msec);
-
-        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
-        {
-            CalStatus = CalibrationStatus.NoSensorCalibration;
-
-            //if (_sensorAttached)
-            {
-                ModbusInfo.IsAlive = true;
-                IsProgressVisible = false;
-            }
-        });
     }
 
 }

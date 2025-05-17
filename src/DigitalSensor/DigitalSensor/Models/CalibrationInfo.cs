@@ -14,6 +14,5 @@ namespace DigitalSensor.Models;
 public partial class CalibInfo : ObservableObject
 {
     [ObservableProperty] private bool _isRun = false;
-    [ObservableProperty] private CommandStatus _cmdStatus= CommandStatus.Ready;
     [ObservableProperty] private CalibrationStatus _CalStatus = CalibrationStatus.NoSensorCalibration;
 }

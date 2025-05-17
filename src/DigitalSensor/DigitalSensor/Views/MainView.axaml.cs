@@ -134,10 +134,12 @@ public partial class MainView : UserControl
             {
                 foreach (var subItem in navItem.MenuItems)
                 {
-                    if (subItem is NavigationViewItem subNavItem && subNavItem.Tag?.ToString() == tagname)
+                    if (subItem is NavigationViewItem subNavItem)
                     {
-                        subNavItem.IsEnabled = false;
-                        break; // 찾았으면 루프 종료
+                        subNavItem.IsEnabled = true;
+
+                        if (subNavItem.Tag?.ToString() == tagname)
+                             subNavItem.IsEnabled = false;
                     }
                 }
             }

@@ -75,7 +75,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     {
         await _monitoringService.ApplyCalib_Zero();
 
-        Debug.WriteLine($"Apply 버튼클릭: {CalibInfo.IsRun}");
+        Debug.WriteLine($"Apply 버튼클릭: Run= {CalibInfo.IsRun}");
     }
 
     [RelayCommand]
@@ -83,7 +83,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     {
         await _monitoringService.AbortCalib();
 
-        Debug.WriteLine($"Abort 버튼클릭: {CalibInfo.CalStatus}");
+        Debug.WriteLine($"Abort 버튼클릭: Status= {CalibInfo.CalStatus}");
         _notificationService.ShowMessage(Localize["Information"], $"Zero Calibration Aborted");
     }
 
