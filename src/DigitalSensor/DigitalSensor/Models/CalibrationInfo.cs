@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DigitalSensor.Models;
 
-public partial class CalInfo : ObservableObject
+public partial class CalibInfo : ObservableObject
 {
     [ObservableProperty] private bool _isRun = false;
     [ObservableProperty] private CommandStatus _cmdStatus= CommandStatus.Ready;

@@ -81,7 +81,7 @@
 				<StackPanel>
 					<TextBlock Text="{Binding Localize[CalibrationStatus]}" FontSize="14" Foreground="LightBlue"/>
 					<Grid ColumnDefinitions="110, *, Auto" Margin="0,0,0,10">
-						<TextBlock Grid.Column="1" Text="{Binding CalInfo.CalStatus, Converter={StaticResource StatusDescriptionConverter}}" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
+						<TextBlock Grid.Column="1" Text="{Binding CalibInfo.CalStatus, Converter={StaticResource StatusDescriptionConverter}}" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
 							   Margin="0,0,0,0"/>
 						<Border Grid.Column="2" VerticalAlignment="Bottom" Width="30" Height="20" Margin="0,5,10,0" >
 						</Border>
@@ -91,10 +91,10 @@
 
 
 			<UniformGrid Columns="2" Width="300" Height="100">
-				<Button x:Name="AbortButton" Content="{Binding Localize[Stop]}" Command="{Binding AbortCommand}" IsEnabled="{Binding !CalInfo.IsRun}" Classes="" Margin="4" Width="135" Height="60"/>
-				<Button x:Name="ApplyButton" Command="{Binding ApplyCommand}" IsEnabled="{Binding CalInfo.IsRun}" Classes="accent" Margin="4" Width="135" Height="60">
+				<Button x:Name="AbortButton" Command="{Binding AbortCommand}" IsEnabled="{Binding CalibInfo.IsRun}" Classes="" Content="{Binding Localize[Stop]}" Margin="4" Width="135" Height="60"/>
+				<Button x:Name="ApplyButton" Command="{Binding ApplyCommand}" IsEnabled="{Binding !CalibInfo.IsRun}" Classes="accent" Margin="4" Width="135" Height="60">
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-						<ui:ProgressRing IsVisible="{Binding CalInfo.IsRun}"
+						<ui:ProgressRing IsVisible="{Binding CalibInfo.IsRun}"
 									  Width="40" Height="40" Margin="0,0,15,0"
 									  IsActive="True"/>
 						<TextBlock Text="{Binding Localize[Apply]}" VerticalAlignment="Center"/>

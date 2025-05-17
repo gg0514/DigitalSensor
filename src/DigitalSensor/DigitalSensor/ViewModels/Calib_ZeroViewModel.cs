@@ -29,7 +29,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     private SensorData receivedData;
 
     [ObservableProperty]
-    private CalInfo _calInfo;
+    private CalibInfo _calibInfo;
 
 
 
@@ -45,7 +45,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         // 이것으로 이벤트핸들러를 대체하는 효과
         ReceivedInfo = _monitoringService.SensorInfo;
         ReceivedData = _monitoringService.SensorData;
-        CalInfo = _monitoringService.CalInfo;
+        CalibInfo = _monitoringService.CalibInfo;
     }
 
     public Calib_ZeroViewModel(IMonitoringService monitoringService, AppSettings settings, NotificationService notificationService)
@@ -56,7 +56,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         // 이것으로 이벤트핸들러를 대체하는 효과
         ReceivedInfo = _monitoringService.SensorInfo;
         ReceivedData = _monitoringService.SensorData;
-        CalInfo = _monitoringService.CalInfo;
+        CalibInfo = _monitoringService.CalibInfo;
     }
 
 
@@ -75,7 +75,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     {
         await _monitoringService.ApplyCalib_Zero();
 
-        Debug.WriteLine($"Apply 버튼클릭: {CalInfo.IsRun}");
+        Debug.WriteLine($"Apply 버튼클릭: {CalibInfo.IsRun}");
     }
 
     [RelayCommand]
@@ -83,7 +83,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     {
         await _monitoringService.AbortCalib();
 
-        Debug.WriteLine($"Abort 버튼클릭: {CalInfo.CalStatus}");
+        Debug.WriteLine($"Abort 버튼클릭: {CalibInfo.CalStatus}");
         _notificationService.ShowMessage(Localize["Information"], $"Zero Calibration Aborted");
     }
 
