@@ -159,7 +159,8 @@ public class ModbusService : IModbusService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"MODBUS - Verify Identification Error: {ex.Message}");
+            Debug.WriteLine($"MODBUS - Verify ID Error: {ex.Message}");
+            Debug.WriteLine($"MODBUS - ");
             return -1;
         }
     }

@@ -105,12 +105,20 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         {
             int slaveId = await RetrieveSensorID();
 
+            if(slaveId < 0)
+            {
+                Debug.WriteLine($"Monitoring - RetrieveSensorID FAIL!! ");
+                ErrSignal?.Invoke();
+
+                return;
+            }
+
             await UpdateInfo(deviceInfo, slaveId);
             await StartMonitoring();
         }
         catch (Exception ex)
         {
-            Debug.WriteLine("정보", $"OnSensorAttached() failed");
+            Debug.WriteLine($"OnSensorAttached() failed");
         }
 
         // 센서 진단
@@ -138,6 +146,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     public async Task<int> RetrieveSensorID()
     {
+        Debug.WriteLine($"Monitoring - ");
         Debug.WriteLine($"Monitoring - RetrieveSensorID ...");
 
         return await _sensorService.RetrieveID();

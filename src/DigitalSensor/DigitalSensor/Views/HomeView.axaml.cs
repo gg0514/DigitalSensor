@@ -19,9 +19,10 @@ public partial class HomeView : UserControl
         InitializeComponent();
 
 
+        string appVersion = " Ver.1.0";
         string Greeting = LocalizationManager.GetString("Greeting");
 
-        Debug.WriteLine(Greeting); // "안녕하세요" 출력
+        Debug.WriteLine(Greeting+ appVersion); // "안녕하세요" 출력
 
     }
 
