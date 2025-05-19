@@ -17,7 +17,6 @@ public partial class SensorInfo : ObservableObject
     [ObservableProperty] private SensorType _type= SensorType.None;
     [ObservableProperty] private string _serial;             // hexstring으로 표시
     [ObservableProperty] private string _sensorUnit;
-    [ObservableProperty] private bool _isAttached= false;
 }
 
 // ** 참고

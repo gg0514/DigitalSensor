@@ -174,9 +174,12 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
     [RelayCommand]
     private async void Apply()
     {
-        await _monitoringService.ApplyCalib_1PSample(CalibValue);
+        bool bMonitoring = _monitoringService.IsMonitoring;
 
-        Debug.WriteLine($"Apply 버튼클릭: Run= {CalibInfo.IsRun}");
+        if (bMonitoring)
+            await _monitoringService.ApplyCalib_1PSample(CalibValue);
+    
+        Debug.WriteLine($"Apply 버튼클릭: Run= {bMonitoring}");
     }
 
     [RelayCommand]

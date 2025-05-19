@@ -134,9 +134,12 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     [RelayCommand]
     private async void Apply()
     {
-        await _monitoringService.ApplyCalib_Zero();
+        bool bMonitoring = _monitoringService.IsMonitoring;
 
-        Debug.WriteLine($"Apply 버튼클릭: Run= {CalibInfo.IsRun}");
+        if (bMonitoring)
+            await _monitoringService.ApplyCalib_Zero();
+
+        Debug.WriteLine($"Apply 버튼클릭: Run= {bMonitoring}");
     }
 
     [RelayCommand]

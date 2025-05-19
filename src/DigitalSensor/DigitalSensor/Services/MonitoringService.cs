@@ -21,6 +21,8 @@ public interface IMonitoringService
     SensorData  SensorData { get; set; }
     CalibInfo     CalibInfo { get; set; }
 
+    bool IsMonitoring { get; }
+
     event Action ErrSignal;
 
     event Action<int> SensorTypeReceived;
@@ -55,6 +57,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     [ObservableProperty]
     private CalibInfo  _calibInfo = new();
 
+    public bool IsMonitoring => _isMonitoring;
 
 
     private bool _isMonitoring = false;
@@ -124,8 +127,13 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     public void SetCurrentPage(string pageName)
     {
         _currentPage = pageName;
-
         Debug.WriteLine($"CurrentPage: {_currentPage}");
+
+        // 교정 상태 초기화
+        ResetCallibStatus();
+
+        // 교정결과 초기화
+        CalibInfo.CalStatus = CalibrationStatus.NoSensorCalibration;
     }
 
     public async Task<int> RetrieveSensorID()
