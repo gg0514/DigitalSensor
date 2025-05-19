@@ -256,13 +256,15 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         catch (Exception ex)
         {
             ErrSignal?.Invoke();
-            await Task.Delay(1000); // 1초 대기
+
             Debug.WriteLine($"CalibMode - Error: {ex.Message}");
 
             // 에러발생시 센서 재연결
+            await Task.Delay(1000); // 1초 대기
             await _sensorService.Close();
-            await _sensorService.Open();
 
+            await Task.Delay(2000); // 2초 대기
+            await _sensorService.Open();
 
             // 교정 상태 초기화
             ResetCallibStatus();
@@ -323,6 +325,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
                 await Write2PBufferCalibAsync(token);
             }
         }
+        // 교정중단 예외만 처리, 나머지는 위로
         catch (OperationCanceledException)
         {
             await WriteCalibAbortAsync();

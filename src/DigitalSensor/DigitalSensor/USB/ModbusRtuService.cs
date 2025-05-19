@@ -190,9 +190,7 @@ public class ModbusRtuService
               response[2] == frame[2] && response[3] == frame[3] &&
               response[4] == frame[4] && response[5] == frame[5]))
         {
-            // SecretKey 250이 아닌 경우에만 예외 발생
-            if (slaveId != 250)
-                throw new Exception("Mismatch response");
+            throw new Exception("Mismatch response");
         }
     }
 

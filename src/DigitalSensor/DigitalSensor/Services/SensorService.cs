@@ -221,6 +221,7 @@ public class SensorService : ISensorService
         catch (Exception ex)
         {
             Debug.WriteLine($"[Error] calibration zero: {ex.Message}");
+            throw;
         }
     }
 
@@ -233,6 +234,7 @@ public class SensorService : ISensorService
         catch (Exception ex)
         {
             Debug.WriteLine($"[Error] calibration abort: {ex.Message}");
+            throw;
         }
     }
 
@@ -245,6 +247,7 @@ public class SensorService : ISensorService
         catch (Exception ex)
         {
             Debug.WriteLine($"[Error] calibration 1p sample: {ex.Message}");
+            throw;
         }
     }
 
@@ -263,6 +266,9 @@ public class SensorService : ISensorService
         catch (Exception ex)
         {
             Debug.WriteLine($"[Error] calibration 2p buffer: {ex.Message}");
+
+            // 재전송
+            throw;
         }
     }
 
@@ -276,6 +282,7 @@ public class SensorService : ISensorService
         catch (Exception ex)
         {
             Debug.WriteLine($"[Error] DiscardInBuffer: {ex.Message}");
+            throw;
         }
     }
 }
