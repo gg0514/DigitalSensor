@@ -177,8 +177,12 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
         bool bMonitoring = _monitoringService.IsMonitoring;
 
         if (bMonitoring)
+        {
+            // 버튼 반응성 향상 목적
+            CalibInfo.IsRun = true;
             await _monitoringService.ApplyCalib_1PSample(CalibValue);
-    
+        }    
+
         Debug.WriteLine($"Apply 버튼클릭: Monitoring = {bMonitoring}");
     }
 
