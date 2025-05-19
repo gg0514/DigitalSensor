@@ -3,6 +3,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.VisualTree;
 using FluentAvalonia.UI.Controls;
 using FluentIcons.Avalonia.Fluent;
+using DigitalSensor.Resources;
 using DigitalSensor.Extensions;
 using DigitalSensor.Services;
 using DigitalSensor.ViewModels;
@@ -18,6 +19,9 @@ namespace DigitalSensor.Views;
 public partial class MainView : UserControl
 {
     private readonly IMonitoringService _monitoringService;
+
+    public Localize Localize { get; } = new();
+
 
     public MainView()
     {
@@ -45,18 +49,23 @@ public partial class MainView : UserControl
     {
         string parentTag = "Calib"; // 부모 메뉴의 Tag 값
 
+        //MainViewModel vm= (DataContext as MainViewModel);
+        //Localize localize = new Localize();
+
         foreach (var item in NavView.MenuItems)
         {
             if (item is NavigationViewItem navItem && navItem.Tag?.ToString() == parentTag)
             {
                 var Item1 = new NavigationViewItem
                 {
-                    Content = "Zero Calibration",
+                    //Content = "Zero Calibration",
+                    Content = Localize["MenuCalibZero"],
                     Tag = "Calib_Zero"
                 };
                 var Item2 = new NavigationViewItem
                 {
-                    Content = "1Point Sample",
+                    //Content = "1Point Sample",
+                    Content = Localize["MenuCalib1PSample"],
                     Tag = "Calib_1PSample"
                 };
                 //var Item3 = new NavigationViewItem
@@ -71,7 +80,8 @@ public partial class MainView : UserControl
                 //};
                 var Item5 = new NavigationViewItem
                 {
-                    Content = "2Point Buffer",
+                    //Content = "2Point Buffer",
+                    Content = Localize["MenuCalib2PBuffer"],
                     Tag = "Calib_2PBuffer"
                 };
 

@@ -139,7 +139,7 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
             await _monitoringService.ApplyCalib_2PBuffer();
 
 
-        Debug.WriteLine($"Apply 버튼클릭: Run= {bMonitoring}");
+        Debug.WriteLine($"Apply 버튼클릭: Monitoring = {bMonitoring}");
     }
 
     [RelayCommand]

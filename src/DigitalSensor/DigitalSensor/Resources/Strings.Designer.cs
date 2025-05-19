@@ -214,6 +214,60 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
+        ///   Calibration과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string MenuCalib {
+            get {
+                return ResourceManager.GetString("MenuCalib", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   1P Sample Calibration과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string MenuCalib1PSample {
+            get {
+                return ResourceManager.GetString("MenuCalib1PSample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   2P Buffer Calibration과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string MenuCalib2PBuffer {
+            get {
+                return ResourceManager.GetString("MenuCalib2PBuffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Zero Calibration과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string MenuCalibZero {
+            get {
+                return ResourceManager.GetString("MenuCalibZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Home과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string MenuHome {
+            get {
+                return ResourceManager.GetString("MenuHome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Setting과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string MenuSetting {
+            get {
+                return ResourceManager.GetString("MenuSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sensor Data과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string SensorData {

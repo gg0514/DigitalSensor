@@ -210,4 +210,22 @@
   <data name="StatusFail" xml:space="preserve">
     <value>실 패</value>
   </data>
+  <data name="MenuHome" xml:space="preserve">
+    <value>홈</value>
+  </data>
+  <data name="MenuSetting" xml:space="preserve">
+    <value>설정</value>
+  </data>
+  <data name="MenuCalib" xml:space="preserve">
+    <value>교정</value>
+  </data>
+  <data name="MenuCalibZero" xml:space="preserve">
+    <value>영점 교정</value>
+  </data>
+  <data name="MenuCalib1PSample" xml:space="preserve">
+    <value>1P 샘플 교정</value>
+  </data>
+  <data name="MenuCalib2PBuffer" xml:space="preserve">
+    <value>2P 버퍼 교정</value>
+  </data>
 </root>

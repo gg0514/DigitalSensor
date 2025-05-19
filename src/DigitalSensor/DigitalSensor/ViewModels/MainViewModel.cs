@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DigitalSensor.Resources;
 using DigitalSensor.Services;
 using DigitalSensor.Views;
 using System;
@@ -16,6 +17,12 @@ public partial class MainViewModel : ViewModelBase
 
     [ObservableProperty]
     private object? _currentPage;
+
+
+    // 다국어 지원을 위한 Localize 객체
+    public Localize Localize { get; } = new();
+
+
 
     public MainViewModel(INavigationService navigationService)
     {

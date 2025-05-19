@@ -179,7 +179,7 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
         if (bMonitoring)
             await _monitoringService.ApplyCalib_1PSample(CalibValue);
     
-        Debug.WriteLine($"Apply 버튼클릭: Run= {bMonitoring}");
+        Debug.WriteLine($"Apply 버튼클릭: Monitoring = {bMonitoring}");
     }
 
     [RelayCommand]

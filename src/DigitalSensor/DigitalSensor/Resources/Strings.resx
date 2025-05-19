@@ -218,4 +218,28 @@
   <data name="StatusFail" xml:space="preserve">
     <value>Fail</value>
   </data>
+  <data name="MenuHome" xml:space="preserve">
+    <value>Home</value>
+    <comment>메뉴 홈</comment>
+  </data>
+  <data name="MenuSetting" xml:space="preserve">
+    <value>Setting</value>
+    <comment>메뉴 설정</comment>
+  </data>
+  <data name="MenuCalib" xml:space="preserve">
+    <value>Calibration</value>
+    <comment>메뉴 교정</comment>
+  </data>
+  <data name="MenuCalibZero" xml:space="preserve">
+    <value>Zero Calibration</value>
+    <comment>메뉴 교정-영점교정</comment>
+  </data>
+  <data name="MenuCalib1PSample" xml:space="preserve">
+    <value>1P Sample Calibration</value>
+    <comment>메뉴 교정-1P샘플</comment>
+  </data>
+  <data name="MenuCalib2PBuffer" xml:space="preserve">
+    <value>2P Buffer Calibration</value>
+    <comment>메뉴 교정-2P버퍼</comment>
+  </data>
 </root>

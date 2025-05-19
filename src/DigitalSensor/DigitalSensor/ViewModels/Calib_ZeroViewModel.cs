@@ -139,7 +139,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
         if (bMonitoring)
             await _monitoringService.ApplyCalib_Zero();
 
-        Debug.WriteLine($"Apply 버튼클릭: Run= {bMonitoring}");
+        Debug.WriteLine($"Apply 버튼클릭: Monitoring = {bMonitoring}");
     }
 
     [RelayCommand]

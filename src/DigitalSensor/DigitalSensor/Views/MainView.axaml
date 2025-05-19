@@ -42,7 +42,7 @@
 		<ui:NavigationView.MenuItems>
 			<ui:NavigationViewItem
 				FontSize="14"
-				Content="Home"
+				Content="{Binding Localize[MenuHome]}"
 				Tag="Home"
 				IconSource="Home"
 				IsSelected="True"
@@ -50,14 +50,14 @@
 
 			<ui:NavigationViewItem
 				FontSize="14"
-				Content="Setting"
+				Content="{Binding Localize[MenuSetting]}"
 				IconSource="Setting"
 				Tag="Setting">
 			</ui:NavigationViewItem>
 
 			<ui:NavigationViewItem
 				FontSize="14"
-				Content="Calibration"
+				Content="{Binding Localize[MenuCalib]}"
 				Tag="Calib">
 
 				<ui:NavigationViewItem.IconSource>
