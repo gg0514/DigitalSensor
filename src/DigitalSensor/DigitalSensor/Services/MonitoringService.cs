@@ -64,6 +64,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     private bool _isCalibration = false;
 
     private float _calibValue = 0;
+    private int _failCount = 0; // 실패 횟수
 
     private string _currentPage = string.Empty;
 
@@ -401,6 +402,8 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
         // 폴링 주기
         await Task.Delay(2000, token);
+
+        _failCount = 0; // 실패 횟수 초기화
         await ReadCalibStatus();
 
         while (CalibInfo.CalStatus == CalibrationStatus.CalInProgress)
@@ -420,7 +423,25 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     {
         int status = await _sensorService.GetCalibStatusAsync();
         
-        CalibInfo.CalStatus = (CalibrationStatus)status;
+        CalibrationStatus calStatus = (CalibrationStatus)status;
+
+        if(calStatus== CalibrationStatus.Fail_GeneralCalFail)
+        {
+            _failCount++;
+            Debug.WriteLine($" => 교정 실패 횟수: {_failCount}회");
+
+            if (_failCount >= 3)
+            {
+                Debug.WriteLine($" => 교정 실패 횟수 초과: {_failCount}회");
+                CalibInfo.CalStatus = CalibrationStatus.Fail_GeneralCalFail;
+                return;
+            }
+        }
+        else
+        {
+            CalibInfo.CalStatus = calStatus;
+        }
+
         Debug.WriteLine($"ReadCalibStatus: {CalibInfo.CalStatus}");
     }
 

@@ -107,7 +107,7 @@ public class ModbusRtuService
         Debug.WriteLine($"MODBUS Write (0:8): {hex_req}");
 
         await _usbService.WriteAsync(frame);
-        await Task.Delay(200); // 200ms 대기
+        await Task.Delay(500); // 500ms 대기
 
         _RxSignal?.Invoke();
 
@@ -169,7 +169,7 @@ public class ModbusRtuService
         Debug.WriteLine($"MODBUS Write (0:{frame.Length}): {hex_req}");
 
         await _usbService.WriteAsync(frame);
-        await Task.Delay(200); // 200ms 대기
+        await Task.Delay(500); // 500ms 대기
 
 
         _RxSignal?.Invoke();
