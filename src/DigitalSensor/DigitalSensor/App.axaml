@@ -22,6 +22,7 @@
 	<Application.Resources>
 		<!-- BoolToBrushConverter를 리소스로 등록 -->
 		<util:BoolToBrushConverter x:Key="BoolToBrushConverter" />
+		<util:EmptyStringToZeroConverter x:Key="EmptyStringToZeroConverter" />
 		<util:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
 		<util:StatusDescriptionConverter x:Key="StatusDescriptionConverter" />
 	</Application.Resources>

@@ -128,13 +128,13 @@
 									   IsVisible="{Binding !IsEditing}"
 									   PointerPressed="OnTextBlockClick"/>
 							<TextBox x:Name="ValueTextBox"
-								     Text="{Binding CalibValue, UpdateSourceTrigger=PropertyChanged}"
+								     Text="{Binding CalibValue, Converter={StaticResource EmptyStringToZeroConverter}, UpdateSourceTrigger=PropertyChanged,  TargetNullValue='', FallbackValue='0' }"
    								     Width="120"
 									 TextAlignment="Center"
 									 VerticalAlignment="Center"
 									 HorizontalAlignment="Center"
 									 FontSize="30"
-									 IsVisible="{Binding IsEditing}"
+									 IsVisible="{Binding IsEditing}"									
 									 KeyUp="OnTextBoxKeyUp"
 									 LostFocus="OnTextBoxLostFocus"/>
 						</Grid>

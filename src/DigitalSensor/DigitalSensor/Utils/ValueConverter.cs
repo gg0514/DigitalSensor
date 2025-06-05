@@ -10,6 +10,29 @@ using System.Threading.Tasks;
 
 namespace DigitalSensor.Utils;
 
+public class EmptyStringToZeroConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        // ViewModel의 float? → TextBox.Text
+        if (value is float f)
+            return f.ToString(culture);
+
+        return "0";
+    }
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        var text = value as string;
+        if (string.IsNullOrWhiteSpace(text))
+            return 0f; // 빈 문자열 → 0으로 변환
+
+        if (float.TryParse(text, NumberStyles.Float, culture, out var result))
+            return result;
+
+        return 0f; // 변환 실패 시도 0으로
+    }
+}
 
 public class BoolToBrushConverter : IValueConverter
 {
