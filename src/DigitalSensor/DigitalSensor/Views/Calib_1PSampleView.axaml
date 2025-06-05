@@ -68,7 +68,7 @@
 				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
 				CornerRadius="12"
 				Padding="26"
-				Margin="0,20,0,0"
+				Margin="0,10,0,0"
 				Effect="{DynamicResource ShadowElevation3}" >
 
 				<StackPanel>
@@ -90,8 +90,8 @@
 			<Border
 				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
 				CornerRadius="12"
-				Padding="26,26,26,12"
-				Margin="0,10,0,0"
+				Padding="26,16,26,6"
+				Margin="0,0,0,0"
 				Effect="{DynamicResource ShadowElevation3}" >
 
 				<StackPanel Background="">
@@ -161,7 +161,7 @@
 				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
 				CornerRadius="12"
 				Padding="26"
-				Margin="0,10,0,0"
+				Margin="0,0,0,0"
 				Effect="{DynamicResource ShadowElevation3}" >
 
 				<StackPanel>

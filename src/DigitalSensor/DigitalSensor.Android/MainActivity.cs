@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace DigitalSensor.Android;
 
 [Activity(
-    Label = "DigitalSensor.Android",
+    Label = "DigitalSensor",
     Theme = "@style/MyTheme.NoActionBar",
     Icon = "@drawable/bluesen",
     MainLauncher = true,
