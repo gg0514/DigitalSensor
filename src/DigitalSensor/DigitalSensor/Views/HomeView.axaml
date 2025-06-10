@@ -64,7 +64,7 @@
 						   Margin="0,0,0,15" />
 				<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
 					<TextBlock Grid.Column="0" Text="{Binding ReceivedInfo.Type, Converter={StaticResource EnumDescriptionConverter}}" HorizontalAlignment="Center" FontWeight="Bold" FontSize="50"
-						   Margin="0,0,0,0"/>
+						   Margin="60,0,0,0"/>
 					<Border Grid.Column="1" VerticalAlignment="Bottom" Width="30" Height="20" Margin="0,5,10,0" >
 						<TextBlock Text="" FontWeight="Light" FontSize="14"/>
 					</Border>
@@ -85,8 +85,8 @@
 						   Margin="0,0,0,15" />
 				<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
 					<TextBlock Grid.Column="0" Text="{Binding ReceivedData.Value}" HorizontalAlignment="Center" FontWeight="Bold" FontSize="50"
-						   Margin="0,0,0,0"/>
-					<Border Grid.Column="1" VerticalAlignment="Bottom" Width="40" Height="20" Margin="0,5,10,0" >
+						   Margin="60,0,0,0"/>
+					<Border Grid.Column="1" VerticalAlignment="Bottom" Width="40" Height="20" Margin="0,0,10,0" >
 						<TextBlock Name="SensorUnit" Text="{Binding ReceivedInfo.SensorUnit}" FontWeight="Light" FontSize="14"/>
 					</Border>
 				</Grid>
@@ -106,7 +106,7 @@
 						   Margin="0,0,0,15" />
 				<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
 					<TextBlock Grid.Column="0" Text="{Binding ReceivedData.Mv}" HorizontalAlignment="Center" FontWeight="Bold" FontSize="50"
-						   Margin="0,0,0,0"/>
+						   Margin="60,0,0,0"/>
 					<Border Grid.Column="1" VerticalAlignment="Bottom" Width="40" Height="20" Margin="0,5,10,0" >
 						<TextBlock Text="mV" FontWeight="Light" FontSize="14"/>
 					</Border>
@@ -128,7 +128,7 @@
 						   Margin="0,0,0,15" />
 				<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
 					<TextBlock Grid.Column="0" Text="{Binding ReceivedData.Temperature}" HorizontalAlignment="Center" FontWeight="Bold" FontSize="50"
-						   Margin="0,0,0,0"/>
+						   Margin="60,0,0,0"/>
 					<Border Grid.Column="1" VerticalAlignment="Bottom" Width="40" Height="20" Margin="0,5,10,0" >
 						<TextBlock Text="°C" FontWeight="Light" FontSize="14"/>
 					</Border>

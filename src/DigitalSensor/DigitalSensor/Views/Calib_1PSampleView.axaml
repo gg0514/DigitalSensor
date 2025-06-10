@@ -29,7 +29,7 @@
 			<Grid ColumnDefinitions="*, Auto, Auto, Auto, 10">
 				<!-- Title -->
 				<StackPanel Grid.Column="0" Margin="0,10,10,10">
-					<TextBlock Text="{Binding Localize[1PSample]}" FontSize="28" FontWeight="Bold"/>
+					<TextBlock Text="{Binding Localize[1PSample]}" FontSize="26" FontWeight="Bold"/>
 				</StackPanel>
 
 				<StackPanel Grid.Column="1" Margin="0,10,10,10">
