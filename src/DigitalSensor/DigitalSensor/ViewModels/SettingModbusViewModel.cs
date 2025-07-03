@@ -45,7 +45,7 @@ public partial class SettingModbusViewModel : ViewModelBase
     {
         try
         {
-            Debug.WriteLine($"Load 버튼클릭");
+            Console.WriteLine($"Load 버튼클릭");
 
             int slaveID = await _modbusService.VerifyID();
             ModbusInfo.SlaveID = slaveID;
@@ -56,7 +56,7 @@ public partial class SettingModbusViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error loading settings: {ex.Message}");
+            Console.WriteLine($"Error loading settings: {ex.Message}");
         }
         finally
         {
@@ -70,7 +70,7 @@ public partial class SettingModbusViewModel : ViewModelBase
 
         try
         {
-            Debug.WriteLine($"Apply 버튼클릭");
+            Console.WriteLine($"Apply 버튼클릭");
 
             await _modbusService.WriteSlaveId((ushort)slaveID);
 
@@ -80,7 +80,7 @@ public partial class SettingModbusViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error applying settings: {ex.Message}");
+            Console.WriteLine($"Error applying settings: {ex.Message}");
         }
         finally
         {

@@ -19,7 +19,7 @@ public class NavigationService : INavigationService
 
     public object GetPage(string name)
     {
-        Debug.WriteLine($"GetPage: {name}");
+        Console.WriteLine($"GetPage: {name}");
 
         return name switch
         {

@@ -22,7 +22,7 @@ public partial class HomeView : UserControl
         string appVersion = " Ver.1.0";
         string Greeting = LocalizationManager.GetString("Greeting");
 
-        Debug.WriteLine(Greeting+ appVersion); // "안녕하세요" 출력
+        Console.WriteLine(Greeting+ appVersion); // "안녕하세요" 출력
 
     }
 
@@ -46,7 +46,7 @@ public partial class HomeView : UserControl
         {
             _tapCount = 0;
 
-            Debug.WriteLine("Triple tap detected!");
+            Console.WriteLine("Triple tap detected!");
 
             // 원하는 로직 실행
             MainView mainView = App.GlobalHost.GetService<MainView>();

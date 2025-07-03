@@ -108,7 +108,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
             if(slaveId < 0)
             {
-                Debug.WriteLine($"Monitoring - RetrieveSensorID FAIL!! ");
+                Console.WriteLine($"Monitoring - RetrieveSensorID FAIL!! ");
                 ErrSignal?.Invoke();
 
                 return;
@@ -119,7 +119,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"OnSensorAttached() failed");
+            Console.WriteLine($"OnSensorAttached() failed");
         }
 
         // 센서 진단
@@ -136,7 +136,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     public void SetCurrentPage(string pageName)
     {
         _currentPage = pageName;
-        Debug.WriteLine($"CurrentPage: {_currentPage}");
+        Console.WriteLine($"CurrentPage: {_currentPage}");
 
         // 교정 상태 초기화
         ResetCallibStatus();
@@ -147,8 +147,8 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     public async Task<int> RetrieveSensorID()
     {
-        Debug.WriteLine($"Monitoring - ");
-        Debug.WriteLine($"Monitoring - RetrieveSensorID ...");
+        Console.WriteLine($"Monitoring - ");
+        Console.WriteLine($"Monitoring - RetrieveSensorID ...");
 
         return await _sensorService.RetrieveID();
     }
@@ -200,7 +200,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     {
         try
         {
-            Debug.WriteLine($"[ NormalMode ] ");
+            Console.WriteLine($"[ NormalMode ] ");
 
             await GetSensorType();
             await GetSensorValue();
@@ -211,7 +211,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         {
             ErrSignal?.Invoke();
             await Task.Delay(1000); // 1초 대기
-            Debug.WriteLine($"NormalMode - Error : {ex.Message}");
+            Console.WriteLine($"NormalMode - Error : {ex.Message}");
         }
     }
 
@@ -219,7 +219,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     {
         try
         {
-            Debug.WriteLine($"[ SettingMode ] ");
+            Console.WriteLine($"[ SettingMode ] ");
 
             await Task.Delay(1000); // 1초 대기
         }
@@ -227,7 +227,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         {
             ErrSignal?.Invoke();
             await Task.Delay(1000); // 1초 대기
-            Debug.WriteLine($"SettingMode - Error: {ex.Message}");
+            Console.WriteLine($"SettingMode - Error: {ex.Message}");
         }
     }
 
@@ -237,7 +237,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         {
             if (_isCalibration)
             {
-                Debug.WriteLine($"[ CalibMode ] ");
+                Console.WriteLine($"[ CalibMode ] ");
 
                 // 교정 실행
                 CalibInfo.IsRun = true;
@@ -248,7 +248,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
             }
             else
             {
-                Debug.WriteLine($"[ Calibration - Ready] ");
+                Console.WriteLine($"[ Calibration - Ready] ");
 
                 await GetSensorType();
                 await GetSensorValue();
@@ -258,7 +258,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         {
             ErrSignal?.Invoke();
 
-            Debug.WriteLine($"CalibMode - Error: {ex.Message}");
+            Console.WriteLine($"CalibMode - Error: {ex.Message}");
 
             // 에러발생시 센서 재연결
             await Task.Delay(1000); // 1초 대기
@@ -336,7 +336,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     private async Task WriteZeroCalibAsync(CancellationToken token)
     {
         await _sensorService.SetCalibZeroAsync();
-        Debug.WriteLine($" => Zero 교정 실행 ");
+        Console.WriteLine($" => Zero 교정 실행 ");
 
         await WaitForCalibrationCompletion(token);
 
@@ -347,7 +347,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     private async Task Write1PSampleCalibAsync(CancellationToken token)
     {
         await _sensorService.SetCalib1PSampleAsync(_calibValue);
-        Debug.WriteLine($" => 1PSample 교정 실행 ");
+        Console.WriteLine($" => 1PSample 교정 실행 ");
 
         await WaitForCalibrationCompletion(token);
 
@@ -360,7 +360,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         // 2P Buffer 교정
         int calibOrder = 0;
         await _sensorService.SetCalib2PBufferAsync(calibOrder);
-        Debug.WriteLine($" => 2PBuffer - 1st 교정 실행 ");
+        Console.WriteLine($" => 2PBuffer - 1st 교정 실행 ");
 
         await WaitForCalibrationCompletion(token);
 
@@ -373,7 +373,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
             // 2P Buffer 교정
             calibOrder = 1;
             await _sensorService.SetCalib2PBufferAsync(calibOrder);
-            Debug.WriteLine($" => 2PBuffer - 2nd 교정 실행 ");
+            Console.WriteLine($" => 2PBuffer - 2nd 교정 실행 ");
 
             await WaitForCalibrationCompletion(token);
         }
@@ -385,7 +385,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     private async Task WriteCalibAbortAsync()
     {
-        Debug.WriteLine($" => 교정 중단!! ");
+        Console.WriteLine($" => 교정 중단!! ");
         await _sensorService.SetCalibAbortAsync();
 
         // 교정 상태 초기화
@@ -414,8 +414,8 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
             await ReadCalibStatus();
         }
 
-        if (CalibInfo.CalStatus == CalibrationStatus.CalOK)   Debug.WriteLine($" => 교정 성공!! ");
-        else                                        Debug.WriteLine($" => 교정 실패!! ");
+        if (CalibInfo.CalStatus == CalibrationStatus.CalOK)   Console.WriteLine($" => 교정 성공!! ");
+        else                                        Console.WriteLine($" => 교정 실패!! ");
     }
 
 
@@ -428,11 +428,11 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         if(calStatus== CalibrationStatus.Fail_GeneralCalFail)
         {
             _failCount++;
-            Debug.WriteLine($" => 교정 실패 횟수: {_failCount}회");
+            Console.WriteLine($" => 교정 실패 횟수: {_failCount}회");
 
             if (_failCount >= 3)
             {
-                Debug.WriteLine($" => 교정 실패 횟수 초과: {_failCount}회");
+                Console.WriteLine($" => 교정 실패 횟수 초과: {_failCount}회");
                 CalibInfo.CalStatus = CalibrationStatus.Fail_GeneralCalFail;
                 return;
             }
@@ -442,7 +442,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
             CalibInfo.CalStatus = calStatus;
         }
 
-        Debug.WriteLine($"ReadCalibStatus: {CalibInfo.CalStatus}");
+        Console.WriteLine($"ReadCalibStatus: {CalibInfo.CalStatus}");
     }
 
     private Task ResetCallibStatus()
@@ -483,7 +483,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
         SensorData.Value = value;
 
-        Debug.WriteLine($"SensorValue: {value}");
+        Console.WriteLine($"SensorValue: {value}");
         SensorValueReceived?.Invoke(value);
     }
 
@@ -492,7 +492,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         float mv = await _sensorService.GetMVAsync();
 
         SensorData.Mv = mv;
-        Debug.WriteLine($"SensorMv: {mv}");
+        Console.WriteLine($"SensorMv: {mv}");
     }
 
     private async Task GetSensorTemperature()
@@ -500,7 +500,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         float temperature = await _sensorService.GetTemperatureAsync();
 
         SensorData.Temperature = temperature;
-        Debug.WriteLine($"SensorTemperature: {temperature}");
+        Console.WriteLine($"SensorTemperature: {temperature}");
     }
 
 

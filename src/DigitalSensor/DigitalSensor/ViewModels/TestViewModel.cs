@@ -87,7 +87,7 @@ public partial class TestViewModel : ViewModelBase
             int slaveID = values[0];
 
             string msg = $"Slave ID: {slaveID}";
-            //Debug.WriteLine(msg);
+            //Console.WriteLine(msg);
             _notificationService.ShowMessage(Localize["Information"], msg);
 
             string msg2 = $"{DateTime.Now.ToString("[HH:mm:ss] ")} {msg}";
@@ -127,7 +127,7 @@ public partial class TestViewModel : ViewModelBase
             ushort numRegisters = DataLength;
 
             string result = await _modbusService.ReadHoldingRegisters(slaveId, startAddress, numRegisters);
-            Debug.WriteLine(result);
+            Console.WriteLine(result);
 
             string msg2 = $"{DateTime.Now.ToString("[HH:mm:ss] ")} {result}";
 

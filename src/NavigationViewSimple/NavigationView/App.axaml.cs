@@ -10,6 +10,7 @@ using NavigationView.Services;
 using NavigationView.ViewModels;
 using NavigationView.Views;
 using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace NavigationView;
@@ -21,6 +22,10 @@ public partial class App : Application
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
+
+        Console.WriteLine("App Initialize");
+        Console.WriteLine("Console- App Initialize");
+
     }
 
     public override void OnFrameworkInitializationCompleted()
@@ -28,6 +33,8 @@ public partial class App : Application
         // Line below is needed to remove Avalonia data validation.
         // Without this line you will get duplicate validations from both Avalonia and CT
         BindingPlugins.DataValidators.RemoveAt(0);
+        Console.WriteLine("App OnFrameworkInitializationCompleted()");
+        Console.WriteLine("Console- App OnFrameworkInitializationCompleted()");
 
 
         //// FluentAvalonia 초기화

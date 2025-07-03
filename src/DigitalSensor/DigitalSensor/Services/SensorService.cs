@@ -81,7 +81,7 @@ public class SensorService : ISensorService
                 SensorAttached?.Invoke(deviceInfo);
 
                 _notificationService.ShowMessage(Localize["Information"], $"Device {deviceInfo.DeviceId} opened successfully.");
-                Debug.WriteLine($"USB - {deviceInfo.ProductName}:{deviceInfo.DeviceId} Device Attached");
+                Console.WriteLine($"USB - {deviceInfo.ProductName}:{deviceInfo.DeviceId} Device Attached");
 
                 //SettingViewModel vm = App.GlobalHost.GetService<SettingViewModel>();
 
@@ -93,7 +93,7 @@ public class SensorService : ISensorService
         }
         catch(Exception ex)
         {
-            Debug.WriteLine($"Error opening device: {ex.Message}");
+            Console.WriteLine($"Error opening device: {ex.Message}");
             _notificationService.ShowMessage(Localize["Information"], $"Error opening device: {ex.Message}");
             return;
         }
@@ -121,7 +121,7 @@ public class SensorService : ISensorService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error opening device: {ex.Message}");
+            Console.WriteLine($"Error opening device: {ex.Message}");
             return false;
         }
     }
@@ -133,7 +133,7 @@ public class SensorService : ISensorService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error closing device: {ex.Message}");
+            Console.WriteLine($"Error closing device: {ex.Message}");
         }
     }
 
@@ -220,7 +220,7 @@ public class SensorService : ISensorService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"[Error] calibration zero: {ex.Message}");
+            Console.WriteLine($"[Error] calibration zero: {ex.Message}");
             throw;
         }
     }
@@ -233,7 +233,7 @@ public class SensorService : ISensorService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"[Error] calibration abort: {ex.Message}");
+            Console.WriteLine($"[Error] calibration abort: {ex.Message}");
             throw;
         }
     }
@@ -246,7 +246,7 @@ public class SensorService : ISensorService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"[Error] calibration 1p sample: {ex.Message}");
+            Console.WriteLine($"[Error] calibration 1p sample: {ex.Message}");
             throw;
         }
     }
@@ -265,7 +265,7 @@ public class SensorService : ISensorService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"[Error] calibration 2p buffer: {ex.Message}");
+            Console.WriteLine($"[Error] calibration 2p buffer: {ex.Message}");
 
             // 재전송
             throw;
@@ -281,7 +281,7 @@ public class SensorService : ISensorService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"[Error] DiscardInBuffer: {ex.Message}");
+            Console.WriteLine($"[Error] DiscardInBuffer: {ex.Message}");
             throw;
         }
     }

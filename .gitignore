@@ -8,6 +8,7 @@
 bin/
 obj/
 util/
+doc/
 
 # User-specific files
 *.rsuser

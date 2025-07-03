@@ -38,7 +38,7 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand]
     public void NavigateTo(string pageKey)
     {
-        Debug.WriteLine($"NavigateTo: {pageKey}");
+        Console.WriteLine($"NavigateTo: {pageKey}");
 
         // Placeholder 
         if (pageKey != "Calib")

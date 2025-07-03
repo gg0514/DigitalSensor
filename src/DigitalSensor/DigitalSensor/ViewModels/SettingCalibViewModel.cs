@@ -54,7 +54,7 @@ public partial class SettingCalibViewModel : ViewModelBase
 
         try
         {
-            Debug.WriteLine($"Apply 버튼클릭");
+            Console.WriteLine($"Apply 버튼클릭");
 
             await _modbusService.WriteSensorFactor(factor);
             await Task.Delay(1000); // Simulate a delay for loading
@@ -68,7 +68,7 @@ public partial class SettingCalibViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error applying settings: {ex.Message}");
+            Console.WriteLine($"Error applying settings: {ex.Message}");
         }
         finally
         {

@@ -143,7 +143,7 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
         }
 
 
-        Debug.WriteLine($"Apply 버튼클릭: Monitoring = {bMonitoring}");
+        Console.WriteLine($"Apply 버튼클릭: Monitoring = {bMonitoring}");
     }
 
     [RelayCommand]
@@ -151,7 +151,7 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     {
         await _monitoringService.AbortCalib();
 
-        Debug.WriteLine($"Abort 버튼클릭: {CalibInfo.CalStatus}");
+        Console.WriteLine($"Abort 버튼클릭: {CalibInfo.CalStatus}");
         _notificationService.ShowMessage(Localize["Information"], $"2P Buffer Calibration Aborted");
 
     }

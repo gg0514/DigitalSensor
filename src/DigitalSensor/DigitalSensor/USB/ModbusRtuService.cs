@@ -48,7 +48,7 @@ public class ModbusRtuService
 
 
         string hex_req = BitConverter.ToString(frame, 0, 8).Replace("-", " ");
-        Debug.WriteLine($"MODBUS Write (0:8): {hex_req}");
+        Console.WriteLine($"MODBUS Write (0:8): {hex_req}");
 
         _TxSignal?.Invoke();
         await _usbService.WriteAsync(frame);
@@ -65,7 +65,7 @@ public class ModbusRtuService
         byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(ms));
 
         string hex_resp = BitConverter.ToString(response, 0, response.Length).Replace("-", " ");
-        Debug.WriteLine($"MODBUS Read (0:{response.Length}): {hex_resp}");
+        Console.WriteLine($"MODBUS Read (0:{response.Length}): {hex_resp}");
 
         if (!ValidateCrc(response))
             throw new Exception("CRC mismatch");
@@ -104,7 +104,7 @@ public class ModbusRtuService
         _TxSignal?.Invoke();
 
         string hex_req = BitConverter.ToString(frame, 0, 8).Replace("-", " ");
-        Debug.WriteLine($"MODBUS Write (0:8): {hex_req}");
+        Console.WriteLine($"MODBUS Write (0:8): {hex_req}");
 
         await _usbService.WriteAsync(frame);
         await Task.Delay(500); // 500ms 대기
@@ -118,7 +118,7 @@ public class ModbusRtuService
         byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(ms));
 
         string hex_resp = BitConverter.ToString(response, 0, response.Length).Replace("-", " ");
-        Debug.WriteLine($"MODBUS Read (0:{response.Length}): {hex_resp}");
+        Console.WriteLine($"MODBUS Read (0:{response.Length}): {hex_resp}");
 
 
         if (!ValidateCrc(response))
@@ -166,7 +166,7 @@ public class ModbusRtuService
         _TxSignal?.Invoke();
 
         string hex_req = BitConverter.ToString(frame, 0, frame.Length).Replace("-", " ");
-        Debug.WriteLine($"MODBUS Write (0:{frame.Length}): {hex_req}");
+        Console.WriteLine($"MODBUS Write (0:{frame.Length}): {hex_req}");
 
         await _usbService.WriteAsync(frame);
         await Task.Delay(500); // 500ms 대기
@@ -180,7 +180,7 @@ public class ModbusRtuService
         byte[] response = await _usbService.ReadAsync(expectedLength, TimeSpan.FromMilliseconds(ms));
 
         string hex_resp = BitConverter.ToString(response, 0, response.Length).Replace("-", " ");
-        Debug.WriteLine($"MODBUS Read (0:{response.Length}): {hex_resp}");
+        Console.WriteLine($"MODBUS Read (0:{response.Length}): {hex_resp}");
 
         if (!ValidateCrc(response))
             throw new Exception("CRC mismatch");

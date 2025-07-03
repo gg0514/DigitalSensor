@@ -7,6 +7,7 @@ using DigitalSensor.Services;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO.Ports;
+using System;
 using System.Threading.Tasks;
 
 namespace DigitalSensor.ViewModels;
@@ -110,7 +111,7 @@ public partial class SettingSerialViewModel : ViewModelBase
         string parity = SelectedParity ?? "0";
         string stopBits = SelectedStopbits ?? "1";
 
-        Debug.WriteLine($"Apply 버튼클릭: {baudRate}, {dataBits}, {parity}, {stopBits}");
+        Console.WriteLine($"Apply 버튼클릭: {baudRate}, {dataBits}, {parity}, {stopBits}");
 
         // Update the SerialConn object
         _serialConn.BaudRate = baudRate;

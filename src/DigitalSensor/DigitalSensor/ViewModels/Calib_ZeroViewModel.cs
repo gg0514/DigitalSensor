@@ -127,7 +127,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
 
     public async void OnViewUnloaded()
     {
-        Debug.WriteLine($"OnViewUnloaded: {ReceivedInfo.Type} - {ReceivedInfo.SensorUnit}");
+        Console.WriteLine($"OnViewUnloaded: {ReceivedInfo.Type} - {ReceivedInfo.SensorUnit}");
     }
 
 
@@ -143,7 +143,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
             await _monitoringService.ApplyCalib_Zero();
         }
 
-        Debug.WriteLine($"Apply 버튼클릭: Monitoring = {bMonitoring}");
+        Console.WriteLine($"Apply 버튼클릭: Monitoring = {bMonitoring}");
     }
 
     [RelayCommand]
@@ -151,7 +151,7 @@ public partial class Calib_ZeroViewModel : ViewModelBase
     {
         await _monitoringService.AbortCalib();
 
-        Debug.WriteLine($"Abort 버튼클릭: Status= {CalibInfo.CalStatus}");
+        Console.WriteLine($"Abort 버튼클릭: Status= {CalibInfo.CalStatus}");
         _notificationService.ShowMessage(Localize["Information"], $"Zero Calibration Aborted");
     }
 
