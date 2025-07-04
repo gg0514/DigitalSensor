@@ -255,10 +255,10 @@ public class SensorService : ISensorService
     {
         try
         {
-            float value = order switch
+            ushort value = order switch
             {
-                0 => 0.0f,
-                1 => 1.0f,
+                0 => 0,
+                1 => 1,
                 _ => throw new ArgumentOutOfRangeException(nameof(order), "Invalid order value")
             };
             await _modbusService.WriteCalib2pBuffer(value);

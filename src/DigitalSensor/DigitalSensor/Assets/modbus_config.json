@@ -64,7 +64,7 @@
 	},
 	"CALIB_2P_BUFFER": {
 		"register": 40013,
-		"address": 12,
+		"address": 19,
 		"properties": "WRITE",
 		"dataType": "UINT16",
 		"dataLength": 1

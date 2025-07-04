@@ -242,4 +242,10 @@
     <value>2P Buffer Calibration</value>
     <comment>메뉴 교정-2P버퍼</comment>
   </data>
+  <data name="2PBuffer_Message1" xml:space="preserve">
+    <value>Shall we start the 1st calibration? </value>
+  </data>
+  <data name="2PBuffer_Message2" xml:space="preserve">
+    <value>Shall we continue with 2nd calibration?</value>
+  </data>
 </root>

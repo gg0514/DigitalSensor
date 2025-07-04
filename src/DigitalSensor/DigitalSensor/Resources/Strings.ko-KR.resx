@@ -180,11 +180,11 @@
   <data name="1PGuide1" xml:space="preserve">
     <value>1. 센서를 샘플용액에 담근다.</value>
   </data>
-  <data name="1PGuide3" xml:space="preserve">
-    <value>3. 교정을 중단하려면 중단버튼을 누른다.</value>
-  </data>
   <data name="1PGuide2" xml:space="preserve">
     <value>2. 교정값을 입력후, 적용버튼을 누른다.</value>
+  </data>
+  <data name="1PGuide3" xml:space="preserve">
+    <value>3. 교정을 중단하려면 중단버튼을 누른다.</value>
   </data>
   <data name="2PGuide1" xml:space="preserve">
     <value>1. 센서를 버퍼용액에 담근다.</value>
@@ -227,5 +227,11 @@
   </data>
   <data name="MenuCalib2PBuffer" xml:space="preserve">
     <value>2P 버퍼 교정</value>
+  </data>
+  <data name="2PBuffer_Message1" xml:space="preserve">
+    <value>1번째 교정을 시작하시겠습니까?</value>
+  </data>
+  <data name="2PBuffer_Message2" xml:space="preserve">
+    <value>2번째 교정을 시작하시겠습니까?</value>
   </data>
 </root>

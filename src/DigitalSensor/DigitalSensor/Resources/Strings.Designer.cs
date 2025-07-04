@@ -106,6 +106,24 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
+        ///   Shall we start the 1st calibration? 과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string _2PBuffer_Message1 {
+            get {
+                return ResourceManager.GetString("2PBuffer_Message1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Shall we continue with 2nd calibration?과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string _2PBuffer_Message2 {
+            get {
+                return ResourceManager.GetString("2PBuffer_Message2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   1. Put a sensor into 1st Buffer.과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string _2PGuide1 {

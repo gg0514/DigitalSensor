@@ -50,7 +50,7 @@ public interface IModbusService
     Task WriteSensorFactor(float value);
     Task WriteSensorOffset(float value);
     Task WriteCalib1pSample(float value);
-    Task WriteCalib2pBuffer(float value);
+    Task WriteCalib2pBuffer(ushort value);
     Task WriteCalibZero(ushort value);
     Task WriteCalibAbort(ushort value);
 }
@@ -462,7 +462,7 @@ public class ModbusService : IModbusService
     }
 
     // CALIB_2P_BUFFER
-    public async Task WriteCalib2pBuffer(float value)
+    public async Task WriteCalib2pBuffer(ushort value)
     {
         if (!_usbService.IsConnection())
             return;
@@ -471,9 +471,12 @@ public class ModbusService : IModbusService
         ushort startAddress = (ushort)_modbusMap["CALIB_2P_BUFFER"]["address"];
         ushort[] registers = ConvertToRegisters(value);
 
-        await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers, 2000);
+        //await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers, 5000);
+        await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value, 2000);
 
-        Console.WriteLine($"MODBUS - WriteCalib2pBuffer:  REQ= Id:{slaveId}, Addr:{startAddress}, Val:{value}, Reg:[{string.Join(",", registers.Select(r => $"0x{r:X4}"))}]");
+        //Console.WriteLine($"MODBUS - WriteCalib2pBuffer:  REQ= Id:{slaveId}, Addr:{startAddress}, Val:{value}, Reg:[{string.Join(",", registers.Select(r => $"0x{r:X4}"))}]");
+        Console.WriteLine($"MODBUS - WriteCalib2pBuffer:  REQ= Id:{slaveId}, Addr:{startAddress}, Val:{value}");
+
     }
 
     // CALIB_ZERO

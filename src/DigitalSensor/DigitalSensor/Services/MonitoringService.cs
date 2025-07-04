@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using DigitalSensor.Extensions;
 using DigitalSensor.Models;
+using DigitalSensor.Resources;
 using DigitalSensor.Utils;
 using DigitalSensor.ViewModels;
 using FluentAvalonia.UI.Controls;
@@ -357,25 +358,32 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     private async Task Write2PBufferCalibAsync(CancellationToken token)
     {
-        // 2P Buffer 교정
-        int calibOrder = 0;
-        await _sensorService.SetCalib2PBufferAsync(calibOrder);
-        Console.WriteLine($" => 2PBuffer - 1st 교정 실행 ");
-
-        await WaitForCalibrationCompletion(token);
-
+        // 1번째 교정을 시작하시겠습니까?
         string title = "2P Buffer";
-        string message = $"2번째 버퍼 교정을 시작하시겠습니까?";
+        string message = LocalizationManager.GetString("2PBuffer_Message1");
         bool bResult = await ShowConfirmationAsync(title, message);
 
-        if(bResult)
+        if (bResult)
         {
-            // 2P Buffer 교정
-            calibOrder = 1;
+            // 교정순서
+            int calibOrder = 0;
             await _sensorService.SetCalib2PBufferAsync(calibOrder);
-            Console.WriteLine($" => 2PBuffer - 2nd 교정 실행 ");
+            Console.WriteLine($" => 2PBuffer - 1st 교정 실행 ");
 
             await WaitForCalibrationCompletion(token);
+
+            // 2번째 교정을 시작하시겠습니까?
+            message = LocalizationManager.GetString("2PBuffer_Message2");
+            bResult = await ShowConfirmationAsync(title, message);
+
+            if (bResult)
+            {
+                calibOrder = 1;
+                await _sensorService.SetCalib2PBufferAsync(calibOrder);
+                Console.WriteLine($" => 2PBuffer - 2nd 교정 실행 ");
+
+                await WaitForCalibrationCompletion(token);
+            }
         }
 
         // 교정 상태 초기화
