@@ -33,6 +33,9 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     [ObservableProperty]
     private CalibInfo _calibInfo;
 
+    [ObservableProperty]
+    private string    _calibOrderGuide;
+
 
 
     // 다국어 지원을 위한 Localize 객체
@@ -59,6 +62,8 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
         ReceivedInfo = _monitoringService.SensorInfo;
         ReceivedData = _monitoringService.SensorData;
         CalibInfo = _monitoringService.CalibInfo;
+
+        CalibOrderGuide = Localize["2PGuide1_1P"];
     }
 
     public Calib_2PBufferViewModel(IMonitoringService monitoringService, IModbusService modbusService, NotificationService notificationService)
@@ -72,11 +77,16 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
         ReceivedData = _monitoringService.SensorData;
         CalibInfo = _monitoringService.CalibInfo;
 
+        CalibOrderGuide = Localize["2PGuide1_1P"];
+
+
         // LED 구독 등록
         _modbusService.TxSignal += OnTxSignal;
         _modbusService.RxSignal += OnRxSignal;
         _monitoringService.ErrSignal += OnErrSignal;
 
+        // 캘리브레이션 완료 이벤트 구독
+        _monitoringService.CalibrationCompleted += OnCallibrationCompleted;
     }
 
 
@@ -100,6 +110,25 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
         IsErrOn = true;
     }
 
+    public void OnCallibrationCompleted()
+    {
+        UpdateCalibOrderGuide();
+    }
+
+
+    private void UpdateCalibOrderGuide()
+    {
+        int calibOrder = _monitoringService.CalibOrder;
+
+        if (calibOrder == 0)
+            CalibOrderGuide = Localize["2PGuide1_1P"];
+        else
+            CalibOrderGuide = Localize["2PGuide1_2P"];
+        
+        Console.WriteLine($"UpdateCalibOrderGuide - {CalibOrderGuide}");
+    }
+
+
     private void BlinkLed(ref CancellationTokenSource cts, Action<bool> setState)
     {
         // 이전 작업 취소
@@ -122,6 +151,7 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
 
     public async void OnViewLoaded()
     {
+        UpdateCalibOrderGuide();
     }
 
     public async void OnViewUnloaded()

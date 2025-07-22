@@ -248,4 +248,10 @@
   <data name="2PBuffer_Message2" xml:space="preserve">
     <value>Shall we continue with 2nd calibration?</value>
   </data>
+  <data name="2PGuide1_1P" xml:space="preserve">
+    <value>1. Put a sensor into 1st Buffer.</value>
+  </data>
+  <data name="2PGuide1_2P" xml:space="preserve">
+    <value>1. Put a sensor into 2nd Buffer.</value>
+  </data>
 </root>

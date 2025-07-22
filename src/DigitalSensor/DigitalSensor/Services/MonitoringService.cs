@@ -5,6 +5,7 @@ using DigitalSensor.Resources;
 using DigitalSensor.Utils;
 using DigitalSensor.ViewModels;
 using FluentAvalonia.UI.Controls;
+using FluentIcons.Common.Internals;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -20,14 +21,17 @@ public interface IMonitoringService
 {
     SensorInfo  SensorInfo { get; set; }
     SensorData  SensorData { get; set; }
-    CalibInfo     CalibInfo { get; set; }
+    CalibInfo   CalibInfo { get; set; }
 
-    bool IsMonitoring { get; }
+    bool    IsMonitoring { get; }
+    int     CalibOrder { get; }
 
     event Action ErrSignal;
 
     event Action<int> SensorTypeReceived;
     event Action<float> SensorValueReceived;
+
+    event Action CalibrationCompleted;
 
     void SetCurrentPage(string pageName);
 
@@ -59,13 +63,15 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     private CalibInfo  _calibInfo = new();
 
     public bool IsMonitoring => _isMonitoring;
+    public int CalibOrder => _calibOrder;
 
 
     private bool _isMonitoring = false;
     private bool _isCalibration = false;
 
-    private float _calibValue = 0;
-    private int _failCount = 0; // 실패 횟수
+    private float   _calibValue = 0;
+    private int     _failCount = 0;     // 실패 횟수
+    private int     _calibOrder = 0;    // 2P Buffer 교정 순서
 
     private string _currentPage = string.Empty;
 
@@ -74,6 +80,9 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     public event Action<int> SensorTypeReceived;
     public event Action<float> SensorValueReceived;
+
+    public event Action CalibrationCompleted;
+
 
     private CancellationTokenSource? _calibrationCts;
 
@@ -141,6 +150,9 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
         // 교정 상태 초기화
         ResetCallibStatus();
+
+        // 2P 버퍼교정 순서 초기화
+        ResetCallibOrder();
 
         // 교정결과 초기화
         CalibInfo.CalStatus = CalibrationStatus.NoSensorCalibration;
@@ -358,37 +370,57 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     private async Task Write2PBufferCalibAsync(CancellationToken token)
     {
-        // 1번째 교정을 시작하시겠습니까?
-        string title = "2P Buffer";
-        string message = LocalizationManager.GetString("2PBuffer_Message1");
-        bool bResult = await ShowConfirmationAsync(title, message);
+        await _sensorService.SetCalib2PBufferAsync(_calibOrder);
+        Console.WriteLine($" => 2PBuffer {_calibOrder+1}번째 교정 실행 ");
 
-        if (bResult)
+        await WaitForCalibrationCompletion(token);
+
+        if(CalibInfo.CalStatus == CalibrationStatus.CalOK)
         {
-            // 교정순서
-            int calibOrder = 0;
-            await _sensorService.SetCalib2PBufferAsync(calibOrder);
-            Console.WriteLine($" => 2PBuffer - 1st 교정 실행 ");
+            if(_calibOrder==0)
+                _calibOrder++;
 
-            await WaitForCalibrationCompletion(token);
-
-            // 2번째 교정을 시작하시겠습니까?
-            message = LocalizationManager.GetString("2PBuffer_Message2");
-            bResult = await ShowConfirmationAsync(title, message);
-
-            if (bResult)
-            {
-                calibOrder = 1;
-                await _sensorService.SetCalib2PBufferAsync(calibOrder);
-                Console.WriteLine($" => 2PBuffer - 2nd 교정 실행 ");
-
-                await WaitForCalibrationCompletion(token);
-            }
+            // 교정 완료 이벤트 전송
+            CalibrationCompleted?.Invoke();
         }
 
         // 교정 상태 초기화
         ResetCallibStatus();
     }
+
+    //private async Task Write2PBufferCalibAsync(CancellationToken token)
+    //{
+    //    // 1번째 교정을 시작하시겠습니까?
+    //    string title = "2P Buffer";
+    //    string message = LocalizationManager.GetString("2PBuffer_Message1");
+    //    bool bResult = await ShowConfirmationAsync(title, message);
+
+    //    if (bResult)
+    //    {
+    //        // 교정순서
+    //        int calibOrder = 0;
+    //        await _sensorService.SetCalib2PBufferAsync(calibOrder);
+    //        Console.WriteLine($" => 2PBuffer - 1st 교정 실행 ");
+
+    //        await WaitForCalibrationCompletion(token);
+
+    //        // 2번째 교정을 시작하시겠습니까?
+    //        message = LocalizationManager.GetString("2PBuffer_Message2");
+    //        bResult = await ShowConfirmationAsync(title, message);
+
+    //        if (bResult)
+    //        {
+    //            calibOrder = 1;
+    //            await _sensorService.SetCalib2PBufferAsync(calibOrder);
+    //            Console.WriteLine($" => 2PBuffer - 2nd 교정 실행 ");
+
+    //            await WaitForCalibrationCompletion(token);
+    //        }
+    //    }
+
+    //    // 교정 상태 초기화
+    //    ResetCallibStatus();
+    //}
 
 
     private async Task WriteCalibAbortAsync()
@@ -422,8 +454,10 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
             await ReadCalibStatus();
         }
 
-        if (CalibInfo.CalStatus == CalibrationStatus.CalOK)   Console.WriteLine($" => 교정 성공!! ");
-        else                                        Console.WriteLine($" => 교정 실패!! ");
+        if (CalibInfo.CalStatus == CalibrationStatus.CalOK)   
+            Console.WriteLine($" => 교정 성공!! ");
+        else                                        
+            Console.WriteLine($" => 교정 실패!! ");
     }
 
 
@@ -466,8 +500,12 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         return Task.CompletedTask;
     }
 
+    private void ResetCallibOrder()
+    {
+        _calibOrder= 0;
 
-
+        Console.WriteLine($"2P 버퍼교정 초기화 - CalibOrder= {_calibOrder}");
+    }
 
 
 

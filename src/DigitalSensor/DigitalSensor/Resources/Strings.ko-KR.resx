@@ -234,4 +234,10 @@
   <data name="2PBuffer_Message2" xml:space="preserve">
     <value>2번째 교정을 시작하시겠습니까?</value>
   </data>
+  <data name="2PGuide1_1P" xml:space="preserve">
+    <value>1. 센서를 1번째 버퍼용액에 담근다.</value>
+  </data>
+  <data name="2PGuide1_2P" xml:space="preserve">
+    <value>1. 센서를 2번째 버퍼용액에 담근다.</value>
+  </data>
 </root>

@@ -133,6 +133,24 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
+        ///   1. Put a sensor into 1st Buffer.과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string _2PGuide1_1P {
+            get {
+                return ResourceManager.GetString("2PGuide1_1P", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   1. Put a sensor into 2nd Buffer.과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string _2PGuide1_2P {
+            get {
+                return ResourceManager.GetString("2PGuide1_2P", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   2. After the sensor stabilized, Press [Apply] button.과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string _2PGuide2 {
