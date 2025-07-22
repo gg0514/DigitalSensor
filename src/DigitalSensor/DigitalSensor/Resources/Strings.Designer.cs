@@ -61,7 +61,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   1. Put a sensor into 1st Sample.과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   1. Put a sensor in the formazine solution.과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string _1PGuide1 {
             get {
@@ -277,7 +277,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   Temp. Electrode과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   Temperature Electrode과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string MenuCalibTemp {
             get {

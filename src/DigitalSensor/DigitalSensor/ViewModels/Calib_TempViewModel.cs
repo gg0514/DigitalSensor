@@ -140,7 +140,7 @@ public partial class Calib_TempViewModel : ViewModelBase
     private async void UpButton()
     {
         if (!IsModified)
-            CalibValue = ReceivedData.Value;
+            CalibValue = ReceivedData.Temperature;
 
         IsModified = true;
 
@@ -155,7 +155,7 @@ public partial class Calib_TempViewModel : ViewModelBase
     private async void DownButton()
     {
         if (!IsModified)
-            CalibValue = ReceivedData.Value;
+            CalibValue = ReceivedData.Temperature;
 
         IsModified = true;
 
@@ -180,7 +180,7 @@ public partial class Calib_TempViewModel : ViewModelBase
         {
             // 버튼 반응성 향상 목적
             CalibInfo.IsRun = true;
-            await _monitoringService.ApplyCalib_1PSample(CalibValue);
+            await _monitoringService.ApplyCalib_Temp(CalibValue);
         }    
 
         Console.WriteLine($"Apply 버튼클릭: Monitoring = {bMonitoring}");
@@ -192,7 +192,7 @@ public partial class Calib_TempViewModel : ViewModelBase
         await _monitoringService.AbortCalib();
 
         Console.WriteLine($"Abort 버튼클릭: Status= {CalibInfo.CalStatus}");
-        _notificationService.ShowMessage(Localize["Information"], $"1P Sample Calibration Aborted");
+        _notificationService.ShowMessage(Localize["Information"], $"Temperature Calibration Aborted");
     }
 
 
@@ -201,7 +201,7 @@ public partial class Calib_TempViewModel : ViewModelBase
     // 코드 비하인드에서 호출되는 메서드
     public void StartEditing()
     {
-        CalibValue= ReceivedData.Value;
+        CalibValue= ReceivedData.Temperature;
 
         // TextBox에 포커스를 주고 편집 모드로 전환
         IsEditing = true;

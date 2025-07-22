@@ -16,7 +16,7 @@ public partial class Calib_TempView : UserControl
 
         this.AttachedToVisualTree += (_, _) =>
         {
-            if (DataContext is Calib_1PSampleViewModel vm)
+            if (DataContext is Calib_TempViewModel vm)
             {
                 vm.OnViewLoaded(); // ViewModel에서 정의한 메서드 호출
             }
@@ -25,7 +25,7 @@ public partial class Calib_TempView : UserControl
         // 화면에서 사라질때
         this.DetachedFromVisualTree += (s, e) =>
         {
-            if (DataContext is Calib_1PSampleViewModel vm)
+            if (DataContext is Calib_TempViewModel vm)
             {
                 vm.OnViewUnloaded();
             }
@@ -38,9 +38,10 @@ public partial class Calib_TempView : UserControl
     {
         ValueTextBlock.Focus();
     }
+
     private void OnTextBlockClick(object sender, PointerPressedEventArgs e)
     {
-        if (DataContext is Calib_1PSampleViewModel viewModel)
+        if (DataContext is Calib_TempViewModel viewModel)
         {
             viewModel.StartEditing();
         }
@@ -51,7 +52,7 @@ public partial class Calib_TempView : UserControl
 
     private void OnTextBoxKeyUp(object sender, KeyEventArgs e)
     {
-        if (e.Key == Key.Enter && DataContext is Calib_1PSampleViewModel viewModel)
+        if (e.Key == Key.Enter && DataContext is Calib_TempViewModel viewModel)
         {
             viewModel.StopEditing();
         }
@@ -59,7 +60,7 @@ public partial class Calib_TempView : UserControl
 
     private void OnTextBoxLostFocus(object sender, RoutedEventArgs e)
     {
-        if (DataContext is Calib_1PSampleViewModel viewModel)
+        if (DataContext is Calib_TempViewModel viewModel)
         {
             viewModel.StopEditing();
         }

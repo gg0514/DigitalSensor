@@ -31,7 +31,7 @@
                        PaneDisplayMode="LeftMinimal"
                        IsPaneToggleButtonVisible="True"
 				       IsSettingsVisible="False"
-					   OpenPaneLength="200"
+					   OpenPaneLength="230"
 				       SelectionChanged="NavView_SelectionChanged"
 				       >
 
