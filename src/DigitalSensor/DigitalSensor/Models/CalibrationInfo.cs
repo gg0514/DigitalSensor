@@ -15,4 +15,5 @@ public partial class CalibInfo : ObservableObject
 {
     [ObservableProperty] private bool _isRun = false;
     [ObservableProperty] private CalibrationStatus _CalStatus = CalibrationStatus.NoSensorCalibration;
+    [ObservableProperty] private string _calibOrderGuide;
 }

@@ -24,7 +24,6 @@ public interface IMonitoringService
     CalibInfo   CalibInfo { get; set; }
 
     bool    IsMonitoring { get; }
-    int     CalibOrder { get; }
 
     event Action ErrSignal;
 
@@ -62,8 +61,12 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     [ObservableProperty]
     private CalibInfo  _calibInfo = new();
 
+
+    // 다국어 지원을 위한 Localize 객체
+    public Localize Localize { get; } = new();
+
+
     public bool IsMonitoring => _isMonitoring;
-    public int CalibOrder => _calibOrder;
 
 
     private bool _isMonitoring = false;
@@ -91,6 +94,10 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     {
         _sensorService = new SensorService();
         _modbusInfo = new ModbusInfo();
+
+        // 2P 버퍼교정 순서 초기화
+        CalibInfo.CalibOrderGuide = Localize["2PGuide1_1P"];
+
         // Sensor 구독 등록
         _sensorService.SensorAttached += OnSensorAttached;
         _sensorService.SensorDetached += OnSensorDetached;
@@ -103,6 +110,9 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
         // 상태 초기화
         _modbusInfo.IsAlive = false;
+
+        // 2P 버퍼교정 순서 초기화
+        CalibInfo.CalibOrderGuide = Localize["2PGuide1_1P"];
 
         // Sensor 구독 등록
         _sensorService.SensorAttached += OnSensorAttached;
@@ -381,7 +391,10 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
                 _calibOrder++;
 
             // 교정 완료 이벤트 전송
-            CalibrationCompleted?.Invoke();
+            //CalibrationCompleted?.Invoke();
+
+            // 2P 버퍼교정 순서 초기화
+            CalibInfo.CalibOrderGuide = Localize["2PGuide1_2P"];
         }
 
         // 교정 상태 초기화
@@ -503,6 +516,9 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     private void ResetCallibOrder()
     {
         _calibOrder= 0;
+
+        // 2P 버퍼교정 순서 초기화
+        CalibInfo.CalibOrderGuide= Localize["2PGuide1_1P"];
 
         Console.WriteLine($"2P 버퍼교정 초기화 - CalibOrder= {_calibOrder}");
     }
