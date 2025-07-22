@@ -189,7 +189,7 @@
     <value>1. Put a sensor into 1st Sample.</value>
   </data>
   <data name="1PGuide2" xml:space="preserve">
-    <value>2. Adjust the 1st value using the arrows or keypad, and then apply to calibration.</value>
+    <value>2. Adjust the calibration values using the arrows or keypad, and then apply to calibration.</value>
   </data>
   <data name="1PGuide3" xml:space="preserve">
     <value>3. If you want to cancel calibration, Press [Stop] button.</value>
@@ -253,5 +253,22 @@
   </data>
   <data name="2PGuide1_2P" xml:space="preserve">
     <value>1. Put a sensor into 2nd Buffer.</value>
+  </data>
+  <data name="TempCalibration" xml:space="preserve">
+    <value>Temperature Electrode</value>
+    <comment>온도교정</comment>
+  </data>
+  <data name="TempGuide1" xml:space="preserve">
+    <value>1. Put a sensor in the formazine solution.</value>
+  </data>
+  <data name="TempGuide2" xml:space="preserve">
+    <value>2. Adjust the calibration values using the arrows or keypad, and then apply to calibration.</value>
+  </data>
+  <data name="TempGuide3" xml:space="preserve">
+    <value>3. If you want to cancel calibration, Press [Stop] button.</value>
+  </data>
+  <data name="MenuCalibTemp" xml:space="preserve">
+    <value>Temp. Electrode</value>
+    <comment>메뉴 교정-온도교정</comment>
   </data>
 </root>

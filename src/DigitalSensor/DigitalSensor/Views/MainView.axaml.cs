@@ -68,11 +68,13 @@ public partial class MainView : UserControl
                     Content = Localize["MenuCalib1PSample"],
                     Tag = "Calib_1PSample"
                 };
+                // 1Point Buffer 메뉴 생략
                 //var Item3 = new NavigationViewItem
                 //{
                 //    Content = "1Point Buffer",
                 //    Tag = "Calib_1PBuffer"
                 //};
+                // 2Point Sample 메뉴 생략
                 //var Item4 = new NavigationViewItem
                 //{
                 //    Content = "2Point Sample",
@@ -83,6 +85,11 @@ public partial class MainView : UserControl
                     //Content = "2Point Buffer",
                     Content = Localize["MenuCalib2PBuffer"],
                     Tag = "Calib_2PBuffer"
+                };
+                var Item6 = new NavigationViewItem
+                {
+                    Content = Localize["MenuCalibTemp"],
+                    Tag = "Calib_Temp"
                 };
 
 
@@ -97,6 +104,7 @@ public partial class MainView : UserControl
                 //navItem.MenuItems.Add(Item3);
                 //navItem.MenuItems.Add(Item4);
                 navItem.MenuItems.Add(Item5);
+                navItem.MenuItems.Add(Item6);
                 break; // 찾았으면 루프 종료
             }
         }

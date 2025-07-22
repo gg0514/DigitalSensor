@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -6,8 +7,6 @@ using DigitalSensor.Models;
 using DigitalSensor.Resources;
 using DigitalSensor.Services;
 using DigitalSensor.Utils;
-
-using FluentAvalonia.UI.Controls;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -17,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace DigitalSensor.ViewModels;
 
-public partial class Calib_2PBufferViewModel : ViewModelBase
+public partial class Calib_TempViewModel : ViewModelBase
 {
     private readonly IMonitoringService _monitoringService;
     private readonly IModbusService _modbusService;
@@ -33,6 +32,15 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     [ObservableProperty]
     private CalibInfo _calibInfo;
 
+
+    [ObservableProperty]
+    private float calibValue = 0;
+
+    [ObservableProperty]
+    private bool isEditing = false;
+
+    [ObservableProperty]
+    private bool isModified = false;
 
     // 다국어 지원을 위한 Localize 객체
     public Localize Localize { get; } = new();
@@ -50,7 +58,7 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     private CancellationTokenSource _rxCts = new();
     private CancellationTokenSource _ErrCts = new();
 
-    public Calib_2PBufferViewModel()
+    public Calib_TempViewModel()
     {
         _monitoringService = new MonitoringService(new SensorService(), new AppSettings());
 
@@ -60,29 +68,23 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
         CalibInfo = _monitoringService.CalibInfo;
     }
 
-    public Calib_2PBufferViewModel(IMonitoringService monitoringService, IModbusService modbusService, NotificationService notificationService)
+    public Calib_TempViewModel(IMonitoringService monitoringService, IModbusService modbusService, NotificationService notificationService)
     {
         _monitoringService = monitoringService;
         _modbusService = modbusService;
         _notificationService = notificationService;
 
-        //************************************************
         // 이것으로 이벤트핸들러를 대체하는 효과
-        //************************************************
         ReceivedInfo = _monitoringService.SensorInfo;
         ReceivedData = _monitoringService.SensorData;
         CalibInfo = _monitoringService.CalibInfo;
-
 
         // LED 구독 등록
         _modbusService.TxSignal += OnTxSignal;
         _modbusService.RxSignal += OnRxSignal;
         _monitoringService.ErrSignal += OnErrSignal;
 
-        // 캘리브레이션 완료 이벤트 구독
-        //_monitoringService.CalibrationCompleted += OnCallibrationCompleted;
     }
-
 
     public void OnTxSignal()
     {
@@ -103,25 +105,6 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
         // Err신호는 Tx/Rx와 다르게 LED가 꺼지지 않도록 설정
         IsErrOn = true;
     }
-
-    //public void OnCallibrationCompleted()
-    //{
-    //    UpdateCalibOrderGuide();
-    //}
-
-
-    //private void UpdateCalibOrderGuide()
-    //{
-    //    int calibOrder = _monitoringService.CalibOrder;
-
-    //    if (calibOrder == 0)
-    //        CalibOrderGuide = Localize["2PGuide1_1P"];
-    //    else
-    //        CalibOrderGuide = Localize["2PGuide1_2P"];
-        
-    //    Console.WriteLine($"UpdateCalibOrderGuide - {CalibOrderGuide}");
-    //}
-
 
     private void BlinkLed(ref CancellationTokenSource cts, Action<bool> setState)
     {
@@ -145,13 +128,47 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
 
     public async void OnViewLoaded()
     {
-        //UpdateCalibOrderGuide();
+        IsModified = false;
     }
 
     public async void OnViewUnloaded()
     {
 
     }
+
+    [RelayCommand]
+    private async void UpButton()
+    {
+        if (!IsModified)
+            CalibValue = ReceivedData.Value;
+
+        IsModified = true;
+
+        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
+        {
+            CalibValue += 0.01f;
+            CalibValue = (float)Math.Round(CalibValue, 2);
+        });
+    }
+
+    [RelayCommand]
+    private async void DownButton()
+    {
+        if (!IsModified)
+            CalibValue = ReceivedData.Value;
+
+        IsModified = true;
+
+        await UiDispatcherHelper.RunOnUiThreadAsync(async () =>
+        {
+
+            CalibValue -= 0.01f;
+            if(CalibValue < 0)    CalibValue = 0;
+
+            CalibValue = (float)Math.Round(CalibValue, 2);
+        });
+    }
+
 
 
     [RelayCommand]
@@ -163,9 +180,8 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
         {
             // 버튼 반응성 향상 목적
             CalibInfo.IsRun = true;
-            await _monitoringService.ApplyCalib_2PBuffer();
-        }
-
+            await _monitoringService.ApplyCalib_1PSample(CalibValue);
+        }    
 
         Console.WriteLine($"Apply 버튼클릭: Monitoring = {bMonitoring}");
     }
@@ -175,9 +191,25 @@ public partial class Calib_2PBufferViewModel : ViewModelBase
     {
         await _monitoringService.AbortCalib();
 
-        Console.WriteLine($"Abort 버튼클릭: {CalibInfo.CalStatus}");
-        _notificationService.ShowMessage(Localize["Information"], $"2P Buffer Calibration Aborted");
-
+        Console.WriteLine($"Abort 버튼클릭: Status= {CalibInfo.CalStatus}");
+        _notificationService.ShowMessage(Localize["Information"], $"1P Sample Calibration Aborted");
     }
 
+
+
+
+    // 코드 비하인드에서 호출되는 메서드
+    public void StartEditing()
+    {
+        CalibValue= ReceivedData.Value;
+
+        // TextBox에 포커스를 주고 편집 모드로 전환
+        IsEditing = true;
+    }
+
+    public void StopEditing()
+    {
+        IsEditing = false;
+        IsModified = true;
+    }
 }

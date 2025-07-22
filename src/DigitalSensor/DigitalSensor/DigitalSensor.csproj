@@ -47,6 +47,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AvaloniaXaml Update="Views\Calib_TempView.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
     <AvaloniaXaml Update="Views\Calib_ZeroView.axaml">
       <SubType>Designer</SubType>
     </AvaloniaXaml>
@@ -65,6 +68,10 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Calib_TempView.axaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>Calib_TempView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Calib_2PBufferView.axaml.cs">
       <DependentUpon>Calib_2PBufferView.axaml</DependentUpon>

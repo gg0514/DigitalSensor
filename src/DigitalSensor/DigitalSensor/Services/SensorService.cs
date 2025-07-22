@@ -30,6 +30,7 @@ public interface ISensorService
 
     Task SetCalibAbortAsync();
     Task SetCalibZeroAsync();
+    Task SetCalibTempAsync(float v);
     Task SetCalib1PSampleAsync(float v);
     Task SetCalib2PBufferAsync(int order);
 
@@ -234,6 +235,19 @@ public class SensorService : ISensorService
         catch (Exception ex)
         {
             Console.WriteLine($"[Error] calibration abort: {ex.Message}");
+            throw;
+        }
+    }
+
+    public async Task SetCalibTempAsync(float value)
+    {
+        try
+        {
+            await _modbusService.WriteCalib1pTemp(value);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Error] calibration temperature: {ex.Message}");
             throw;
         }
     }

@@ -70,7 +70,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   2. Adjust the 1st value using the arrows or keypad, and then apply to calibration.과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   2. Adjust the calibration values using the arrows or keypad, and then apply to calibration.과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string _1PGuide2 {
             get {
@@ -277,6 +277,15 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
+        ///   Temp. Electrode과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string MenuCalibTemp {
+            get {
+                return ResourceManager.GetString("MenuCalibTemp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Zero Calibration과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string MenuCalibZero {
@@ -385,11 +394,47 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
+        ///   Temperature Electrode과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string TempCalibration {
+            get {
+                return ResourceManager.GetString("TempCalibration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Temperature과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string Temperature {
             get {
                 return ResourceManager.GetString("Temperature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   1. Put a sensor in the formazine solution.과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string TempGuide1 {
+            get {
+                return ResourceManager.GetString("TempGuide1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   2. Adjust the calibration values using the arrows or keypad, and then apply to calibration.과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string TempGuide2 {
+            get {
+                return ResourceManager.GetString("TempGuide2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   3. If you want to cancel calibration, Press [Stop] button.과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string TempGuide3 {
+            get {
+                return ResourceManager.GetString("TempGuide3", resourceCulture);
             }
         }
         

@@ -39,6 +39,8 @@ public interface IMonitoringService
 
     // 영점 교정
     Task ApplyCalib_Zero();
+    // 온도 교정
+    Task ApplyCalib_Temp(float value);
     // 1점 샘플
     Task ApplyCalib_1PSample(float value);
     // 2점 버퍼
@@ -306,6 +308,14 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         return Task.CompletedTask;
     }
 
+    public Task ApplyCalib_Temp(float value)
+    {
+        _isCalibration = true;
+        _calibValue = value;
+
+        return Task.CompletedTask;
+    }
+
     public Task ApplyCalib_1PSample(float value)
     {
         _isCalibration = true;
@@ -340,6 +350,10 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
             {
                 await WriteZeroCalibAsync(token);
             }
+            else if (_currentPage == "Calib_Temp")
+            {
+                await WriteTempCalibAsync(token);
+            }
             else if (_currentPage == "Calib_1PSample")
             {
                 await Write1PSampleCalibAsync(token);
@@ -360,6 +374,17 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     {
         await _sensorService.SetCalibZeroAsync();
         Console.WriteLine($" => Zero 교정 실행 ");
+
+        await WaitForCalibrationCompletion(token);
+
+        // 교정 상태 초기화
+        ResetCallibStatus();
+    }
+
+    private async Task WriteTempCalibAsync(CancellationToken token)
+    {
+        await _sensorService.SetCalibTempAsync(_calibValue);
+        Console.WriteLine($" => 온도 교정 실행 ");
 
         await WaitForCalibrationCompletion(token);
 

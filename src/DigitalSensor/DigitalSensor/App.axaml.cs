@@ -56,6 +56,8 @@ public partial class App : Application
                 services.AddSingleton<SettingSerialViewModel>();
                 services.AddSingleton<Calib_ZeroView>();
                 services.AddSingleton<Calib_ZeroViewModel>();
+                services.AddSingleton<Calib_TempView>();
+                services.AddSingleton<Calib_TempViewModel>();
                 services.AddSingleton<Calib_1PSampleView>();
                 services.AddSingleton<Calib_1PSampleViewModel>();
                 services.AddSingleton<Calib_2PBufferView>();
@@ -77,6 +79,7 @@ public partial class App : Application
         // 즉시 생성할 인스턴스 Resolve
         // LED Tx, Rx Signal 구독 등록 목적
         _ = host.Services.GetRequiredService<Calib_ZeroViewModel>();
+        _ = host.Services.GetRequiredService<Calib_TempViewModel>();
         _ = host.Services.GetRequiredService<Calib_1PSampleViewModel>();
         _ = host.Services.GetRequiredService<Calib_2PBufferViewModel>();
 

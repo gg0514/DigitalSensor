@@ -62,6 +62,13 @@
 		"dataType": "FLOAT",
 		"dataLength": 2
 	},
+	"CALIB_1P_TEMP": {
+		"register": 40015,
+		"address": 14,
+		"properties": "WRITE",
+		"dataType": "FLOAT",
+		"dataLength": 2
+	},
 	"CALIB_2P_BUFFER": {
 		"register": 40013,
 		"address": 19,
