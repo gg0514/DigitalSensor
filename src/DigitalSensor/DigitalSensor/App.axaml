@@ -5,7 +5,7 @@
              xmlns:vm="using:DigitalSensor.ViewModels"
              xmlns:util="using:DigitalSensor.Utils"
 			 x:Class="DigitalSensor.App"
-             RequestedThemeVariant="Dark">
+             RequestedThemeVariant="Light">
              <!-- "Default" ThemeVariant follows system theme variant. 
 			      "Dark" or "Light" are other available options. -->
 
@@ -20,11 +20,20 @@
 	</Application.Styles>
 
 	<Application.Resources>
+		
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="/Assets/Fonts/NotoFonts.axaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+
+
 		<!-- BoolToBrushConverter를 리소스로 등록 -->
 		<util:BoolToBrushConverter x:Key="BoolToBrushConverter" />
 		<util:EmptyStringToZeroConverter x:Key="EmptyStringToZeroConverter" />
 		<util:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
 		<util:StatusDescriptionConverter x:Key="StatusDescriptionConverter" />
+
 	</Application.Resources>
 
 

@@ -79,7 +79,16 @@
 
 		</ui:NavigationView.MenuItems>
 
-		<ContentControl Content="{Binding CurrentPage}" />
+		<ui:NavigationView.Content>
+			<Grid>
+				<!-- 배경 이미지 -->
+				<Image Source="avares://DigitalSensor/Assets/background.png"
+					   Stretch="UniformToFill"
+					   IsHitTestVisible="False" />
+				
+				<ContentControl Content="{Binding CurrentPage}" />
+			</Grid>		
+		</ui:NavigationView.Content>	
 	</ui:NavigationView>
 
 

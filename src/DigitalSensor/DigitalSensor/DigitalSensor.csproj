@@ -10,6 +10,7 @@
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
 
+
   <ItemGroup>
     <AvaloniaXaml Remove="Views\Calib_1PBufferView.axaml" />
     <AvaloniaXaml Remove="Views\Calib_2PSampleView.axaml" />
