@@ -545,7 +545,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         // 2P 버퍼교정 순서 초기화
         CalibInfo.CalibOrderGuide= Localize["2PGuide1_1P"];
 
-        Console.WriteLine($"2P 버퍼교정 초기화 - CalibOrder= {_calibOrder}");
+        //Console.WriteLine($"2P 버퍼교정 초기화 - CalibOrder= {_calibOrder}");
     }
 
 

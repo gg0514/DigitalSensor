@@ -1,7 +1,9 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 using DigitalSensor.ViewModels;
+using System;
 
 namespace DigitalSensor.Views;
 
@@ -36,7 +38,12 @@ public partial class Calib_1PSampleView : UserControl
 
     private void OnBackgroundPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        ValueTextBlock.Focus();
+        if (DataContext is Calib_1PSampleViewModel viewModel && viewModel.IsEditing)
+        {
+            viewModel.StopEditing();
+        }
+
+        Console.WriteLine("OnBackgroundPointerPressed called");
     }
     private void OnTextBlockClick(object sender, PointerPressedEventArgs e)
     {
@@ -47,6 +54,21 @@ public partial class Calib_1PSampleView : UserControl
 
         ValueTextBox.Focus();
         ValueTextBox.CaretIndex = ValueTextBox.Text?.Length ?? 0;
+
+        //// TextBox에 포커스 강제 지정 (로드 이후에)
+        //Dispatcher.UIThread.Post(() =>
+        //{
+        //    ValueTextBox.Focus();
+        //    ValueTextBox.CaretIndex = ValueTextBox.Text?.Length ?? 0;
+        //}, DispatcherPriority.Background);
+
+        //DummySpace.Visibility = Avalonia.Controls.Visibility.Visible; // DummySpace를 숨김
+        //MainScrollViewer.ScrollToEnd(); // 스크롤을 맨 아래로 이동
+
+
+        // 이벤트가 부모로 버블링되지 않게 함
+        e.Handled = true;
+        Console.WriteLine("OnTextBlockClick called");
     }
 
     private void OnTextBoxKeyUp(object sender, KeyEventArgs e)
@@ -55,6 +77,8 @@ public partial class Calib_1PSampleView : UserControl
         {
             viewModel.StopEditing();
         }
+
+        //DummySpace.Visibility = Avalonia.Controls.Visibility.Collapsed; // DummySpace를 숨김
     }
 
     private void OnTextBoxLostFocus(object sender, RoutedEventArgs e)
@@ -63,8 +87,7 @@ public partial class Calib_1PSampleView : UserControl
         {
             viewModel.StopEditing();
         }
+
+        //DummySpace.Visibility = Avalonia.Controls.Visibility.Collapsed; // DummySpace를 숨김
     }
-
-
-
 }
