@@ -32,7 +32,6 @@ public partial class Calib_1PSampleView : UserControl
                 vm.OnViewUnloaded();
             }
         };
-
     }
 
 
@@ -62,9 +61,10 @@ public partial class Calib_1PSampleView : UserControl
         //    ValueTextBox.CaretIndex = ValueTextBox.Text?.Length ?? 0;
         //}, DispatcherPriority.Background);
 
-        //DummySpace.Visibility = Avalonia.Controls.Visibility.Visible; // DummySpace를 숨김
-        //MainScrollViewer.ScrollToEnd(); // 스크롤을 맨 아래로 이동
+        SpacerBorder.IsVisible = true;
 
+        // 이벤트 딜레이를 방지하기 위해 UI 스레드에서 스크롤을 업데이트  
+        Dispatcher.UIThread.InvokeAsync(() => MainScrollViewer.ScrollToEnd());
 
         // 이벤트가 부모로 버블링되지 않게 함
         e.Handled = true;
@@ -78,7 +78,7 @@ public partial class Calib_1PSampleView : UserControl
             viewModel.StopEditing();
         }
 
-        //DummySpace.Visibility = Avalonia.Controls.Visibility.Collapsed; // DummySpace를 숨김
+        SpacerBorder.IsVisible = false;
     }
 
     private void OnTextBoxLostFocus(object sender, RoutedEventArgs e)
@@ -88,6 +88,6 @@ public partial class Calib_1PSampleView : UserControl
             viewModel.StopEditing();
         }
 
-        //DummySpace.Visibility = Avalonia.Controls.Visibility.Collapsed; // DummySpace를 숨김
+        SpacerBorder.IsVisible = false;
     }
 }

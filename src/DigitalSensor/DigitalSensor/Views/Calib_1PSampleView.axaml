@@ -27,7 +27,10 @@
         <StreamGeometry x:Key="icon_beaker">M67,334c-14,-14 -6,-39 34,-107 38,-64 41,-73 37,-128l-4,-59 56,0 56,0 -4,59c-4,55 -1,64 38,129 61,104 59,106 -86,110 -66,1 -123,-1 -127,-4zM300,309c0,-6 -12,-30 -26,-55l-26,-44 -58,0 -58,0 -26,44c-14,25 -26,49 -26,55 0,7 38,11 110,11 72,0 110,-4 110,-11zM226,174c-3,-9 -6,-38 -6,-65 0,-48 -1,-49 -30,-49 -29,0 -30,1 -30,49 0,27 -3,56 -6,65 -5,13 2,16 36,16 34,0 41,-3 36,-16z</StreamGeometry>
     </UserControl.Resources>
 
-    <ScrollViewer x:Name="MainScrollViewer" Margin="0,30,0,0" Padding="20">
+    <ScrollViewer
+        x:Name="MainScrollViewer"
+        Margin="0,30,0,0"
+        Padding="20">
         <StackPanel Spacing="20">
 
             <!--  LED 영역  -->
@@ -314,7 +317,11 @@
             </UniformGrid>
 
             <!--  스크롤 여백  -->
-            <!--<Border x:Name="DummySpace" Height="100" Background="Transparent"/>-->
+            <Border
+                x:Name="SpacerBorder"
+                Height="50"
+			    IsVisible="False" 
+                Background="Transparent"/>
         </StackPanel>
 
     </ScrollViewer>
