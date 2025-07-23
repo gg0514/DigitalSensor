@@ -275,8 +275,10 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
             {
                 Console.WriteLine($"[ Calibration - Ready] ");
 
-                await GetSensorType();
-                await GetSensorValue();
+                if (_currentPage == "Calib_Zero" || _currentPage == "Calib_1PSample" || _currentPage == "Calib_2PBuffer")
+                    await GetSensorValue();
+                else if (_currentPage == "Calib_Temp")
+                    await GetSensorTemperature();
             }
         }
         catch (Exception ex)

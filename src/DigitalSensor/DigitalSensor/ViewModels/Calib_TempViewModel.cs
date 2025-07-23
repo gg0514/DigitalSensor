@@ -142,6 +142,7 @@ public partial class Calib_TempViewModel : ViewModelBase
     {
         //if (!IsModified)
         //    CalibValue = ReceivedData.Temperature;
+        Console.WriteLine($"UpButton 버튼클릭");
 
         IsModified = true;
 
@@ -157,6 +158,7 @@ public partial class Calib_TempViewModel : ViewModelBase
     {
         //if (!IsModified)
         //    CalibValue = ReceivedData.Temperature;
+        Console.WriteLine($"DownButton 버튼클릭");
 
         IsModified = true;
 
