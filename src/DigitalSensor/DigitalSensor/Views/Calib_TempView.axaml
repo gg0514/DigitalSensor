@@ -22,7 +22,9 @@
 		<StreamGeometry x:Key="icon_beaker">M67,334c-14,-14 -6,-39 34,-107 38,-64 41,-73 37,-128l-4,-59 56,0 56,0 -4,59c-4,55 -1,64 38,129 61,104 59,106 -86,110 -66,1 -123,-1 -127,-4zM300,309c0,-6 -12,-30 -26,-55l-26,-44 -58,0 -58,0 -26,44c-14,25 -26,49 -26,55 0,7 38,11 110,11 72,0 110,-4 110,-11zM226,174c-3,-9 -6,-38 -6,-65 0,-48 -1,-49 -30,-49 -29,0 -30,1 -30,49 0,27 -3,56 -6,65 -5,13 2,16 36,16 34,0 41,-3 36,-16z</StreamGeometry>
 	</UserControl.Resources>
 
-	<ScrollViewer Padding="20" Margin="0,30,0,0">
+	<ScrollViewer 
+			x:Name="MainScrollViewer"
+			Padding="20" Margin="0,30,0,0">
 		<StackPanel Spacing="20">
 
 			<!-- LED 영역-->
@@ -107,48 +109,72 @@
 							<TextBlock Text="°C" HorizontalAlignment="Center" FontWeight="Light" FontSize="14"/>
 						</Border>
 					</Grid>
-					<Grid	ColumnDefinitions="120, *, Auto" Margin="0,0,0,0">
+					<Grid
+                        Margin="0,0,0,0"
+                        Background="Transparent"
+                        ColumnDefinitions="120, *, Auto"
+                        PointerPressed="OnBackgroundPointerPressed">
 
-						<!-- 배경 클릭 영역 -->
-						<Border Background="Transparent"
-								PointerPressed="OnBackgroundPointerPressed"/>
-						
-						<TextBlock Grid.Column="0" Text="{Binding Localize[CalibrationValue]}"  VerticalAlignment="Center" FontSize="14" Foreground="LightBlue"/>
+						<TextBlock
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            Foreground="LightBlue"
+                            Text="{Binding Localize[CalibrationValue]}" />
 
 						<Grid Grid.Column="1">
-							<TextBlock x:Name="ValueTextBlock"
-								       Text="{Binding CalibValue}"
-									   Background=""
-									   Width="120"
-									   TextAlignment="Center"
-									   VerticalAlignment="Center"
-									   HorizontalAlignment="Center"
-									   FontWeight="Normal"
-									   FontSize="30"
-									   IsVisible="{Binding !IsEditing}"
-									   PointerPressed="OnTextBlockClick"/>
-							<TextBox x:Name="ValueTextBox"
-								     Text="{Binding CalibValue, Converter={StaticResource EmptyStringToZeroConverter}, UpdateSourceTrigger=PropertyChanged,  TargetNullValue='', FallbackValue='0' }"
-   								     Width="120"
-									 TextAlignment="Center"
-									 VerticalAlignment="Center"
-									 HorizontalAlignment="Center"
-									 FontSize="30"
-									 IsVisible="{Binding IsEditing}"									
-									 KeyUp="OnTextBoxKeyUp"
-									 LostFocus="OnTextBoxLostFocus"/>
+							<TextBlock
+                                x:Name="ValueTextBlock"
+                                Width="120"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                FontSize="30"
+                                FontWeight="Normal"
+                                IsVisible="{Binding !IsEditing}"
+                                PointerPressed="OnTextBlockClick"
+                                Text="{Binding CalibValue}"
+                                TextAlignment="Center" />
+							<TextBox
+                                x:Name="ValueTextBox"
+                                Width="120"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="30"
+                                IsVisible="{Binding IsEditing}"
+                                KeyUp="OnTextBoxKeyUp"
+                                LostFocus="OnTextBoxLostFocus"
+                                Text="{Binding CalibValue, Converter={StaticResource EmptyStringToZeroConverter}, UpdateSourceTrigger=PropertyChanged, TargetNullValue='', FallbackValue='0'}"
+                                TextAlignment="Center" />
 						</Grid>
-																	
-						<Border Grid.Column="2" Background=""
-								HorizontalAlignment="Center" 
-								VerticalAlignment="Center" 
-								Width="60" Height="90" Margin="0,5,10,0" >
+
+						<Border
+                            Grid.Column="2"
+                            Width="60"
+                            Height="90"
+                            Margin="0,5,10,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Background="">
 							<StackPanel Background="">
-								<Button Command="{Binding UpButtonCommand}" Height="30" Width="60" Margin="0,5,0,10">
-									<ic:FluentIcon Icon="ChevronUp" IconVariant="Regular" IconSize="Size16" />
+								<Button
+                                    Width="60"
+                                    Height="30"
+                                    Margin="0,5,0,10"
+                                    Command="{Binding UpButtonCommand}">
+									<ic:FluentIcon
+                                        Icon="ChevronUp"
+                                        IconSize="Size16"
+                                        IconVariant="Regular" />
 								</Button>
-								<Button Command="{Binding DownButtonCommand}" Height="30" Width="60">
-									<ic:FluentIcon Icon="ChevronDown" IconVariant="Regular" IconSize="Size16" />
+								<Button
+                                    Width="60"
+                                    Height="30"
+                                    Command="{Binding DownButtonCommand}">
+									<ic:FluentIcon
+                                        Icon="ChevronDown"
+                                        IconSize="Size16"
+                                        IconVariant="Regular" />
 								</Button>
 							</StackPanel>
 						</Border>
@@ -188,7 +214,13 @@
 					</StackPanel>
 				</Button>
 			</UniformGrid>
-
+			
+			<!--  스크롤 여백  -->
+			<Border
+                x:Name="SpacerBorder"
+                Height="50"
+			    IsVisible="False"
+                Background="Transparent"/>
 		</StackPanel>
 	</ScrollViewer>
 </UserControl>

@@ -372,8 +372,8 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     private async Task WriteZeroCalibAsync(CancellationToken token)
     {
-        await _sensorService.SetCalibZeroAsync();
         Console.WriteLine($" => Zero 교정 실행 ");
+        await _sensorService.SetCalibZeroAsync();
 
         await WaitForCalibrationCompletion(token);
 
@@ -383,8 +383,8 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     private async Task WriteTempCalibAsync(CancellationToken token)
     {
-        await _sensorService.SetCalibTempAsync(_calibValue);
         Console.WriteLine($" => 온도 교정 실행 ");
+        await _sensorService.SetCalibTempAsync(_calibValue);
 
         await WaitForCalibrationCompletion(token);
 
@@ -394,8 +394,8 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     private async Task Write1PSampleCalibAsync(CancellationToken token)
     {
-        await _sensorService.SetCalib1PSampleAsync(_calibValue);
         Console.WriteLine($" => 1PSample 교정 실행 ");
+        await _sensorService.SetCalib1PSampleAsync(_calibValue);
 
         await WaitForCalibrationCompletion(token);
 
@@ -405,8 +405,8 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     private async Task Write2PBufferCalibAsync(CancellationToken token)
     {
+        Console.WriteLine($" => 2PBuffer {_calibOrder + 1}번째 교정 실행 ");
         await _sensorService.SetCalib2PBufferAsync(_calibOrder);
-        Console.WriteLine($" => 2PBuffer {_calibOrder+1}번째 교정 실행 ");
 
         await WaitForCalibrationCompletion(token);
 

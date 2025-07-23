@@ -129,6 +129,8 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
     public async void OnViewLoaded()
     {
         IsModified = false;
+        CalibValue = ReceivedData.Value;
+
     }
 
     public async void OnViewUnloaded()
@@ -139,8 +141,8 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
     [RelayCommand]
     private async void UpButton()
     {
-        if (!IsModified)
-            CalibValue = ReceivedData.Value;
+        //if (!IsModified)
+        //    CalibValue = ReceivedData.Value;
 
         IsModified = true;
 
@@ -154,8 +156,8 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
     [RelayCommand]
     private async void DownButton()
     {
-        if (!IsModified)
-            CalibValue = ReceivedData.Value;
+        //if (!IsModified)
+        //    CalibValue = ReceivedData.Value;
 
         IsModified = true;
 
@@ -201,7 +203,7 @@ public partial class Calib_1PSampleViewModel : ViewModelBase
     // 코드 비하인드에서 호출되는 메서드
     public void StartEditing()
     {
-        CalibValue= ReceivedData.Value;
+        //CalibValue= ReceivedData.Value;
 
         // TextBox에 포커스를 주고 편집 모드로 전환
         IsEditing = true;

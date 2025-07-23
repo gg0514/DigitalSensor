@@ -457,9 +457,8 @@ public class ModbusService : IModbusService
         ushort startAddress = (ushort)_modbusMap["CALIB_1P_TEMP"]["address"];
         ushort[] registers = ConvertToRegisters(value);
 
-        await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers, 2000);
-
         Console.WriteLine($"MODBUS - WriteCalib1pTemp:  REQ= Id:{slaveId}, Addr:{startAddress}, Val:{value}, Reg:[{string.Join(",", registers.Select(r => $"0x{r:X4}"))}]");
+        await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers, 2000);
     }    
     
     // CALIB_1P_SAMPLE
@@ -472,9 +471,8 @@ public class ModbusService : IModbusService
         ushort startAddress = (ushort)_modbusMap["CALIB_1P_SAMPLE"]["address"];
         ushort[] registers = ConvertToRegisters(value);
 
-        await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers, 2000);
-
         Console.WriteLine($"MODBUS - WriteCalib1pSample:  REQ= Id:{slaveId}, Addr:{startAddress}, Val:{value}, Reg:[{string.Join(",", registers.Select(r => $"0x{r:X4}"))}]");
+        await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers, 2000);
     }
 
     // CALIB_2P_BUFFER

@@ -42,7 +42,7 @@ public partial class Calib_1PSampleView : UserControl
             viewModel.StopEditing();
         }
 
-        Console.WriteLine("OnBackgroundPointerPressed called");
+        //Console.WriteLine("OnBackgroundPointerPressed called");
     }
     private void OnTextBlockClick(object sender, PointerPressedEventArgs e)
     {
@@ -68,7 +68,7 @@ public partial class Calib_1PSampleView : UserControl
 
         // 이벤트가 부모로 버블링되지 않게 함
         e.Handled = true;
-        Console.WriteLine("OnTextBlockClick called");
+        //Console.WriteLine("OnTextBlockClick called");
     }
 
     private void OnTextBoxKeyUp(object sender, KeyEventArgs e)
@@ -76,9 +76,8 @@ public partial class Calib_1PSampleView : UserControl
         if (e.Key == Key.Enter && DataContext is Calib_1PSampleViewModel viewModel)
         {
             viewModel.StopEditing();
+            SpacerBorder.IsVisible = false;
         }
-
-        SpacerBorder.IsVisible = false;
     }
 
     private void OnTextBoxLostFocus(object sender, RoutedEventArgs e)
@@ -86,8 +85,7 @@ public partial class Calib_1PSampleView : UserControl
         if (DataContext is Calib_1PSampleViewModel viewModel)
         {
             viewModel.StopEditing();
+            SpacerBorder.IsVisible = false;
         }
-
-        SpacerBorder.IsVisible = false;
     }
 }
