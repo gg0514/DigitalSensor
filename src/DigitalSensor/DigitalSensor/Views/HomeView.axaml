@@ -21,7 +21,7 @@
     </Design.DataContext>
 
     <ScrollViewer Margin="0,20,0,0" Padding="20">
-        <StackPanel Margin="10,5,10,0" Background="">
+        <StackPanel Margin="0,0,0,0" Spacing="10" Background="">
 
             <!--  Text="{Binding ReceivedData.Timestamp}"  -->
 
@@ -29,7 +29,7 @@
             <Grid ColumnDefinitions="*, Auto, Auto, Auto, 10">
                 <ToggleButton
                     Grid.Column="0"
-                    Margin="20,0"
+                    Margin="10,10,0,0"
                     IsChecked="False"
                     IsVisible="True">
                     <ToggleButton.Styles>
@@ -49,7 +49,7 @@
                             Text="&#xf3c6;" />
                     </ToggleButton.Content>
                 </ToggleButton>
-                <StackPanel Grid.Column="1" Margin="0,10,10,10">
+                <StackPanel Grid.Column="1" Margin="0,10,10,0">
                     <TextBlock
                         Margin="0,0,0,0"
                         FontSize="12"
@@ -62,7 +62,7 @@
                         <Ellipse Fill="{Binding IsTxOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='Orange'}" />
                     </Border>
                 </StackPanel>
-                <StackPanel Grid.Column="2" Margin="0,10,10,10">
+                <StackPanel Grid.Column="2" Margin="0,10,10,0">
                     <TextBlock
                         Margin="0,0,0,0"
                         FontSize="12"
@@ -75,7 +75,7 @@
                         <Ellipse Fill="{Binding IsRxOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='GreenYellow'}" />
                     </Border>
                 </StackPanel>
-                <StackPanel Grid.Column="3" Margin="0,10,10,10">
+                <StackPanel Grid.Column="3" Margin="0,10,10,0">
                     <TextBlock
                         Margin="0,0,0,0"
                         FontSize="12"
@@ -92,7 +92,7 @@
 
             <!--  센서종류 영역  -->
             <Border
-                Margin="10,5,5,15"
+                Margin="0,10,0,5"				
                 Padding="16"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
                 CornerRadius="12"
@@ -129,7 +129,7 @@
 
             <!--  데이터 영역  -->
             <Border
-                Margin="10,5,5,15"
+                Margin="0,5"				
                 Padding="16"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
                 CornerRadius="12"
@@ -167,7 +167,7 @@
 
             <!--  데이터 (mV) 영역  -->
             <Border
-                Margin="10,5,5,15"
+                Margin="0,5"				
                 Padding="16"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
                 CornerRadius="12"
@@ -204,7 +204,7 @@
 
             <!--  수온 영역  -->
             <Border
-                Margin="10,5,5,15"
+                Margin="0,5"				
                 Padding="16"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
                 CornerRadius="12"
