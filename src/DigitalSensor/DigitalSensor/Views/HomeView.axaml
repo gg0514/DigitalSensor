@@ -28,10 +28,12 @@
             <!--  LED 영역  -->
             <Grid ColumnDefinitions="*, Auto, Auto, Auto, 10">
                 <ToggleButton
+					x:Name="LampButton"
                     Grid.Column="0"
                     Margin="10,10,0,0"
-                    IsChecked="False"
-                    IsVisible="True">
+					Command="{Binding LampCommand}" 
+					CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
+                    IsVisible="{Binding IsLampVisible}">
                     <ToggleButton.Styles>
                         <Style Selector="ToggleButton:checked">
                             <Style Selector="^:checked /template/ ContentPresenter#PART_ContentPresenter">
