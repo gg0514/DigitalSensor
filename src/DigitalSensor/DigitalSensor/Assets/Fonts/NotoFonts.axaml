@@ -1,9 +1,7 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 		<FontFamily x:Key="fNoto">avares://DigitalSensor/Assets/Fonts/#Noto Sans KR</FontFamily>
-		<FontFamily x:Key="fNoto_Black">avares://DigitalSensor/Assets/Fonts/#Noto Sans KR Black</FontFamily>
 		<FontFamily x:Key="fNoto_Bold">avares://DigitalSensor/Assets/Fonts/#Noto Sans KR Bold</FontFamily>
 		<FontFamily x:Key="fNoto_Medium">avares://DigitalSensor/Assets/Fonts/#Noto Sans KR Medium</FontFamily>
 		<FontFamily x:Key="fNoto_Light">avares://DigitalSensor/Assets/Fonts/#Noto Sans KR Light</FontFamily>
-		<FontFamily x:Key="fNoto_Thin">avares://DigitalSensor/Assets/Fonts/#Noto Sans KR Thin</FontFamily>
 </ResourceDictionary>

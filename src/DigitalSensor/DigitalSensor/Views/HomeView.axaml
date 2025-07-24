@@ -20,214 +20,235 @@
         <vm:HomeViewModel />
     </Design.DataContext>
 
+    <ScrollViewer Margin="0,20,0,0" Padding="20">
+        <StackPanel Margin="10,5,10,0" Background="">
 
-    <StackPanel Margin="10,5" Background="">
-        <TextBlock
-            Margin="0,10,20,10"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Center"
-            FontSize="14"
-            Text="{Binding ReceivedData.Timestamp}" />
+            <!--  Text="{Binding ReceivedData.Timestamp}"  -->
 
-		<!--Text="{Binding ReceivedData.Timestamp}"-->
-
-		<!--  LED 영역  -->
-        <Grid ColumnDefinitions="*, Auto, Auto, Auto, 10">
-            <StackPanel Grid.Column="1" Margin="0,10,10,10">
-                <TextBlock
-                    Margin="0,0,0,0"
-                    FontSize="12"
-                    FontWeight="SemiBold"
-                    Text="TX" />
-                <Border
-                    Width="10"
-                    Height="10"
-                    Margin="0,5,0,0">
-                    <Ellipse Fill="{Binding IsTxOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='Orange'}" />
-                </Border>
-            </StackPanel>
-            <StackPanel Grid.Column="2" Margin="0,10,10,10">
-                <TextBlock
-                    Margin="0,0,0,0"
-                    FontSize="12"
-                    FontWeight="SemiBold"
-                    Text="RX" />
-                <Border
-                    Width="10"
-                    Height="10"
-                    Margin="0,5,0,0">
-                    <Ellipse Fill="{Binding IsRxOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='GreenYellow'}" />
-                </Border>
-            </StackPanel>
-            <StackPanel Grid.Column="3" Margin="0,10,10,10">
-                <TextBlock
-                    Margin="0,0,0,0"
-                    FontSize="12"
-                    FontWeight="SemiBold"
-                    Text="ERR" />
-                <Border
-                    Width="10"
-                    Height="10"
-                    Margin="0,5,0,0">
-                    <Ellipse Fill="{Binding IsErrOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='Red'}" />
-                </Border>
-            </StackPanel>
-        </Grid>
-
-        <!--  센서종류 영역  -->
-        <Border
-            Margin="10,5,5,20"
-            Padding="16"
-            Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-            CornerRadius="12"
-            Effect="{DynamicResource ShadowElevation3}">
-
-            <StackPanel>
-                <TextBlock
-                    Margin="0,0,0,15"
-                    FontSize="14"
-					FontFamily="{StaticResource fNoto_Bold}"
-                    Text="{Binding Localize[SensorType]}" />
-                <Grid Margin="0,0,0,10" ColumnDefinitions="*, Auto">
-                    <TextBlock
-                        Grid.Column="0"
-                        Margin="60,0,0,0"
-                        HorizontalAlignment="Center"
-                        FontSize="50"
-                        FontWeight="Bold"
-                        Text="{Binding ReceivedInfo.Type, Converter={StaticResource EnumDescriptionConverter}}" />
-                    <Border
-                        Grid.Column="1"
-                        Width="30"
-                        Height="20"
-                        Margin="0,5,10,0"
-                        VerticalAlignment="Bottom">
+            <!--  LED 영역  -->
+            <Grid ColumnDefinitions="*, Auto, Auto, Auto, 10">
+                <ToggleButton
+                    Grid.Column="0"
+                    Margin="20,0"
+                    IsChecked="False"
+                    IsVisible="True">
+                    <ToggleButton.Styles>
+                        <Style Selector="ToggleButton:checked">
+                            <Style Selector="^:checked /template/ ContentPresenter#PART_ContentPresenter">
+                                <!--  Checked setters here  -->
+                                <Setter Property="Background" Value="yellow" />
+                                <Setter Property="Foreground" Value="black" />
+                            </Style>
+                        </Style>
+                    </ToggleButton.Styles>
+                    <ToggleButton.Content>
                         <TextBlock
-                            FontSize="14"
-                            FontWeight="Light"
-                            Text="" />
-                    </Border>
-                </Grid>
-            </StackPanel>
-        </Border>
-
-        <!--  데이터 영역  -->
-        <Border
-            Margin="10,5,5,20"
-            Padding="16"
-            Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-            CornerRadius="12"
-            Effect="{DynamicResource ShadowElevation3}">
-
-            <StackPanel>
-                <TextBlock
-                    Margin="0,0,0,15"
-                    FontSize="14"
-                    Text="{Binding Localize[SensorData]}" />
-                <Grid Margin="0,0,0,10" ColumnDefinitions="*, Auto">
+                            Margin="0,0,0,0"
+                            FontFamily="/Assets/Fonts/#Font Awesome 5 Brands Regular"
+                            FontSize="16"
+                            Text="&#xf3c6;" />
+                    </ToggleButton.Content>
+                </ToggleButton>
+                <StackPanel Grid.Column="1" Margin="0,10,10,10">
                     <TextBlock
-                        Grid.Column="0"
-                        Margin="60,0,0,0"
-                        HorizontalAlignment="Center"
-                        FontSize="50"
-                        FontWeight="Bold"
-                        Text="{Binding ReceivedData.Value}" />
+                        Margin="0,0,0,0"
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        Text="TX" />
                     <Border
-                        Grid.Column="1"
-                        Width="40"
-                        Height="20"
-                        Margin="0,0,10,0"
-                        VerticalAlignment="Bottom">
-                        <TextBlock
-                            Name="SensorUnit"
-                            FontSize="14"
-                            FontWeight="Light"
-                            Text="{Binding ReceivedInfo.SensorUnit}" />
+                        Width="10"
+                        Height="10"
+                        Margin="0,5,0,0">
+                        <Ellipse Fill="{Binding IsTxOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='Orange'}" />
                     </Border>
-                </Grid>
-            </StackPanel>
-        </Border>
-
-        <!--  데이터 (mV) 영역  -->
-        <Border
-            Margin="10,5,5,20"
-            Padding="16"
-            Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-            CornerRadius="12"
-            Effect="{DynamicResource ShadowElevation3}">
-
-            <StackPanel>
-                <TextBlock
-                    Margin="0,0,0,15"
-                    FontSize="14"
-                    Text="{Binding Localize[SensorDataMv]}" />
-                <Grid Margin="0,0,0,10" ColumnDefinitions="*, Auto">
+                </StackPanel>
+                <StackPanel Grid.Column="2" Margin="0,10,10,10">
                     <TextBlock
-                        Grid.Column="0"
-                        Margin="60,0,0,0"
-                        HorizontalAlignment="Center"
-                        FontSize="50"
-                        FontWeight="Bold"
-                        Text="{Binding ReceivedData.Mv}" />
+                        Margin="0,0,0,0"
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        Text="RX" />
                     <Border
-                        Grid.Column="1"
-                        Width="40"
-                        Height="20"
-                        Margin="0,5,10,0"
-                        VerticalAlignment="Bottom">
-                        <TextBlock
-                            FontSize="14"
-                            FontWeight="Light"
-                            Text="mV" />
+                        Width="10"
+                        Height="10"
+                        Margin="0,5,0,0">
+                        <Ellipse Fill="{Binding IsRxOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='GreenYellow'}" />
                     </Border>
-                </Grid>
-            </StackPanel>
-        </Border>
-
-        <!--  수온 영역  -->
-        <Border
-            Margin="10,5,5,20"
-            Padding="16"
-            Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-            CornerRadius="12"
-            Effect="{DynamicResource ShadowElevation3}"
-            PointerPressed="OnBackgroundPointerPressed">
-
-            <StackPanel>
-                <TextBlock
-                    Margin="0,0,0,15"
-                    FontSize="14"
-                    Text="{Binding Localize[Temperature]}" />
-                <Grid Margin="0,0,0,10" ColumnDefinitions="*, Auto">
+                </StackPanel>
+                <StackPanel Grid.Column="3" Margin="0,10,10,10">
                     <TextBlock
-                        Grid.Column="0"
-                        Margin="60,0,0,0"
-                        HorizontalAlignment="Center"
-                        FontSize="50"
-                        FontWeight="Bold"
-                        Text="{Binding ReceivedData.Temperature}" />
+                        Margin="0,0,0,0"
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        Text="ERR" />
                     <Border
-                        Grid.Column="1"
-                        Width="40"
-                        Height="20"
-                        Margin="0,5,10,0"
-                        VerticalAlignment="Bottom">
-                        <TextBlock
-                            FontSize="14"
-                            FontWeight="Light"
-                            Text="°C" />
+                        Width="10"
+                        Height="10"
+                        Margin="0,5,0,0">
+                        <Ellipse Fill="{Binding IsErrOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='Red'}" />
                     </Border>
-                </Grid>
-            </StackPanel>
-        </Border>
+                </StackPanel>
+            </Grid>
 
-        <Image
-            IsHitTestVisible="False"
-			HorizontalAlignment="Center"
-			Width="140"
-            Source="avares://DigitalSensor/Assets/bluesen.png"
-            Stretch="UniformToFill" />
+            <!--  센서종류 영역  -->
+            <Border
+                Margin="10,5,5,15"
+                Padding="16"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="12"
+                Effect="{DynamicResource ShadowElevation3}">
 
-    </StackPanel>
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,0,0,15"
+                        FontFamily="{StaticResource fNoto_Bold}"
+                        FontSize="14"
+                        Text="{Binding Localize[SensorType]}" />
+                    <Grid Margin="0,0,0,10" ColumnDefinitions="*, Auto">
+                        <TextBlock
+                            Grid.Column="0"
+                            Margin="60,0,0,0"
+                            HorizontalAlignment="Center"
+                            FontSize="50"
+                            FontWeight="Bold"
+                            Text="{Binding ReceivedInfo.Type, Converter={StaticResource EnumDescriptionConverter}}" />
+                        <Border
+                            Grid.Column="1"
+                            Width="30"
+                            Height="20"
+                            Margin="0,5,10,0"
+                            VerticalAlignment="Bottom">
+                            <TextBlock
+                                FontSize="14"
+                                FontWeight="Light"
+                                Text="" />
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!--  데이터 영역  -->
+            <Border
+                Margin="10,5,5,15"
+                Padding="16"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="12"
+                Effect="{DynamicResource ShadowElevation3}">
+
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,0,0,15"
+                        FontFamily="{StaticResource fNoto_Bold}"
+                        FontSize="14"
+                        Text="{Binding Localize[SensorData]}" />
+                    <Grid Margin="0,0,0,10" ColumnDefinitions="*, Auto">
+                        <TextBlock
+                            Grid.Column="0"
+                            Margin="60,0,0,0"
+                            HorizontalAlignment="Center"
+                            FontSize="50"
+                            FontWeight="Bold"
+                            Text="{Binding ReceivedData.Value}" />
+                        <Border
+                            Grid.Column="1"
+                            Width="40"
+                            Height="20"
+                            Margin="0,0,10,0"
+                            VerticalAlignment="Bottom">
+                            <TextBlock
+                                Name="SensorUnit"
+                                FontSize="14"
+                                FontWeight="Light"
+                                Text="{Binding ReceivedInfo.SensorUnit}" />
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!--  데이터 (mV) 영역  -->
+            <Border
+                Margin="10,5,5,15"
+                Padding="16"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="12"
+                Effect="{DynamicResource ShadowElevation3}">
+
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,0,0,15"
+                        FontFamily="{StaticResource fNoto_Bold}"
+                        FontSize="14"
+                        Text="{Binding Localize[SensorDataMv]}" />
+                    <Grid Margin="0,0,0,10" ColumnDefinitions="*, Auto">
+                        <TextBlock
+                            Grid.Column="0"
+                            Margin="60,0,0,0"
+                            HorizontalAlignment="Center"
+                            FontSize="50"
+                            FontWeight="Bold"
+                            Text="{Binding ReceivedData.Mv}" />
+                        <Border
+                            Grid.Column="1"
+                            Width="40"
+                            Height="20"
+                            Margin="0,5,10,0"
+                            VerticalAlignment="Bottom">
+                            <TextBlock
+                                FontSize="14"
+                                FontWeight="Light"
+                                Text="mV" />
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!--  수온 영역  -->
+            <Border
+                Margin="10,5,5,15"
+                Padding="16"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="12"
+                Effect="{DynamicResource ShadowElevation3}"
+                PointerPressed="OnBackgroundPointerPressed">
+
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,0,0,15"
+                        FontFamily="{StaticResource fNoto_Bold}"
+                        FontSize="14"
+                        Text="{Binding Localize[Temperature]}" />
+                    <Grid Margin="0,0,0,10" ColumnDefinitions="*, Auto">
+                        <TextBlock
+                            Grid.Column="0"
+                            Margin="60,0,0,0"
+                            HorizontalAlignment="Center"
+                            FontSize="50"
+                            FontWeight="Bold"
+                            Text="{Binding ReceivedData.Temperature}" />
+                        <Border
+                            Grid.Column="1"
+                            Width="40"
+                            Height="20"
+                            Margin="0,5,10,0"
+                            VerticalAlignment="Bottom">
+                            <TextBlock
+                                FontSize="14"
+                                FontWeight="Light"
+                                Text="°C" />
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Image
+                Width="140"
+                Margin="0,10,0,0"
+                HorizontalAlignment="Center"
+                IsHitTestVisible="False"
+                Source="avares://DigitalSensor/Assets/bluesen.png"
+                Stretch="UniformToFill" />
+
+        </StackPanel>
+    </ScrollViewer>
 
 </UserControl>
