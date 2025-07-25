@@ -110,20 +110,21 @@
                             Foreground="Gray" />
                         <StackPanel Grid.Column="1" Spacing="10">
                             <TextBlock
-                                Width="270"
+                                MaxWidth="270"
                                 HorizontalAlignment="Left"
                                 FontSize="15"
                                 Text="{Binding Localize[TempGuide1]}"
                                 TextWrapping="Wrap" />
                             <TextBlock
-                                Width="270"
+                                MaxWidth="270"
+								Background=""
                                 HorizontalAlignment="Left"
                                 FontSize="15"
                                 Foreground=""
                                 Text="{Binding Localize[TempGuide2]}"
                                 TextWrapping="Wrap" />
                             <TextBlock
-                                Width="270"
+                                MaxWidth="270"
                                 HorizontalAlignment="Left"
                                 FontSize="15"
                                 Foreground=""
