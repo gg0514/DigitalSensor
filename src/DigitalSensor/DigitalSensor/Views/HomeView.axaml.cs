@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Security.Principal;
 using System;
 using DigitalSensor.Resources;
+using DigitalSensor.ViewModels;
 
 namespace DigitalSensor.Views;
 
@@ -19,14 +20,13 @@ public partial class HomeView : UserControl
         InitializeComponent();
 
 
-        string appVersion = " Ver.1.0";
+        string appVersion = LocalizationManager.GetString("Version");
         string Greeting = LocalizationManager.GetString("Greeting");
 
-        Console.WriteLine(Greeting+ appVersion); // "안녕하세요" 출력
-
+        Console.WriteLine($"{Greeting} - DigitalSensor Ver.{appVersion}"); 
     }
 
-    private void OnBackgroundPointerPressed(object? sender, PointerPressedEventArgs e)
+    private void OnTemperatureBackgroundPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         var now = DateTime.Now;
         var diff = (now - _lastTapTime).TotalMilliseconds;
@@ -48,9 +48,13 @@ public partial class HomeView : UserControl
 
             Console.WriteLine("Triple tap detected!");
 
+
+            HomeViewModel vm = App.GlobalHost.GetService<HomeViewModel>();
+            vm.IsLampVisible = !vm.IsLampVisible; // 토글 상태
+
             // 원하는 로직 실행
-            MainView mainView = App.GlobalHost.GetService<MainView>();
-            mainView.OnNavigateTo("pH");
+            //MainView mainView = App.GlobalHost.GetService<MainView>();
+            //mainView.OnNavigateTo("pH");
         }
     }
 

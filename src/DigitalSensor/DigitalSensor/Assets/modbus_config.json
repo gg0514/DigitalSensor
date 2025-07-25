@@ -96,5 +96,12 @@
 		"properties": "R/W",
 		"dataType": "UINT16",
 		"dataLength": 1
+	},
+	"LAMP_ONOFF": {
+		"register": 40066,
+		"address": 65,
+		"properties": "R/W",
+		"dataType": "UINT16",
+		"dataLength": 1
 	}
 }

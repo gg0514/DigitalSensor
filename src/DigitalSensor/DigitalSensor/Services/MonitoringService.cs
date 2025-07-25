@@ -37,6 +37,9 @@ public interface IMonitoringService
     Task StartMonitoring();
     Task StopMonitoring();
 
+    // 램프 제어 
+    void WriteLampCtrl(bool onoff);
+
     // 영점 교정
     Task ApplyCalib_Zero();
     // 온도 교정
@@ -67,9 +70,10 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
     // 다국어 지원을 위한 Localize 객체
     public Localize Localize { get; } = new();
 
+    private bool IsLamp_Ctrl_On = false;                   // 램프 ON 제어
+    private bool IsLamp_Ctrl_Off = false;
 
     public bool IsMonitoring => _isMonitoring;
-
 
     private bool _isMonitoring = false;
     private bool _isCalibration = false;
@@ -119,6 +123,18 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         // Sensor 구독 등록
         _sensorService.SensorAttached += OnSensorAttached;
         _sensorService.SensorDetached += OnSensorDetached;
+    }
+
+    public void WriteLampCtrl(bool onoff)
+    {
+        if (onoff)
+        {
+            IsLamp_Ctrl_On = true;
+        }
+        else
+        {
+            IsLamp_Ctrl_Off = true;
+        }
     }
 
 
@@ -227,6 +243,8 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
         {
             Console.WriteLine($"[ NormalMode ] ");
 
+            await Do_Lamp_Ctrl();
+
             await GetSensorType();
             await GetSensorValue();
             await GetSensorMv();
@@ -239,6 +257,29 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
             Console.WriteLine($"NormalMode - Error : {ex.Message}");
         }
     }
+
+
+
+    private async Task Do_Lamp_Ctrl()
+    {
+        if(IsLamp_Ctrl_On)
+        {
+            Console.WriteLine($"[ Lamp Ctrl On ] ");
+            IsLamp_Ctrl_On = false;
+
+            // 램프 ON
+            await _sensorService.SetLampOnOffAsync(1);
+        }
+        else if (IsLamp_Ctrl_Off)
+        {
+            Console.WriteLine($"[ Lamp Ctrl Off ] ");
+            IsLamp_Ctrl_Off = false;
+
+            // 램프 OFF
+            await _sensorService.SetLampOnOffAsync(0);
+        }
+    }
+
 
     private async Task SettingMode()
     {

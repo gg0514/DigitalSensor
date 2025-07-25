@@ -102,7 +102,6 @@ public partial class HomeViewModel : ViewModelBase
                 case SensorType.TurbidityLow:
                 case SensorType.TurbidityHighColor:
                 case SensorType.TurbidityHighIR:
-                //case SensorType.PH:
                     IsLampVisible = true;
                     break;
                 default:
@@ -114,21 +113,19 @@ public partial class HomeViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async void Lamp(bool? isChecked)
+    private async void LampOnOff(bool isChecked)
     {
         try
         {
             Console.WriteLine($"램프 버튼클릭- {isChecked}");
 
-            //bool bChecked= LampButton.IsChecked ?? false;
+            _monitoringService.WriteLampCtrl(isChecked);
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error Lamp Button: {ex.Message}");
         }
-        finally
-        {
-        }
+
     }
 
     public void OnTxSignal()

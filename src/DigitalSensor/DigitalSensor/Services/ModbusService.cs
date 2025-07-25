@@ -45,7 +45,10 @@ public interface IModbusService
 
     Task<float> ReadCalib1pSample();
     Task<ushort> ReadCalibStatus();
+    Task<ushort> ReadLampOnOff();
 
+
+    Task WriteLampOnOff(ushort value);
     Task WriteSlaveId(ushort value);
     Task WriteSensorFactor(float value);
     Task WriteSensorOffset(float value);
@@ -397,6 +400,40 @@ public class ModbusService : IModbusService
         return registers[0];
     }
 
+
+    // Lamp ON/OFF
+    public async Task<ushort> ReadLampOnOff()
+    {
+        if (!_usbService.IsConnection())
+            return 0;
+
+        byte slaveId = _slaveId;
+        ushort startAddress = (ushort)_modbusMap["LAMP_ONOFF"]["address"];
+        ushort numRegisters = (ushort)_modbusMap["LAMP_ONOFF"]["dataLength"]; ;
+        ushort[] registers = await _modbusMaster.ReadHoldingRegistersAsync(slaveId, startAddress, numRegisters);
+
+        string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
+
+        Console.WriteLine($"MODBUS - ReadLampOnOff:  REQ= Id:{slaveId}, Addr:{startAddress}, Num:{numRegisters}, Result= 0x{result}");
+
+        return registers[0];
+    }
+
+    // Lamp ON/OFF
+    public async Task WriteLampOnOff(ushort value)
+    {
+        if (!_usbService.IsConnection())
+            return;
+
+        byte slaveId = _slaveId;
+
+        ushort startAddress = (ushort)_modbusMap["LAMP_ONOFF"]["address"];
+        ushort numRegisters = (ushort)_modbusMap["LAMP_ONOFF"]["dataLength"]; ;
+
+        await _modbusMaster?.WriteSingleRegisterAsync(slaveId, startAddress, value);
+
+        Console.WriteLine($"MODBUS - WriteLampOnOff:  Id:{slaveId}, Addr:{startAddress}, Val:{value}");
+    }
 
 
     // SlaveId

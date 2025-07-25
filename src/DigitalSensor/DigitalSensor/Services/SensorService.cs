@@ -22,6 +22,7 @@ public interface ISensorService
     Task<SensorInfo> GetSensorInfoAsync();
     Task<SensorData> GetSensorDataAsync();
     Task<int> GetCalibStatusAsync();
+    Task<int> GetLampOnOffAsync();
 
     Task<int> GetTypeAsync();
     Task<float> GetValueAsync();
@@ -33,6 +34,7 @@ public interface ISensorService
     Task SetCalibTempAsync(float v);
     Task SetCalib1PSampleAsync(float v);
     Task SetCalib2PBufferAsync(int order);
+    Task SetLampOnOffAsync(int onoff);
 
     void DiscardInBuffer();
 }
@@ -213,6 +215,12 @@ public class SensorService : ISensorService
         return status;
     }
 
+    public async Task<int> GetLampOnOffAsync()
+    {
+        int status = await _modbusService.ReadLampOnOff();
+        return status;
+    }
+
     public async Task SetCalibZeroAsync()
     {
         try
@@ -280,6 +288,27 @@ public class SensorService : ISensorService
         catch (Exception ex)
         {
             Console.WriteLine($"[Error] calibration 2p buffer: {ex.Message}");
+
+            // 재전송
+            throw;
+        }
+    }
+
+    public async Task SetLampOnOffAsync(int onoff)
+    {
+        try
+        {
+            ushort value = onoff switch
+            {
+                0 => 0,
+                1 => 1,
+                _ => throw new ArgumentOutOfRangeException(nameof(onoff), "Invalid onoff value")
+            };
+            await _modbusService.WriteLampOnOff(value);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Error] SetLampOnOffAsync: {ex.Message}");
 
             // 재전송
             throw;
