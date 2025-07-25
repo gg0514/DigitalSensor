@@ -174,34 +174,34 @@
     <value>Calibration Value</value>
   </data>
   <data name="ZeroGuide1" xml:space="preserve">
-    <value>1. Put a sensor into DI water.</value>
+    <value>Put a sensor into DI water.</value>
     <comment>교정지침1</comment>
   </data>
   <data name="ZeroGuide2" xml:space="preserve">
-    <value>2. After the sensor stabilized, Press [Apply] button.</value>
+    <value>After the sensor stabilized, Press [Apply] button.</value>
     <comment>교정지침2</comment>
   </data>
   <data name="ZeroGuide3" xml:space="preserve">
-    <value>3. If you want to cancel calibration, Press [Stop] button.</value>
+    <value>If you want to cancel calibration, Press [Stop] button.</value>
     <comment>교정지침3</comment>
   </data>
   <data name="1PGuide1" xml:space="preserve">
-    <value>1. Put a sensor in the formazine solution.</value>
+    <value>Put a sensor in the formazine solution.</value>
   </data>
   <data name="1PGuide2" xml:space="preserve">
-    <value>2. Adjust the calibration values using the arrows or keypad, and then apply to calibration.</value>
+    <value>Adjust the calibration values using the arrows or keypad, and then apply to calibration.</value>
   </data>
   <data name="1PGuide3" xml:space="preserve">
-    <value>3. If you want to cancel calibration, Press [Stop] button.</value>
+    <value>If you want to cancel calibration, Press [Stop] button.</value>
   </data>
   <data name="2PGuide1" xml:space="preserve">
-    <value>1. Put a sensor into 1st Buffer.</value>
+    <value>Put a sensor into 1st Buffer.</value>
   </data>
   <data name="2PGuide2" xml:space="preserve">
-    <value>2. After the sensor stabilized, Press [Apply] button.</value>
+    <value>After the sensor stabilized, Press [Apply] button.</value>
   </data>
   <data name="2PGuide3" xml:space="preserve">
-    <value>3. If you want to cancel calibration, Press [Stop] button.</value>
+    <value>If you want to cancel calibration, Press [Stop] button.</value>
   </data>
   <data name="Information" xml:space="preserve">
     <value>Information</value>
@@ -249,23 +249,23 @@
     <value>Shall we continue with 2nd calibration?</value>
   </data>
   <data name="2PGuide1_1P" xml:space="preserve">
-    <value>1. Put a sensor into 1st Buffer.</value>
+    <value>Put a sensor into 1st Buffer.</value>
   </data>
   <data name="2PGuide1_2P" xml:space="preserve">
-    <value>1. Put a sensor into 2nd Buffer.</value>
+    <value>Put a sensor into 2nd Buffer.</value>
   </data>
   <data name="TempCalibration" xml:space="preserve">
     <value>Temperature Electrode</value>
     <comment>온도교정</comment>
   </data>
   <data name="TempGuide1" xml:space="preserve">
-    <value>1. Put a sensor in the formazine solution.</value>
+    <value>Put a sensor in the formazine solution.</value>
   </data>
   <data name="TempGuide2" xml:space="preserve">
-    <value>2. Adjust the calibration values using the arrows or keypad, and then apply to calibration.</value>
+    <value>Adjust the calibration values using the arrows or keypad, and then apply to calibration.</value>
   </data>
   <data name="TempGuide3" xml:space="preserve">
-    <value>3. If you want to cancel calibration, Press [Stop] button.</value>
+    <value>If you want to cancel calibration, Press [Stop] button.</value>
   </data>
   <data name="MenuCalibTemp" xml:space="preserve">
     <value>Temperature Electrode</value>

@@ -104,26 +104,39 @@
                             Data="{StaticResource icon_beaker}"
                             Foreground="Gray" />
                         <StackPanel Grid.Column="1" Spacing="10">
-                            <TextBlock
-                                Width="270"
-                                HorizontalAlignment="Left"
-                                FontSize="15"
-                                Text="{Binding CalibInfo.CalibOrderGuide}"
-                                TextWrapping="Wrap" />
-                            <TextBlock
-                                Width="270"
-                                HorizontalAlignment="Left"
-                                FontSize="15"
-                                Foreground=""
-                                Text="{Binding Localize[2PGuide2]}"
-                                TextWrapping="Wrap" />
-                            <TextBlock
-                                Width="270"
-                                HorizontalAlignment="Left"
-                                FontSize="15"
-                                Foreground=""
-                                Text="{Binding Localize[2PGuide3]}"
-                                TextWrapping="Wrap" />
+							<Grid ColumnDefinitions="20,*">
+								<TextBlock Grid.Column="0"
+										   Text="1."
+										   FontSize="15"
+										   VerticalAlignment="Top" />
+								<TextBlock Grid.Column="1"
+										   Text="{Binding CalibInfo.CalibOrderGuide}"
+										   TextWrapping="Wrap"
+										   FontSize="15"
+										   MaxWidth="270" />
+							</Grid>
+							<Grid ColumnDefinitions="20,*">
+								<TextBlock Grid.Column="0"
+										   Text="2."
+										   FontSize="15"
+										   VerticalAlignment="Top" />
+								<TextBlock Grid.Column="1"
+										   Text="{Binding Localize[2PGuide2]}"
+										   TextWrapping="Wrap"
+										   FontSize="15"
+										   MaxWidth="270" />
+							</Grid>
+							<Grid ColumnDefinitions="20,*">
+								<TextBlock Grid.Column="0"
+										   Text="3."
+										   FontSize="15"
+										   VerticalAlignment="Top" />
+								<TextBlock Grid.Column="1"
+										   Text="{Binding Localize[2PGuide3]}"
+										   TextWrapping="Wrap"
+										   FontSize="15"
+										   MaxWidth="270" />
+							</Grid>
                         </StackPanel>
                     </Grid>
                 </StackPanel>

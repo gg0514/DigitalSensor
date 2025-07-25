@@ -169,31 +169,31 @@
     <value>교정값</value>
   </data>
   <data name="ZeroGuide1" xml:space="preserve">
-    <value>1. 센서를 제로용액에 담근다.</value>
+    <value>센서를 제로용액에 담근다.</value>
   </data>
   <data name="ZeroGuide2" xml:space="preserve">
-    <value>2. 안정화후 적용버튼을 누른다.</value>
+    <value>안정화후 적용버튼을 누른다.</value>
   </data>
   <data name="ZeroGuide3" xml:space="preserve">
-    <value>3. 교정을 중단하려면 중단버튼을 누른다.</value>
+    <value>교정을 중단하려면 중단버튼을 누른다.</value>
   </data>
   <data name="1PGuide1" xml:space="preserve">
-    <value>1. 센서를 샘플용액에 담근다.</value>
+    <value>센서를 샘플용액에 담근다.</value>
   </data>
   <data name="1PGuide2" xml:space="preserve">
-    <value>2. 교정값을 입력후, 적용버튼을 누른다.</value>
+    <value>교정값을 입력후, 적용버튼을 누른다.</value>
   </data>
   <data name="1PGuide3" xml:space="preserve">
-    <value>3. 교정을 중단하려면 중단버튼을 누른다.</value>
+    <value>교정을 중단하려면 중단버튼을 누른다.</value>
   </data>
   <data name="2PGuide1" xml:space="preserve">
-    <value>1. 센서를 버퍼용액에 담근다.</value>
+    <value>센서를 버퍼용액에 담근다.</value>
   </data>
   <data name="2PGuide2" xml:space="preserve">
-    <value>2. 안정화후 적용버튼을 누른다.</value>
+    <value>안정화후 적용버튼을 누른다.</value>
   </data>
   <data name="2PGuide3" xml:space="preserve">
-    <value>3. 교정을 중단하려면 중단버튼을 누른다.</value>
+    <value>교정을 중단하려면 중단버튼을 누른다.</value>
   </data>
   <data name="Information" xml:space="preserve">
     <value>정보</value>
@@ -235,22 +235,22 @@
     <value>2번째 교정을 시작하시겠습니까?</value>
   </data>
   <data name="2PGuide1_1P" xml:space="preserve">
-    <value>1. 센서를 1번째 버퍼용액에 담근다.</value>
+    <value>센서를 1번째 버퍼용액에 담근다.</value>
   </data>
   <data name="2PGuide1_2P" xml:space="preserve">
-    <value>1. 센서를 2번째 버퍼용액에 담근다.</value>
+    <value>센서를 2번째 버퍼용액에 담근다.</value>
   </data>
   <data name="TempCalibration" xml:space="preserve">
     <value>온도 교정</value>
   </data>
   <data name="TempGuide1" xml:space="preserve">
-    <value>1. 센서를 표준용액에 담근다.</value>
+    <value>센서를 표준용액에 담근다.</value>
   </data>
   <data name="TempGuide2" xml:space="preserve">
-    <value>2. 교정값을 입력후, 적용버튼을 누른다.</value>
+    <value>교정값을 입력후, 적용버튼을 누른다.</value>
   </data>
   <data name="TempGuide3" xml:space="preserve">
-    <value>3. 교정을 중단하려면 중단버튼을 누른다.</value>
+    <value>교정을 중단하려면 중단버튼을 누른다.</value>
   </data>
   <data name="MenuCalibTemp" xml:space="preserve">
     <value>온도 교정</value>

@@ -112,28 +112,40 @@
 						<StackPanel 
 						    Grid.Column="1"
 							Spacing="10">
-							<TextBlock
-                                MaxWidth="270"
-                                HorizontalAlignment="Stretch"
-                                FontSize="15"
-                                Text="{Binding Localize[1PGuide1]}"
-                                TextWrapping="Wrap" />
-                            <TextBlock
-                                MaxWidth="270"
-                                HorizontalAlignment="Stretch"
-                                Background=""
-                                FontSize="15"
-                                Foreground=""
-                                Text="{Binding Localize[1PGuide2]}"
-                                TextWrapping="Wrap" />
-                            <TextBlock
-                                MaxWidth="270"
-                                HorizontalAlignment="Stretch"
-                                FontSize="15"
-                                Foreground=""
-                                Text="{Binding Localize[1PGuide3]}"
-                                TextWrapping="Wrap" />
-                        </StackPanel>
+							<Grid ColumnDefinitions="20,*">
+								<TextBlock Grid.Column="0"
+										   Text="1."
+										   FontSize="15"
+										   VerticalAlignment="Top" />
+								<TextBlock Grid.Column="1"
+										   Text="{Binding Localize[1PGuide1]}"
+										   TextWrapping="Wrap"
+										   FontSize="15"
+										   MaxWidth="270" />
+							</Grid>
+							<Grid ColumnDefinitions="20,*">
+								<TextBlock Grid.Column="0"
+										   Text="2."
+										   FontSize="15"
+										   VerticalAlignment="Top" />
+								<TextBlock Grid.Column="1"
+										   Text="{Binding Localize[1PGuide2]}"
+										   TextWrapping="Wrap"
+										   FontSize="15"
+										   MaxWidth="270" />
+							</Grid>
+							<Grid ColumnDefinitions="20,*">
+								<TextBlock Grid.Column="0"
+										   Text="3."
+										   FontSize="15"
+										   VerticalAlignment="Top" />
+								<TextBlock Grid.Column="1"
+										   Text="{Binding Localize[1PGuide3]}"
+										   TextWrapping="Wrap"
+										   FontSize="15"
+										   MaxWidth="270" />
+							</Grid>
+						</StackPanel>
                     </Grid>
                 </StackPanel>
             </Border>

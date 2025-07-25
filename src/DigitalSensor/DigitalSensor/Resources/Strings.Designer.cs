@@ -61,7 +61,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   1. Put a sensor in the formazine solution.과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   Put a sensor in the formazine solution.과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string _1PGuide1 {
             get {
@@ -70,7 +70,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   2. Adjust the calibration values using the arrows or keypad, and then apply to calibration.과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   Adjust the calibration values using the arrows or keypad, and then apply to calibration.과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string _1PGuide2 {
             get {
@@ -79,7 +79,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   3. If you want to cancel calibration, Press [Stop] button.과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   If you want to cancel calibration, Press [Stop] button.과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string _1PGuide3 {
             get {
@@ -124,7 +124,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   1. Put a sensor into 1st Buffer.과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   Put a sensor into 1st Buffer.과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string _2PGuide1 {
             get {
@@ -133,7 +133,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   1. Put a sensor into 1st Buffer.과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   Put a sensor into 1st Buffer.과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string _2PGuide1_1P {
             get {
@@ -142,7 +142,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   1. Put a sensor into 2nd Buffer.과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   Put a sensor into 2nd Buffer.과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string _2PGuide1_2P {
             get {
@@ -151,7 +151,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   2. After the sensor stabilized, Press [Apply] button.과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   After the sensor stabilized, Press [Apply] button.과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string _2PGuide2 {
             get {
@@ -160,7 +160,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   3. If you want to cancel calibration, Press [Stop] button.과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   If you want to cancel calibration, Press [Stop] button.과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string _2PGuide3 {
             get {
@@ -412,7 +412,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   1. Put a sensor in the formazine solution.과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   Put a sensor in the formazine solution.과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string TempGuide1 {
             get {
@@ -421,7 +421,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   2. Adjust the calibration values using the arrows or keypad, and then apply to calibration.과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   Adjust the calibration values using the arrows or keypad, and then apply to calibration.과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string TempGuide2 {
             get {
@@ -430,7 +430,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   3. If you want to cancel calibration, Press [Stop] button.과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   If you want to cancel calibration, Press [Stop] button.과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string TempGuide3 {
             get {
@@ -448,7 +448,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   1. Put a sensor into DI water.과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   Put a sensor into DI water.과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string ZeroGuide1 {
             get {
@@ -457,7 +457,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   2. After the sensor stabilized, Press [Apply] button.과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   After the sensor stabilized, Press [Apply] button.과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string ZeroGuide2 {
             get {
@@ -466,7 +466,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   3. If you want to cancel calibration, Press [Stop] button.과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   If you want to cancel calibration, Press [Stop] button.과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string ZeroGuide3 {
             get {
