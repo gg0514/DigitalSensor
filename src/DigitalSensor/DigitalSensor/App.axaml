@@ -27,6 +27,8 @@
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 
+		<!-- NavigationView의 Pane(왼쪽 메뉴) 배경 색 설정 -->
+		<SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#B7C4DC"/>
 
 		<!-- BoolToBrushConverter를 리소스로 등록 -->
 		<util:BoolToBrushConverter x:Key="BoolToBrushConverter" />

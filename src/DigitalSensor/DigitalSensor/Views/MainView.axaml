@@ -24,7 +24,7 @@
     <!--  SelectedIndex="{Binding SelectedNavIndex}"  -->
     <!--  SelectionChanged="NavView_SelectionChanged">  -->
 
-
+	<Border Background="DarkBlue">
 		
 	<ui:NavigationView x:Name="NavView" 
 					   IsPaneOpen="False"
@@ -38,6 +38,7 @@
 		<!--<ui:NavigationView.PaneToggleButton>
 			<Button Template="{StaticResource CustomPaneToggleButtonTemplate}" />
 		</ui:NavigationView.PaneToggleButton>-->
+		
 
 		<ui:NavigationView.MenuItems>
 			<ui:NavigationViewItem
@@ -91,5 +92,5 @@
 		</ui:NavigationView.Content>	
 	</ui:NavigationView>
 
-
+	</Border>
 </UserControl>
