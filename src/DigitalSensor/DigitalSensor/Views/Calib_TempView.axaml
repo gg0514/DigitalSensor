@@ -1,129 +1,196 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:ui="using:FluentAvalonia.UI.Controls"
-             xmlns:vm="using:DigitalSensor.ViewModels"
-		  	 xmlns:ic="using:FluentIcons.Avalonia.Fluent"
-			 xmlns:icons="using:Material.Icons.Avalonia"
-             xmlns:views="using:DigitalSensor.Views"
-			 mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="800"
-             x:Class="DigitalSensor.Views.Calib_TempView"
-             x:DataType="vm:Calib_TempViewModel">
-	
-  <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
-         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-	  <vm:Calib_TempViewModel />
-  </Design.DataContext>
+<UserControl
+    x:Class="DigitalSensor.Views.Calib_TempView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ic="using:FluentIcons.Avalonia.Fluent"
+    xmlns:icons="using:Material.Icons.Avalonia"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="using:FluentAvalonia.UI.Controls"
+    xmlns:views="using:DigitalSensor.Views"
+    xmlns:vm="using:DigitalSensor.ViewModels"
+    d:DesignHeight="800"
+    d:DesignWidth="450"
+    x:DataType="vm:Calib_TempViewModel"
+    mc:Ignorable="d">
+
+    <Design.DataContext>
+        <!--
+            This only sets the DataContext for the previewer in an IDE,
+            to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs)
+        -->
+        <vm:Calib_TempViewModel />
+    </Design.DataContext>
 
 
-	<UserControl.Resources>
-		<StreamGeometry x:Key="icon_beaker">M67,334c-14,-14 -6,-39 34,-107 38,-64 41,-73 37,-128l-4,-59 56,0 56,0 -4,59c-4,55 -1,64 38,129 61,104 59,106 -86,110 -66,1 -123,-1 -127,-4zM300,309c0,-6 -12,-30 -26,-55l-26,-44 -58,0 -58,0 -26,44c-14,25 -26,49 -26,55 0,7 38,11 110,11 72,0 110,-4 110,-11zM226,174c-3,-9 -6,-38 -6,-65 0,-48 -1,-49 -30,-49 -29,0 -30,1 -30,49 0,27 -3,56 -6,65 -5,13 2,16 36,16 34,0 41,-3 36,-16z</StreamGeometry>
-	</UserControl.Resources>
+    <UserControl.Resources>
+        <StreamGeometry x:Key="icon_beaker">M67,334c-14,-14 -6,-39 34,-107 38,-64 41,-73 37,-128l-4,-59 56,0 56,0 -4,59c-4,55 -1,64 38,129 61,104 59,106 -86,110 -66,1 -123,-1 -127,-4zM300,309c0,-6 -12,-30 -26,-55l-26,-44 -58,0 -58,0 -26,44c-14,25 -26,49 -26,55 0,7 38,11 110,11 72,0 110,-4 110,-11zM226,174c-3,-9 -6,-38 -6,-65 0,-48 -1,-49 -30,-49 -29,0 -30,1 -30,49 0,27 -3,56 -6,65 -5,13 2,16 36,16 34,0 41,-3 36,-16z</StreamGeometry>
+    </UserControl.Resources>
 
-	<ScrollViewer 
-			x:Name="MainScrollViewer"
-			Padding="20" Margin="0,30,0,0">
-		<StackPanel Spacing="20">
+    <ScrollViewer
+        x:Name="MainScrollViewer"
+        Margin="0,30,0,0"
+        Padding="20">
+        <StackPanel Spacing="20">
 
-			<!-- LED 영역-->
-			<Grid ColumnDefinitions="*, Auto, Auto, Auto, 10">
-				<!-- Title -->
-				<StackPanel Grid.Column="0" Margin="0,10,10,10">
-					<TextBlock Text="{Binding Localize[TempCalibration]}" FontSize="26" FontWeight="Bold"/>
-				</StackPanel>
+            <!--  LED 영역  -->
+            <Grid ColumnDefinitions="*, Auto, Auto, Auto, 10">
+                <!--  Title  -->
+                <StackPanel Grid.Column="0" Margin="0,10,10,10">
+                    <TextBlock
+                        FontSize="26"
+                        FontWeight="Bold"
+                        Text="{Binding Localize[TempCalibration]}" />
+                </StackPanel>
 
-				<StackPanel Grid.Column="1" Margin="0,10,10,10">
-					<TextBlock Text="TX"
-								FontSize="12"
-								Margin="0,0,0,0"
-								FontWeight="SemiBold"/>
-					<Border Width="10" Height="10" Margin="0,5,0,0" >
-						<Ellipse Fill="{Binding IsTxOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='Orange'}"/>
-					</Border>
-				</StackPanel>
-				<StackPanel Grid.Column="2" Margin="0,10,10,10">
-					<TextBlock Text="RX"
-								FontSize="12"
-								Margin="0,0,0,0"
-								FontWeight="SemiBold"/>
-					<Border Width="10" Height="10" Margin="0,5,0,0" >
-						<Ellipse Fill="{Binding IsRxOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='GreenYellow'}"/>
-					</Border>
-				</StackPanel>
-				<StackPanel Grid.Column="3" Margin="0,10,10,10">
-					<TextBlock Text="ERR"
-								FontSize="12"
-								Margin="0,0,0,0"
-								FontWeight="SemiBold"/>
-					<Border Width="10" Height="10" Margin="0,5,0,0" >
-						<Ellipse Fill="{Binding IsErrOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='Red'}"/>
-					</Border>
-				</StackPanel>
-			</Grid>
+                <StackPanel Grid.Column="1" Margin="0,10,10,10">
+                    <TextBlock
+                        Margin="0,0,0,0"
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        Text="TX" />
+                    <Border
+                        Width="10"
+                        Height="10"
+                        Margin="0,5,0,0">
+                        <Ellipse Fill="{Binding IsTxOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='Orange'}" />
+                    </Border>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Margin="0,10,10,10">
+                    <TextBlock
+                        Margin="0,0,0,0"
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        Text="RX" />
+                    <Border
+                        Width="10"
+                        Height="10"
+                        Margin="0,5,0,0">
+                        <Ellipse Fill="{Binding IsRxOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='GreenYellow'}" />
+                    </Border>
+                </StackPanel>
+                <StackPanel Grid.Column="3" Margin="0,10,10,10">
+                    <TextBlock
+                        Margin="0,0,0,0"
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        Text="ERR" />
+                    <Border
+                        Width="10"
+                        Height="10"
+                        Margin="0,5,0,0">
+                        <Ellipse Fill="{Binding IsErrOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='Red'}" />
+                    </Border>
+                </StackPanel>
+            </Grid>
 
 
 
-			<!-- 교정 지침 -->
-			<Border
-				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-				CornerRadius="12"
-				Padding="26"
-				Margin="0,10,0,0"
-				Effect="{DynamicResource ShadowElevation3}" >
+            <!--  교정 지침  -->
+            <Border
+                Margin="0,10,0,0"
+                Padding="26"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="12"
+                Effect="{DynamicResource ShadowElevation3}">
 
-				<StackPanel>
-					<TextBlock Text="{Binding Localize[Guide]}" FontSize="14" Foreground="LightBlue"/>
-					<StackPanel Margin="0,0,10,0">
-						<StackPanel Orientation="Horizontal">
-							<PathIcon Margin="10,20,30,0" Height="40" Width="40" Foreground="Gray" Data="{StaticResource icon_beaker}"/>
-							<StackPanel Spacing="10">
-								<TextBlock Text="{Binding Localize[TempGuide1]}" TextWrapping="Wrap" Width="270" FontSize="15" HorizontalAlignment="Left"/>
-								<TextBlock Text="{Binding Localize[TempGuide2]}" TextWrapping="Wrap" Width="270" FontSize="15" Foreground="" HorizontalAlignment="Left"/>
-								<TextBlock Text="{Binding Localize[TempGuide3]}" TextWrapping="Wrap" Width="270"  FontSize="15" Foreground="" HorizontalAlignment="Left"/>
-							</StackPanel>
-						</StackPanel>
-					</StackPanel>
-				</StackPanel>
-			</Border>
+                <StackPanel>
+                    <TextBlock
+                        FontFamily="{StaticResource fNoto_Bold}"
+                        FontSize="14"
+                        Foreground="DarkBlue"
+                        Text="{Binding Localize[Guide]}" />
+                    <StackPanel Margin="0,0,10,0">
+                        <StackPanel Orientation="Horizontal">
+                            <PathIcon
+                                Width="40"
+                                Height="40"
+                                Margin="10,20,30,0"
+                                Data="{StaticResource icon_beaker}"
+                                Foreground="Gray" />
+                            <StackPanel Spacing="10">
+                                <TextBlock
+                                    Width="270"
+                                    HorizontalAlignment="Left"
+                                    FontSize="15"
+                                    Text="{Binding Localize[TempGuide1]}"
+                                    TextWrapping="Wrap" />
+                                <TextBlock
+                                    Width="270"
+                                    HorizontalAlignment="Left"
+                                    FontSize="15"
+                                    Foreground=""
+                                    Text="{Binding Localize[TempGuide2]}"
+                                    TextWrapping="Wrap" />
+                                <TextBlock
+                                    Width="270"
+                                    HorizontalAlignment="Left"
+                                    FontSize="15"
+                                    Foreground=""
+                                    Text="{Binding Localize[TempGuide3]}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
 
-			<!-- 현재값 -->
-			<Border
-				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-				CornerRadius="12"
-				Padding="26,16,26,6"
-				Margin="0,0,0,0"
-				Effect="{DynamicResource ShadowElevation3}" >
+            <!--  현재값  -->
+            <Border
+                Margin="0,0,0,0"
+                Padding="26,16,26,6"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="12"
+                Effect="{DynamicResource ShadowElevation3}">
 
-				<StackPanel Background="">
-					<Grid  ColumnDefinitions="120, *, Auto" Margin="0,0,0,0">
-						<TextBlock Grid.Column="0" Text="{Binding Localize[CurrentValue]}"  VerticalAlignment="Center" FontSize="14" Foreground="LightBlue"/>
-						<TextBlock Grid.Column="1" Text="{Binding ReceivedData.Temperature}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
-							   Margin="0,0,0,0"/>
-									
-						<Border Grid.Column="2" 
-								HorizontalAlignment="Center" 
-								VerticalAlignment="Center" 
-								Width="60" Height="20" Margin="0,5,10,0" >
-							<TextBlock Text="°C" HorizontalAlignment="Center" FontWeight="Light" FontSize="14"/>
-						</Border>
-					</Grid>
-					<Grid
+                <StackPanel Background="">
+                    <Grid Margin="0,0,0,0" ColumnDefinitions="120, *, Auto">
+                        <TextBlock
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            FontFamily="{StaticResource fNoto_Bold}"
+                            FontSize="14"
+                            Foreground="DarkBlue"
+                            Text="{Binding Localize[CurrentValue]}" />
+                        <TextBlock
+                            Grid.Column="1"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="30"
+                            FontWeight="Normal"
+                            Text="{Binding ReceivedData.Temperature}" />
+
+                        <Border
+                            Grid.Column="2"
+                            Width="60"
+                            Height="20"
+                            Margin="0,5,10,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                FontSize="14"
+                                FontWeight="Light"
+                                Text="°C" />
+                        </Border>
+                    </Grid>
+                    <Grid
                         Margin="0,0,0,0"
                         Background="Transparent"
                         ColumnDefinitions="120, *, Auto"
                         PointerPressed="OnBackgroundPointerPressed">
 
-						<TextBlock
+                        <TextBlock
                             Grid.Column="0"
                             VerticalAlignment="Center"
+                            FontFamily="{StaticResource fNoto_Bold}"
                             FontSize="14"
-                            Foreground="LightBlue"
+                            Foreground="DarkBlue"
                             Text="{Binding Localize[CalibrationValue]}" />
 
-						<Grid Grid.Column="1">
-							<TextBlock
+                        <Grid Grid.Column="1">
+                            <TextBlock
                                 x:Name="ValueTextBlock"
                                 Width="120"
                                 HorizontalAlignment="Center"
@@ -135,7 +202,7 @@
                                 PointerPressed="OnTextBlockClick"
                                 Text="{Binding CalibValue}"
                                 TextAlignment="Center" />
-							<TextBox
+                            <TextBox
                                 x:Name="ValueTextBox"
                                 Width="120"
                                 HorizontalAlignment="Center"
@@ -146,9 +213,9 @@
                                 LostFocus="OnTextBoxLostFocus"
                                 Text="{Binding CalibValue, Converter={StaticResource EmptyStringToZeroConverter}, UpdateSourceTrigger=PropertyChanged, TargetNullValue='', FallbackValue='0'}"
                                 TextAlignment="Center" />
-						</Grid>
+                        </Grid>
 
-						<Border
+                        <Border
                             Grid.Column="2"
                             Width="60"
                             Height="90"
@@ -156,71 +223,113 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Background="">
-							<StackPanel Background="">
-								<Button
+                            <StackPanel Background="">
+                                <Button
                                     Width="60"
                                     Height="30"
                                     Margin="0,5,0,10"
                                     Command="{Binding UpButtonCommand}">
-									<ic:FluentIcon
+                                    <ic:FluentIcon
                                         Icon="ChevronUp"
                                         IconSize="Size16"
                                         IconVariant="Regular" />
-								</Button>
-								<Button
+                                </Button>
+                                <Button
                                     Width="60"
                                     Height="30"
                                     Command="{Binding DownButtonCommand}">
-									<ic:FluentIcon
+                                    <ic:FluentIcon
                                         Icon="ChevronDown"
                                         IconSize="Size16"
                                         IconVariant="Regular" />
-								</Button>
-							</StackPanel>
-						</Border>
-					</Grid>
-				</StackPanel>
-			</Border>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </Border>
 
-			<!-- 교정상태 -->
-			<Border
-				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-				CornerRadius="12"
-				Padding="26"
-				Margin="0,0,0,0"
-				Effect="{DynamicResource ShadowElevation3}" >
+            <!--  교정상태  -->
+            <Border
+                Margin="0,0,0,0"
+                Padding="26"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="12"
+                Effect="{DynamicResource ShadowElevation3}">
 
-				<StackPanel>
-					<Grid ColumnDefinitions="120, *, auto" Margin="0,0,0,10">
-						<TextBlock Grid.Column="0" Text="{Binding Localize[CalibrationStatus]}" FontSize="14" Foreground="LightBlue"/>
-						<TextBlock Grid.Column="1" Text="{Binding CalibInfo.CalStatus, Converter={StaticResource StatusDescriptionConverter}}" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
-							   Margin="0,0,0,0"/>
-						<Border Grid.Column="2" VerticalAlignment="Bottom" Width="50" Height="20" Margin="0,5,10,0" >
-						</Border>
-					</Grid>
-				</StackPanel>
-			</Border>
+                <StackPanel>
+                    <Grid Margin="0,0,0,10" ColumnDefinitions="125, *, auto">
+                        <TextBlock
+                            Grid.Column="0"
+                            FontFamily="{StaticResource fNoto_Bold}"
+                            FontSize="14"
+                            Foreground="DarkBlue"
+                            Text="{Binding Localize[CalibrationStatus]}" />
+                        <TextBlock
+                            Grid.Column="1"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            FontSize="30"
+                            FontWeight="Normal"
+                            Text="{Binding CalibInfo.CalStatus, Converter={StaticResource StatusDescriptionConverter}}" />
+                        <Border
+                            Grid.Column="2"
+                            Width="50"
+                            Height="20"
+                            Margin="0,5,10,0"
+                            VerticalAlignment="Bottom" />
+                    </Grid>
+                </StackPanel>
+            </Border>
 
 
-			<!-- 적용버튼 -->
-			<UniformGrid Columns="2" Width="300" Height="100">
-				<Button x:Name="AbortButton" Command="{Binding AbortCommand}" IsEnabled="{Binding CalibInfo.IsRun}" Classes="" Content="{Binding Localize[Stop]}" Margin="4" Width="135" Height="60"/>
-				<Button x:Name="ApplyButton" Command="{Binding ApplyCommand}" IsEnabled="{Binding !CalibInfo.IsRun}" Classes="accent" Margin="4" Width="135" Height="60">
-					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-						<ui:ProgressRing IsVisible="{Binding CalibInfo.IsRun}"
-									  Width="40" Height="40" Margin="0,0,15,0"
-									  IsActive="True"/>
-						<TextBlock Text="{Binding Localize[Apply]}" VerticalAlignment="Center"/>
-					</StackPanel>
-				</Button>
-			</UniformGrid>
-			
-			<!--  스크롤 여백  -->
-			<Border
+            <!--  적용버튼  -->
+            <UniformGrid
+                Width="300"
+                Height="100"
+                Columns="2">
+                <Button
+                    x:Name="AbortButton"
+                    Width="135"
+                    Height="60"
+                    Margin="4"
+                    FontFamily="{StaticResource fNoto_Medium}"
+                    FontSize="16"
+                    Classes=""
+                    Command="{Binding AbortCommand}"
+                    Content="{Binding Localize[Stop]}"
+                    IsEnabled="{Binding CalibInfo.IsRun}" />
+                <Button
+                    x:Name="ApplyButton"
+                    Width="135"
+                    Height="60"
+                    Margin="4"
+                    FontFamily="{StaticResource fNoto_Medium}"
+                    FontSize="16"					
+                    Classes="accent"
+                    Command="{Binding ApplyCommand}"
+                    IsEnabled="{Binding !CalibInfo.IsRun}">
+                    <StackPanel
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <ui:ProgressRing
+                            Width="40"
+                            Height="40"
+                            Margin="0,0,15,0"
+                            IsActive="True"
+                            IsVisible="{Binding CalibInfo.IsRun}" />
+                        <TextBlock VerticalAlignment="Center" Text="{Binding Localize[Apply]}" />
+                    </StackPanel>
+                </Button>
+            </UniformGrid>
+
+            <!--  스크롤 여백  -->
+            <Border
                 x:Name="SpacerBorder"
                 Height="50"
-			    IsVisible="False"
-                Background="Transparent"/>
-		</StackPanel>
-	</ScrollViewer>
+                Background="Transparent"
+                IsVisible="False" />
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

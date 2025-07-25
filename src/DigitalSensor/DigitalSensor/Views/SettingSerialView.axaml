@@ -1,91 +1,143 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:ui="using:FluentAvalonia.UI.Controls"
-             xmlns:vm="using:DigitalSensor.ViewModels"
-             xmlns:views="using:DigitalSensor.Views"
-			 mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="800"
-             x:Class="DigitalSensor.Views.SettingSerialView"
-             x:DataType="vm:SettingSerialViewModel">
-	
-  <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
-         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    <vm:SettingSerialViewModel />
-  </Design.DataContext>
+<UserControl
+    x:Class="DigitalSensor.Views.SettingSerialView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="using:FluentAvalonia.UI.Controls"
+    xmlns:views="using:DigitalSensor.Views"
+    xmlns:vm="using:DigitalSensor.ViewModels"
+    d:DesignHeight="800"
+    d:DesignWidth="450"
+    x:DataType="vm:SettingSerialViewModel"
+    mc:Ignorable="d">
 
-	<ScrollViewer Padding="20" Margin="0,50,0,0">
-		<StackPanel Spacing="20">
+    <Design.DataContext>
+        <!--
+            This only sets the DataContext for the previewer in an IDE,
+            to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs)
+        -->
+        <vm:SettingSerialViewModel />
+    </Design.DataContext>
 
-			<!-- 시리얼 통신 -->
-			<Border
-				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-				CornerRadius="12"
-				Padding="16"
-				Margin="0,5"
-				Effect="{DynamicResource ShadowElevation3}" >
+    <ScrollViewer Margin="0,50,0,0" Padding="20">
+        <StackPanel Spacing="20">
 
-				<StackPanel>
-					<TextBlock Text="SERIAL" FontSize="14" Foreground="LightBlue"/>
-					<StackPanel Margin="0,15,0,0" Spacing="12">
+            <!--  시리얼 통신  -->
+            <Border
+                Margin="0,5"
+                Padding="16"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="12"
+                Effect="{DynamicResource ShadowElevation3}">
 
-						<!-- Baud rate -->
-						<StackPanel Spacing="12">
-							<TextBlock Text="Baud rate" FontSize="16"/>
-							<!--<TextBlock Text="{Binding SerialConn.BaudRate}" FontSize="24" Foreground="Gray"/>-->
-							<ui:FAComboBox IsEditable="False" IsTextSearchEnabled="False"
-										   ItemsSource="{Binding SerialBaudrate}"
-										   SelectedItem="{Binding SelectedBaudrate}"
-									       FontSize="24" Foreground="Gray"  HorizontalAlignment="Stretch" />
-						</StackPanel>
+                <StackPanel>
+                    <TextBlock
+                        FontFamily="{StaticResource fNoto_Bold}"
+                        FontSize="16"
+                        Foreground="DarkBlue"
+                        Text="SERIAL" />
+                    <StackPanel Margin="0,15,0,0" Spacing="12">
 
-						<Separator/>
-						<!-- Data bits -->
-						<StackPanel Spacing="12">
-							<TextBlock Text="Data bits" FontSize="16"/>
-							<!--<TextBlock Text="{Binding SerialConn.DataBits}" FontSize="24" Foreground="Gray"/>-->
-							<ui:FAComboBox IsEditable="False" IsTextSearchEnabled="False"
-										   ItemsSource="{Binding SerialDatabits}"
-										   SelectedItem="{Binding SelectedDatabits}"
-										   FontSize="24" Foreground="Gray"  HorizontalAlignment="Stretch" />
-						</StackPanel>
+                        <!--  Baud rate  -->
+                        <StackPanel Spacing="12">
+                            <TextBlock
+                                FontFamily="{StaticResource fNoto_Medium}"
+                                FontSize="14"
+                                Text="Baud rate" />
+                            <!--<TextBlock Text="{Binding SerialConn.BaudRate}" FontSize="24" Foreground="Gray"/>-->
+                            <ui:FAComboBox
+                                HorizontalAlignment="Stretch"
+                                FontSize="24"
+                                Foreground="Gray"
+                                IsEditable="False"
+                                IsTextSearchEnabled="False"
+                                ItemsSource="{Binding SerialBaudrate}"
+                                SelectedItem="{Binding SelectedBaudrate}" />
+                        </StackPanel>
 
-						<Separator/>
-						<!-- Parity -->
-						<StackPanel Spacing="12">
-							<TextBlock Text="Parity" FontSize="16"/>
-							<!--<TextBlock Text="{Binding SerialConn.Parity}" FontSize="24" Foreground="Gray"/>-->
-							<ui:FAComboBox IsEditable="False" IsTextSearchEnabled="False"
-										   ItemsSource="{Binding SerialParity}"
-										   SelectedItem="{Binding SelectedParity}"
-										   FontSize="24" Foreground="Gray"  HorizontalAlignment="Stretch" />
+                        <Separator />
+                        <!--  Data bits  -->
+                        <StackPanel Spacing="12">
+                            <TextBlock
+                                FontFamily="{StaticResource fNoto_Medium}"
+                                FontSize="14"
+                                Text="Data bits" />
+                            <!--<TextBlock Text="{Binding SerialConn.DataBits}" FontSize="24" Foreground="Gray"/>-->
+                            <ui:FAComboBox
+                                HorizontalAlignment="Stretch"
+                                FontSize="24"
+                                Foreground="Gray"
+                                IsEditable="False"
+                                IsTextSearchEnabled="False"
+                                ItemsSource="{Binding SerialDatabits}"
+                                SelectedItem="{Binding SelectedDatabits}" />
+                        </StackPanel>
 
-						</StackPanel>
+                        <Separator />
+                        <!--  Parity  -->
+                        <StackPanel Spacing="12">
+                            <TextBlock
+                                FontFamily="{StaticResource fNoto_Medium}"
+                                FontSize="14"
+                                Text="Parity" />
+                            <!--<TextBlock Text="{Binding SerialConn.Parity}" FontSize="24" Foreground="Gray"/>-->
+                            <ui:FAComboBox
+                                HorizontalAlignment="Stretch"
+                                FontSize="24"
+                                Foreground="Gray"
+                                IsEditable="False"
+                                IsTextSearchEnabled="False"
+                                ItemsSource="{Binding SerialParity}"
+                                SelectedItem="{Binding SelectedParity}" />
 
-						<Separator/>
-						<!-- Stop bits -->
-						<StackPanel Spacing="12">
-							<TextBlock Text="Stop bits" FontSize="16"/>
-							<!--<TextBlock Text="{Binding SerialConn.StopBits}" FontSize="24" Foreground="Gray"/>-->
-							<ui:FAComboBox IsEditable="False" IsTextSearchEnabled="False"
-										   ItemsSource="{Binding SerialStopbits}"
-										   SelectedItem="{Binding SelectedStopbits}"
-										   FontSize="24" 
-										   Foreground="Gray"  
-										   HorizontalAlignment="Stretch"    />
+                        </StackPanel>
 
-						</StackPanel>
-					</StackPanel>
-				</StackPanel>
-			</Border>
-			
-			<!-- 적용버튼 -->
-			<UniformGrid Columns="2" Width="300" Height="100">
-				<Button Content="" Command="" Classes="" Margin="4" Width="0" Height="0"/>
-				<Button Content="{Binding Localize[Apply]}" Command="{Binding ApplyCommand}" Classes="accent" Margin="4" Width="135" Height="60" />
-			</UniformGrid>
+                        <Separator />
+                        <!--  Stop bits  -->
+                        <StackPanel Spacing="12">
+                            <TextBlock
+                                FontFamily="{StaticResource fNoto_Medium}"
+                                FontSize="14"
+                                Text="Stop bits" />
+                            <!--<TextBlock Text="{Binding SerialConn.StopBits}" FontSize="24" Foreground="Gray"/>-->
+                            <ui:FAComboBox
+                                HorizontalAlignment="Stretch"
+                                FontSize="24"
+                                Foreground="Gray"
+                                IsEditable="False"
+                                IsTextSearchEnabled="False"
+                                ItemsSource="{Binding SerialStopbits}"
+                                SelectedItem="{Binding SelectedStopbits}" />
 
-		</StackPanel>
-	</ScrollViewer>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!--  적용버튼  -->
+            <UniformGrid
+                Width="300"
+                Height="100"
+                Columns="2">
+                <Button
+                    Width="0"
+                    Height="0"
+                    Margin="4"
+                    Classes=""
+                    Command=""
+                    Content="" />
+                <Button
+                    Width="135"
+                    Height="60"
+                    Margin="4"
+                    Classes="accent"
+                    Command="{Binding ApplyCommand}"
+                    Content="{Binding Localize[Apply]}"
+                    FontFamily="{StaticResource fNoto_Medium}"
+                    FontSize="16" />
+            </UniformGrid>
+
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

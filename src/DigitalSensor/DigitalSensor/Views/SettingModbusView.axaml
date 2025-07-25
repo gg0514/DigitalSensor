@@ -1,52 +1,90 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:ui="using:FluentAvalonia.UI.Controls"
-             xmlns:vm="using:DigitalSensor.ViewModels"
-             xmlns:views="using:DigitalSensor.Views"
-			 mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="800"
-             x:Class="DigitalSensor.Views.SettingModbusView"
-             x:DataType="vm:SettingModbusViewModel">
-	
-  <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
-         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    <vm:SettingModbusViewModel />
-  </Design.DataContext>
+<UserControl
+    x:Class="DigitalSensor.Views.SettingModbusView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="using:FluentAvalonia.UI.Controls"
+    xmlns:views="using:DigitalSensor.Views"
+    xmlns:vm="using:DigitalSensor.ViewModels"
+    d:DesignHeight="800"
+    d:DesignWidth="450"
+    x:DataType="vm:SettingModbusViewModel"
+    mc:Ignorable="d">
 
-	<ScrollViewer Padding="20" Margin="0,50,0,0">
-		<StackPanel Spacing="20">
+    <Design.DataContext>
+        <!--
+            This only sets the DataContext for the previewer in an IDE,
+            to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs)
+        -->
+        <vm:SettingModbusViewModel />
+    </Design.DataContext>
+
+    <ScrollViewer Margin="0,50,0,0" Padding="20">
+        <StackPanel Spacing="20">
 
 
-			<!-- MODBUS -->
-			<Border
-				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-				CornerRadius="12"
-				Padding="16"
-				Margin="0,0"
-				Effect="{DynamicResource ShadowElevation3}" >
+            <!--  MODBUS  -->
+            <Border
+                Margin="0,0"
+                Padding="16"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="12"
+                Effect="{DynamicResource ShadowElevation3}">
 
-				<StackPanel Margin="0,10,0,0">
-					<TextBlock Text="MODBUS" FontSize="14" Foreground="LightBlue"/>
-					<StackPanel Margin="0,15,0,0" Spacing="12">
-						<StackPanel  Spacing="12">
-							<TextBlock Text="Slave ID" FontSize="16"/>
-							<!--<TextBlock Text="{Binding SlaveID}" FontSize="14" Foreground="Gray"/>-->
-							<ui:NumberBox Value="{Binding ModbusInfo.SlaveID}" Minimum="1" Maximum="30" 
-										  FontSize="24" Foreground="Gray" 
-										  HorizontalAlignment="Stretch" SpinButtonPlacementMode="Inline"/>
-						</StackPanel>
-					</StackPanel>
-				</StackPanel>
-			</Border>
-			
-			<!-- 적용버튼 -->
-			<UniformGrid Columns="2" Width="300" Height="100">
-				<Button Content="{Binding Localize[Loading]}" Command="{Binding LoadCommand}" IsEnabled="{Binding ModbusInfo.IsAlive}" Classes="" Margin="4" Width="135" Height="60"/>
-				<Button Content="{Binding Localize[Apply]}" Command="{Binding ApplyCommand}" IsEnabled="{Binding ModbusInfo.IsAlive}" Classes="accent" Margin="4" Width="135" Height="60" />
-			</UniformGrid>
+                <StackPanel Margin="0,10,0,0">
+                    <TextBlock
+                        FontFamily="{StaticResource fNoto_Bold}"
+                        FontSize="16"
+                        Foreground="DarkBlue"
+                        Text="MODBUS" />
+                    <StackPanel Margin="0,15,0,0" Spacing="12">
+                        <StackPanel Spacing="12">
+                            <TextBlock
+                                FontFamily="{StaticResource fNoto_Medium}"
+                                FontSize="14"
+                                Text="Slave ID" />
+                            <!--<TextBlock Text="{Binding SlaveID}" FontSize="14" Foreground="Gray"/>-->
+                            <ui:NumberBox
+                                HorizontalAlignment="Stretch"
+                                FontSize="24"
+                                Foreground="Gray"
+                                Maximum="30"
+                                Minimum="1"
+                                SpinButtonPlacementMode="Inline"
+                                Value="{Binding ModbusInfo.SlaveID}" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
 
-		</StackPanel>
-	</ScrollViewer>
+            <!--  적용버튼  -->
+            <UniformGrid
+                Width="300"
+                Height="100"
+                Columns="2">
+                <Button
+                    Width="135"
+                    Height="60"
+                    Margin="4"
+                    FontFamily="{StaticResource fNoto_Medium}"
+                    FontSize="16"
+                    Classes=""
+                    Command="{Binding LoadCommand}"
+                    Content="{Binding Localize[Loading]}"
+                    IsEnabled="{Binding ModbusInfo.IsAlive}" />
+                <Button
+                    Width="135"
+                    Height="60"
+                    Margin="4"
+                    FontFamily="{StaticResource fNoto_Medium}"
+                    FontSize="16"
+                    Classes="accent"
+                    Command="{Binding ApplyCommand}"
+                    Content="{Binding Localize[Apply]}"
+                    IsEnabled="{Binding ModbusInfo.IsAlive}" />
+            </UniformGrid>
+
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

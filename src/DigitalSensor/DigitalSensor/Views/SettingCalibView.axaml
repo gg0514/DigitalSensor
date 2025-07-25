@@ -1,66 +1,110 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:ui="using:FluentAvalonia.UI.Controls"
-             xmlns:vm="using:DigitalSensor.ViewModels"
-             xmlns:views="using:DigitalSensor.Views"
-			 mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="800"
-             x:Class="DigitalSensor.Views.SettingCalibView"
-             x:DataType="vm:SettingCalibViewModel">
-	
-  <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
-         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-	  <vm:SettingCalibViewModel />
-  </Design.DataContext>
+<UserControl
+    x:Class="DigitalSensor.Views.SettingCalibView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="using:FluentAvalonia.UI.Controls"
+    xmlns:views="using:DigitalSensor.Views"
+    xmlns:vm="using:DigitalSensor.ViewModels"
+    d:DesignHeight="800"
+    d:DesignWidth="450"
+    x:DataType="vm:SettingCalibViewModel"
+    mc:Ignorable="d">
 
-	<ScrollViewer Padding="20" Margin="0,50,0,0">
-		<StackPanel Spacing="20">
+    <Design.DataContext>
+        <!--
+            This only sets the DataContext for the previewer in an IDE,
+            to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs)
+        -->
+        <vm:SettingCalibViewModel />
+    </Design.DataContext>
 
-			
-			<!-- Calibration -->
-			<Border
-				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-				CornerRadius="12"
-				Padding="16"
-				Margin="0,0"
-				Effect="{DynamicResource ShadowElevation3}" >
+    <ScrollViewer Margin="0,50,0,0" Padding="20">
+        <StackPanel Spacing="20">
 
-				<StackPanel Margin="0,10,0,0">
-					<TextBlock Text="CALIBRATION" FontSize="14" Foreground="LightBlue"/>
-					<StackPanel Margin="0,15,0,0" Spacing="12">
-						<!-- Factor -->
-						<StackPanel Spacing="12">
-							<TextBlock Text="Factor" FontSize="16"/>
-							<!--<TextBlock Text="{Binding CalibAdjust.Factor}" FontSize="14" Foreground="Gray"/>-->
-							<ui:NumberBox Value="{Binding CalibAdjust.Factor}" 
-										  SmallChange="0.01"
-										  LargeChange="0.1"
-										  SimpleNumberFormat="F2" FontSize="24" Foreground="Gray" HorizontalAlignment="Stretch" SpinButtonPlacementMode="Inline"/>
-						</StackPanel>
 
-						<Separator/>
-						<!-- Offset -->
-						<StackPanel Spacing="12">
-							<TextBlock Text="Offset" FontSize="16"/>
-							<!--<TextBlock Text="{Binding CalibAdjust.Offset}" FontSize="14" Foreground="Gray"/>-->
-							<ui:NumberBox Value="{Binding CalibAdjust.Offset}" 
-  										  SmallChange="0.01"
-										  LargeChange="0.1"
-										  SimpleNumberFormat="F2" FontSize="24" Foreground="Gray" HorizontalAlignment="Stretch" SpinButtonPlacementMode="Inline"/>
-						</StackPanel>
-					</StackPanel>
-				</StackPanel>
-			</Border>
+            <!--  Calibration  -->
+            <Border
+                Margin="0,0"
+                Padding="16"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="12"
+                Effect="{DynamicResource ShadowElevation3}">
 
-			<!-- 적용버튼 -->
-			<UniformGrid Columns="2" Width="300" Height="100">
-				<Button Content="" Command="" Classes="" Margin="4" Width="0" Height="0"/>
-				<Button Content="{Binding Localize[Apply]}" Command="{Binding ApplyCommand}" IsEnabled="{Binding ModbusInfo.IsAlive}" Classes="accent" Margin="4" Width="135" Height="60" />
-			</UniformGrid>
+                <StackPanel Margin="0,10,0,0">
+                    <TextBlock
+                        FontFamily="{StaticResource fNoto_Bold}"
+                        FontSize="16"
+                        Foreground="DarkBlue"
+                        Text="CALIBRATION" />
+                    <StackPanel Margin="0,15,0,0" Spacing="12">
+                        <!--  Factor  -->
+                        <StackPanel Spacing="12">
+                            <TextBlock
+                                FontFamily="{StaticResource fNoto_Medium}"
+                                FontSize="14"
+                                Text="Factor" />
+                            <!--<TextBlock Text="{Binding CalibAdjust.Factor}" FontSize="14" Foreground="Gray"/>-->
+                            <ui:NumberBox
+                                HorizontalAlignment="Stretch"
+                                FontSize="24"
+                                Foreground="Gray"
+                                LargeChange="0.1"
+                                SimpleNumberFormat="F2"
+                                SmallChange="0.01"
+                                SpinButtonPlacementMode="Inline"
+                                Value="{Binding CalibAdjust.Factor}" />
+                        </StackPanel>
 
+                        <Separator />
+                        <!--  Offset  -->
+                        <StackPanel Spacing="12">
+                            <TextBlock
+                                FontFamily="{StaticResource fNoto_Medium}"
+                                FontSize="14"
+                                Text="Offset" />
+                            <!--<TextBlock Text="{Binding CalibAdjust.Offset}" FontSize="14" Foreground="Gray"/>-->
+                            <ui:NumberBox
+                                HorizontalAlignment="Stretch"
+                                FontSize="24"
+                                Foreground="Gray"
+                                LargeChange="0.1"
+                                SimpleNumberFormat="F2"
+                                SmallChange="0.01"
+                                SpinButtonPlacementMode="Inline"
+                                Value="{Binding CalibAdjust.Offset}" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!--  적용버튼  -->
+            <UniformGrid
+                Width="300"
+                Height="100"
+                Columns="2">
+                <Button
+                    Width="0"
+                    Height="0"
+                    Margin="4"
+                    Classes=""
+                    Command=""
+                    Content="" />
+                <Button
+                    Width="135"
+                    Height="60"
+                    Margin="4"
+                    FontFamily="{StaticResource fNoto_Medium}"
+                    FontSize="16"
+                    Classes="accent"
+                    Command="{Binding ApplyCommand}"
+                    Content="{Binding Localize[Apply]}"
+                    IsEnabled="{Binding ModbusInfo.IsAlive}" />
+            </UniformGrid>
+
+			<!--FontWeight="Bold"-->
 
 		</StackPanel>
-	</ScrollViewer>
+    </ScrollViewer>
 </UserControl>

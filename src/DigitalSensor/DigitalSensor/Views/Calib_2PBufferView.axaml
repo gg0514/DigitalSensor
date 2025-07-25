@@ -1,141 +1,246 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:ui="using:FluentAvalonia.UI.Controls"
-             xmlns:vm="using:DigitalSensor.ViewModels"
-             xmlns:views="using:DigitalSensor.Views"
-			 mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="800"
-             x:Class="DigitalSensor.Views.Calib_2PBufferView"
-             x:DataType="vm:Calib_2PBufferViewModel">
-	
-  <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
-         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-	  <vm:Calib_2PBufferViewModel />
-  </Design.DataContext>
+<UserControl
+    x:Class="DigitalSensor.Views.Calib_2PBufferView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="using:FluentAvalonia.UI.Controls"
+    xmlns:views="using:DigitalSensor.Views"
+    xmlns:vm="using:DigitalSensor.ViewModels"
+    d:DesignHeight="800"
+    d:DesignWidth="450"
+    x:DataType="vm:Calib_2PBufferViewModel"
+    mc:Ignorable="d">
+
+    <Design.DataContext>
+        <!--
+            This only sets the DataContext for the previewer in an IDE,
+            to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs)
+        -->
+        <vm:Calib_2PBufferViewModel />
+    </Design.DataContext>
 
 
-	<UserControl.Resources>
-		<StreamGeometry x:Key="icon_beaker">M67,334c-14,-14 -6,-39 34,-107 38,-64 41,-73 37,-128l-4,-59 56,0 56,0 -4,59c-4,55 -1,64 38,129 61,104 59,106 -86,110 -66,1 -123,-1 -127,-4zM300,309c0,-6 -12,-30 -26,-55l-26,-44 -58,0 -58,0 -26,44c-14,25 -26,49 -26,55 0,7 38,11 110,11 72,0 110,-4 110,-11zM226,174c-3,-9 -6,-38 -6,-65 0,-48 -1,-49 -30,-49 -29,0 -30,1 -30,49 0,27 -3,56 -6,65 -5,13 2,16 36,16 34,0 41,-3 36,-16z</StreamGeometry>
-	</UserControl.Resources>
+    <UserControl.Resources>
+        <StreamGeometry x:Key="icon_beaker">M67,334c-14,-14 -6,-39 34,-107 38,-64 41,-73 37,-128l-4,-59 56,0 56,0 -4,59c-4,55 -1,64 38,129 61,104 59,106 -86,110 -66,1 -123,-1 -127,-4zM300,309c0,-6 -12,-30 -26,-55l-26,-44 -58,0 -58,0 -26,44c-14,25 -26,49 -26,55 0,7 38,11 110,11 72,0 110,-4 110,-11zM226,174c-3,-9 -6,-38 -6,-65 0,-48 -1,-49 -30,-49 -29,0 -30,1 -30,49 0,27 -3,56 -6,65 -5,13 2,16 36,16 34,0 41,-3 36,-16z</StreamGeometry>
+    </UserControl.Resources>
 
-	<ScrollViewer Padding="20" Margin="0,30,0,0">
-		<StackPanel Spacing="20">
+    <ScrollViewer Margin="0,30,0,0" Padding="20">
+        <StackPanel Spacing="20">
 
-			<!-- LED 영역-->
-			<Grid ColumnDefinitions="*, Auto, Auto, Auto, 10">
-				<!-- Title -->
-				<StackPanel Grid.Column="0" Margin="0,10,10,10">
-					<TextBlock Text="{Binding Localize[2PBuffer]}" FontSize="26" FontWeight="Bold"/>
-				</StackPanel>
+            <!--  LED 영역  -->
+            <Grid ColumnDefinitions="*, Auto, Auto, Auto, 10">
+                <!--  Title  -->
+                <StackPanel Grid.Column="0" Margin="0,10,10,10">
+                    <TextBlock
+                        FontSize="26"
+                        FontWeight="Bold"
+                        Text="{Binding Localize[2PBuffer]}" />
+                </StackPanel>
 
-				<StackPanel Grid.Column="1" Margin="0,10,10,10">
-					<TextBlock Text="TX"
-								FontSize="12"
-								Margin="0,0,0,0"
-								FontWeight="SemiBold"/>
-					<Border Width="10" Height="10" Margin="0,5,0,0" >
-						<Ellipse Fill="{Binding IsTxOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='Orange'}"/>
-					</Border>
-				</StackPanel>
-				<StackPanel Grid.Column="2" Margin="0,10,10,10">
-					<TextBlock Text="RX"
-								FontSize="12"
-								Margin="0,0,0,0"
-								FontWeight="SemiBold"/>
-					<Border Width="10" Height="10" Margin="0,5,0,0" >
-						<Ellipse Fill="{Binding IsRxOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='GreenYellow'}"/>
-					</Border>
-				</StackPanel>
-				<StackPanel Grid.Column="3" Margin="0,10,10,10">
-					<TextBlock Text="ERR"
-								FontSize="12"
-								Margin="0,0,0,0"
-								FontWeight="SemiBold"/>
-					<Border Width="10" Height="10" Margin="0,5,0,0" >
-						<Ellipse Fill="{Binding IsErrOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='Red'}"/>
-					</Border>
-				</StackPanel>
-			</Grid>
-
-
-
-			<!-- 교정 지침 -->
-			<Border
-				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-				CornerRadius="12"
-				Padding="26"
-				Margin="0,10,0,0"
-				Effect="{DynamicResource ShadowElevation3}" >
-
-				<StackPanel>
-					<TextBlock Text="{Binding Localize[Guide]}" FontSize="14" Foreground="LightBlue"/>
-					<StackPanel Margin="0,0,10,0">
-						<StackPanel Orientation="Horizontal">
-							<PathIcon Margin="10,20,30,0" Height="40" Width="40" Foreground="Gray" Data="{StaticResource icon_beaker}"/>
-							<StackPanel Spacing="10">
-								<TextBlock Text="{Binding CalibInfo.CalibOrderGuide}" TextWrapping="Wrap" Width="270" FontSize="15" HorizontalAlignment="Left"/>
-								<TextBlock Text="{Binding Localize[2PGuide2]}" TextWrapping="Wrap" Width="270" FontSize="15" Foreground="" HorizontalAlignment="Left"/>
-								<TextBlock Text="{Binding Localize[2PGuide3]}" TextWrapping="Wrap" Width="270"  FontSize="15" Foreground="" HorizontalAlignment="Left"/>
-							</StackPanel>
-						</StackPanel>
-					</StackPanel>
-				</StackPanel>
-			</Border>
-
-			<!-- 현재값 -->
-			<Border
-				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-				CornerRadius="12"
-				Padding="26"
-				Margin="0,0,0,0"
-				Effect="{DynamicResource ShadowElevation3}" >
-
-				<StackPanel>
-					<TextBlock Text="{Binding Localize[CurrentValue]}" FontSize="14" Foreground="LightBlue"/>
-						<Grid ColumnDefinitions="110, *, Auto" Margin="0,0,0,10">
-							<TextBlock Grid.Column="1" Text="{Binding ReceivedData.Value}" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
-								   Margin="0,0,0,0"/>
-							<Border Grid.Column="2" VerticalAlignment="Bottom" Width="40" Height="20" Margin="0,5,10,0" >
-								<TextBlock Name="SensorUnit" Text="{Binding ReceivedInfo.SensorUnit}" FontWeight="Light" FontSize="14"/>
-							</Border>
-						</Grid>
-				</StackPanel>
-			</Border>
-
-			<!-- 교정상태 -->
-			<Border
-				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-				CornerRadius="12"
-				Padding="26"
-				Margin="0,0,0,0"
-				Effect="{DynamicResource ShadowElevation3}" >
-
-				<StackPanel>
-					<TextBlock Text="{Binding Localize[CalibrationStatus]}" FontSize="14" Foreground="LightBlue"/>
-					<Grid ColumnDefinitions="110, *, Auto" Margin="0,0,0,10">
-						<TextBlock Grid.Column="1" Text="{Binding CalibInfo.CalStatus, Converter={StaticResource StatusDescriptionConverter}}" HorizontalAlignment="Center" FontWeight="Normal" FontSize="30"
-							   Margin="0,0,0,0"/>
-						<Border Grid.Column="2" VerticalAlignment="Bottom" Width="30" Height="20" Margin="0,5,10,0" >
-						</Border>
-					</Grid>
-				</StackPanel>
-			</Border>
+                <StackPanel Grid.Column="1" Margin="0,10,10,10">
+                    <TextBlock
+                        Margin="0,0,0,0"
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        Text="TX" />
+                    <Border
+                        Width="10"
+                        Height="10"
+                        Margin="0,5,0,0">
+                        <Ellipse Fill="{Binding IsTxOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='Orange'}" />
+                    </Border>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Margin="0,10,10,10">
+                    <TextBlock
+                        Margin="0,0,0,0"
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        Text="RX" />
+                    <Border
+                        Width="10"
+                        Height="10"
+                        Margin="0,5,0,0">
+                        <Ellipse Fill="{Binding IsRxOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='GreenYellow'}" />
+                    </Border>
+                </StackPanel>
+                <StackPanel Grid.Column="3" Margin="0,10,10,10">
+                    <TextBlock
+                        Margin="0,0,0,0"
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        Text="ERR" />
+                    <Border
+                        Width="10"
+                        Height="10"
+                        Margin="0,5,0,0">
+                        <Ellipse Fill="{Binding IsErrOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='Red'}" />
+                    </Border>
+                </StackPanel>
+            </Grid>
 
 
-			<UniformGrid Columns="2" Width="300" Height="100">
-				<Button x:Name="AbortButton" Command="{Binding AbortCommand}" IsEnabled="{Binding CalibInfo.IsRun}" Classes="" Content="{Binding Localize[Stop]}" Margin="4" Width="135" Height="60"/>
-				<Button x:Name="ApplyButton" Command="{Binding ApplyCommand}" IsEnabled="{Binding !CalibInfo.IsRun}" Classes="accent" Margin="4" Width="135" Height="60">
-					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-						<ui:ProgressRing IsVisible="{Binding CalibInfo.IsRun}"
-									  Width="40" Height="40" Margin="0,0,15,0"
-									  IsActive="True"/>
-						<TextBlock Text="{Binding Localize[Apply]}" VerticalAlignment="Center"/>
-					</StackPanel>
-				</Button>
-			</UniformGrid>
 
-		</StackPanel>
-	</ScrollViewer>
+            <!--  교정 지침  -->
+            <Border
+                Margin="0,10,0,0"
+                Padding="26"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="12"
+                Effect="{DynamicResource ShadowElevation3}">
+
+                <StackPanel>
+                    <TextBlock
+                        FontFamily="{StaticResource fNoto_Bold}"
+                        FontSize="14"
+                        Foreground="DarkBlue"
+                        Text="{Binding Localize[Guide]}" />
+                    <StackPanel Margin="0,0,10,0">
+                        <StackPanel Orientation="Horizontal">
+                            <PathIcon
+                                Width="40"
+                                Height="40"
+                                Margin="10,20,30,0"
+                                Data="{StaticResource icon_beaker}"
+                                Foreground="Gray" />
+                            <StackPanel Spacing="10">
+                                <TextBlock
+                                    Width="270"
+                                    HorizontalAlignment="Left"
+                                    FontSize="15"
+                                    Text="{Binding CalibInfo.CalibOrderGuide}"
+                                    TextWrapping="Wrap" />
+                                <TextBlock
+                                    Width="270"
+                                    HorizontalAlignment="Left"
+                                    FontSize="15"
+                                    Foreground=""
+                                    Text="{Binding Localize[2PGuide2]}"
+                                    TextWrapping="Wrap" />
+                                <TextBlock
+                                    Width="270"
+                                    HorizontalAlignment="Left"
+                                    FontSize="15"
+                                    Foreground=""
+                                    Text="{Binding Localize[2PGuide3]}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!--  현재값  -->
+            <Border
+                Margin="0,0,0,0"
+                Padding="26"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="12"
+                Effect="{DynamicResource ShadowElevation3}">
+
+                <StackPanel>
+                    <TextBlock
+                        FontFamily="{StaticResource fNoto_Bold}"
+                        FontSize="14"
+                        Foreground="DarkBlue"
+                        Text="{Binding Localize[CurrentValue]}" />
+                    <Grid Margin="0,0,0,10" ColumnDefinitions="110, *, Auto">
+                        <TextBlock
+                            Grid.Column="1"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            FontSize="30"
+                            FontWeight="Normal"
+                            Text="{Binding ReceivedData.Value}" />
+                        <Border
+                            Grid.Column="2"
+                            Width="40"
+                            Height="20"
+                            Margin="0,5,10,0"
+                            VerticalAlignment="Bottom">
+                            <TextBlock
+                                Name="SensorUnit"
+                                FontSize="14"
+                                FontWeight="Light"
+                                Text="{Binding ReceivedInfo.SensorUnit}" />
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!--  교정상태  -->
+            <Border
+                Margin="0,0,0,0"
+                Padding="26"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="12"
+                Effect="{DynamicResource ShadowElevation3}">
+
+                <StackPanel>
+                    <TextBlock
+                        FontFamily="{StaticResource fNoto_Bold}"
+                        FontSize="14"
+                        Foreground="DarkBlue"
+                        Text="{Binding Localize[CalibrationStatus]}" />
+                    <Grid Margin="0,0,0,10" ColumnDefinitions="110, *, Auto">
+                        <TextBlock
+                            Grid.Column="1"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            FontSize="30"
+                            FontWeight="Normal"
+                            Text="{Binding CalibInfo.CalStatus, Converter={StaticResource StatusDescriptionConverter}}" />
+                        <Border
+                            Grid.Column="2"
+                            Width="30"
+                            Height="20"
+                            Margin="0,5,10,0"
+                            VerticalAlignment="Bottom" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+
+            <UniformGrid
+                Width="300"
+                Height="100"
+                Columns="2">
+                <Button
+                    x:Name="AbortButton"
+                    Width="135"
+                    Height="60"
+                    Margin="4"
+                    Classes=""
+                    Command="{Binding AbortCommand}"
+                    Content="{Binding Localize[Stop]}"
+                    FontFamily="{StaticResource fNoto_Medium}"
+                    FontSize="16"
+                    IsEnabled="{Binding CalibInfo.IsRun}" />
+                <Button
+                    x:Name="ApplyButton"
+                    Width="135"
+                    Height="60"
+                    Margin="4"
+                    Classes="accent"
+                    Command="{Binding ApplyCommand}"
+                    FontFamily="{StaticResource fNoto_Medium}"
+                    FontSize="16"
+                    IsEnabled="{Binding !CalibInfo.IsRun}">
+                    <StackPanel
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <ui:ProgressRing
+                            Width="40"
+                            Height="40"
+                            Margin="0,0,15,0"
+                            IsActive="True"
+                            IsVisible="{Binding CalibInfo.IsRun}" />
+                        <TextBlock VerticalAlignment="Center" Text="{Binding Localize[Apply]}" />
+                    </StackPanel>
+                </Button>
+            </UniformGrid>
+
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

@@ -1,31 +1,40 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:ui="using:FluentAvalonia.UI.Controls"
-             xmlns:vm="using:DigitalSensor.ViewModels"
-             xmlns:views="using:DigitalSensor.Views"
-			 mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="800"
-             x:Class="DigitalSensor.Views.SettingView"
-             x:DataType="vm:SettingViewModel">
-	
-  <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
-         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    <vm:SettingViewModel />
-  </Design.DataContext>
+<UserControl
+    x:Class="DigitalSensor.Views.SettingView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="using:FluentAvalonia.UI.Controls"
+    xmlns:views="using:DigitalSensor.Views"
+    xmlns:vm="using:DigitalSensor.ViewModels"
+    d:DesignHeight="800"
+    d:DesignWidth="450"
+    x:DataType="vm:SettingViewModel"
+    mc:Ignorable="d">
 
-	<ScrollViewer Padding="20" Margin="0,30,0,0">
-		<StackPanel Spacing="20">
+    <Design.DataContext>
+        <!--
+            This only sets the DataContext for the previewer in an IDE,
+            to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs)
+        -->
+        <vm:SettingViewModel />
+    </Design.DataContext>
 
-			<!-- Title -->
-			<TextBlock Text="{Binding Localize[Setting]}" FontSize="28" FontWeight="Bold"/>
+    <ScrollViewer Margin="0,30,0,0" Padding="20">
+        <StackPanel Spacing="20">
+
+            <!--  Title  -->
+            <TextBlock
+                FontSize="28"
+                FontWeight="Bold"
+                Text="{Binding Localize[Setting]}" />
 
 
-			<!-- USB Devices 
-			     화면에서 삭제 
-			-->			
-			<!--<Border
+            <!--
+                USB Devices
+                화면에서 삭제
+            -->
+            <!--<Border
 				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
 				CornerRadius="12"
 				Padding="16"
@@ -43,126 +52,186 @@
 				</StackPanel>
 			</Border>-->
 
-			<!-- MODBUS -->
-			<Border
-				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-				CornerRadius="12"
-				Padding="16"
-				Margin="0,0"				
-				Effect="{DynamicResource ShadowElevation3}" >
+            <!--  MODBUS  -->
+            <Border
+                Margin="0,0"
+                Padding="16"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="12"
+                Effect="{DynamicResource ShadowElevation3}">
 
-				<StackPanel>
-					<TextBlock Text="MODBUS" FontSize="14" Foreground="LightBlue"/>
-					<StackPanel Margin="0,15,0,0" Spacing="12"
-								PointerPressed="OnBackgroundModbus_PointerPressed"
-								Background="Transparent">
-						<StackPanel >
-							<TextBlock Text="Slave ID" FontSize="16"/>
-							<TextBlock Text="{Binding ModbusInfo.SlaveID}" FontSize="14" Foreground="Gray"/>
-							<!--<ui:NumberBox Value="{Binding SlaveID}" FontSize="14" Foreground="Gray" HorizontalAlignment="Stretch"/>-->
-						</StackPanel>
-					</StackPanel>
-				</StackPanel>
-			</Border>
-
-			
-			<!-- Calibration -->
-			<Border
-				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-				CornerRadius="12"
-				Padding="16"
-				Margin="0,0"
-				Effect="{DynamicResource ShadowElevation3}" >
-
-				<StackPanel>
-					<TextBlock Text="CALIBRATION" FontSize="14" Foreground="LightBlue"/>
-					<StackPanel Margin="0,15,0,0" Spacing="12"
-								PointerPressed="OnBackgroundCalibration_PointerPressed"
-								Background="Transparent">
-						<!-- Factor -->
-						<StackPanel>
-							<TextBlock Text="Factor" FontSize="16"/>
-							<TextBlock Text="{Binding CalibAdjust.Factor}" FontSize="14" Foreground="Gray"/>
-							<!--<ui:NumberBox Value="{Binding CalibAdjust.Factor}" FontSize="14" Foreground="Gray" HorizontalAlignment="Stretch"/>-->
-						</StackPanel>
-
-						<Separator/>
-						<!-- Offset -->
-						<StackPanel>
-							<TextBlock Text="Offset" FontSize="16"/>
-							<TextBlock Text="{Binding CalibAdjust.Offset}" FontSize="14" Foreground="Gray"/>
-							<!--<ui:NumberBox Value="{Binding CalibAdjust.Offset}" FontSize="14" Foreground="Gray" HorizontalAlignment="Stretch"/>-->
-						</StackPanel>
-					</StackPanel>
-				</StackPanel>
-			</Border>
+                <StackPanel>
+                    <TextBlock
+                        FontFamily="{StaticResource fNoto_Bold}"
+                        FontSize="16"
+                        Foreground="DarkBlue"
+                        Text="MODBUS" />
+                    <StackPanel
+                        Margin="0,15,0,0"
+                        Background="Transparent"
+                        PointerPressed="OnBackgroundModbus_PointerPressed"
+                        Spacing="12">
+                        <StackPanel>
+                            <TextBlock
+                                FontFamily="{StaticResource fNoto_Medium}"
+                                FontSize="14"
+                                Text="Slave ID" />
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="Gray"
+                                Text="{Binding ModbusInfo.SlaveID}" />
+                            <!--<ui:NumberBox Value="{Binding SlaveID}" FontSize="14" Foreground="Gray" HorizontalAlignment="Stretch"/>-->
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
 
 
+            <!--  Calibration  -->
+            <Border
+                Margin="0,0"
+                Padding="16"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="12"
+                Effect="{DynamicResource ShadowElevation3}">
+
+                <StackPanel>
+                    <TextBlock
+                        FontFamily="{StaticResource fNoto_Bold}"
+                        FontSize="16"
+                        Foreground="DarkBlue"
+                        Text="CALIBRATION" />
+                    <StackPanel
+                        Margin="0,15,0,0"
+                        Background="Transparent"
+                        PointerPressed="OnBackgroundCalibration_PointerPressed"
+                        Spacing="12">
+                        <!--  Factor  -->
+                        <StackPanel>
+                            <TextBlock
+                                FontFamily="{StaticResource fNoto_Medium}"
+                                FontSize="14"
+                                Text="Factor" />
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="Gray"
+                                Text="{Binding CalibAdjust.Factor}" />
+                            <!--<ui:NumberBox Value="{Binding CalibAdjust.Factor}" FontSize="14" Foreground="Gray" HorizontalAlignment="Stretch"/>-->
+                        </StackPanel>
+
+                        <Separator />
+                        <!--  Offset  -->
+                        <StackPanel>
+                            <TextBlock
+                                FontFamily="{StaticResource fNoto_Medium}"
+                                FontSize="14"
+                                Text="Offset" />
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="Gray"
+                                Text="{Binding CalibAdjust.Offset}" />
+                            <!--<ui:NumberBox Value="{Binding CalibAdjust.Offset}" FontSize="14" Foreground="Gray" HorizontalAlignment="Stretch"/>-->
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
 
 
-			<!-- 시리얼 통신 -->
-			<Border
-				Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-				CornerRadius="12"
-				Padding="16"
-				Margin="0,0"
-				Effect="{DynamicResource ShadowElevation3}" >
 
-				<StackPanel>
-					<TextBlock Text="SERIAL" FontSize="14" Foreground="LightBlue"/>
-					<StackPanel Margin="0,15,0,0" Spacing="12"
-								PointerPressed="OnBackgroundSerial_PointerPressed"
-								Background="Transparent">
 
-						<!-- Baud rate -->
-						<StackPanel>
-							<TextBlock Text="Baud rate" FontSize="16"/>
-							<TextBlock Text="{Binding SerialConn.BaudRate}" FontSize="14" Foreground="Gray"/>
-							<!--<ui:FAComboBox IsEditable="False" IsTextSearchEnabled="False"
+            <!--  시리얼 통신  -->
+            <Border
+                Margin="0,0"
+                Padding="16"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="12"
+                Effect="{DynamicResource ShadowElevation3}">
+
+                <StackPanel>
+                    <TextBlock
+                        FontFamily="{StaticResource fNoto_Bold}"
+                        FontSize="16"
+                        Foreground="DarkBlue"
+                        Text="SERIAL" />
+                    <StackPanel
+                        Margin="0,15,0,0"
+                        Background="Transparent"
+                        PointerPressed="OnBackgroundSerial_PointerPressed"
+                        Spacing="12">
+
+                        <!--  Baud rate  -->
+                        <StackPanel>
+                            <TextBlock
+                                FontFamily="{StaticResource fNoto_Medium}"
+                                FontSize="14"
+                                Text="Baud rate" />
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="Gray"
+                                Text="{Binding SerialConn.BaudRate}" />
+                            <!--<ui:FAComboBox IsEditable="False" IsTextSearchEnabled="False"
 										   ItemsSource="{Binding SerialBaudrate}"
 										   SelectedItem="{Binding SelectedBaudrate}"
 									       FontSize="14" Foreground="Gray"  HorizontalAlignment="Stretch" />-->
-						</StackPanel>
+                        </StackPanel>
 
-						<Separator/>
-						<!-- Data bits -->
-						<StackPanel>
-							<TextBlock Text="Data bits" FontSize="16"/>
-							<TextBlock Text="{Binding SerialConn.DataBits}" FontSize="14" Foreground="Gray"/>
-							<!--<ui:FAComboBox IsEditable="False" IsTextSearchEnabled="False"
+                        <Separator />
+                        <!--  Data bits  -->
+                        <StackPanel>
+                            <TextBlock
+                                FontFamily="{StaticResource fNoto_Medium}"
+                                FontSize="14"
+                                Text="Data bits" />
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="Gray"
+                                Text="{Binding SerialConn.DataBits}" />
+                            <!--<ui:FAComboBox IsEditable="False" IsTextSearchEnabled="False"
 										   ItemsSource="{Binding SerialDatabits}"
 										   SelectedItem="{Binding SelectedDatabits}"
 										   FontSize="14" Foreground="Gray"  HorizontalAlignment="Stretch" />-->
-						</StackPanel>
+                        </StackPanel>
 
-						<Separator/>
-						<!-- Parity -->
-						<StackPanel>
-							<TextBlock Text="Parity" FontSize="16"/>
-							<TextBlock Text="{Binding SerialConn.Parity}" FontSize="14" Foreground="Gray"/>
-							<!--<ui:FAComboBox IsEditable="False" IsTextSearchEnabled="False"
+                        <Separator />
+                        <!--  Parity  -->
+                        <StackPanel>
+                            <TextBlock
+                                FontFamily="{StaticResource fNoto_Medium}"
+                                FontSize="14"
+                                Text="Parity" />
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="Gray"
+                                Text="{Binding SerialConn.Parity}" />
+                            <!--<ui:FAComboBox IsEditable="False" IsTextSearchEnabled="False"
 										   ItemsSource="{Binding SerialParity}"
 										   SelectedItem="{Binding SelectedParity}"
 										   FontSize="14" Foreground="Gray"  HorizontalAlignment="Stretch" />-->
-						</StackPanel>
+                        </StackPanel>
 
-						<Separator/>
-						<!-- Stop bits -->
-						<StackPanel>
-							<TextBlock Text="Stop bits" FontSize="16"/>
-							<TextBlock Text="{Binding SerialConn.StopBits}" FontSize="14" Foreground="Gray"/>
-							<!--<ui:FAComboBox IsEditable="False" IsTextSearchEnabled="False"
+                        <Separator />
+                        <!--  Stop bits  -->
+                        <StackPanel>
+                            <TextBlock
+                                FontFamily="{StaticResource fNoto_Medium}"
+                                FontSize="14"
+                                Text="Stop bits" />
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="Gray"
+                                Text="{Binding SerialConn.StopBits}" />
+                            <!--<ui:FAComboBox IsEditable="False" IsTextSearchEnabled="False"
 										   ItemsSource="{Binding SerialStopbits}"
 										   SelectedItem="{Binding SelectedStopbits}"
-										   FontSize="14" 
-										   Foreground="Gray"  
+										   FontSize="14"
+										   Foreground="Gray"
 										   HorizontalAlignment="Stretch"    />-->
-						</StackPanel>
-					</StackPanel>
-				</StackPanel>
-			</Border>
-			
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
 
-		</StackPanel>
-	</ScrollViewer>
+
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

@@ -96,8 +96,9 @@
 
                 <StackPanel>
                     <TextBlock
+                        FontFamily="{StaticResource fNoto_Bold}"
                         FontSize="14"
-                        Foreground="LightBlue"
+                        Foreground="DarkBlue"
                         Text="{Binding Localize[Guide]}" />
                     <StackPanel Margin="0,0,10,0">
                         <StackPanel Orientation="Horizontal">
@@ -147,8 +148,9 @@
                         <TextBlock
                             Grid.Column="0"
                             VerticalAlignment="Center"
+                            FontFamily="{StaticResource fNoto_Bold}"
                             FontSize="14"
-                            Foreground="LightBlue"
+                            Foreground="DarkBlue"
                             Text="{Binding Localize[CurrentValue]}" />
                         <TextBlock
                             Grid.Column="1"
@@ -182,8 +184,9 @@
                         <TextBlock
                             Grid.Column="0"
                             VerticalAlignment="Center"
+                            FontFamily="{StaticResource fNoto_Bold}"
                             FontSize="14"
-                            Foreground="LightBlue"
+                            Foreground="DarkBlue"
                             Text="{Binding Localize[CalibrationValue]}" />
 
                         <Grid Grid.Column="1">
@@ -255,11 +258,12 @@
                 Effect="{DynamicResource ShadowElevation3}">
 
                 <StackPanel>
-                    <Grid Margin="0,0,0,10" ColumnDefinitions="120, *, auto">
+                    <Grid Margin="0,0,0,10" ColumnDefinitions="125, *, auto">
                         <TextBlock
                             Grid.Column="0"
+                            FontFamily="{StaticResource fNoto_Bold}"
                             FontSize="14"
-                            Foreground="LightBlue"
+                            Foreground="DarkBlue"
                             Text="{Binding Localize[CalibrationStatus]}" />
                         <TextBlock
                             Grid.Column="1"
@@ -292,6 +296,8 @@
                     Classes=""
                     Command="{Binding AbortCommand}"
                     Content="{Binding Localize[Stop]}"
+                    FontFamily="{StaticResource fNoto_Medium}"
+                    FontSize="16"
                     IsEnabled="{Binding CalibInfo.IsRun}" />
                 <Button
                     x:Name="ApplyButton"
@@ -300,6 +306,8 @@
                     Margin="4"
                     Classes="accent"
                     Command="{Binding ApplyCommand}"
+                    FontFamily="{StaticResource fNoto_Medium}"
+                    FontSize="16"
                     IsEnabled="{Binding !CalibInfo.IsRun}">
                     <StackPanel
                         HorizontalAlignment="Center"
@@ -320,8 +328,8 @@
             <Border
                 x:Name="SpacerBorder"
                 Height="50"
-			    IsVisible="False" 
-                Background="Transparent"/>
+                Background="Transparent"
+                IsVisible="False" />
         </StackPanel>
 
     </ScrollViewer>
