@@ -102,7 +102,7 @@ public partial class HomeViewModel : ViewModelBase
                 case SensorType.TurbidityLow:
                 case SensorType.TurbidityHighColor:
                 case SensorType.TurbidityHighIR:
-                case SensorType.PH:
+                //case SensorType.PH:
                     IsLampVisible = true;
                     break;
                 default:

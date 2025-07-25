@@ -150,7 +150,7 @@
                             HorizontalAlignment="Center"
                             FontSize="50"
                             FontWeight="Bold"
-                            Text="{Binding ReceivedData.Value}" />
+                            Text="{Binding ReceivedData.Value, StringFormat={}{0:F2}}" />
                         <Border
                             Grid.Column="1"
                             Width="40"
@@ -188,7 +188,7 @@
                             HorizontalAlignment="Center"
                             FontSize="50"
                             FontWeight="Bold"
-                            Text="{Binding ReceivedData.Mv}" />
+                            Text="{Binding ReceivedData.Mv, StringFormat={}{0:F1}}" />
                         <Border
                             Grid.Column="1"
                             Width="40"
@@ -226,7 +226,7 @@
                             HorizontalAlignment="Center"
                             FontSize="50"
                             FontWeight="Bold"
-                            Text="{Binding ReceivedData.Temperature}" />
+                            Text="{Binding ReceivedData.Temperature, StringFormat={}{0:F2}}" />
                         <Border
                             Grid.Column="1"
                             Width="40"

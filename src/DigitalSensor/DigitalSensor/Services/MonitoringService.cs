@@ -524,7 +524,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
             CalibInfo.CalStatus = calStatus;
         }
 
-        Console.WriteLine($"ReadCalibStatus: {CalibInfo.CalStatus}");
+        //Console.WriteLine($"ReadCalibStatus: {CalibInfo.CalStatus}");
     }
 
     private Task ResetCallibStatus()

@@ -255,4 +255,7 @@
   <data name="MenuCalibTemp" xml:space="preserve">
     <value>온도 교정</value>
   </data>
+  <data name="Version" xml:space="preserve">
+    <value>1.0.0</value>
+  </data>
 </root>

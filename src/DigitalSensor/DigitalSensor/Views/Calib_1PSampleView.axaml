@@ -174,7 +174,7 @@
                             VerticalAlignment="Center"
                             FontSize="30"
                             FontWeight="Normal"
-                            Text="{Binding ReceivedData.Value}" />
+                            Text="{Binding ReceivedData.Value, StringFormat={}{0:F2}}" />
 
                         <Border
                             Grid.Column="2"
@@ -215,7 +215,7 @@
                                 FontWeight="Normal"
                                 IsVisible="{Binding !IsEditing}"
                                 PointerPressed="OnTextBlockClick"
-                                Text="{Binding CalibValue}"
+                                Text="{Binding CalibValue, StringFormat={}{0:F2}}"
                                 TextAlignment="Center" />
                             <TextBox
                                 x:Name="ValueTextBox"

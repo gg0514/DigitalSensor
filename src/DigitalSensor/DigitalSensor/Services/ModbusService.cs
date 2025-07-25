@@ -390,7 +390,9 @@ public class ModbusService : IModbusService
 
         string result = string.Join(" ", registers.Select(v => v.ToString("X4")));
 
-        Console.WriteLine($"MODBUS - ReadCalibStatus: REQ= Id:{slaveId}, Addr:{startAddress}, Num:{numRegisters}, Result= 0x{result}");
+        CalibrationStatus calStatus = (CalibrationStatus)registers[0];
+
+        Console.WriteLine($"MODBUS - ReadCalibStatus: REQ= Id:{slaveId}, Addr:{startAddress}, Num:{numRegisters}, Result= 0x{result} ({calStatus})");
 
         return registers[0];
     }
@@ -483,14 +485,15 @@ public class ModbusService : IModbusService
 
         byte slaveId = _slaveId;
         ushort startAddress = (ushort)_modbusMap["CALIB_2P_BUFFER"]["address"];
-        ushort[] registers = ConvertToRegisters(value);
+        
+        ushort[] registers = new ushort[1];
 
-        //await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers, 5000);
-        await _modbusMaster.WriteSingleRegisterAsync(slaveId, startAddress, value, 2000);
+        ushort swapped = (ushort)((value >> 8) | (value << 8));
+        registers[0] = swapped;
 
-        //Console.WriteLine($"MODBUS - WriteCalib2pBuffer:  REQ= Id:{slaveId}, Addr:{startAddress}, Val:{value}, Reg:[{string.Join(",", registers.Select(r => $"0x{r:X4}"))}]");
-        Console.WriteLine($"MODBUS - WriteCalib2pBuffer:  REQ= Id:{slaveId}, Addr:{startAddress}, Val:{value}");
+        await _modbusMaster.WriteMultipleRegistersAsync(slaveId, startAddress, registers, 5000);
 
+        Console.WriteLine($"MODBUS - WriteCalib2pBuffer:  REQ= Id:{slaveId}, Addr:{startAddress}, Val:{value}, Reg:[{string.Join(",", registers.Select(r => $"0x{r:X4}"))}]");
     }
 
     // CALIB_ZERO

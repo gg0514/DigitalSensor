@@ -161,7 +161,7 @@
                             HorizontalAlignment="Center"
                             FontSize="35"
                             FontWeight="Normal"
-                            Text="{Binding ReceivedData.Value}" />
+                            Text="{Binding ReceivedData.Value, StringFormat={}{0:F2}}" />
                         <Border
                             Grid.Column="2"
                             Width="40"
