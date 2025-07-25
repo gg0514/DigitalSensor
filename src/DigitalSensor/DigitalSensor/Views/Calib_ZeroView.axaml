@@ -93,38 +93,37 @@
                         FontSize="14"
                         Foreground="DarkBlue"
                         Text="{Binding Localize[Guide]}" />
-                    <StackPanel Margin="0,0,10,0">
-                        <StackPanel Orientation="Horizontal">
-                            <PathIcon
-                                Width="40"
-                                Height="40"
-                                Margin="10,20,30,0"
-                                Data="{StaticResource icon_beaker}"
-                                Foreground="Gray" />
-                            <StackPanel Spacing="10">
-                                <TextBlock
-                                    Width="270"
-                                    HorizontalAlignment="Left"
-                                    FontSize="15"
-                                    Text="{Binding Localize[ZeroGuide1]}"
-                                    TextWrapping="Wrap" />
-                                <TextBlock
-                                    Width="270"
-                                    HorizontalAlignment="Left"
-                                    FontSize="15"
-                                    Foreground=""
-                                    Text="{Binding Localize[ZeroGuide2]}"
-                                    TextWrapping="Wrap" />
-                                <TextBlock
-                                    Width="270"
-                                    HorizontalAlignment="Left"
-                                    FontSize="15"
-                                    Foreground=""
-                                    Text="{Binding Localize[ZeroGuide3]}"
-                                    TextWrapping="Wrap" />
-                            </StackPanel>
+                    <Grid Margin="0,0,0,0" ColumnDefinitions="Auto, *">
+                        <PathIcon
+                            Grid.Column="0"
+                            Width="40"
+                            Height="40"
+                            Margin="10,20,30,0"
+                            Data="{StaticResource icon_beaker}"
+                            Foreground="Gray" />
+                        <StackPanel Grid.Column="1" Spacing="10">
+                            <TextBlock
+                                Width="270"
+                                HorizontalAlignment="Left"
+                                FontSize="15"
+                                Text="{Binding Localize[ZeroGuide1]}"
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Width="270"
+                                HorizontalAlignment="Left"
+                                FontSize="15"
+                                Foreground=""
+                                Text="{Binding Localize[ZeroGuide2]}"
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Width="270"
+                                HorizontalAlignment="Left"
+                                FontSize="15"
+                                Foreground=""
+                                Text="{Binding Localize[ZeroGuide3]}"
+                                TextWrapping="Wrap" />
                         </StackPanel>
-                    </StackPanel>
+                    </Grid>
                 </StackPanel>
             </Border>
 
@@ -209,21 +208,21 @@
                     Width="135"
                     Height="60"
                     Margin="4"
-                    FontFamily="{StaticResource fNoto_Medium}"
-                    FontSize="16"
                     Classes=""
                     Command="{Binding AbortCommand}"
                     Content="{Binding Localize[Stop]}"
+                    FontFamily="{StaticResource fNoto_Medium}"
+                    FontSize="16"
                     IsEnabled="{Binding CalibInfo.IsRun}" />
                 <Button
                     x:Name="ApplyButton"
                     Width="135"
                     Height="60"
                     Margin="4"
-                    FontFamily="{StaticResource fNoto_Medium}"
-                    FontSize="16"					
                     Classes="accent"
                     Command="{Binding ApplyCommand}"
+                    FontFamily="{StaticResource fNoto_Medium}"
+                    FontSize="16"
                     IsEnabled="{Binding !CalibInfo.IsRun}">
                     <StackPanel
                         HorizontalAlignment="Center"

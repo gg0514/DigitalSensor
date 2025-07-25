@@ -94,44 +94,47 @@
                 CornerRadius="12"
                 Effect="{DynamicResource ShadowElevation3}">
 
-                <StackPanel>
+                <StackPanel Background="">
                     <TextBlock
                         FontFamily="{StaticResource fNoto_Bold}"
                         FontSize="14"
                         Foreground="DarkBlue"
                         Text="{Binding Localize[Guide]}" />
-                    <StackPanel Margin="0,0,10,0">
-                        <StackPanel Orientation="Horizontal">
-                            <PathIcon
-                                Width="40"
-                                Height="40"
-                                Margin="10,20,30,0"
-                                Data="{StaticResource icon_beaker}"
-                                Foreground="Gray" />
-                            <StackPanel Spacing="10">
-                                <TextBlock
-                                    Width="270"
-                                    HorizontalAlignment="Left"
-                                    FontSize="15"
-                                    Text="{Binding Localize[1PGuide1]}"
-                                    TextWrapping="Wrap" />
-                                <TextBlock
-                                    Width="270"
-                                    HorizontalAlignment="Left"
-                                    FontSize="15"
-                                    Foreground=""
-                                    Text="{Binding Localize[1PGuide2]}"
-                                    TextWrapping="Wrap" />
-                                <TextBlock
-                                    Width="270"
-                                    HorizontalAlignment="Left"
-                                    FontSize="15"
-                                    Foreground=""
-                                    Text="{Binding Localize[1PGuide3]}"
-                                    TextWrapping="Wrap" />
-                            </StackPanel>
+
+					<Grid Margin="0,0,0,0" ColumnDefinitions="Auto, *">
+                        <PathIcon
+							Grid.Column="0"
+                            Width="40"
+                            Height="40"
+                            Margin="10,20,30,0"
+                            Data="{StaticResource icon_beaker}"
+                            Foreground="Gray" />
+						<StackPanel 
+						    Grid.Column="1"
+							Spacing="10">
+							<TextBlock
+                                MaxWidth="270"
+                                HorizontalAlignment="Stretch"
+                                FontSize="15"
+                                Text="{Binding Localize[1PGuide1]}"
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                MaxWidth="270"
+                                HorizontalAlignment="Stretch"
+                                Background=""
+                                FontSize="15"
+                                Foreground=""
+                                Text="{Binding Localize[1PGuide2]}"
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                MaxWidth="270"
+                                HorizontalAlignment="Stretch"
+                                FontSize="15"
+                                Foreground=""
+                                Text="{Binding Localize[1PGuide3]}"
+                                TextWrapping="Wrap" />
                         </StackPanel>
-                    </StackPanel>
+                    </Grid>
                 </StackPanel>
             </Border>
 
