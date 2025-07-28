@@ -77,6 +77,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     private bool _isMonitoring = false;
     private bool _isCalibration = false;
+    private bool _need_sensor_info = false;               // 센서 정보가 필요한지 여부
 
     private float   _calibValue = 0;
     private int     _failCount = 0;     // 실패 횟수
@@ -152,7 +153,7 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
                 return;
             }
 
-            await RetrieveSensorInfo();
+            _need_sensor_info = true;
 
             await UpdateInfo(deviceInfo, slaveId);
             await StartMonitoring();
@@ -198,13 +199,13 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     public async Task RetrieveSensorInfo()
     {
-        SensorInfo = await _sensorService.GetSensorInfoAsync();
+        SensorInfo info = await _sensorService.GetSensorInfoAsync();
         SettingViewModel vm = App.GlobalHost.GetService<SettingViewModel>();
 
-        vm.CalibAdjust.Factor = SensorInfo.Factor;
-        vm.CalibAdjust.Offset = SensorInfo.Offset;
+        vm.CalibAdjust.Factor = info.Factor;
+        vm.CalibAdjust.Offset = info.Offset;
 
-        Console.WriteLine($"[SENSOR INFO] SlaveID: {_modbusInfo.SlaveID}, Type: {SensorInfo.Type} Factor: {SensorInfo.Factor}, Offset: {SensorInfo.Offset}");
+        Console.WriteLine($"[SENSOR INFO] SlaveID: {_modbusInfo.SlaveID}, Type: {info.Type} Factor: {info.Factor}, Offset: {info.Offset}");
     }
 
 
@@ -262,6 +263,12 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
             await GetSensorValue();
             await GetSensorMv();
             await GetSensorTemperature();
+
+            if (_need_sensor_info == true)
+            {
+                _need_sensor_info = false;
+                await RetrieveSensorInfo();
+            }
         }
         catch(Exception ex)
         {
