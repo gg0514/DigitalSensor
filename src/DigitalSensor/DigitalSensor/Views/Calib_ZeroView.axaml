@@ -154,9 +154,10 @@
                         FontSize="14"
                         Foreground="DarkBlue"
                         Text="{Binding Localize[CurrentValue]}" />
-                    <Grid Margin="0,0,0,10" ColumnDefinitions="110, *, Auto">
-                        <TextBlock
-                            Grid.Column="1"
+					<Grid Margin="40,0,0,10" ColumnDefinitions="110, *, Auto">
+						<TextBlock
+							Grid.Column="0"
+                            Grid.ColumnSpan="3"
                             Margin="0,0,0,0"
                             HorizontalAlignment="Center"
                             FontSize="35"
@@ -193,14 +194,16 @@
                         FontSize="14"
                         Foreground="DarkBlue"
                         Text="{Binding Localize[CalibrationStatus]}" />
-                    <Grid Margin="0,0,0,10" ColumnDefinitions="110, *, Auto">
-                        <TextBlock
-                            Grid.Column="1"
+                    <Grid Margin="40,0,0,10" ColumnDefinitions="110, *, Auto">
+						<TextBlock
+							Grid.Column="0"
+                            Grid.ColumnSpan="3"
+							Background=""
                             Margin="0,0,0,0"
                             HorizontalAlignment="Center"
                             FontSize="30"
                             FontWeight="Normal"
-                            Text="{Binding CalibInfo.CalStatus, Converter={StaticResource StatusDescriptionConverter}}" />
+                			Text="{Binding CalibInfo.CalStatus, Converter={StaticResource StatusDescriptionConverter}}" />
                         <Border
                             Grid.Column="2"
                             Width="30"
@@ -210,9 +213,10 @@
                     </Grid>
                 </StackPanel>
             </Border>
+			<!--Text="{Binding CalibInfo.CalStatus, Converter={StaticResource StatusDescriptionConverter}}" />-->
 
 
-            <UniformGrid
+			<UniformGrid
                 Width="300"
                 Height="100"
                 Columns="2">

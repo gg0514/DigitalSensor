@@ -104,7 +104,21 @@ public static class EnumExtensions
                 resourceKey = "StatusProgress";
             else if (status == CalibrationStatus.CalOK)
                 resourceKey = "StatusSuccess";
-            else 
+            else if (status == CalibrationStatus.Fail_ValueTooLow)
+                resourceKey = "StatusFail_ValueTooLow";
+            else if (status == CalibrationStatus.Fail_ValueTooHigh)
+                resourceKey = "StatusFail_ValueTooHigh";
+            else if (status == CalibrationStatus.Fail_SlopeTooLow)
+                resourceKey = "StatusFail_SlopeTooLow";
+            else if (status == CalibrationStatus.Fail_SlopeTooHigh)
+                resourceKey = "StatusFail_SlopeTooHigh";
+            else if (status == CalibrationStatus.Fail_OffsetTooLow)
+                resourceKey = "StatusFail_OffsetTooLow";
+            else if (status == CalibrationStatus.Fail_OffsetTooHigh)
+                resourceKey = "StatusFail_OffsetTooHigh";
+            else if (status == CalibrationStatus.Fail_PointsTooClose)
+                resourceKey = "StatusFail_PointsTooClose";
+            else
                 resourceKey = "StatusFail";
         }
 

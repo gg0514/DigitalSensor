@@ -83,7 +83,7 @@ public class SensorService : ISensorService
             {
                 SensorAttached?.Invoke(deviceInfo);
 
-                _notificationService.ShowMessage(Localize["Information"], $"{deviceInfo.ProductName} - Device opened successfully.");
+                _notificationService.ShowMessage(Localize["Information"], $"Device opened successfully.");
                 Console.WriteLine($"USB - {deviceInfo.ProductName}:{deviceInfo.DeviceId} Device Attached");
 
                 //SettingViewModel vm = App.GlobalHost.GetService<SettingViewModel>();

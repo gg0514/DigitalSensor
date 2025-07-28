@@ -273,15 +273,15 @@
                 Effect="{DynamicResource ShadowElevation3}">
 
                 <StackPanel>
-                    <Grid Margin="0,0,0,10" ColumnDefinitions="125, *, auto">
-                        <TextBlock
+					<TextBlock
+						FontFamily="{StaticResource fNoto_Bold}"
+						FontSize="14"
+						Foreground="DarkBlue"
+						Text="{Binding Localize[CalibrationStatus]}" />
+					<Grid Margin="40,0,0,10" ColumnDefinitions="110, *, Auto">
+						<TextBlock
                             Grid.Column="0"
-                            FontFamily="{StaticResource fNoto_Bold}"
-                            FontSize="14"
-                            Foreground="DarkBlue"
-                            Text="{Binding Localize[CalibrationStatus]}" />
-                        <TextBlock
-                            Grid.Column="1"
+                            Grid.ColumnSpan="3"
                             Margin="0,0,0,0"
                             HorizontalAlignment="Center"
                             FontSize="30"
@@ -301,7 +301,7 @@
             <!--  적용버튼  -->
             <UniformGrid
                 Width="300"
-                Height="100"
+                Height="70"
                 Columns="2">
                 <Button
                     x:Name="AbortButton"

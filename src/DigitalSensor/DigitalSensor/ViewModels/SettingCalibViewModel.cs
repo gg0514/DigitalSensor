@@ -64,7 +64,7 @@ public partial class SettingCalibViewModel : ViewModelBase
             // Save the settings to the AppSettings
             await Task.Run(() => _settings.SaveSettings());
 
-            _notificationService.ShowMessage(Localize["Information"], $"Sensor Factor: {factor}, Offset: {offset}");
+            _notificationService.ShowMessage(Localize["Information"], $"Current Sensor Factor: {factor}, Offset: {offset}");
         }
         catch (Exception ex)
         {

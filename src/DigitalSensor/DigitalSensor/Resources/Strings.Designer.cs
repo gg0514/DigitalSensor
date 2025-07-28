@@ -358,6 +358,69 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
+        ///   Fail (OffsetTooHigh)과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string StatusFail_OffsetTooHigh {
+            get {
+                return ResourceManager.GetString("StatusFail_OffsetTooHigh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Fail (OffsetTooLow)과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string StatusFail_OffsetTooLow {
+            get {
+                return ResourceManager.GetString("StatusFail_OffsetTooLow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Fail (PointsTooClose)과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string StatusFail_PointsTooClose {
+            get {
+                return ResourceManager.GetString("StatusFail_PointsTooClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Fail (SlopeTooHigh)과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string StatusFail_SlopeTooHigh {
+            get {
+                return ResourceManager.GetString("StatusFail_SlopeTooHigh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Fail (SlopeTooLow)과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string StatusFail_SlopeTooLow {
+            get {
+                return ResourceManager.GetString("StatusFail_SlopeTooLow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Fail (ValueTooHigh)과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string StatusFail_ValueTooHigh {
+            get {
+                return ResourceManager.GetString("StatusFail_ValueTooHigh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Fail (ValueTooLow)과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string StatusFail_ValueTooLow {
+            get {
+                return ResourceManager.GetString("StatusFail_ValueTooLow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Progress과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string StatusProgress {

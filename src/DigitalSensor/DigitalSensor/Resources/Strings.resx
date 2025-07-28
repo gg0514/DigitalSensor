@@ -275,4 +275,25 @@
     <value>1.0.1</value>
     <comment>프로그램버전</comment>
   </data>
+  <data name="StatusFail_ValueTooLow" xml:space="preserve">
+    <value>Fail (ValueTooLow)</value>
+  </data>
+  <data name="StatusFail_ValueTooHigh" xml:space="preserve">
+    <value>Fail (ValueTooHigh)</value>
+  </data>
+  <data name="StatusFail_SlopeTooLow" xml:space="preserve">
+    <value>Fail (SlopeTooLow)</value>
+  </data>
+  <data name="StatusFail_SlopeTooHigh" xml:space="preserve">
+    <value>Fail (SlopeTooHigh)</value>
+  </data>
+  <data name="StatusFail_OffsetTooLow" xml:space="preserve">
+    <value>Fail (OffsetTooLow)</value>
+  </data>
+  <data name="StatusFail_OffsetTooHigh" xml:space="preserve">
+    <value>Fail (OffsetTooHigh)</value>
+  </data>
+  <data name="StatusFail_PointsTooClose" xml:space="preserve">
+    <value>Fail (PointsTooClose)</value>
+  </data>
 </root>

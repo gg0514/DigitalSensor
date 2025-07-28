@@ -156,7 +156,7 @@
                         FontSize="14"
                         Foreground="DarkBlue"
                         Text="{Binding Localize[CurrentValue]}" />
-                    <Grid Margin="0,0,0,10" ColumnDefinitions="110, *, Auto">
+                    <Grid Margin="0,0,0,10" ColumnDefinitions="100, *, Auto">
                         <TextBlock
                             Grid.Column="1"
                             Margin="0,0,0,0"
@@ -194,9 +194,10 @@
                         FontSize="14"
                         Foreground="DarkBlue"
                         Text="{Binding Localize[CalibrationStatus]}" />
-                    <Grid Margin="0,0,0,10" ColumnDefinitions="110, *, Auto">
-                        <TextBlock
-                            Grid.Column="1"
+					<Grid Margin="40,0,0,10" ColumnDefinitions="110, *, Auto">
+						<TextBlock
+                            Grid.Column="0"
+							Grid.ColumnSpan="3"
                             Margin="0,0,0,0"
                             HorizontalAlignment="Center"
                             FontSize="30"

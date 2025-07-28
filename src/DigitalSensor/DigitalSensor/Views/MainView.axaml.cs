@@ -208,6 +208,9 @@ public partial class MainView : UserControl
         {
             string parentTag = "Home"; // 부모 메뉴의 Tag 값
 
+            NavView.IsBackButtonVisible = false;
+            NavView.IsBackEnabled = false;
+
             foreach (var item in NavView.MenuItems)
             {
                 if (item is NavigationViewItem navItem && navItem.Tag?.ToString() == parentTag)
