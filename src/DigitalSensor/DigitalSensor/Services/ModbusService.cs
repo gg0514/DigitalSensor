@@ -157,7 +157,7 @@ public class ModbusService : IModbusService
         try
         {
             _slaveId = (byte)(await ReadSlaveId())[0];
-            Console.WriteLine($"MODBUS - Verify ID: {_slaveId}");
+            //Console.WriteLine($"MODBUS - Verify ID: {_slaveId}");
 
             return _slaveId;
         }
@@ -583,6 +583,12 @@ public class ModbusService : IModbusService
         return sensorData;
     }
 
+
+
+    // float	1.0f
+    // IEEE 754 (Hex)	0x3F800000
+
+    // [low L][low H][high L][high H] = [00][00][80][3F] = 리틀엔디안
     private float ConvertRegistersToFloat(ushort high, ushort low)
     {
         byte[] bytes = new byte[4];
@@ -618,21 +624,24 @@ public class ModbusService : IModbusService
 
 
     // float	1.0f
-    // IEEE 754 (Hex)	0x3F800000
-    // ushort[] (Little-Endian)	{ 0x0000, 0x3F80 }
+    // 논리값 IEEE 754 (Hex)   	          0x3F800000
+    // 물리값 Windows OS(Little-Endian)	{ 0x0000, 0x3F80 } {0x00, 0x00, 0x80, 0x3F}
+    // 물리값 Modbus (Big-Endian)        { 0x3F80, 0x0000 } {0x3F, 0x80, 0x00, 0x00}
 
-    // Big-Endian	0x3F80 0x0000
-    // ushort[] = { 0x3F80, 0x0000 }
-    
+    // float	1.1f
+    // 논리값 IEEE 754 (Hex)   	          0x3F8CCCCD
+    // 물리값 Windows OS(Little-Endian)	{ 0xCCCD, 0x3F8C } {0xCD, 0xCC, 0x8C, 0x3F}
+    // 물리값 Modbus (Big-Endian)        { 0x3F8C, 0xCCCD } {0x3F, 0x8C, 0xCC, 0xCD}
+
     private ushort[] ConvertToRegisters(float value)
     {
-        byte[] bytes = BitConverter.GetBytes(value); // [0x00, 0x00, 0x80, 0x3F]
+        byte[] bytes = BitConverter.GetBytes(value); // [0x00, 0x00, 0x80, 0x3F]   (Windows 리틀엔디안)
         return new ushort[]
         {
         //(ushort)(bytes[3] << 8 | bytes[2]), // 0x3F80
         //(ushort)(bytes[1] << 8 | bytes[0])  // 0x0000
-        (ushort)(bytes[0] << 8 | bytes[1]), // 0x0000
-        (ushort)(bytes[2] << 8 | bytes[3])  // 0x0000
+        (ushort)(bytes[0] << 8 | bytes[1]), // 0x0000, 0xCDCC
+        (ushort)(bytes[2] << 8 | bytes[3])  // 0x803F, 0x8C3F
         };
     }
 

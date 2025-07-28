@@ -83,7 +83,7 @@ public class SensorService : ISensorService
             {
                 SensorAttached?.Invoke(deviceInfo);
 
-                _notificationService.ShowMessage(Localize["Information"], $"Device {deviceInfo.DeviceId} opened successfully.");
+                _notificationService.ShowMessage(Localize["Information"], $"{deviceInfo.ProductName} - Device opened successfully.");
                 Console.WriteLine($"USB - {deviceInfo.ProductName}:{deviceInfo.DeviceId} Device Attached");
 
                 //SettingViewModel vm = App.GlobalHost.GetService<SettingViewModel>();
@@ -160,11 +160,16 @@ public class SensorService : ISensorService
     {
         int type = await _modbusService.ReadSensorType();
         string serial = await _modbusService.ReadSensorSerial();
+        float factor = await _modbusService.ReadSensorFactor();
+        float offset = await _modbusService.ReadSensorOffset();
 
         var data = new SensorInfo
         {
             Type = (SensorType)type,
-            Serial = serial // 예시로 고정된 시리얼 번호
+            Serial = serial,
+            SensorUnit = string.Empty,
+            Factor = factor,
+            Offset = offset
         };
 
         return data;

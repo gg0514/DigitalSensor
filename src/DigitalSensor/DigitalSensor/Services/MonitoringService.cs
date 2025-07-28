@@ -54,8 +54,8 @@ public interface IMonitoringService
 
 public partial class MonitoringService : ObservableObject, IMonitoringService
 {
-    private readonly ISensorService _sensorService;
-    private readonly ModbusInfo _modbusInfo;
+    private ISensorService _sensorService;
+    private ModbusInfo _modbusInfo;
 
     [ObservableProperty]
     private SensorInfo _sensorInfo= new();
@@ -152,6 +152,8 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
                 return;
             }
 
+            await RetrieveSensorInfo();
+
             await UpdateInfo(deviceInfo, slaveId);
             await StartMonitoring();
         }
@@ -188,10 +190,21 @@ public partial class MonitoringService : ObservableObject, IMonitoringService
 
     public async Task<int> RetrieveSensorID()
     {
-        Console.WriteLine($"Monitoring - ");
-        Console.WriteLine($"Monitoring - RetrieveSensorID ...");
+        int slave_id= await _sensorService.RetrieveID();
+        //Console.WriteLine($"Monitoring - RetrieveSensorID() Slave ID: {slave_id}");
 
-        return await _sensorService.RetrieveID();
+        return slave_id;
+    }
+
+    public async Task RetrieveSensorInfo()
+    {
+        SensorInfo = await _sensorService.GetSensorInfoAsync();
+        SettingViewModel vm = App.GlobalHost.GetService<SettingViewModel>();
+
+        vm.CalibAdjust.Factor = SensorInfo.Factor;
+        vm.CalibAdjust.Offset = SensorInfo.Offset;
+
+        Console.WriteLine($"[SENSOR INFO] SlaveID: {_modbusInfo.SlaveID}, Type: {SensorInfo.Type} Factor: {SensorInfo.Factor}, Offset: {SensorInfo.Offset}");
     }
 
 

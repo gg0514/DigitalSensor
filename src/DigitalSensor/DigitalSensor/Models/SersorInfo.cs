@@ -16,7 +16,9 @@ public partial class SensorInfo : ObservableObject
 {
     [ObservableProperty] private SensorType _type= SensorType.None;
     [ObservableProperty] private string _serial;             // hexstring으로 표시
-    [ObservableProperty] private string _sensorUnit;
+    [ObservableProperty] private string _sensorUnit= string.Empty;
+    [ObservableProperty] private float _factor = 1;          // slope
+    [ObservableProperty] private float _offset = 0;
 }
 
 // ** 참고
