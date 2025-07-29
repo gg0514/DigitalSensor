@@ -29,7 +29,7 @@
 
     <ScrollViewer
         x:Name="MainScrollViewer"
-        Margin="0,30,0,0"
+        Margin="0,10,0,0"
         Padding="20">
         <StackPanel Spacing="20">
 
@@ -115,34 +115,40 @@
 							<Grid ColumnDefinitions="20,*">
 								<TextBlock Grid.Column="0"
 										   Text="1."
-										   FontSize="15"
+										   FontFamily="{StaticResource fNoto}"
+										   FontSize="14"
 										   VerticalAlignment="Top" />
 								<TextBlock Grid.Column="1"
 										   Text="{Binding Localize[1PGuide1]}"
 										   TextWrapping="Wrap"
-										   FontSize="15"
+										   FontFamily="{StaticResource fNoto}"
+										   FontSize="14"
 										   MaxWidth="270" />
 							</Grid>
 							<Grid ColumnDefinitions="20,*">
 								<TextBlock Grid.Column="0"
 										   Text="2."
-										   FontSize="15"
+										   FontFamily="{StaticResource fNoto}"
+										   FontSize="14"
 										   VerticalAlignment="Top" />
 								<TextBlock Grid.Column="1"
 										   Text="{Binding Localize[1PGuide2]}"
 										   TextWrapping="Wrap"
-										   FontSize="15"
+										   FontFamily="{StaticResource fNoto}"
+										   FontSize="14"
 										   MaxWidth="270" />
 							</Grid>
 							<Grid ColumnDefinitions="20,*">
 								<TextBlock Grid.Column="0"
 										   Text="3."
-										   FontSize="15"
+										   FontFamily="{StaticResource fNoto}"
+										   FontSize="14"
 										   VerticalAlignment="Top" />
 								<TextBlock Grid.Column="1"
 										   Text="{Binding Localize[1PGuide3]}"
 										   TextWrapping="Wrap"
-										   FontSize="15"
+										   FontFamily="{StaticResource fNoto}"
+										   FontSize="14"
 										   MaxWidth="270" />
 							</Grid>
 						</StackPanel>
