@@ -256,7 +256,7 @@
     <value>온도 교정</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>1.0.1</value>
+    <value>1.0.2</value>
   </data>
   <data name="StatusFail_ValueTooLow" xml:space="preserve">
     <value>실 패 (ValueTooLow)</value>

@@ -107,6 +107,8 @@ public partial class App : Application
 
     public override async void OnFrameworkInitializationCompleted()
     {
+        Console.WriteLine($"OnFrameworkInitializationCompleted");
+
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {

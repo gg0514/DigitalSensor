@@ -272,7 +272,7 @@
     <comment>메뉴 교정-온도교정</comment>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>1.0.1</value>
+    <value>1.0.2</value>
     <comment>프로그램버전</comment>
   </data>
   <data name="StatusFail_ValueTooLow" xml:space="preserve">

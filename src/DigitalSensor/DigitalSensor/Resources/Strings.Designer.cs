@@ -502,7 +502,7 @@ namespace DigitalSensor.Resources {
         }
         
         /// <summary>
-        ///   1.0.1과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///   1.0.2과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string Version {
             get {

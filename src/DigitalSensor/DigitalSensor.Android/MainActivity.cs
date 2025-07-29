@@ -3,6 +3,7 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using Android.Graphics;
+using Android.Util;
 
 using Avalonia;
 using Avalonia.Android;
@@ -23,6 +24,8 @@ public class MainActivity : AvaloniaMainActivity<App>
 {
     protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
     {
+        Log.Debug("DOTNET", "Customizing AppBuilder in MainActivity");
+
         App.RegisterPlatformService = OnRegisterPlatformService;
 
         return base.CustomizeAppBuilder(builder)
