@@ -2,10 +2,91 @@
 using Android.Content;
 using Android.Hardware.Usb;
 using Android.Widget;
+using Android.Util;
+
 using System;
 
 namespace UsbSerialForAndroid.Net.Receivers
 {
+    // 권한 응답 전역 관리
+    public static class UsbPermissionManager
+    {
+        public static UsbDevice? PendingDevice;
+        public static Action<UsbDevice>? PermissionGranted;
+        public static Action<UsbDevice>? PermissionDenied;
+        public static Action<Exception>? PermissionError;
+
+        internal static void OnPermissionGranted()
+        {
+            if (PendingDevice != null)
+            {
+                PermissionGranted?.Invoke(PendingDevice);
+                PendingDevice = null; // 한 번 처리 후 초기화
+            }
+        }
+
+        internal static void OnPermissionDenied()
+        {
+            if (PendingDevice != null)
+            {
+                PermissionDenied?.Invoke(PendingDevice);
+                PendingDevice = null;
+            }
+        }
+
+        internal static void OnPermissionError(Exception ex)
+        {
+            PermissionError?.Invoke(ex);
+            PendingDevice = null;
+        }
+    }
+
+
+    [BroadcastReceiver(Enabled = true, Exported = true)]
+    [IntentFilter(new[] { UsbBroadcastReceiver.UsbPermissionAction })]
+    public class UsbPermissionReceiver : BroadcastReceiver
+    {
+        public UsbPermissionReceiver() { } // 반드시 public 기본 생성자 필요
+
+        public override void OnReceive(Context? context, Intent? intent)
+        {
+            try
+            {
+                if (intent?.Action == UsbBroadcastReceiver.UsbPermissionAction)
+                {
+                    Log.Debug("DOTNET", "UsbPermissionReceiver - OnReceive");
+
+                    bool granted = intent.GetBooleanExtra(UsbManager.ExtraPermissionGranted, false);
+                    if (!granted && context?.GetSystemService(Context.UsbService) is UsbManager usbManager)
+                    {
+                        if (usbManager.HasPermission(UsbPermissionManager.PendingDevice))
+                            granted = true; // 최종 보정
+                    }
+
+                    if (granted)
+                    {
+                        UsbPermissionManager.OnPermissionGranted();
+                        //if (context != null)
+                        //    Toast.MakeText(context, "USB permission granted", ToastLength.Short)?.Show();
+                    }
+                    else
+                    {
+                        UsbPermissionManager.OnPermissionDenied();
+                        //if (context != null)
+                        //    Toast.MakeText(context, "USB permission denied", ToastLength.Short)?.Show();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                UsbPermissionManager.OnPermissionError(ex);
+                if (context != null)
+                    Toast.MakeText(context, ex.Message, ToastLength.Long)?.Show();
+            }
+        }
+    }
+
+
     internal class UsbBroadcastReceiver : BroadcastReceiver
     {
         public Action<UsbDevice>? UsbDeviceAttached;
@@ -13,53 +94,68 @@ namespace UsbSerialForAndroid.Net.Receivers
         public Action<Exception>? ErrorCallback;
         public bool IsShowToast { get; set; } = true;
 
-        private const string UsbPermissionAction = "com.example.USB_PERMISSION";
+        internal const string UsbPermissionAction = "com.android.example.USB_PERMISSION";
 
         public override void OnReceive(Context? context, Intent? intent)
         {
             try
             {
-                var usbService = context?.GetSystemService(Context.UsbService);
-                if (usbService is UsbManager usbManager && intent is not null && intent.Extras is not null)
+                if (context?.GetSystemService(Context.UsbService) is UsbManager usbManager &&
+                    intent?.Extras?.Get(UsbManager.ExtraDevice) is UsbDevice usbDevice)
                 {
-                    if (intent.Extras.Get(UsbManager.ExtraDevice) is UsbDevice usbDevice)
+                    string msg = $"PID={usbDevice.ProductId} VID={usbDevice.VendorId}";
+
+                    switch (intent.Action)
                     {
-                        string msg = $"PID={usbDevice.ProductId} VID={usbDevice.VendorId}";
-                        switch (intent.Action)
-                        {
-                            case UsbManager.ActionUsbDeviceAttached:
-                                {
-                                    msg = AppResources.UsbDeviceAttached + msg;
-                                    if (usbManager.HasPermission(usbDevice))
-                                    {
-                                        UsbDeviceAttached?.Invoke(usbDevice);
-                                    }
-                                    else
-                                    {
-                                        var permissionIntent = new Intent(UsbPermissionAction);
-                                        var pendingIntent = PendingIntent.GetBroadcast(context, 0, permissionIntent, PendingIntentFlags.Immutable);
+                        case UsbManager.ActionUsbDeviceAttached:
+                            {
+                                Log.Debug("DOTNET", "UsbBroadcastReceiver - ActionUsbDeviceAttached");
 
-                                        // 여기서 USB 권한 요청
-                                        context.RegisterReceiver(new UsbPermissionReceiver(usbDevice, UsbDeviceAttached, ErrorCallback, IsShowToast), new IntentFilter(UsbPermissionAction));
-                                        usbManager.RequestPermission(usbDevice, pendingIntent);
-                                    }
-                                    break;
-                                }
-                            case UsbManager.ActionUsbDeviceDetached:
-                                {
-                                    msg = AppResources.UsbDeviceDetached + msg;
+                                msg = "USB Attached: " + msg;
 
-                                    // 여기서 USB Device가 분리되었음을 알린다.
-                                    UsbDeviceDetached?.Invoke(usbDevice);
-                                    break;
+                                if (usbManager.HasPermission(usbDevice))
+                                {
+                                    UsbDeviceAttached?.Invoke(usbDevice);
                                 }
-                            default:
+                                else
+                                {
+                                    // 디바이스 기억해두기
+                                    UsbPermissionManager.PendingDevice = usbDevice;
+                                    UsbPermissionManager.PermissionGranted = UsbDeviceAttached;
+                                    UsbPermissionManager.PermissionDenied = d =>
+                                    {
+                                        if (IsShowToast)
+                                            Toast.MakeText(context, "USB permission denied", ToastLength.Short)?.Show();
+                                    };
+                                    UsbPermissionManager.PermissionError = ErrorCallback;
+
+                                    // UsbPermissionReceiver 등록
+                                    var filter = new IntentFilter(UsbPermissionAction);
+                                    context.RegisterReceiver(new UsbPermissionReceiver(), filter);
+
+
+                                    // PendingIntent 생성 (내 앱 내부 한정)
+                                    var permissionIntent = new Intent(UsbPermissionAction);
+                                    var pendingIntent = PendingIntent.GetBroadcast(
+                                        context,
+                                        0,
+                                        permissionIntent,
+                                        PendingIntentFlags.Immutable);
+
+                                    usbManager.RequestPermission(usbDevice, pendingIntent);
+                                }
                                 break;
-                        }
-
-                        if (IsShowToast)
-                            Toast.MakeText(context, msg, ToastLength.Short)?.Show();
+                            }
+                        case UsbManager.ActionUsbDeviceDetached:
+                            {
+                                msg = "USB Detached: " + msg;
+                                UsbDeviceDetached?.Invoke(usbDevice);
+                                break;
+                            }
                     }
+
+                    if (IsShowToast)
+                        Toast.MakeText(context, msg, ToastLength.Short)?.Show();
                 }
             }
             catch (Exception ex)
@@ -69,56 +165,5 @@ namespace UsbSerialForAndroid.Net.Receivers
                 ErrorCallback?.Invoke(ex);
             }
         }
-
-        private class UsbPermissionReceiver : BroadcastReceiver
-        {
-            private readonly UsbDevice usbDevice;
-            private readonly Action<UsbDevice>? usbDeviceAttachedCallback;
-            private readonly Action<Exception>? errorCallback;
-            private readonly bool isShowToast;
-
-            public UsbPermissionReceiver(UsbDevice usbDevice, Action<UsbDevice>? usbDeviceAttachedCallback, Action<Exception>? errorCallback, bool isShowToast)
-            {
-                this.usbDevice = usbDevice;
-                this.usbDeviceAttachedCallback = usbDeviceAttachedCallback;
-                this.errorCallback = errorCallback;
-                this.isShowToast = isShowToast;
-            }
-
-            public override void OnReceive(Context? context, Intent? intent)
-            {
-                try
-                {
-                    if (intent?.Action == UsbPermissionAction)
-                    {
-                        bool granted = intent.GetBooleanExtra(UsbManager.ExtraPermissionGranted, true);
-                        if (granted)
-                        {
-                            // 여기서 USB 권한을 획득한후에 콜백함수를 호출한다.
-                            usbDeviceAttachedCallback?.Invoke(usbDevice);
-
-                            if (isShowToast)
-                                Toast.MakeText(context, "USB permission granted", ToastLength.Short)?.Show();
-                        }
-                        else
-                        {
-                            if (isShowToast)
-                                Toast.MakeText(context, "USB permission denied", ToastLength.Short)?.Show();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (isShowToast)
-                        Toast.MakeText(context, ex.Message, ToastLength.Long)?.Show();
-                    errorCallback?.Invoke(ex);
-                }
-                finally
-                {
-                    context?.UnregisterReceiver(this);
-                }
-            }
-        }
-
     }
 }
