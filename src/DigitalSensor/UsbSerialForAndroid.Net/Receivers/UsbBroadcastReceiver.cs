@@ -42,8 +42,6 @@ namespace UsbSerialForAndroid.Net.Receivers
     }
 
 
-    [BroadcastReceiver(Enabled = true, Exported = true)]
-    [IntentFilter(new[] { UsbBroadcastReceiver.UsbPermissionAction })]
     public class UsbPermissionReceiver : BroadcastReceiver
     {
         public UsbPermissionReceiver() { } // 반드시 public 기본 생성자 필요
