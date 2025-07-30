@@ -33,7 +33,8 @@ public partial class SettingView : UserControl
 
     private void OnBackgroundSerial_PointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        MainView mainView = App.GlobalHost.GetService<MainView>();
-        mainView.OnNavigateTo("Setting_Serial");
+        // 통신값 고정
+        //MainView mainView = App.GlobalHost.GetService<MainView>();
+        //mainView.OnNavigateTo("Setting_Serial");
     }
 }

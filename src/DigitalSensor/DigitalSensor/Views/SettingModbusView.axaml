@@ -49,7 +49,7 @@
                                 HorizontalAlignment="Stretch"
                                 FontSize="24"
                                 Foreground="Gray"
-                                Maximum="30"
+                                Maximum="100"
                                 Minimum="1"
                                 SpinButtonPlacementMode="Inline"
                                 Value="{Binding ModbusInfo.SlaveID}" />

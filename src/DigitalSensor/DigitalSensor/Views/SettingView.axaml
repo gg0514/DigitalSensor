@@ -100,7 +100,7 @@
                         FontFamily="{StaticResource fNoto_Bold}"
                         FontSize="16"
                         Foreground="DarkBlue"
-                        Text="CALIBRATION" />
+                        Text="ADJUST" />
                     <StackPanel
                         Margin="0,15,0,0"
                         Background="Transparent"
