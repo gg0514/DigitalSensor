@@ -20,7 +20,7 @@
         <vm:SettingViewModel />
     </Design.DataContext>
 
-    <ScrollViewer Margin="0,30,0,0" Padding="20">
+    <ScrollViewer Margin="0,30,0,0" Padding="25">
         <StackPanel Spacing="20">
 
             <!--  Title  -->
@@ -55,7 +55,7 @@
             <!--  MODBUS  -->
             <Border
                 Margin="0,0"
-                Padding="16"
+                Padding="15,10"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
                 CornerRadius="12"
                 Effect="{DynamicResource ShadowElevation3}">
@@ -90,7 +90,7 @@
             <!--  Calibration  -->
             <Border
                 Margin="0,0"
-                Padding="16"
+                Padding="15,10"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
                 CornerRadius="12"
                 Effect="{DynamicResource ShadowElevation3}">
@@ -105,7 +105,7 @@
                         Margin="0,15,0,0"
                         Background="Transparent"
                         PointerPressed="OnBackgroundCalibration_PointerPressed"
-                        Spacing="12">
+                        Spacing="8">
                         <!--  Factor  -->
                         <StackPanel>
                             <TextBlock
@@ -142,7 +142,7 @@
             <!--  시리얼 통신  -->
             <Border
                 Margin="0,0"
-                Padding="16"
+                Padding="15,10"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
                 CornerRadius="12"
                 Effect="{DynamicResource ShadowElevation3}">
@@ -157,7 +157,7 @@
                         Margin="0,15,0,0"
                         Background="Transparent"
                         PointerPressed="OnBackgroundSerial_PointerPressed"
-                        Spacing="12">
+                        Spacing="8">
 
                         <!--  Baud rate  -->
                         <StackPanel>

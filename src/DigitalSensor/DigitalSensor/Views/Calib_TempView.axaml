@@ -29,21 +29,21 @@
 
     <ScrollViewer
         x:Name="MainScrollViewer"
-        Margin="0,10,0,0"
-        Padding="20">
-        <StackPanel Spacing="20">
+        Margin="0,20,0,0"
+        Padding="25">
+        <StackPanel Spacing="25">
 
             <!--  LED 영역  -->
-            <Grid ColumnDefinitions="*, Auto, Auto, Auto, 10">
+            <Grid ColumnDefinitions="*, Auto, Auto, Auto, 0">
                 <!--  Title  -->
-                <StackPanel Grid.Column="0" Margin="0,10,10,10">
+                <StackPanel Grid.Column="0" Margin="0,10,10,0">
                     <TextBlock
-                        FontSize="26"
+                        FontSize="24"
                         FontWeight="Bold"
                         Text="{Binding Localize[TempCalibration]}" />
                 </StackPanel>
 
-                <StackPanel Grid.Column="1" Margin="0,10,10,10">
+                <StackPanel Grid.Column="1" Margin="0,10,10,0">
                     <TextBlock
                         Margin="0,0,0,0"
                         FontSize="12"
@@ -56,7 +56,7 @@
                         <Ellipse Fill="{Binding IsTxOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='Orange'}" />
                     </Border>
                 </StackPanel>
-                <StackPanel Grid.Column="2" Margin="0,10,10,10">
+                <StackPanel Grid.Column="2" Margin="0,10,10,0">
                     <TextBlock
                         Margin="0,0,0,0"
                         FontSize="12"
@@ -69,7 +69,7 @@
                         <Ellipse Fill="{Binding IsRxOn, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='GreenYellow'}" />
                     </Border>
                 </StackPanel>
-                <StackPanel Grid.Column="3" Margin="0,10,10,10">
+                <StackPanel Grid.Column="3" Margin="0,10,10,0">
                     <TextBlock
                         Margin="0,0,0,0"
                         FontSize="12"
@@ -89,7 +89,7 @@
             <!--  교정 지침  -->
             <Border
                 Margin="0,10,0,0"
-                Padding="26"
+                Padding="25,15"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
                 CornerRadius="12"
                 Effect="{DynamicResource ShadowElevation3}">
@@ -156,7 +156,7 @@
             <!--  현재값  -->
             <Border
                 Margin="0,0,0,0"
-                Padding="26,16,26,6"
+                Padding="25,15,25,5"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
                 CornerRadius="12"
                 Effect="{DynamicResource ShadowElevation3}">
@@ -270,7 +270,7 @@
             <!--  교정상태  -->
             <Border
                 Margin="0,0,0,0"
-                Padding="26"
+                Padding="25,15"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
                 CornerRadius="12"
                 Effect="{DynamicResource ShadowElevation3}">
@@ -287,7 +287,7 @@
 							Grid.ColumnSpan="3"
                             Margin="0,0,0,0"
                             HorizontalAlignment="Center"
-                            FontSize="30"
+                            FontSize="28"
                             FontWeight="Normal"
                             Text="{Binding CalibInfo.CalStatus, Converter={StaticResource StatusDescriptionConverter}}" />
                         <Border
