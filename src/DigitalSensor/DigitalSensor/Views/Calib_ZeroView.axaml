@@ -112,7 +112,7 @@
 										   Text="{Binding Localize[ZeroGuide1]}"
 										   TextWrapping="Wrap"
 										   FontFamily="{StaticResource fNoto}"
-										   FontSize="14"
+										   FontSize="13"
 										   MaxWidth="270" />
 							</Grid>
 							<Grid ColumnDefinitions="20,*">
@@ -124,7 +124,8 @@
 								<TextBlock Grid.Column="1"
 										   Text="{Binding Localize[ZeroGuide2]}"
 										   TextWrapping="Wrap"
-										   FontSize="15"
+										   FontFamily="{StaticResource fNoto}"
+										   FontSize="13"
 										   MaxWidth="270" />
 							</Grid>
 							<Grid ColumnDefinitions="20,*">
@@ -137,7 +138,7 @@
 										   Text="{Binding Localize[ZeroGuide3]}"
 										   TextWrapping="Wrap"
 										   FontFamily="{StaticResource fNoto}"
-										   FontSize="14"
+										   FontSize="13"
 										   MaxWidth="270" />
 							</Grid>
 						</StackPanel>

@@ -8,6 +8,11 @@ using System;
 
 namespace UsbSerialForAndroid.Net.Receivers
 {
+    internal static class UsbConstants
+    {
+        internal const string UsbPermissionAction = "com.bluesen.DigitalSensor.USB_PERMISSION";
+    }
+
     // 권한 응답 전역 관리
     public static class UsbPermissionManager
     {
@@ -41,7 +46,9 @@ namespace UsbSerialForAndroid.Net.Receivers
         }
     }
 
-
+    // AndroidManifest.xml에 Receiver를 자동등록하기 위한 속성(Attribute)
+    [BroadcastReceiver(Enabled = true, Exported = true)]
+    [IntentFilter(new[] { UsbConstants.UsbPermissionAction })]
     public class UsbPermissionReceiver : BroadcastReceiver
     {
         public UsbPermissionReceiver() { } // 반드시 public 기본 생성자 필요
@@ -50,7 +57,7 @@ namespace UsbSerialForAndroid.Net.Receivers
         {
             try
             {
-                if (intent?.Action == UsbBroadcastReceiver.UsbPermissionAction)
+                if (intent?.Action == UsbConstants.UsbPermissionAction)
                 {
                     Log.Debug("DOTNET", "UsbPermissionReceiver - OnReceive");
 
@@ -92,8 +99,6 @@ namespace UsbSerialForAndroid.Net.Receivers
         public Action<Exception>? ErrorCallback;
         public bool IsShowToast { get; set; } = true;
 
-        internal const string UsbPermissionAction = "com.android.example.USB_PERMISSION";
-
         public override void OnReceive(Context? context, Intent? intent)
         {
             try
@@ -107,7 +112,7 @@ namespace UsbSerialForAndroid.Net.Receivers
                     {
                         case UsbManager.ActionUsbDeviceAttached:
                             {
-                                Log.Debug("DOTNET", "UsbBroadcastReceiver - ActionUsbDeviceAttached");
+                                Log.Debug("DOTNET", $"UsbBroadcastReceiver - UsbPermissionAction : {UsbConstants.UsbPermissionAction}");
 
                                 msg = "USB Attached: " + msg;
 
@@ -127,20 +132,33 @@ namespace UsbSerialForAndroid.Net.Receivers
                                     };
                                     UsbPermissionManager.PermissionError = ErrorCallback;
 
-                                    // UsbPermissionReceiver 등록
-                                    var filter = new IntentFilter(UsbPermissionAction);
-                                    context.RegisterReceiver(new UsbPermissionReceiver(), filter);
-
 
                                     // PendingIntent 생성 (내 앱 내부 한정)
-                                    var permissionIntent = new Intent(UsbPermissionAction);
+                                    var permissionIntent = new Intent(context, typeof(UsbPermissionReceiver));
+                                    permissionIntent.SetAction(UsbConstants.UsbPermissionAction);
+                                    permissionIntent.SetPackage(context.PackageName); // 내 앱 한정
+
+                                    // *********************************************************************
+                                    // USB 권한 요청을 가로채지 못하도록 하기 위해서는                                    
+                                    // 다음처럼 UsbPermissionReceiver를 동적 등록하면 안된다.
+                                    // 반드시 Manifest에 수동등록하거나, 클래스의 Attribute로 등록해서
+                                    // Manifest에 자동으로 등록되도록 해야 한다.
+                                    // *********************************************************************
+
+                                    //var filter = new IntentFilter(UsbPermissionAction);
+                                    //context.RegisterReceiver(new UsbPermissionReceiver(), filter);
+                                    //var permissionIntent = new Intent(UsbPermissionAction);
+
                                     var pendingIntent = PendingIntent.GetBroadcast(
                                         context,
                                         0,
                                         permissionIntent,
-                                        PendingIntentFlags.Immutable);
+                                        PendingIntentFlags.Immutable | PendingIntentFlags.UpdateCurrent);
 
                                     usbManager.RequestPermission(usbDevice, pendingIntent);
+
+                                    Log.Debug("DOTNET", $"UsbBroadcastReceiver - RequestPermission - DeviceId: {usbDevice.DeviceId}, VendorId: {usbDevice.VendorId}, ProductId: {usbDevice.ProductId}");
+
                                 }
                                 break;
                             }

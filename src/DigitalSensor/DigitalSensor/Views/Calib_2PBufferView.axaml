@@ -114,7 +114,7 @@
 										   Text="{Binding CalibInfo.CalibOrderGuide}"
 										   TextWrapping="Wrap"
 										   FontFamily="{StaticResource fNoto}"
-										   FontSize="14"
+										   FontSize="13"
 										   MaxWidth="270" />
 							</Grid>
 							<Grid ColumnDefinitions="20,*">
@@ -127,7 +127,7 @@
 										   Text="{Binding Localize[2PGuide2]}"
 										   TextWrapping="Wrap"
 										   FontFamily="{StaticResource fNoto}"
-										   FontSize="14"
+										   FontSize="13"
 										   MaxWidth="270" />
 							</Grid>
 							<Grid ColumnDefinitions="20,*">
@@ -140,7 +140,7 @@
 										   Text="{Binding Localize[2PGuide3]}"
 										   TextWrapping="Wrap"
 										   FontFamily="{StaticResource fNoto}"
-										   FontSize="14"
+										   FontSize="13"
 										   MaxWidth="270" />
 							</Grid>
                         </StackPanel>

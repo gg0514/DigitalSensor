@@ -119,7 +119,7 @@
 										   Text="{Binding Localize[TempGuide1]}"
 										   TextWrapping="Wrap"
 										   FontFamily="{StaticResource fNoto}"
-										   FontSize="14"
+										   FontSize="13"
 										   MaxWidth="270" />
 							</Grid>
 							<Grid ColumnDefinitions="20,*">
@@ -132,7 +132,7 @@
 										   Text="{Binding Localize[TempGuide2]}"
 										   TextWrapping="Wrap"
 										   FontFamily="{StaticResource fNoto}"
-										   FontSize="14"
+										   FontSize="13"
 										   MaxWidth="270" />
 							</Grid>
 							<Grid ColumnDefinitions="20,*">
@@ -145,7 +145,7 @@
 										   Text="{Binding Localize[TempGuide3]}"
 										   TextWrapping="Wrap"
 										   FontFamily="{StaticResource fNoto}"
-										   FontSize="14"
+										   FontSize="13"
 										   MaxWidth="270" />
 							</Grid>
                         </StackPanel>

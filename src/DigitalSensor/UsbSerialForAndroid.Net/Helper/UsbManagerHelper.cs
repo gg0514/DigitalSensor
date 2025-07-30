@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Hardware.Usb;
+using Android.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +43,8 @@ namespace UsbSerialForAndroid.Net.Helper
             var intent = new Intent(UsbManager.ActionUsbDeviceAttached);
             var pendingIntent = PendingIntent.GetBroadcast(Application.Context, 0, intent, PendingIntentFlags.Immutable);
             usbManager.RequestPermission(usbDevice, pendingIntent);
+
+            Log.Debug("DOTNET", $"UsbManagerHelper::RequestPermission - DeviceId: {usbDevice.DeviceId}, VendorId: {usbDevice.VendorId}, ProductId: {usbDevice.ProductId}");
         }
     }
 }
